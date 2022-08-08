@@ -42,3 +42,8 @@ Route::post('api/hosting', 'HostingController@store');
 
 Route::get('api/department', 'DepartmentController@index');
 Route::post('api/department', 'DepartmentController@store');
+
+Route::get('api/user', 'UserController@index');
+Route::post('api/user', 'UserController@store');
+Route::put('api/user/{uuid}', 'UserController@update');
+Route::delete('api/user/{uuid}', 'UserController@delete');
