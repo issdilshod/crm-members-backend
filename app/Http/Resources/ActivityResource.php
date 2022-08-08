@@ -21,6 +21,7 @@ class ActivityResource extends JsonResource
             'device' => $this->device,
             'ip' => $this->ip,
             'description' => $this->description,
+            'updated_at' => $this->updated_at,
             'status' => $this->status
         ];
     }
