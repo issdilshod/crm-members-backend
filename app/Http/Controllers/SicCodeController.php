@@ -13,7 +13,7 @@ class SicCodeController extends Controller
     /**     @OA\Get(
       *         path="/api/sic_code",
       *         operationId="list_sic_code",
-      *         tags={"Company"},
+      *         tags={"Helper"},
       *         summary="List of sic code",
       *         description="List of sic code",
       *             @OA\Response(

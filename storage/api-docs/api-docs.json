@@ -8,7 +8,7 @@
         "/api/sic_code": {
             "get": {
                 "tags": [
-                    "Company"
+                    "Helper"
                 ],
                 "summary": "List of sic code",
                 "description": "List of sic code",
