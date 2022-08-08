@@ -41,6 +41,7 @@ Route::resource('api/hosting', HostingController::class);
 Route::resource('api/department', DepartmentController::class);
 Route::resource('api/user', UserController::class);
 Route::resource('api/role', RoleController::class);
+// Activity
 Route::resource('api/activity', ActivityController::class);
-Route::get('api/activity/user/{uuid}', 'App\Http\Controllers\ActivityController@by_user');
-Route::get('api/activity/entity/{uuid}', 'App\Http\Controllers\ActivityController@by_entity');
+Route::get('api/activity/user/{uuid}', [ActivityController::class, 'by_user']);
+Route::get('api/activity/entity/{uuid}', [ActivityController::class, 'by_entity']);
