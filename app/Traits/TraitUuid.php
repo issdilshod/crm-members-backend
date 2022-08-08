@@ -25,6 +25,16 @@ trait TraitUuid
         static::creating($creationCallback);
     }
 
+    /**
+     * Tell laravel that the key name is a uuid, not an id.
+     *
+     * @return string
+     */
+    public function getKeyName(): string
+    {
+        return 'uuid';
+    }
+
 
     /**
      * Override the getIncrementing() function to return false to tell
