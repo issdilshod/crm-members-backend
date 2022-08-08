@@ -30,6 +30,32 @@
                     }
                 }
             }
+        },
+        "/api/state": {
+            "get": {
+                "tags": [
+                    "Helper"
+                ],
+                "summary": "List of state",
+                "description": "List of state",
+                "operationId": "list_state",
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
         }
     }
 }

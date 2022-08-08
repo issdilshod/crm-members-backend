@@ -2,20 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\SicCodeResource;
-use App\Models\API\SicCode;
+use App\Http\Resources\StateResource;
+use App\Models\API\State;
 use Illuminate\Http\Request;
 
-class SicCodeController extends Controller
+class StateController extends Controller
 {
-
-
     /**     @OA\Get(
-      *         path="/api/sic_code",
-      *         operationId="list_sic_code",
+      *         path="/api/state",
+      *         operationId="list_state",
       *         tags={"Helper"},
-      *         summary="List of sic code",
-      *         description="List of sic code",
+      *         summary="List of state",
+      *         description="List of state",
       *             @OA\Response(
       *                 response=200,
       *                 description="Successfully",
@@ -28,7 +26,7 @@ class SicCodeController extends Controller
     public function index()
     {
         //
-        return SicCodeResource::collection(SicCode::all()->where('status', '=', '1'));
+        return StateResource::collection(State::all()->where('status', '=', '1'));
     }
 
     /**
@@ -51,21 +49,20 @@ class SicCodeController extends Controller
     {
         //
         $validated = $request->validate([
-            'code' => 'required|integer',
-            'office' => 'required|string|max:100',
-            'industry_title' => 'required|string|max:200',
+            'short_name' => 'required|string|max:20',
+            'full_name' => 'required|string|max:50',
             'status' => 'required|integer'
         ]);
-        return new SicCodeResource(SicCode::create($validated));
+        return new StateResource(State::create($validated));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\API\SicCode  $sicCode
+     * @param  \App\Models\API\State  $state
      * @return \Illuminate\Http\Response
      */
-    public function show(SicCode $sicCode)
+    public function show(State $state)
     {
         //
     }
@@ -73,10 +70,10 @@ class SicCodeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\API\SicCode  $sicCode
+     * @param  \App\Models\API\State  $state
      * @return \Illuminate\Http\Response
      */
-    public function edit(SicCode $sicCode)
+    public function edit(State $state)
     {
         //
     }
@@ -85,10 +82,10 @@ class SicCodeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\API\SicCode  $sicCode
+     * @param  \App\Models\API\State  $state
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, SicCode $sicCode)
+    public function update(Request $request, State $state)
     {
         //
     }
@@ -96,10 +93,10 @@ class SicCodeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\API\SicCode  $sicCode
+     * @param  \App\Models\API\State  $state
      * @return \Illuminate\Http\Response
      */
-    public function destroy(SicCode $sicCode)
+    public function destroy(State $state)
     {
         //
     }

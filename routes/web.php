@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SicCodeController;
+use App\Http\Controllers\StateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +18,5 @@ use App\Http\Controllers\SicCodeController;
 //Route::get('/', function () { return view('welcome'); });
 
 Route::resource('api/sic_code', SicCodeController::class);
+
+Route::resource('api/state', StateController::class);

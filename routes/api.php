@@ -19,9 +19,13 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| Company Model
+| Helper Group
 |--------------------------------------------------------------------------
 |
 */
 
 Route::get('api/sic_code', 'SicCodeController@index');
+Route::post('api/sic_code', 'SicCodeController@store');
+
+Route::get('api/state', 'StateController@index');
+Route::post('api/state', 'StateController@store');
