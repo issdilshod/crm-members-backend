@@ -57,6 +57,32 @@
                 }
             }
         },
+        "/api/role": {
+            "get": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "List of role",
+                "description": "List of role",
+                "operationId": "list_role",
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
         "/api/sic_code": {
             "get": {
                 "tags": [

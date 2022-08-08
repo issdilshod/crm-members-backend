@@ -45,5 +45,9 @@ Route::post('api/department', 'DepartmentController@store');
 
 Route::get('api/user', 'UserController@index');
 Route::post('api/user', 'UserController@store');
+Route::get('api/user/{uuid}', 'UserController@show');
 Route::put('api/user/{uuid}', 'UserController@update');
 Route::delete('api/user/{uuid}', 'UserController@delete');
+
+Route::get('api/role', 'RoleController@index');
+Route::post('api/role', 'RoleController@store');

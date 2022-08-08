@@ -5,6 +5,7 @@ use App\Http\Controllers\SicCodeController;
 use App\Http\Controllers\StateController;
 use App\Http\Controllers\HostingController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -29,3 +30,5 @@ Route::resource('api/hosting', HostingController::class);
 Route::resource('api/department', DepartmentController::class);
 
 Route::resource('api/user', UserController::class);
+
+Route::resource('api/role', RoleController::class);
