@@ -1,0 +1,35 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Proj WebAPI",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/sic_code": {
+            "get": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "List of sic code",
+                "description": "List of sic code",
+                "operationId": "list_sic_code",
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        }
+    }
+}
