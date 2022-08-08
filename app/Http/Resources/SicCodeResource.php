@@ -14,6 +14,11 @@ class SicCodeResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'uuid' => $this->uuid,
+            'code' => $this->code,
+            'office' => $this->office,
+            'industry_title' => $this->industry_title,
+        ];
     }
 }
