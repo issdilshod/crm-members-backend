@@ -5,6 +5,32 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/api/department": {
+            "get": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "List of department",
+                "description": "List of department",
+                "operationId": "list_department",
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
         "/api/hosting": {
             "get": {
                 "tags": [

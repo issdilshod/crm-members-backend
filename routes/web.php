@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SicCodeController;
 use App\Http\Controllers\StateController;
 use App\Http\Controllers\HostingController;
+use App\Http\Controllers\DepartmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,3 +24,5 @@ Route::resource('api/sic_code', SicCodeController::class);
 Route::resource('api/state', StateController::class);
 
 Route::resource('api/hosting', HostingController::class);
+
+Route::resource('api/department', DepartmentController::class);

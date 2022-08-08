@@ -32,3 +32,13 @@ Route::post('api/state', 'StateController@store');
 
 Route::get('api/hosting', 'HostingController@index');
 Route::post('api/hosting', 'HostingController@store');
+
+/*
+|--------------------------------------------------------------------------
+| Account Group
+|--------------------------------------------------------------------------
+|
+*/
+
+Route::get('api/department', 'DepartmentController@index');
+Route::post('api/department', 'DepartmentController@store');
