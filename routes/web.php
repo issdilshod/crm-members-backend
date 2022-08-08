@@ -7,6 +7,7 @@ use App\Http\Controllers\HostingController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ActivityController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,14 +22,25 @@ use App\Http\Controllers\UserController;
 
 //Route::get('/', function () { return view('welcome'); });
 
+/*
+|--------------------------------------------------------------------------
+| Helper Group Routes
+|--------------------------------------------------------------------------
+|
+*/
 Route::resource('api/sic_code', SicCodeController::class);
-
 Route::resource('api/state', StateController::class);
-
 Route::resource('api/hosting', HostingController::class);
 
+/*
+|--------------------------------------------------------------------------
+| Account Group Routes
+|--------------------------------------------------------------------------
+|
+*/
 Route::resource('api/department', DepartmentController::class);
-
 Route::resource('api/user', UserController::class);
-
 Route::resource('api/role', RoleController::class);
+Route::resource('api/activity', ActivityController::class);
+Route::get('api/activity/user/{uuid}', 'App\Http\Controllers\ActivityController@by_user');
+Route::get('api/activity/entity/{uuid}', 'App\Http\Controllers\ActivityController@by_entity');

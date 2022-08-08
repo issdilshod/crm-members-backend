@@ -23,7 +23,6 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 |
 */
-
 Route::get('api/sic_code', 'SicCodeController@index');
 Route::post('api/sic_code', 'SicCodeController@store');
 
@@ -39,7 +38,6 @@ Route::post('api/hosting', 'HostingController@store');
 |--------------------------------------------------------------------------
 |
 */
-
 Route::get('api/department', 'DepartmentController@index');
 Route::post('api/department', 'DepartmentController@store');
 
@@ -51,3 +49,9 @@ Route::delete('api/user/{uuid}', 'UserController@delete');
 
 Route::get('api/role', 'RoleController@index');
 Route::post('api/role', 'RoleController@store');
+
+Route::get('api/activity', 'ActivityController@index');
+Route::post('api/activity', 'ActivityController@store');
+Route::get('api/activity/{uuid}', 'ActivityController@show');
+Route::put('api/activity/{uuid}', 'ActivityController@update');
+Route::delete('api/activity/{uuid}', 'ActivityController@delete');
