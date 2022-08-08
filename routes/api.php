@@ -29,3 +29,6 @@ Route::post('api/sic_code', 'SicCodeController@store');
 
 Route::get('api/state', 'StateController@index');
 Route::post('api/state', 'StateController@store');
+
+Route::get('api/hosting', 'HostingController@index');
+Route::post('api/hosting', 'HostingController@store');

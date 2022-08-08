@@ -5,6 +5,32 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/api/hosting": {
+            "get": {
+                "tags": [
+                    "Helper"
+                ],
+                "summary": "List of hosting",
+                "description": "List of hosting",
+                "operationId": "list_hosting",
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
         "/api/sic_code": {
             "get": {
                 "tags": [
