@@ -26,7 +26,8 @@ class DirectorResource extends JsonResource
             'phone_type' => $this->phone_type,
             'phone_number' => $this->phone_number,
             'files' => $this->files(),
-            'emails' => $this->emails()
+            'emails' => $this->emails(),
+            'addresses' => $this->addresses()
         ];
     }
 }

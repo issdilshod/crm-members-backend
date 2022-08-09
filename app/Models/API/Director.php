@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Traits\TraitUuid;
 use App\Models\API\File;
 use App\Models\API\Email;
+use App\Models\API\Address;
 
 class Director extends Model
 {
@@ -20,5 +21,9 @@ class Director extends Model
 
     public function emails(){
         return $this->hasMany(Email::class);
+    }
+
+    public function addresses(){
+        return $this->hasMany(Address::class);
     }
 }
