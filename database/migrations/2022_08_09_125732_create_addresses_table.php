@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('state');
             $table->string('postal');
             $table->string('country');
+            $table->string('address_parent');
             $table->tinyInteger('status');
             $table->timestamps();
         });
