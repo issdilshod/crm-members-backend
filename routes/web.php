@@ -8,6 +8,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\DirectorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,3 +46,11 @@ Route::resource('api/role', RoleController::class);
 Route::resource('api/activity', ActivityController::class);
 Route::get('api/activity/user/{uuid}', [ActivityController::class, 'by_user']);
 Route::get('api/activity/entity/{uuid}', [ActivityController::class, 'by_entity']);
+
+/*
+|--------------------------------------------------------------------------
+| Director Group Routes
+|--------------------------------------------------------------------------
+|
+*/
+Route::resource('api/director', DirectorController::class);

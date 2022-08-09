@@ -55,3 +55,15 @@ Route::get('api/activity', 'ActivityController@index');
 Route::get('api/activity/{uuid}', 'ActivityController@show');
 Route::put('api/activity/{uuid}', 'ActivityController@update');
 Route::delete('api/activity/{uuid}', 'ActivityController@delete');
+
+/*
+|--------------------------------------------------------------------------
+| Director Group
+|--------------------------------------------------------------------------
+|
+*/
+Route::get('api/director', 'DirectorController@index');
+Route::post('api/director', 'DirectorController@store');
+Route::get('api/director/{uuid}', 'DirectorController@show');
+Route::put('api/director/{uuid}', 'DirectorController@update');
+Route::delete('api/director/{uuid}', 'DirectorController@delete');

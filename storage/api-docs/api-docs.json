@@ -207,6 +207,151 @@
                 }
             }
         },
+        "/api/director": {
+            "get": {
+                "tags": [
+                    "Director"
+                ],
+                "summary": "List of director",
+                "description": "List of director",
+                "operationId": "list_director",
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Director"
+                ],
+                "summary": "Add director",
+                "description": "Add director",
+                "operationId": "post_director",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "user_uuid",
+                                    "first_name",
+                                    "middle_name",
+                                    "last_name",
+                                    "date_of_birth",
+                                    "ssn_cpn",
+                                    "company_association",
+                                    "phone_type",
+                                    "phone_number",
+                                    "status"
+                                ],
+                                "properties": {
+                                    "user_uuid": {
+                                        "type": "text"
+                                    },
+                                    "first_name": {
+                                        "type": "text"
+                                    },
+                                    "middle_name": {
+                                        "type": "text"
+                                    },
+                                    "last_name": {
+                                        "type": "text"
+                                    },
+                                    "date_of_birth": {
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "ssn_cpn": {
+                                        "type": "text"
+                                    },
+                                    "company_association": {
+                                        "type": "text"
+                                    },
+                                    "phone_type": {
+                                        "type": "text"
+                                    },
+                                    "phone_number": {
+                                        "type": "text"
+                                    },
+                                    "status": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/director/{uuid}": {
+            "get": {
+                "tags": [
+                    "Director"
+                ],
+                "summary": "Get director",
+                "description": "Get director",
+                "operationId": "get_director",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "director uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
         "/api/hosting": {
             "get": {
                 "tags": [
