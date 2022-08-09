@@ -29,58 +29,6 @@
                         "description": "Resource Not Found"
                     }
                 }
-            },
-            "post": {
-                "tags": [
-                    "Account"
-                ],
-                "summary": "Add activity",
-                "description": "Add activity",
-                "operationId": "post_activity",
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [
-                                    "user_uuid",
-                                    "entity_uuid",
-                                    "status"
-                                ],
-                                "properties": {
-                                    "user_uuid": {
-                                        "type": "text"
-                                    },
-                                    "entity_uuid": {
-                                        "type": "text"
-                                    },
-                                    "status": {
-                                        "type": "integer"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        },
-                        "application/json": {
-                            "schema": {}
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    }
-                }
             }
         },
         "/api/activity/{uuid}": {

@@ -41,38 +41,10 @@ class ActivityController extends Controller
         //
     }
 
-    /**     @OA\POST(
-      *         path="/api/activity",
-      *         operationId="post_activity",
-      *         tags={"Account"},
-      *         summary="Add activity",
-      *         description="Add activity",
-      *             @OA\RequestBody(
-      *                 @OA\JsonContent(),
-      *                 @OA\MediaType(
-      *                     mediaType="multipart/form-data",
-      *                     @OA\Schema(
-      *                         type="object",
-      *                         required={"user_uuid", "entity_uuid", "status"},
-      *                         @OA\Property(property="user_uuid", type="text"),
-      *                         @OA\Property(property="entity_uuid", type="text"),
-      *                         @OA\Property(property="status", type="int"),
-      *                     ),
-      *                 ),
-      *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
-      *             @OA\Response(response=400, description="Bad request"),
-      *             @OA\Response(response=404, description="Resource Not Found"),
-      *     )
-      */
     public function store(Request $request)
     {
         //
-        $validated = $request->validate([
+        /*$validated = $request->validate([
             'user_uuid' => 'required|string',
             'entity_uuid' => 'required|string',
             'status' => 'required|integer'
@@ -82,7 +54,7 @@ class ActivityController extends Controller
         $validated['description'] = 'static description';
         $validated['device'] = UserSystemInfoHelper::device_full();
         $validated['ip'] = UserSystemInfoHelper::ip();
-        return new ActivityResource(Activity::create($validated));
+        return new ActivityResource(Activity::create($validated));*/
     }
 
     /**     @OA\GET(

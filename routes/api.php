@@ -51,7 +51,7 @@ Route::get('api/role', 'RoleController@index');
 Route::post('api/role', 'RoleController@store');
 
 Route::get('api/activity', 'ActivityController@index');
-Route::post('api/activity', 'ActivityController@store');
+//Route::post('api/activity', 'ActivityController@store');
 Route::get('api/activity/{uuid}', 'ActivityController@show');
 Route::put('api/activity/{uuid}', 'ActivityController@update');
 Route::delete('api/activity/{uuid}', 'ActivityController@delete');
