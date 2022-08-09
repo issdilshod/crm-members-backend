@@ -11,4 +11,9 @@ class User extends Model
     use HasFactory, TraitUuid;
 
     protected $fillable = ['first_name', 'last_name', 'username', 'password', 'telegram', 'status'];
+
+    public function activities(){
+        //
+        return $this->hasMany(Activity::class)->where('status', '=', '1')->limit(10);
+    }
 }

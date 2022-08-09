@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ActivityResource;
 use App\Http\Resources\UserResource;
+use App\Models\API\Activity;
 use App\Models\API\User;
 use Illuminate\Http\Request;
 
@@ -26,7 +28,7 @@ class UserController extends Controller
     public function index()
     {
         //
-        $user = User::where('status', '=', '1')->paginate(100);
+        $user = User::where('status', '=', '1')->with('activities')->get();
         return UserResource::collection($user);
     }
 
@@ -113,6 +115,7 @@ class UserController extends Controller
     public function show(User $user)
     {
         //
+        $user = User::with('activities')->get()->find($user);
         return new UserResource($user);
     }
 

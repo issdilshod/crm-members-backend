@@ -20,7 +20,8 @@ class UserResource extends JsonResource
             'last_name' => $this->last_name,
             'username' => $this->username,
             'password' => $this->password,
-            'telegram' => $this->telegram
+            'telegram' => $this->telegram,
+            'activities' => ActivityResource::collection($this->activities)
         ];
     }
 }
