@@ -14,6 +14,8 @@ class User extends Model
 
     public function activities(){
         //
-        return $this->hasMany(Activity::class)->where('status', '=', '1')->limit(10);
+        return $this->hasMany(Activity::class, 'user_uuid', 'uuid')
+                                                                ->where('status', 1)
+                                                                ->limit(10);
     }
 }

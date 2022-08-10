@@ -28,7 +28,7 @@ class UserController extends Controller
     public function index()
     {
         //
-        $user = User::where('status', '=', '1')->with('activities')->get();
+        $user = User::first()->paginate(100);
         return UserResource::collection($user);
     }
 
@@ -115,7 +115,6 @@ class UserController extends Controller
     public function show(User $user)
     {
         //
-        $user = User::with('activities')->get()->find($user);
         return new UserResource($user);
     }
 
