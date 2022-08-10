@@ -11,4 +11,6 @@ class Hosting extends Model
     use HasFactory, TraitUuid;
 
     protected $fillable = ['host', 'status'];
+
+    protected $attributes = ['status' => 1];
 }

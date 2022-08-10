@@ -232,13 +232,25 @@
                     }
                 }
             },
-            "post": {
+            "put": {
                 "tags": [
                     "Director"
                 ],
-                "summary": "Add director",
-                "description": "Add director",
-                "operationId": "post_director",
+                "summary": "Update director (not working on swagger)",
+                "description": "Update director",
+                "operationId": "update_director",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "director uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
                 "requestBody": {
                     "content": {
                         "multipart/form-data": {
@@ -253,7 +265,23 @@
                                     "company_association",
                                     "phone_type",
                                     "phone_number",
-                                    "status"
+                                    "status",
+                                    "address[dl_address][street_address]",
+                                    "address[dl_address][address_line_2]",
+                                    "address[dl_address][city]",
+                                    "address[dl_address][state]",
+                                    "address[dl_address][postal]",
+                                    "address[dl_address][country]",
+                                    "address[credit_home_address][street_address]",
+                                    "address[credit_home_address][address_line_2]",
+                                    "address[credit_home_address][city]",
+                                    "address[credit_home_address][state]",
+                                    "address[credit_home_address][postal]",
+                                    "address[credit_home_address][country]",
+                                    "emails[hosting_uuid]",
+                                    "emails[email]",
+                                    "emails[password]",
+                                    "emails[phone]"
                                 ],
                                 "properties": {
                                     "user_uuid": {
@@ -284,8 +312,238 @@
                                     "phone_number": {
                                         "type": "text"
                                     },
-                                    "status": {
-                                        "type": "integer"
+                                    "address[dl_address][street_address]": {
+                                        "type": "text"
+                                    },
+                                    "address[dl_address][address_line_2]": {
+                                        "type": "text"
+                                    },
+                                    "address[dl_address][city]": {
+                                        "type": "text"
+                                    },
+                                    "address[dl_address][state]": {
+                                        "type": "text"
+                                    },
+                                    "address[dl_address][postal]": {
+                                        "type": "text"
+                                    },
+                                    "address[dl_address][country]": {
+                                        "type": "text"
+                                    },
+                                    "address[credit_home_address][street_address]": {
+                                        "type": "text"
+                                    },
+                                    "address[credit_home_address][address_line_2]": {
+                                        "type": "text"
+                                    },
+                                    "address[credit_home_address][city]": {
+                                        "type": "text"
+                                    },
+                                    "address[credit_home_address][state]": {
+                                        "type": "text"
+                                    },
+                                    "address[credit_home_address][postal]": {
+                                        "type": "text"
+                                    },
+                                    "address[credit_home_address][country]": {
+                                        "type": "text"
+                                    },
+                                    "emails[hosting_uuid]": {
+                                        "type": "text"
+                                    },
+                                    "emails[email]": {
+                                        "type": "text"
+                                    },
+                                    "emails[password]": {
+                                        "type": "text"
+                                    },
+                                    "emails[phone]": {
+                                        "type": "text"
+                                    },
+                                    "files[dl_upload][front][]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "files[dl_upload][back][]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "files[ssn_upload][front][]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "files[ssn_upload][back][]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "files[cpn_docs_upload][]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "files_to_delete[]": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Director"
+                ],
+                "summary": "Add director (not working on swagger)",
+                "description": "Add director",
+                "operationId": "post_director",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "user_uuid",
+                                    "first_name",
+                                    "middle_name",
+                                    "last_name",
+                                    "date_of_birth",
+                                    "ssn_cpn",
+                                    "company_association",
+                                    "phone_type",
+                                    "phone_number",
+                                    "status",
+                                    "address[dl_address][street_address]",
+                                    "address[dl_address][address_line_2]",
+                                    "address[dl_address][city]",
+                                    "address[dl_address][state]",
+                                    "address[dl_address][postal]",
+                                    "address[dl_address][country]",
+                                    "address[credit_home_address][street_address]",
+                                    "address[credit_home_address][address_line_2]",
+                                    "address[credit_home_address][city]",
+                                    "address[credit_home_address][state]",
+                                    "address[credit_home_address][postal]",
+                                    "address[credit_home_address][country]",
+                                    "emails[hosting_uuid]",
+                                    "emails[email]",
+                                    "emails[password]",
+                                    "emails[phone]"
+                                ],
+                                "properties": {
+                                    "user_uuid": {
+                                        "type": "text"
+                                    },
+                                    "first_name": {
+                                        "type": "text"
+                                    },
+                                    "middle_name": {
+                                        "type": "text"
+                                    },
+                                    "last_name": {
+                                        "type": "text"
+                                    },
+                                    "date_of_birth": {
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "ssn_cpn": {
+                                        "type": "text"
+                                    },
+                                    "company_association": {
+                                        "type": "text"
+                                    },
+                                    "phone_type": {
+                                        "type": "text"
+                                    },
+                                    "phone_number": {
+                                        "type": "text"
+                                    },
+                                    "address[dl_address][street_address]": {
+                                        "type": "text"
+                                    },
+                                    "address[dl_address][address_line_2]": {
+                                        "type": "text"
+                                    },
+                                    "address[dl_address][city]": {
+                                        "type": "text"
+                                    },
+                                    "address[dl_address][state]": {
+                                        "type": "text"
+                                    },
+                                    "address[dl_address][postal]": {
+                                        "type": "text"
+                                    },
+                                    "address[dl_address][country]": {
+                                        "type": "text"
+                                    },
+                                    "address[credit_home_address][street_address]": {
+                                        "type": "text"
+                                    },
+                                    "address[credit_home_address][address_line_2]": {
+                                        "type": "text"
+                                    },
+                                    "address[credit_home_address][city]": {
+                                        "type": "text"
+                                    },
+                                    "address[credit_home_address][state]": {
+                                        "type": "text"
+                                    },
+                                    "address[credit_home_address][postal]": {
+                                        "type": "text"
+                                    },
+                                    "address[credit_home_address][country]": {
+                                        "type": "text"
+                                    },
+                                    "emails[hosting_uuid]": {
+                                        "type": "text"
+                                    },
+                                    "emails[email]": {
+                                        "type": "text"
+                                    },
+                                    "emails[password]": {
+                                        "type": "text"
+                                    },
+                                    "emails[phone]": {
+                                        "type": "text"
+                                    },
+                                    "files[dl_upload][front][]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "files[dl_upload][back][]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "files[ssn_upload][front][]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "files[ssn_upload][back][]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "files[cpn_docs_upload][]": {
+                                        "type": "file",
+                                        "format": "binary"
                                     }
                                 },
                                 "type": "object"

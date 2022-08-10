@@ -13,7 +13,9 @@ class File extends Model
 
     protected $fillable = ['user_uuid', 'entity_uuid', 'file_name', 'file_path', 'file_parent', 'status'];
 
+    protected $attributes = ['status' => 1];
+
     public function director(){
-        return $this->belongsTo(Director::class);
+        return $this->belongsTo(Director::class, 'entity_uuid', 'uuid');
     }
 }

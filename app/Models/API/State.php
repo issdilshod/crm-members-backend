@@ -11,4 +11,6 @@ class State extends Model
     use HasFactory, TraitUuid;
 
     protected $fillable = ['short_name', 'full_name', 'status'];
+
+    protected $attributes = ['status' => 1];
 }

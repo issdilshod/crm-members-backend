@@ -11,4 +11,6 @@ class Department extends Model
     use HasFactory, TraitUuid;
 
     protected $fillable = ['department_name', 'status'];
+
+    protected $attributes = ['status' => 1];
 }

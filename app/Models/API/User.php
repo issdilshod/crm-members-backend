@@ -12,6 +12,8 @@ class User extends Model
 
     protected $fillable = ['first_name', 'last_name', 'username', 'password', 'telegram', 'status'];
 
+    protected $attributes = ['status' => 1];
+
     public function activities(){
         //
         return $this->hasMany(Activity::class, 'user_uuid', 'uuid')

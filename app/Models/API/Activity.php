@@ -12,6 +12,8 @@ class Activity extends Model
 
     protected $fillable = ['user_uuid', 'entity_uuid', 'device', 'ip', 'description', 'status'];
 
+    protected $attributes = ['status' => 1];
+
     public function user(){
         return $this->belongsTo(User::class, 'user_uuid', 'uuid')
                                                             ->where('status', 1);

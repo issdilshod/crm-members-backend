@@ -8,8 +8,6 @@ use Illuminate\Http\Request;
 
 class SicCodeController extends Controller
 {
-
-
     /**     @OA\Get(
       *         path="/api/sic_code",
       *         operationId="list_sic_code",

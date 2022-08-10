@@ -13,7 +13,9 @@ class Email extends Model
 
     protected $fillable = ['entity_uuid', 'hosting_uuid', 'email', 'password', 'phone', 'status'];
 
+    protected $attributes = ['status' => 1];
+
     public function director(){
-        return $this->belongsTo(Director::class);
+        return $this->belongsTo(Director::class, 'entity_uuid', 'uuid');
     }
 }
