@@ -8,6 +8,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DirectorController;
 
 /*
@@ -54,3 +55,11 @@ Route::get('api/activity/entity/{uuid}', [ActivityController::class, 'by_entity'
 |
 */
 Route::resource('api/director', DirectorController::class);
+
+/*
+|--------------------------------------------------------------------------
+| Company Group Routes
+|--------------------------------------------------------------------------
+|
+*/
+Route::resource('api/company', CompanyController::class);

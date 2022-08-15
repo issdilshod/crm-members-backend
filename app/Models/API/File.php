@@ -18,4 +18,8 @@ class File extends Model
     public function director(){
         return $this->belongsTo(Director::class, 'entity_uuid', 'uuid');
     }
+
+    public function company(){
+        return $this->belongsTo(Company::class, 'entity_uuid', 'uuid');
+    }
 }

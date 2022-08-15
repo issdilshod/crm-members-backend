@@ -67,3 +67,15 @@ Route::post('api/director', 'DirectorController@store');
 Route::get('api/director/{uuid}', 'DirectorController@show');
 Route::put('api/director/{uuid}', 'DirectorController@update');
 Route::delete('api/director/{uuid}', 'DirectorController@delete');
+
+/*
+|--------------------------------------------------------------------------
+| Company Group
+|--------------------------------------------------------------------------
+|
+*/
+Route::get('api/company', 'CompanyController@index');
+Route::post('api/company', 'CompanyController@store');
+Route::get('api/company/{uuid}', 'CompanyController@show');
+Route::put('api/company/{uuid}', 'CompanyController@update');
+Route::delete('api/company/{uuid}', 'CompanyController@delete');

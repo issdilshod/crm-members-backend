@@ -181,6 +181,404 @@
                 }
             }
         },
+        "/api/company": {
+            "get": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "List of company",
+                "description": "List of company",
+                "operationId": "list_company",
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Update company (not working on swagger)",
+                "description": "Update company",
+                "operationId": "update_company",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "company uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "user_uuid": {
+                                        "type": "text"
+                                    },
+                                    "legal_name": {
+                                        "type": "text"
+                                    },
+                                    "sic_code_uuid": {
+                                        "type": "text"
+                                    },
+                                    "director_uuid": {
+                                        "type": "text"
+                                    },
+                                    "incorporation_state_uuid": {
+                                        "type": "text"
+                                    },
+                                    "incorporation_state_name": {
+                                        "type": "text"
+                                    },
+                                    "doing_business_in_state_uuid": {
+                                        "type": "text"
+                                    },
+                                    "doing_business_in_state_name": {
+                                        "type": "text"
+                                    },
+                                    "ein": {
+                                        "type": "text"
+                                    },
+                                    "phone_type": {
+                                        "type": "text"
+                                    },
+                                    "phone_number": {
+                                        "type": "text"
+                                    },
+                                    "website": {
+                                        "type": "text"
+                                    },
+                                    "db_report_number": {
+                                        "type": "text"
+                                    },
+                                    "address[street_address]": {
+                                        "type": "text"
+                                    },
+                                    "address[address_line_2]": {
+                                        "type": "text"
+                                    },
+                                    "address[city]": {
+                                        "type": "text"
+                                    },
+                                    "address[state]": {
+                                        "type": "text"
+                                    },
+                                    "address[postal]": {
+                                        "type": "text"
+                                    },
+                                    "address[country]": {
+                                        "type": "text"
+                                    },
+                                    "emails[0][hosting_uuid]": {
+                                        "type": "text"
+                                    },
+                                    "emails[0][email]": {
+                                        "type": "text"
+                                    },
+                                    "emails[0][password]": {
+                                        "type": "text"
+                                    },
+                                    "emails[0][phone]": {
+                                        "type": "text"
+                                    },
+                                    "bank_account[name]": {
+                                        "type": "text"
+                                    },
+                                    "bank_account[website]": {
+                                        "type": "text"
+                                    },
+                                    "bank_account[username]": {
+                                        "type": "text"
+                                    },
+                                    "bank_account[password]": {
+                                        "type": "text"
+                                    },
+                                    "bank_account[account_number]": {
+                                        "type": "text"
+                                    },
+                                    "bank_account[routing_number]": {
+                                        "type": "text"
+                                    },
+                                    "files[incorporation_state][]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "files[doing_business_in_state][]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "files[company_ein][]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "files[db_report][]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "files_to_delete[]": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Add company (not working on swagger)",
+                "description": "Add company",
+                "operationId": "post_company",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "user_uuid",
+                                    "legal_name",
+                                    "sic_code_uuid",
+                                    "director_uuid",
+                                    "incorporation_state_uuid",
+                                    "incorporation_state_name",
+                                    "doing_business_in_state_uuid",
+                                    "doing_business_in_state_name",
+                                    "ein",
+                                    "phone_type",
+                                    "phone_number",
+                                    "website",
+                                    "db_report_number",
+                                    "address[street_address]",
+                                    "address[address_line_2]",
+                                    "address[city]",
+                                    "address[state]",
+                                    "address[postal]",
+                                    "address[country]",
+                                    "emails[0][hosting_uuid]",
+                                    "emails[0][email]",
+                                    "emails[0][password]",
+                                    "emails[0][phone]",
+                                    "bank_account[name]",
+                                    "bank_account[website]",
+                                    "bank_account[username]",
+                                    "bank_account[password]",
+                                    "bank_account[account_number]",
+                                    "bank_account[routing_number]"
+                                ],
+                                "properties": {
+                                    "user_uuid": {
+                                        "type": "text"
+                                    },
+                                    "legal_name": {
+                                        "type": "text"
+                                    },
+                                    "sic_code_uuid": {
+                                        "type": "text"
+                                    },
+                                    "director_uuid": {
+                                        "type": "text"
+                                    },
+                                    "incorporation_state_uuid": {
+                                        "type": "text"
+                                    },
+                                    "incorporation_state_name": {
+                                        "type": "text"
+                                    },
+                                    "doing_business_in_state_uuid": {
+                                        "type": "text"
+                                    },
+                                    "doing_business_in_state_name": {
+                                        "type": "text"
+                                    },
+                                    "ein": {
+                                        "type": "text"
+                                    },
+                                    "phone_type": {
+                                        "type": "text"
+                                    },
+                                    "phone_number": {
+                                        "type": "text"
+                                    },
+                                    "website": {
+                                        "type": "text"
+                                    },
+                                    "db_report_number": {
+                                        "type": "text"
+                                    },
+                                    "address[street_address]": {
+                                        "type": "text"
+                                    },
+                                    "address[address_line_2]": {
+                                        "type": "text"
+                                    },
+                                    "address[city]": {
+                                        "type": "text"
+                                    },
+                                    "address[state]": {
+                                        "type": "text"
+                                    },
+                                    "address[postal]": {
+                                        "type": "text"
+                                    },
+                                    "address[country]": {
+                                        "type": "text"
+                                    },
+                                    "emails[0][hosting_uuid]": {
+                                        "type": "text"
+                                    },
+                                    "emails[0][email]": {
+                                        "type": "text"
+                                    },
+                                    "emails[0][password]": {
+                                        "type": "text"
+                                    },
+                                    "emails[0][phone]": {
+                                        "type": "text"
+                                    },
+                                    "bank_account[name]": {
+                                        "type": "text"
+                                    },
+                                    "bank_account[website]": {
+                                        "type": "text"
+                                    },
+                                    "bank_account[username]": {
+                                        "type": "text"
+                                    },
+                                    "bank_account[password]": {
+                                        "type": "text"
+                                    },
+                                    "bank_account[account_number]": {
+                                        "type": "text"
+                                    },
+                                    "bank_account[routing_number]": {
+                                        "type": "text"
+                                    },
+                                    "files[incorporation_state][]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "files[doing_business_in_state][]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "files[company_ein][]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "files[db_report][]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    }
+                }
+            }
+        },
+        "/api/company/{uuid}": {
+            "get": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Get company",
+                "description": "Get company",
+                "operationId": "get_company",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "company uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
         "/api/department": {
             "get": {
                 "tags": [
@@ -255,34 +653,7 @@
                     "content": {
                         "multipart/form-data": {
                             "schema": {
-                                "required": [
-                                    "user_uuid",
-                                    "first_name",
-                                    "middle_name",
-                                    "last_name",
-                                    "date_of_birth",
-                                    "ssn_cpn",
-                                    "company_association",
-                                    "phone_type",
-                                    "phone_number",
-                                    "status",
-                                    "address[dl_address][street_address]",
-                                    "address[dl_address][address_line_2]",
-                                    "address[dl_address][city]",
-                                    "address[dl_address][state]",
-                                    "address[dl_address][postal]",
-                                    "address[dl_address][country]",
-                                    "address[credit_home_address][street_address]",
-                                    "address[credit_home_address][address_line_2]",
-                                    "address[credit_home_address][city]",
-                                    "address[credit_home_address][state]",
-                                    "address[credit_home_address][postal]",
-                                    "address[credit_home_address][country]",
-                                    "emails[hosting_uuid]",
-                                    "emails[email]",
-                                    "emails[password]",
-                                    "emails[phone]"
-                                ],
+                                "required": [],
                                 "properties": {
                                     "user_uuid": {
                                         "type": "text"

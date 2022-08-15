@@ -155,8 +155,11 @@ class DirectorController extends Controller
             $result_check[$key] = Address::where('street_address', $value['street_address'])
                                             ->where('address_line_2', $value['address_line_2'])
                                             ->where('city', $value['city'])
-                                            ->orWhere('postal', $value['postal'])
+                                            ->where('postal', $value['postal'])
                                             ->first();
+            if ($result_check[$key]!=null){
+                break;
+            }
         endforeach;
 
         // Check Director
@@ -212,10 +215,10 @@ class DirectorController extends Controller
                 foreach ($value AS $key1 => $value1):
                     if ($key1=='back' || $key1=='front'){
                         $tmp_file = $value1;
-                        $file_parent = $key1;
+                        $file_parent = $key . '/' . $key1;
                     }else{
                         $tmp_file = $value;
-                        $file_parent = '';
+                        $file_parent = $key;
                     }
                     foreach ($tmp_file AS $key2 => $value2):
                         $file = new File();
@@ -299,7 +302,7 @@ class DirectorController extends Controller
       *                 @OA\MediaType(
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
-      *                         required={"user_uuid", "first_name", "middle_name", "last_name", "date_of_birth", "ssn_cpn", "company_association", "phone_type", "phone_number", "status", "address[dl_address][street_address]", "address[dl_address][address_line_2]", "address[dl_address][city]", "address[dl_address][state]", "address[dl_address][postal]", "address[dl_address][country]", "address[credit_home_address][street_address]", "address[credit_home_address][address_line_2]", "address[credit_home_address][city]", "address[credit_home_address][state]", "address[credit_home_address][postal]", "address[credit_home_address][country]", "emails[hosting_uuid]", "emails[email]", "emails[password]", "emails[phone]"},
+      *                         required={},
       *                         @OA\Property(property="user_uuid", type="text"),
       *                         @OA\Property(property="first_name", type="text"),
       *                         @OA\Property(property="middle_name", type="text"),
@@ -394,32 +397,41 @@ class DirectorController extends Controller
         // Check Email
         if (isset($validated['emails'])){
             $result_check['emails'] = Email::where('entity_uuid', '!=', $director['uuid'])
-                                        ->where('email', $validated['emails']['email'])
-                                        ->where('hosting_uuid', $validated['emails']['hosting_uuid'])
-                                        ->orWhere('phone', $validated['emails']['phone'])
-                                        ->first();
+                                                ->where(function($query) use ($validated){
+                                                        $query->where('email', $validated['emails']['email'])
+                                                                ->where('hosting_uuid', $validated['emails']['hosting_uuid'])
+                                                                ->orWhere('phone', $validated['emails']['phone']);
+                                                })
+                                                ->first();
         }
 
         // Check Address
         if (isset($validated['address'])){
             foreach ($validated['address'] AS $key => $value):
                 $result_check[$key] = Address::where('entity_uuid', '!=', $director['uuid'])
-                                                ->where('street_address', $value['street_address'])
-                                                ->where('address_line_2', $value['address_line_2'])
-                                                ->where('city', $value['city'])
-                                                ->orWhere('postal', $value['postal'])
+                                                ->where(function($query) use ($value){
+                                                        $query->where('street_address', $value['street_address'])
+                                                                ->where('address_line_2', $value['address_line_2'])
+                                                                ->where('city', $value['city'])
+                                                                ->where('postal', $value['postal']);
+                                                })
                                                 ->first();
+                if ($result_check[$key]!=null){
+                    break;
+                }
             endforeach;
         }
 
         // Check Director
         $result_check['director'] = Director::where('uuid', '!=', $director['uuid'])
-                                                ->where('first_name', $validated['first_name'])
-                                                ->where('middle_name', $validated['middle_name'])
-                                                ->where('last_name', $validated['last_name'])
-                                                ->orWhere('ssn_cpn', $validated['ssn_cpn'])
-                                                ->orWhere('company_association', $validated['company_association'])
-                                                ->orWhere('phone_number', $validated['phone_number'])
+                                                ->where(function($query) use ($validated){
+                                                        $query->where('first_name', $validated['first_name'])
+                                                                ->where('middle_name', $validated['middle_name'])
+                                                                ->where('last_name', $validated['last_name'])
+                                                                ->orWhere('ssn_cpn', $validated['ssn_cpn'])
+                                                                ->orWhere('company_association', $validated['company_association'])
+                                                                ->orWhere('phone_number', $validated['phone_number']);
+                                                })
                                                 ->first();
 
         $exsist = false;
@@ -482,10 +494,10 @@ class DirectorController extends Controller
                 foreach ($value AS $key1 => $value1):
                     if ($key1=='back' || $key1=='front'){
                         $tmp_file = $value1;
-                        $file_parent = $key1;
+                        $file_parent = $key . '/' . $key1;
                     }else{
                         $tmp_file = $value;
-                        $file_parent = '';
+                        $file_parent = $key;
                     }
                     foreach ($tmp_file AS $key2 => $value2):
                         $file = new File();
