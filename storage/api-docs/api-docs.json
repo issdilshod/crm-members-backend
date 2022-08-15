@@ -406,6 +406,9 @@
                     },
                     "404": {
                         "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
                     }
                 }
             },
@@ -568,6 +571,9 @@
                     },
                     "404": {
                         "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
                     }
                 }
             }

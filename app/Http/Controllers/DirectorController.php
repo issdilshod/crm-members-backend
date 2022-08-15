@@ -101,11 +101,13 @@ class DirectorController extends Controller
       *             ),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=404, description="Resource Not Found"),
+      *             @OA\Response(response=409, description="Conflict"),
       *     )
       */
     public function store(Request $request)
     {
-        //
+        #region Validate
+
         $validated = $request->validate([
             'user_uuid' => 'required|string',
             'first_name' => 'required|string',
@@ -137,15 +139,62 @@ class DirectorController extends Controller
             'emails.phone' => 'required|string',
         ]);
 
-        //TODO: Check exsist models (Email, Address, Director)
+        #endregion
+
+        #region Check exsist models
+
+        $result_check = [];
+        // Check Email
+        $result_check['emails'] = Email::where('email', $validated['emails']['email'])
+                                        ->where('hosting_uuid', $validated['emails']['hosting_uuid'])
+                                        ->orWhere('phone', $validated['emails']['phone'])
+                                        ->first();
+
+        // Check Address
+        foreach ($validated['address'] AS $key => $value):
+            $result_check[$key] = Address::where('street_address', $value['street_address'])
+                                            ->where('address_line_2', $value['address_line_2'])
+                                            ->where('city', $value['city'])
+                                            ->orWhere('postal', $value['postal'])
+                                            ->first();
+        endforeach;
+
+        // Check Director
+        $result_check['director'] = Director::where('first_name', $validated['first_name'])
+                                                ->where('middle_name', $validated['middle_name'])
+                                                ->where('last_name', $validated['last_name'])
+                                                ->orWhere('ssn_cpn', $validated['ssn_cpn'])
+                                                ->orWhere('company_association', $validated['company_association'])
+                                                ->orWhere('phone_number', $validated['phone_number'])
+                                                ->first();
+
+        $exsist = false;
+        foreach ($result_check AS $key => $value):
+            if ($value != null){
+                $exsist = true;
+                break;
+            }
+        endforeach;
+
+        if ($exsist){
+            return response()->json([
+                        'data' => $result_check,
+                    ], 409);
+        }
+
+        #endregion
 
         $director = Director::create($validated);
 
-        // Email add
+        #region Email add
+
         $validated['emails']['entity_uuid'] = $director['uuid'];
         Email::create($validated['emails']);
 
-        // Address add
+        #endregion
+
+        #region  Address add
+
         foreach ($validated['address'] AS $key => $value){
             $address = new Address($validated['address'][$key]);
             $address->address_parent = $key;
@@ -153,7 +202,10 @@ class DirectorController extends Controller
             $address->save();
         }
 
-        // Files upload (if exsist)
+        #endregion
+
+        #region Files upload (if exsist)
+
         if ($request->has('files')){
             $files = $request->file('files');
             foreach ($files AS $key => $value):
@@ -178,6 +230,8 @@ class DirectorController extends Controller
                 endforeach;
             endforeach;
         }
+
+        #endregion
 
         return new DirectorResource($director);
     }
@@ -292,11 +346,13 @@ class DirectorController extends Controller
       *             ),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=404, description="Resource Not Found"),
+      *             @OA\Response(response=409, description="Conflict"),
       *     )
       */
     public function update(Request $request, Director $director)
     {
-        //
+        #region Validate
+
         $validated = $request->validate([
             'user_uuid' => 'string',
             'first_name' => 'string',
@@ -330,17 +386,71 @@ class DirectorController extends Controller
             'files_to_delete' => 'array'
         ]);
 
-        //TODO: Check exsist models (Email, Address, Director)
+        #endregion
+
+        #region Check exsist models
+
+        $result_check = [];
+        // Check Email
+        if (isset($validated['emails'])){
+            $result_check['emails'] = Email::where('entity_uuid', '!=', $director['uuid'])
+                                        ->where('email', $validated['emails']['email'])
+                                        ->where('hosting_uuid', $validated['emails']['hosting_uuid'])
+                                        ->orWhere('phone', $validated['emails']['phone'])
+                                        ->first();
+        }
+
+        // Check Address
+        if (isset($validated['address'])){
+            foreach ($validated['address'] AS $key => $value):
+                $result_check[$key] = Address::where('entity_uuid', '!=', $director['uuid'])
+                                                ->where('street_address', $value['street_address'])
+                                                ->where('address_line_2', $value['address_line_2'])
+                                                ->where('city', $value['city'])
+                                                ->orWhere('postal', $value['postal'])
+                                                ->first();
+            endforeach;
+        }
+
+        // Check Director
+        $result_check['director'] = Director::where('uuid', '!=', $director['uuid'])
+                                                ->where('first_name', $validated['first_name'])
+                                                ->where('middle_name', $validated['middle_name'])
+                                                ->where('last_name', $validated['last_name'])
+                                                ->orWhere('ssn_cpn', $validated['ssn_cpn'])
+                                                ->orWhere('company_association', $validated['company_association'])
+                                                ->orWhere('phone_number', $validated['phone_number'])
+                                                ->first();
+
+        $exsist = false;
+        foreach ($result_check AS $key => $value):
+            if ($value != null){
+                $exsist = true;
+                break;
+            }
+        endforeach;
+
+        if ($exsist){
+            return response()->json([
+                        'data' => $result_check,
+                    ], 409);
+        }
+
+        #endregion
 
         $director->update($validated);
 
-        // Email update (if exsist)
+        #region Email update (if exsist)
+
         if (isset($validated['emails'])){
             $email = Email::where('entity_uuid', $director['uuid']);
             $email->update($validated['emails']);
         }
 
-        // Address update (if exsist)
+        #endregion
+
+        #region Address update (if exsist)
+
         if (isset($validated['address'])){
             foreach ($validated['address'] AS $key => $value){
                 $address = Address::where('entity_uuid', $director['uuid'])
@@ -349,7 +459,10 @@ class DirectorController extends Controller
             }
         }
 
-        // Files delete (if exsist)
+        #endregion
+
+        #region Files delete (if exsist)
+
         if (isset($validated['files_to_delete'])){
             foreach ($validated['files_to_delete'] AS $key => $value):
                 if ($value!=null){
@@ -359,7 +472,10 @@ class DirectorController extends Controller
             endforeach;
         }
 
-        // Files upload (if exsist)
+        #endregion
+
+        #region Files upload (if exsist)
+
         if ($request->has('files')){
             $files = $request->file('files');
             foreach ($files AS $key => $value):
@@ -384,6 +500,8 @@ class DirectorController extends Controller
                 endforeach;
             endforeach;
         }
+
+        #endregion
 
         return new DirectorResource($director);
     }

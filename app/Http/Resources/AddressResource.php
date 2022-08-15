@@ -22,8 +22,7 @@ class AddressResource extends JsonResource
             'state' => $this->state,
             'postal' => $this->postal,
             'country' => $this->country,
-            'address_parent' => $this->address_parent,
-            'status' => $this->status
+            'address_parent' => $this->address_parent
         ];
     }
 }
