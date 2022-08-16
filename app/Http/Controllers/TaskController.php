@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\TaskResource;
 use App\Models\API\File;
 use App\Models\API\Task;
+use App\Models\API\TaskToUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -125,10 +126,24 @@ class TaskController extends Controller
 
         $task = Task::create($validated);
 
-        //TODO: Realize user add
         #region Users add (if exsist)
 
-
+        if (isset($validated['users'])){
+            foreach($validated['users'] AS $key => $value):
+                $task_to_user = new TaskToUser();
+                $task_to_user->user_uuid = $value;
+                $task_to_user->task_uuid = $task['uuid'];
+                $task_to_user->department_uuid = $validated['department_uuid'];
+                $task_to_user->group = 0;
+                $task_to_user->save();
+            endforeach;
+        }else{
+            $task_to_user = new TaskToUser();
+            $task_to_user->task_uuid = $task['uuid'];
+            $task_to_user->department_uuid = $validated['department_uuid'];
+            $task_to_user->group = 1;
+            $task_to_user->save();
+        }
 
         #endregion
 
@@ -301,17 +316,51 @@ class TaskController extends Controller
 
         $task->update($validated);
 
-        //TODO: Realize user add
         #region Users add (if exsist)
 
+        if (isset($validated['department_uuid'])){
+            $task_to_user = TaskToUser::where('status', 1)
+                                        ->where('task_uuid', $task['uuid'])
+                                        ->where('department_uuid')->count();
 
+            //TODO: Have to check it again
+            if (isset($validated['users'])){
+                if (!$task_to_user){ // if department not found
+                    TaskToUser::where('task_uuid', $task['uuid'])->update(['status' => 0]);
+                }
+                foreach($validated['users'] AS $key => $value):
+                    $task_to_user = new TaskToUser();
+                    $task_to_user->user_uuid = $value;
+                    $task_to_user->task_uuid = $task['uuid'];
+                    $task_to_user->department_uuid = $validated['department_uuid'];
+                    $task_to_user->group = 0;
+                    $task_to_user->save();
+                endforeach;
+            }else{
+                $tmp_group = 0;
+                if ($task_to_user && $task_to_user==count($validated['users_to_delete'])){ // if department found && all users delete
+                    $tmp_group = 1;
+                }
+
+                $task_to_user = new TaskToUser();
+                $task_to_user->task_uuid = $task['uuid'];
+                $task_to_user->user_uuid = $validated['user_uuid'];
+                $task_to_user->department_uuid = $validated['department_uuid'];
+                $task_to_user->group = $tmp_group;
+                $task_to_user->save();
+            }
+        }
 
         #endregion
 
-        //TODO: Realize user to delete
         #region Users to delete (if exsist)
 
-
+        if (isset($validated['users_to_delete'])){
+            foreach($validated['users_to_delete'] AS $key => $value):
+                $task_to_user = TaskToUser::where('task_uuid', $task['uuid'])->where('user_uuid', $value);
+                $task_to_user->update(['status' => 0]);
+            endforeach;
+        }
 
         #endregion
 

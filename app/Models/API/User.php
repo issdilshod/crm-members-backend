@@ -20,4 +20,9 @@ class User extends Model
                                                                 ->where('status', 1)
                                                                 ->limit(10);
     }
+
+    public function tasks(){
+        return $this->hasMany(TaskToUser::class, 'user_uuid', 'uuid')
+                                                            ->where('status', 1);
+    }
 }
