@@ -79,3 +79,15 @@ Route::post('api/company', 'CompanyController@store');
 Route::get('api/company/{uuid}', 'CompanyController@show');
 Route::put('api/company/{uuid}', 'CompanyController@update');
 Route::delete('api/company/{uuid}', 'CompanyController@delete');
+
+/*
+|--------------------------------------------------------------------------
+| Task Group
+|--------------------------------------------------------------------------
+|
+*/
+Route::get('api/task', 'TaskController@index');
+Route::post('api/task', 'TaskController@store');
+Route::get('api/task/{uuid}', 'TaskController@show');
+Route::put('api/task/{uuid}', 'TaskController@update');
+Route::delete('api/task/{uuid}', 'TaskController@delete');

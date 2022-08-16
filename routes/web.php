@@ -10,6 +10,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DirectorController;
+use App\Http\Controllers\TaskController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,3 +64,11 @@ Route::resource('api/director', DirectorController::class);
 |
 */
 Route::resource('api/company', CompanyController::class);
+
+/*
+|--------------------------------------------------------------------------
+| Task Group Routes
+|--------------------------------------------------------------------------
+|
+*/
+Route::resource('api/task', TaskController::class);

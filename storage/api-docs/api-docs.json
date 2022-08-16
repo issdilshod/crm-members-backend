@@ -1106,6 +1106,231 @@
                 }
             }
         },
+        "/api/task": {
+            "get": {
+                "tags": [
+                    "Task"
+                ],
+                "summary": "List of task",
+                "description": "List of task",
+                "operationId": "list_task",
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Update task (not working on swagger)",
+                "description": "Update task",
+                "operationId": "update_task",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "task uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [],
+                                "properties": {
+                                    "user_uuid": {
+                                        "type": "text"
+                                    },
+                                    "company_uuid": {
+                                        "type": "text"
+                                    },
+                                    "due_date": {
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "description": {
+                                        "type": "text"
+                                    },
+                                    "priority": {
+                                        "type": "integer"
+                                    },
+                                    "department_uuid": {
+                                        "type": "string"
+                                    },
+                                    "users[]": {
+                                        "type": "string"
+                                    },
+                                    "users_to_delete[]": {
+                                        "type": "string"
+                                    },
+                                    "files_to_delete[]": {
+                                        "type": "string"
+                                    },
+                                    "files[attachment][]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Add task (not working on swagger)",
+                "description": "Add task",
+                "operationId": "post_task",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "user_uuid",
+                                    "company_uuid",
+                                    "due_date",
+                                    "description",
+                                    "priority",
+                                    "department_uuid"
+                                ],
+                                "properties": {
+                                    "user_uuid": {
+                                        "type": "text"
+                                    },
+                                    "company_uuid": {
+                                        "type": "text"
+                                    },
+                                    "due_date": {
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "description": {
+                                        "type": "text"
+                                    },
+                                    "priority": {
+                                        "type": "integer"
+                                    },
+                                    "department_uuid": {
+                                        "type": "string"
+                                    },
+                                    "users[]": {
+                                        "type": "string"
+                                    },
+                                    "files[attachment][]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    }
+                }
+            }
+        },
+        "/api/task/{uuid}": {
+            "get": {
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Get task",
+                "description": "Get task",
+                "operationId": "get_task",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "task uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
         "/api/user": {
             "get": {
                 "tags": [
