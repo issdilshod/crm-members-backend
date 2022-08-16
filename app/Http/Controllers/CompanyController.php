@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\CompanyResource;
 use App\Models\API\Address;
 use App\Models\API\BankAccount;
+use App\Models\API\BankAccountSecurity;
 use App\Models\API\Company;
 use App\Models\API\Email;
 use App\Models\API\File;
@@ -79,10 +80,10 @@ class CompanyController extends Controller
       *                         @OA\Property(property="address[postal]", type="text"),
       *                         @OA\Property(property="address[country]", type="text"),
       *
-      *                         @OA\Property(property="emails[0][hosting_uuid]", type="text"),
-      *                         @OA\Property(property="emails[0][email]", type="text"),
-      *                         @OA\Property(property="emails[0][password]", type="text"),
-      *                         @OA\Property(property="emails[0][phone]", type="text"),
+      *                         @OA\Property(property="emails[][hosting_uuid]", type="text"),
+      *                         @OA\Property(property="emails[][email]", type="text"),
+      *                         @OA\Property(property="emails[][password]", type="text"),
+      *                         @OA\Property(property="emails[][phone]", type="text"),
       *
       *                         @OA\Property(property="bank_account[name]", type="text"),
       *                         @OA\Property(property="bank_account[website]", type="text"),
@@ -90,6 +91,9 @@ class CompanyController extends Controller
       *                         @OA\Property(property="bank_account[password]", type="text"),
       *                         @OA\Property(property="bank_account[account_number]", type="text"),
       *                         @OA\Property(property="bank_account[routing_number]", type="text"),
+      *
+      *                         @OA\Property(property="bank_account_security[][question]", type="text"),
+      *                         @OA\Property(property="bank_account_security[][answer]", type="text"),
       *
       *                         @OA\Property(property="files[incorporation_state][]", type="file", format="binary"),
       *                         @OA\Property(property="files[doing_business_in_state][]", type="file", format="binary"),
@@ -145,6 +149,9 @@ class CompanyController extends Controller
             'bank_account.password' => 'required|string',
             'bank_account.account_number' => 'required|string',
             'bank_account.routing_number' => 'required|string',
+
+            // bank account security
+            'bank_account_security' => 'array'
         ]);
 
         #endregion
@@ -167,7 +174,7 @@ class CompanyController extends Controller
         $result_check['address'] = Address::where('street_address', $validated['address']['street_address'])
                                             ->where('address_line_2', $validated['address']['address_line_2'])
                                             ->where('city',$validated['address']['city'])
-                                            ->orWhere('postal', $validated['address']['postal'])
+                                            ->where('postal', $validated['address']['postal'])
                                             ->first();
 
         // Check Company
@@ -213,10 +220,17 @@ class CompanyController extends Controller
 
         #endregion
 
-        #region Bank account add
+        #region Bank account & bank account security (if exsist) add
 
         $validated['bank_account']['entity_uuid'] = $company['uuid'];
-        BankAccount::create($validated['bank_account']);
+        $bank_account = BankAccount::create($validated['bank_account']);
+
+        if (isset($validated['bank_account_security'])){
+            foreach ($validated['bank_account_security'] AS $key => $value):
+                $value['entity_uuid'] = $bank_account['uuid'];
+                BankAccountSecurity::create($value);
+            endforeach;
+        }
 
         #endregion
 
@@ -351,6 +365,11 @@ class CompanyController extends Controller
       *                         @OA\Property(property="bank_account[account_number]", type="text"),
       *                         @OA\Property(property="bank_account[routing_number]", type="text"),
       *
+      *                         @OA\Property(property="bank_account_security[][question]", type="text"),
+      *                         @OA\Property(property="bank_account_security[][answer]", type="text"),
+      *
+      *                         @OA\Property(property="bank_account_security_to_delete[]", type="text"),
+      *
       *                         @OA\Property(property="files[incorporation_state][]", type="file", format="binary"),
       *                         @OA\Property(property="files[doing_business_in_state][]", type="file", format="binary"),
       *                         @OA\Property(property="files[company_ein][]", type="file", format="binary"),
@@ -410,6 +429,12 @@ class CompanyController extends Controller
 
             // files to delete
             'files_to_delete' => 'array',
+
+            // bank account security
+            'bank_account_security' => 'array',
+
+            // bank account security to delete
+            'bank_account_security_to_delete' => 'array'
         ]);
 
         #endregion
@@ -418,50 +443,58 @@ class CompanyController extends Controller
 
         $result_check = [];
         // Check Email
-        foreach($validated['emails'] AS $key => $value):
-            $result_check['emails'] = Email::where('entity_uuid', '!=', $company['uuid'])
-                                            ->where(function($query) use ($value){
-                                                    $query->where('email', $value['email'])
-                                                            ->where('hosting_uuid', $value['hosting_uuid'])
-                                                            ->orWhere('phone', $value['phone']);
-                                            })
-                                            ->first();
-            if ($result_check['emails']!=null){
-                break;
-            }
-        endforeach;
+        if (isset($validated['emails'])){
+            foreach($validated['emails'] AS $key => $value):
+                $result_check['emails'] = Email::where('entity_uuid', '!=', $company['uuid'])
+                                                ->where(function($query) use ($value){
+                                                        $query->where('email', $value['email'])
+                                                                ->where('hosting_uuid', $value['hosting_uuid'])
+                                                                ->orWhere('phone', $value['phone']);
+                                                })
+                                                ->first();
+                if ($result_check['emails']!=null){
+                    break;
+                }
+            endforeach;
+        }
 
         // Check Address
-        $result_check['address'] = Address::where('entity_uuid', '!=', $company['uuid'])
-                                            ->where(function($query) use ($validated){
-                                                    $query->where('street_address', $validated['address']['street_address'])
-                                                            ->where('address_line_2', $validated['address']['address_line_2'])
-                                                            ->where('city',$validated['address']['city'])
-                                                            ->where('postal', $validated['address']['postal']);
-                                            })
-                                            ->first();
+        if (isset($validated['address'])){
+            $result_check['address'] = Address::where('entity_uuid', '!=', $company['uuid'])
+                                                ->where(function($query) use ($validated){
+                                                        $query->where('street_address', $validated['address']['street_address'])
+                                                                ->where('address_line_2', $validated['address']['address_line_2'])
+                                                                ->where('city',$validated['address']['city'])
+                                                                ->where('postal', $validated['address']['postal']);
+                                                })
+                                                ->first();
+        }
 
         // Check Company
-        $result_check['company'] = Company::where('uuid', '!=', $company['uuid'])
-                                            ->where(function($query) use ($validated){
-                                                    $query->where('legal_name', $validated['legal_name'])
-                                                            ->orWhere('director_uuid', $validated['director_uuid'])
-                                                            ->orWhere('ein', $validated['ein'])
-                                                            ->orWhere('phone_number', $validated['phone_number'])
-                                                            ->orwhere('website', $validated['website'])
-                                                            ->orWhere('db_report_number', $validated['db_report_number']);
-                                            })
-                                            ->first();
+        if (isset($validated['legal_name'])){
+            $result_check['company'] = Company::where('uuid', '!=', $company['uuid'])
+                                                ->where(function($query) use ($validated){
+                                                        $query->where('legal_name', $validated['legal_name'])
+                                                                ->orWhere('director_uuid', $validated['director_uuid'])
+                                                                ->orWhere('ein', $validated['ein'])
+                                                                ->orWhere('phone_number', $validated['phone_number'])
+                                                                ->orwhere('website', $validated['website'])
+                                                                ->orWhere('db_report_number', $validated['db_report_number']);
+                                                })
+                                                ->first();
+        }
 
         // Check Bank Account
-        $result_check['bank_account'] = BankAccount::where('entity_uuid', '!=', $company['uuid'])
-                                                    ->where(function($query) use ($validated){
-                                                            $query->where('name', $validated['bank_account']['name'])
-                                                                    ->where('username', $validated['bank_account']['username'])
-                                                                    ->orwhere('account_number', $validated['bank_account']['account_number'])
-                                                                    ->orWhere('routing_number', $validated['bank_account']['routing_number']);
-                                                    })
-                                                    ->first();
+        if (isset($validated['bank_account'])){
+            $result_check['bank_account'] = BankAccount::where('entity_uuid', '!=', $company['uuid'])
+                                                        ->where(function($query) use ($validated){
+                                                                $query->where('name', $validated['bank_account']['name'])
+                                                                        ->where('username', $validated['bank_account']['username'])
+                                                                        ->orwhere('account_number', $validated['bank_account']['account_number'])
+                                                                        ->orWhere('routing_number', $validated['bank_account']['routing_number']);
+                                                        })
+                                                        ->first();
+        }
 
         $exsist = false;
         foreach ($result_check AS $key => $value):
@@ -492,17 +525,40 @@ class CompanyController extends Controller
 
         #endregion
 
-        #region Bank account update
+        #region Bank account & bank account security (delete/update) update
 
-        $bank_account = BankAccount::where('entity_uuid', $company['uuid']);
-        $bank_account->update($validated['bank_account']);
+        $bank_account = BankAccount::where('entity_uuid', $company['uuid'])->first();
+        if (isset($validated['bank_account'])){
+            $bank_account->update($validated['bank_account']);
+        }
+
+        if (isset($validated['bank_account_security_to_delete'])){
+            foreach($validated['bank_account_security_to_delete'] AS $key => $value):
+                $bank_account_security = BankAccountSecurity::where('uuid', $value);
+                $bank_account_security->update(['status' => '0']);
+            endforeach;
+        }
+
+        if (isset($validated['bank_account_security'])){
+            foreach ($validated['bank_account_security'] AS $key => $value):
+                $value['entity_uuid'] = $bank_account['uuid'];
+                $bank_account_security = BankAccountSecurity::find($value);
+                if (!$bank_account_security->count()){
+                    BankAccountSecurity::create($value);
+                }else{
+                    $bank_account_security->update($value);
+                }
+            endforeach;
+        }
 
         #endregion
 
         #region Address update
 
-        $address = Address::where('entity_uuid', $company['uuid']);
-        $address->update($validated['address']);
+        if (isset($validated['address'])){
+            $address = Address::where('entity_uuid', $company['uuid']);
+            $address->update($validated['address']);
+        }
 
         #endregion
 
