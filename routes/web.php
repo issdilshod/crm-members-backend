@@ -31,9 +31,9 @@ use App\Http\Controllers\TaskController;
 |--------------------------------------------------------------------------
 |
 */
-Route::resource('api/sic_code', SicCodeController::class);
-Route::resource('api/state', StateController::class);
-Route::resource('api/hosting', HostingController::class);
+Route::resource('api/sic_code', SicCodeController::class)->middleware('auth.custom');
+Route::resource('api/state', StateController::class)->middleware('auth.custom');
+Route::resource('api/hosting', HostingController::class)->middleware('auth.custom');
 
 /*
 |--------------------------------------------------------------------------
@@ -41,13 +41,15 @@ Route::resource('api/hosting', HostingController::class);
 |--------------------------------------------------------------------------
 |
 */
-Route::resource('api/department', DepartmentController::class);
-Route::resource('api/user', UserController::class);
-Route::resource('api/role', RoleController::class);
+Route::resource('api/department', DepartmentController::class)->middleware('auth.custom');
+Route::resource('api/role', RoleController::class)->middleware('auth.custom');
+// Login
+Route::resource('api/user', UserController::class)->middleware('auth.custom');
+Route::post('api/login', [UserController::class, 'login']);
 // Activity
 Route::resource('api/activity', ActivityController::class);
-Route::get('api/activity/user/{uuid}', [ActivityController::class, 'by_user']);
-Route::get('api/activity/entity/{uuid}', [ActivityController::class, 'by_entity']);
+Route::get('api/activity/user/{uuid}', [ActivityController::class, 'by_user'])->middleware('auth.custom');
+Route::get('api/activity/entity/{uuid}', [ActivityController::class, 'by_entity'])->middleware('auth.custom');
 
 /*
 |--------------------------------------------------------------------------
@@ -55,7 +57,7 @@ Route::get('api/activity/entity/{uuid}', [ActivityController::class, 'by_entity'
 |--------------------------------------------------------------------------
 |
 */
-Route::resource('api/director', DirectorController::class);
+Route::resource('api/director', DirectorController::class)->middleware('auth.custom');
 
 /*
 |--------------------------------------------------------------------------
@@ -63,7 +65,7 @@ Route::resource('api/director', DirectorController::class);
 |--------------------------------------------------------------------------
 |
 */
-Route::resource('api/company', CompanyController::class);
+Route::resource('api/company', CompanyController::class)->middleware('auth.custom');
 
 /*
 |--------------------------------------------------------------------------
@@ -71,4 +73,4 @@ Route::resource('api/company', CompanyController::class);
 |--------------------------------------------------------------------------
 |
 */
-Route::resource('api/task', TaskController::class);
+Route::resource('api/task', TaskController::class)->middleware('auth.custom');

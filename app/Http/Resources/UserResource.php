@@ -3,7 +3,6 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\ActivityResource;
 
 class UserResource extends JsonResource
 {
@@ -22,7 +21,7 @@ class UserResource extends JsonResource
             'username' => $this->username,
             'password' => $this->password,
             'telegram' => $this->telegram,
-            'activities' => ActivityResource::collection($this->activities)
+            'access_tokens' => UserAccessTokenResource::collection($this->access_tokens)
         ];
     }
 }

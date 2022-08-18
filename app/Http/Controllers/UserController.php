@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ActivityResource;
+use App\Http\Resources\UserAccessTokenResource;
 use App\Http\Resources\UserResource;
 use App\Models\API\Activity;
 use App\Models\API\User;
+use App\Models\API\UserAccessToken;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -214,5 +218,59 @@ class UserController extends Controller
     {
         //
         $user->update(['status' => '0']);
+    }
+
+    /**     @OA\POST(
+      *         path="/api/login",
+      *         operationId="login",
+      *         tags={"Account"},
+      *         summary="Login",
+      *         description="Login",
+      *             @OA\RequestBody(
+      *                 @OA\JsonContent(),
+      *                 @OA\MediaType(
+      *                     mediaType="multipart/form-data",
+      *                     @OA\Schema(
+      *                         type="object",
+      *                         required={"username", "password"},
+      *                         @OA\Property(property="username", type="text"),
+      *                         @OA\Property(property="password", type="password")
+      *                     ),
+      *                 ),
+      *             ),
+      *             @OA\Response(
+      *                 response=200,
+      *                 description="Successfully",
+      *                 @OA\JsonContent()
+      *             ),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
+    public function login(Request $request)
+    {
+        //
+        $validated = $request->validate([
+            'username' => 'required|string|max:100',
+            'password' => 'required|string|max:100',
+        ]);
+        $user = User::where('username', $validated['username'])
+                        ->where('password', $validated['password'])->first();
+
+        if (!$user){
+            return response()->json([
+                'data' => ['msg' => 'Invalid username or password'],
+            ], 404);
+        }
+
+        $token = Str::random(32);
+        $expires_at = Carbon::now();
+        $expires_at = $expires_at->addDays(7)->toDateTimeString(); // after 7 day expires
+
+        $user['access_token'] = ['user_uuid' => $user['uuid'], 'token' => $token, 'expires_at' => $expires_at];
+
+        UserAccessToken::create($user['access_token']);
+
+        return $user;
     }
 }

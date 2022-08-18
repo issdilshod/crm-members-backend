@@ -5,6 +5,7 @@ namespace App\Models\API;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\TraitUuid;
+use Carbon\Carbon;
 
 class User extends Model
 {
@@ -24,5 +25,10 @@ class User extends Model
     public function tasks(){
         return $this->hasMany(TaskToUser::class, 'user_uuid', 'uuid')
                                                             ->where('status', 1);
+    }
+
+    public function access_tokens(){
+        return $this->hasMany(UserAccessToken::class, 'user_uuid', 'uuid')
+                                                            ->where('expires_at', '>', Carbon::now()->toDateTimeString());
     }
 }
