@@ -25,6 +25,9 @@
                     "400": {
                         "description": "Bad request"
                     },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
                     "404": {
                         "description": "Resource Not Found"
                     }
@@ -63,6 +66,9 @@
                     "400": {
                         "description": "Bad request"
                     },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
                     "404": {
                         "description": "Resource Not Found"
                     }
@@ -98,6 +104,9 @@
                     },
                     "400": {
                         "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -137,6 +146,9 @@
                     "400": {
                         "description": "Bad request"
                     },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
                     "404": {
                         "description": "Resource Not Found"
                     }
@@ -175,6 +187,9 @@
                     "400": {
                         "description": "Bad request"
                     },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
                     "404": {
                         "description": "Resource Not Found"
                     }
@@ -200,6 +215,9 @@
                     },
                     "400": {
                         "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -365,6 +383,9 @@
                     },
                     "400": {
                         "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -547,6 +568,9 @@
                     "400": {
                         "description": "Bad request"
                     },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
                     "404": {
                         "description": "Resource Not Found"
                     },
@@ -588,6 +612,9 @@
                     "400": {
                         "description": "Bad request"
                     },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
                     "404": {
                         "description": "Resource Not Found"
                     }
@@ -614,6 +641,9 @@
                     "400": {
                         "description": "Bad request"
                     },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
                     "404": {
                         "description": "Resource Not Found"
                     }
@@ -639,6 +669,9 @@
                     },
                     "400": {
                         "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -789,6 +822,9 @@
                     },
                     "400": {
                         "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -955,6 +991,9 @@
                     "400": {
                         "description": "Bad request"
                     },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
                     "404": {
                         "description": "Resource Not Found"
                     },
@@ -996,6 +1035,9 @@
                     "400": {
                         "description": "Bad request"
                     },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
                     "404": {
                         "description": "Resource Not Found"
                     }
@@ -1021,6 +1063,9 @@
                     },
                     "400": {
                         "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -1048,6 +1093,9 @@
                     "400": {
                         "description": "Bad request"
                     },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
                     "404": {
                         "description": "Resource Not Found"
                     }
@@ -1073,6 +1121,9 @@
                     },
                     "400": {
                         "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -1100,6 +1151,9 @@
                     "400": {
                         "description": "Bad request"
                     },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
                     "404": {
                         "description": "Resource Not Found"
                     }
@@ -1125,6 +1179,9 @@
                     },
                     "400": {
                         "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -1209,6 +1266,9 @@
                     "400": {
                         "description": "Bad request"
                     },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
                     "404": {
                         "description": "Resource Not Found"
                     },
@@ -1284,6 +1344,9 @@
                     "400": {
                         "description": "Bad request"
                     },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
                     "404": {
                         "description": "Resource Not Found"
                     },
@@ -1325,6 +1388,9 @@
                     "400": {
                         "description": "Bad request"
                     },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
                     "404": {
                         "description": "Resource Not Found"
                     }
@@ -1350,6 +1416,9 @@
                     },
                     "400": {
                         "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -1415,6 +1484,9 @@
                     "400": {
                         "description": "Bad request"
                     },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
                     "404": {
                         "description": "Resource Not Found"
                     }
@@ -1452,6 +1524,9 @@
                     },
                     "400": {
                         "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -1529,6 +1604,9 @@
                     "400": {
                         "description": "Bad request"
                     },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
                     "404": {
                         "description": "Resource Not Found"
                     }
@@ -1564,6 +1642,9 @@
                     },
                     "400": {
                         "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
                     },
                     "404": {
                         "description": "Resource Not Found"

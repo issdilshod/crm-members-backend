@@ -24,6 +24,7 @@ class DirectorController extends Controller
       *                 @OA\JsonContent()
       *             ),
       *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Unauthenticated"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
@@ -100,6 +101,7 @@ class DirectorController extends Controller
       *                 @OA\JsonContent()
       *             ),
       *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Unauthenticated"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *             @OA\Response(response=409, description="Conflict"),
       *     )
@@ -261,6 +263,7 @@ class DirectorController extends Controller
       *                 @OA\JsonContent()
       *             ),
       *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Unauthenticated"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
@@ -348,6 +351,7 @@ class DirectorController extends Controller
       *                 @OA\JsonContent()
       *             ),
       *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Unauthenticated"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *             @OA\Response(response=409, description="Conflict"),
       *     )

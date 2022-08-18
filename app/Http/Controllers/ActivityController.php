@@ -21,6 +21,7 @@ class ActivityController extends Controller
       *                 @OA\JsonContent()
       *             ),
       *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Unauthenticated"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
@@ -79,6 +80,7 @@ class ActivityController extends Controller
       *                 @OA\JsonContent()
       *             ),
       *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Unauthenticated"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
@@ -133,6 +135,7 @@ class ActivityController extends Controller
       *                 @OA\JsonContent()
       *             ),
       *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Unauthenticated"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
@@ -142,7 +145,7 @@ class ActivityController extends Controller
         $activity->update(['status' => '0']);
     }
 
-    /**     @OA\Get(
+    /**     @OA\GET(
       *         path="/api/activity/user/{uuid}",
       *         operationId="list_user_activity",
       *         tags={"Account"},
@@ -164,6 +167,7 @@ class ActivityController extends Controller
       *                 @OA\JsonContent()
       *             ),
       *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Unauthenticated"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
@@ -174,7 +178,7 @@ class ActivityController extends Controller
         //
     }
 
-    /**     @OA\Get(
+    /**     @OA\GET(
       *         path="/api/activity/entity/{uuid}",
       *         operationId="list_entity_activity",
       *         tags={"Account"},
@@ -196,6 +200,7 @@ class ActivityController extends Controller
       *                 @OA\JsonContent()
       *             ),
       *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Unauthenticated"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
