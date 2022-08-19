@@ -1701,6 +1701,32 @@
                     }
                 }
             }
+        },
+        "/api/is_auth": {
+            "get": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Is Auth",
+                "description": "Is Auth",
+                "operationId": "is_auth",
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
         }
     }
 }

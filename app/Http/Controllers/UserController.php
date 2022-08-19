@@ -278,4 +278,27 @@ class UserController extends Controller
 
         return $user;
     }
+
+    /**     @OA\GET(
+      *         path="/api/is_auth",
+      *         operationId="is_auth",
+      *         tags={"Account"},
+      *         summary="Is Auth",
+      *         description="Is Auth",
+      *             @OA\Response(
+      *                 response=200,
+      *                 description="Successfully",
+      *                 @OA\JsonContent()
+      *             ),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
+    public function is_auth()
+    {
+        //
+        return response()->json([
+            'data' => ['msg' => 'Authentificate'],
+        ], 200);
+    }
 }

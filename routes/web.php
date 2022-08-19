@@ -45,6 +45,7 @@ Route::resource('api/department', DepartmentController::class)->middleware('auth
 Route::resource('api/role', RoleController::class)->middleware('auth.custom');
 // Login
 Route::resource('api/user', UserController::class)->middleware('auth.custom');
+Route::get('api/is_auth', [UserController::class, 'is_auth'])->middleware('auth.custom');
 Route::post('api/login', [UserController::class, 'login']);
 // Activity
 Route::resource('api/activity', ActivityController::class);
