@@ -187,6 +187,7 @@ class DirectorController extends Controller
                     ], 409);
         }
 
+        print_r($request);die();
         #endregion
 
         $director = Director::create($validated);
