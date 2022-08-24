@@ -108,7 +108,9 @@ class DirectorController extends Controller
       */
     public function store(Request $request)
     {
+
         #region Validate
+        print_r($request);die();
 
         $validated = $request->validate([
             'user_uuid' => 'required|string',
@@ -187,7 +189,6 @@ class DirectorController extends Controller
                     ], 409);
         }
 
-        print_r($request);die();
         #endregion
 
         $director = Director::create($validated);
