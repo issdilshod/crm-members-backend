@@ -110,7 +110,7 @@ class DirectorController extends Controller
     {
 
         #region Validate
-        print_r($request);die();
+        print_r($request->all());die();
 
         $validated = $request->validate([
             'user_uuid' => 'required|string',
