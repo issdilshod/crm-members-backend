@@ -110,7 +110,6 @@ class DirectorController extends Controller
     {
 
         #region Validate
-        print_r($request->all());die();
 
         $validated = $request->validate([
             'user_uuid' => 'required|string',
@@ -143,6 +142,7 @@ class DirectorController extends Controller
             'emails.phone' => 'required|string',
         ]);
 
+        print_r($validated);die();
         #endregion
 
         #region Check exsist models
