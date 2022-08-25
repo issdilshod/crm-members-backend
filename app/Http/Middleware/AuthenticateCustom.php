@@ -30,7 +30,7 @@ class AuthenticateCustom
         }
 
         $request->user_uuid = $user_access_token->user_uuid;
-        print_r($request->all());die();
+        die();print_r($request->all());die();
         return $next($request);
     }
 }
