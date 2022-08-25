@@ -57,8 +57,7 @@ class DirectorController extends Controller
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
       *                         type="object",
-      *                         required={"user_uuid", "first_name", "middle_name", "last_name", "date_of_birth", "ssn_cpn", "company_association", "phone_type", "phone_number", "status", "address[dl_address][street_address]", "address[dl_address][address_line_2]", "address[dl_address][city]", "address[dl_address][state]", "address[dl_address][postal]", "address[dl_address][country]", "address[credit_home_address][street_address]", "address[credit_home_address][address_line_2]", "address[credit_home_address][city]", "address[credit_home_address][state]", "address[credit_home_address][postal]", "address[credit_home_address][country]", "emails[hosting_uuid]", "emails[email]", "emails[password]", "emails[phone]"},
-      *                         @OA\Property(property="user_uuid", type="text"),
+      *                         required={"first_name", "middle_name", "last_name", "date_of_birth", "ssn_cpn", "company_association", "phone_type", "phone_number", "status", "address[dl_address][street_address]", "address[dl_address][address_line_2]", "address[dl_address][city]", "address[dl_address][state]", "address[dl_address][postal]", "address[dl_address][country]", "address[credit_home_address][street_address]", "address[credit_home_address][address_line_2]", "address[credit_home_address][city]", "address[credit_home_address][state]", "address[credit_home_address][postal]", "address[credit_home_address][country]", "emails[hosting_uuid]", "emails[email]", "emails[password]", "emails[phone]"},
       *                         @OA\Property(property="first_name", type="text"),
       *                         @OA\Property(property="middle_name", type="text"),
       *                         @OA\Property(property="last_name", type="text"),
@@ -112,7 +111,6 @@ class DirectorController extends Controller
         #region Validate
 
         $validated = $request->validate([
-            'user_uuid' => 'required|string',
             'first_name' => 'required|string',
             'middle_name' => 'required|string',
             'last_name' => 'required|string',

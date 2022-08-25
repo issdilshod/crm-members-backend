@@ -846,7 +846,6 @@
                         "multipart/form-data": {
                             "schema": {
                                 "required": [
-                                    "user_uuid",
                                     "first_name",
                                     "middle_name",
                                     "last_name",
@@ -874,9 +873,6 @@
                                     "emails[phone]"
                                 ],
                                 "properties": {
-                                    "user_uuid": {
-                                        "type": "text"
-                                    },
                                     "first_name": {
                                         "type": "text"
                                     },

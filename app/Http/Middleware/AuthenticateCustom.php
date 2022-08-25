@@ -30,7 +30,6 @@ class AuthenticateCustom
         }
 
         $request->merge(['user_uuid' => $user_access_token->user_uuid]);
-        print_r($request->all());die();
         return $next($request);
     }
 }
