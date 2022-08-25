@@ -111,6 +111,7 @@ class DirectorController extends Controller
         #region Validate
 
         $validated = $request->validate([
+            'user_uuid' => 'string',
             'first_name' => 'required|string',
             'middle_name' => 'required|string',
             'last_name' => 'required|string',
