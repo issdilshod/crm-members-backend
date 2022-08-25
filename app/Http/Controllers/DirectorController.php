@@ -86,11 +86,11 @@ class DirectorController extends Controller
       *                         @OA\Property(property="emails[password]", type="text"),
       *                         @OA\Property(property="emails[phone]", type="text"),
       *
-      *                         @OA\Property(property="files[dl_upload][front][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[dl_upload][back][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[ssn_upload][front][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[ssn_upload][back][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[cpn_docs_upload][]", type="file", format="binary")
+      *                         @OA\Property(property="files[dl_upload][front]", type="file", format="binary"),
+      *                         @OA\Property(property="files[dl_upload][back]", type="file", format="binary"),
+      *                         @OA\Property(property="files[ssn_upload][front]", type="file", format="binary"),
+      *                         @OA\Property(property="files[ssn_upload][back]", type="file", format="binary"),
+      *                         @OA\Property(property="files[cpn_docs_upload]", type="file", format="binary")
       *                     ),
       *                 ),
       *             ),

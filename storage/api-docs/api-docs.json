@@ -946,23 +946,23 @@
                                     "emails[phone]": {
                                         "type": "text"
                                     },
-                                    "files[dl_upload][front][]": {
+                                    "files[dl_upload][front]": {
                                         "type": "file",
                                         "format": "binary"
                                     },
-                                    "files[dl_upload][back][]": {
+                                    "files[dl_upload][back]": {
                                         "type": "file",
                                         "format": "binary"
                                     },
-                                    "files[ssn_upload][front][]": {
+                                    "files[ssn_upload][front]": {
                                         "type": "file",
                                         "format": "binary"
                                     },
-                                    "files[ssn_upload][back][]": {
+                                    "files[ssn_upload][back]": {
                                         "type": "file",
                                         "format": "binary"
                                     },
-                                    "files[cpn_docs_upload][]": {
+                                    "files[cpn_docs_upload]": {
                                         "type": "file",
                                         "format": "binary"
                                     }
