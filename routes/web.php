@@ -58,7 +58,7 @@ Route::get('api/activity/entity/{uuid}', [ActivityController::class, 'by_entity'
 |--------------------------------------------------------------------------
 |
 */
-Route::resource('api/director', DirectorController::class)->middleware('auth.custom');
+Route::resource('api/director', DirectorController::class)->middleware('auth.custom')->middleware('cors');
 
 /*
 |--------------------------------------------------------------------------
