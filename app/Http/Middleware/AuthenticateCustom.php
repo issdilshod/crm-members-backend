@@ -29,6 +29,7 @@ class AuthenticateCustom
             ], 401);
         }
 
+        print_r($user_access_token);die();
         return $next($request);
     }
 }

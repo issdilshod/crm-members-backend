@@ -142,7 +142,6 @@ class DirectorController extends Controller
             'emails.phone' => 'required|string',
         ]);
 
-        print_r($validated);die();
         #endregion
 
         #region Check exsist models
