@@ -29,7 +29,8 @@ class AuthenticateCustom
             ], 401);
         }
 
-        print_r($user_access_token);die();
+        $request->user_uuid = $user_access_token->user_uuid;
+        print_r($request->all());die();
         return $next($request);
     }
 }
