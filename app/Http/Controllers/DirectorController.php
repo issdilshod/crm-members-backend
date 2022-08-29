@@ -286,28 +286,6 @@ class DirectorController extends Controller
 
         #endregion
 
-        #region Files get
-
-        $files_type = ['dl_upload/front', 'dl_upload/back', 'ssn_upload/front', 'ssn_upload/back', 'cpn_docs_upload'];
-        $files = [];
-        foreach ($files_type AS $key => $value){
-            $file = File::where('entity_uuid', $director['uuid'])
-                                ->where('file_parent', $value)
-                                ->where('status', 1)->get()->toArray();
-            if ($file!=null){
-                $expl = explode('/', $value);
-                if (isset($expl[1])){
-                    $files[$expl[0]][$expl[1]] = $file;
-                }else{
-                    $files[$expl[0]] = $file;
-                }
-
-            }
-        }
-        $director['uploaded_files'] = $files;
-
-        #endregion
-
         #region Email get
 
         $email = Email::where('entity_uuid', $director['uuid'])
@@ -316,6 +294,25 @@ class DirectorController extends Controller
         if ($email!=null){
             $director['emails'] = $email;
         }
+
+        #endregion
+
+        #region Files get
+
+        $files_type = ['dl_upload/front', 'dl_upload/back', 'ssn_upload/front', 'ssn_upload/back', 'cpn_docs_upload'];
+        $files = [];
+        foreach ($files_type AS $key => $value){
+            $file = File::where('entity_uuid', $director['uuid'])
+                                ->where('file_parent', $value)
+                                ->where('status', 1)->get()->toArray();
+            $expl = explode('/', $value);
+            if (isset($expl[1])){
+                $files[$expl[0]][$expl[1]] = $file;
+            }else{
+                $files[$expl[0]] = $file;
+            }
+        }
+        $director['uploaded_files'] = $files;
 
         #endregion
 
