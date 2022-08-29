@@ -25,9 +25,9 @@ class DirectorResource extends JsonResource
             'company_association' => $this->company_association,
             'phone_type' => $this->phone_type,
             'phone_number' => $this->phone_number,
-            'files' => FileResource::collection($this->files),
+            'uploaded_files' => FileResource::collection($this->files),
             'emails' => EmailResource::collection($this->emails),
-            'addresses' => AddressResource::collection($this->addresses)
+            'address' => AddressResource::collection($this->addresses)
         ];
     }
 }

@@ -270,53 +270,7 @@ class DirectorController extends Controller
       */
     public function show(Director $director)
     {
-
-        #region Addresses get
-
-        $addresses_type = ['credit_home_address', 'dl_address'];$addresses = [];
-        foreach ($addresses_type AS $key => $value){
-            $address = Address::where('entity_uuid', $director['uuid'])
-                                ->where('address_parent', $value)
-                                ->where('status', 1)->first();
-            if ($address!=null){
-                $addresses[$value] = $address;
-            }
-        }
-        $director['address'] = $addresses;
-
-        #endregion
-
-        #region Email get
-
-        $email = Email::where('entity_uuid', $director['uuid'])
-                                ->where('status', 1)
-                                ->first();
-        if ($email!=null){
-            $director['emails'] = $email;
-        }
-
-        #endregion
-
-        #region Files get
-
-        $files_type = ['dl_upload/front', 'dl_upload/back', 'ssn_upload/front', 'ssn_upload/back', 'cpn_docs_upload'];
-        $files = [];
-        foreach ($files_type AS $key => $value){
-            $file = File::where('entity_uuid', $director['uuid'])
-                                ->where('file_parent', $value)
-                                ->where('status', 1)->get()->toArray();
-            $expl = explode('/', $value);
-            if (isset($expl[1])){
-                $files[$expl[0]][$expl[1]] = $file;
-            }else{
-                $files[$expl[0]] = $file;
-            }
-        }
-        $director['uploaded_files'] = $files;
-
-        #endregion
-
-        return new DirectorMap($director);
+        return new DirectorResource($director);
     }
 
     /**
