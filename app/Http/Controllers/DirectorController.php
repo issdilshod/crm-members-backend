@@ -144,47 +144,126 @@ class DirectorController extends Controller
 
         #endregion
 
-        #region Check exsist models
+        #region Check exsist data
 
-        $result_check = [];
-        // Check Email
-        $result_check['emails'] = Email::where('email', $validated['emails']['email'])
-                                        ->where('hosting_uuid', $validated['emails']['hosting_uuid'])
-                                        ->orWhere('phone', $validated['emails']['phone'])
+        $check = [];
+
+        #region Check Email
+
+        if (isset($validated['emails'])){
+            // Hosting & Email
+            $check['hosting_email'] = Email::select('hosting_uuid', 'email')
+                                                ->where('status', 1)
+                                                ->where('hosting_uuid', $validated['emails']['hosting_uuid'])
+                                                ->where('email', $validated['emails']['email'])->first();
+            if ($check['hosting_email']!=null){
+                $check['hosting_email'] = $check['hosting_email']->toArray();
+                foreach ($check['hosting_email'] AS $key => $value):
+                    $check['emails.'.$key] = '~Exsist~';
+                endforeach;
+            }
+            unset($check['hosting_email']);
+
+            // Phone
+            $check['phone'] = Email::select('phone')
+                                        ->where('status', 1)
+                                        ->where('phone', $validated['emails']['phone'])->first();
+            if ($check['phone']!=null){
+                $check['phone'] = $check['phone']->toArray();
+                foreach ($check['phone'] AS $key => $value):
+                    $check['emails.'.$key] = '~Exsist~';
+                endforeach;
+            }
+            unset($check['phone']);
+        }
+
+        #endregion
+
+        #region Check Address
+
+        if (isset($validated['address'])){
+            foreach ($validated['address'] AS $key => $value):
+                $check[$key] = Address::select('street_address', 'address_line_2', 'city', 'postal')
+                                        ->where('status', 1)
+                                        ->where(function($query) use ($value){
+                                                $query->where('street_address', $value['street_address'])
+                                                        ->where('address_line_2', $value['address_line_2'])
+                                                        ->where('city', $value['city'])
+                                                        ->where('postal', $value['postal']);
+                                        })->first();
+                if ($check[$key]!=null){
+                    $check[$key] = $check[$key]->toArray();
+                    foreach ($check[$key] AS $key1 => $value1):
+                        $check['address.'.$key.'.'.$key1] = '~Exsist~';
+                    endforeach;
+                }
+                unset($check[$key]);                
+            endforeach;
+        }
+
+        #endregion
+
+        #region Check Director
+
+        // Names
+        $check['names'] = Director::select('first_name', 'middle_name', 'last_name')
+                                        ->where('status', 1)
+                                        ->where('first_name', $validated['first_name'])
+                                        ->where('middle_name', $validated['middle_name'])
+                                        ->where('last_name', $validated['last_name'])
                                         ->first();
+        if ($check['names']!=null){
+            $check['names'] = $check['names']->toArray();
+            foreach ($check['names'] AS $key => $value):
+                $check[$key] = '~Exsist~';
+            endforeach;
+        }
+        unset($check['names']);
 
-        // Check Address
-        foreach ($validated['address'] AS $key => $value):
-            $result_check[$key] = Address::where('street_address', $value['street_address'])
-                                            ->where('address_line_2', $value['address_line_2'])
-                                            ->where('city', $value['city'])
-                                            ->where('postal', $value['postal'])
-                                            ->first();
-            if ($result_check[$key]!=null){
-                break;
-            }
-        endforeach;
+        // Ssn
+        $check['ssn'] = Director::select('ssn_cpn')
+                                        ->where('status', 1)
+                                        ->where('ssn_cpn', $validated['ssn_cpn'])
+                                        ->first();
+        if ($check['ssn']!=null){
+            $check['ssn'] = $check['ssn']->toArray();
+            foreach ($check['ssn'] AS $key => $value):
+                $check[$key] = '~Exsist~';
+            endforeach;
+        }
+        unset($check['ssn']);
 
-        // Check Director
-        $result_check['director'] = Director::where('first_name', $validated['first_name'])
-                                                ->where('middle_name', $validated['middle_name'])
-                                                ->where('last_name', $validated['last_name'])
-                                                ->orWhere('ssn_cpn', $validated['ssn_cpn'])
-                                                ->orWhere('company_association', $validated['company_association'])
-                                                ->orWhere('phone_number', $validated['phone_number'])
-                                                ->first();
+        // Company 
+        $check['company_association'] = Director::select('company_association')
+                                        ->where('status', 1)
+                                        ->where('company_association', $validated['company_association'])
+                                        ->first();
+        if ($check['company_association']!=null){
+            $check['company_association'] = $check['company_association']->toArray();
+            foreach ($check['company_association'] AS $key => $value):
+                $check[$key] = '~Exsist~';
+            endforeach;
+        }
+        unset($check['company_association']);
 
-        $exsist = false;
-        foreach ($result_check AS $key => $value):
-            if ($value != null){
-                $exsist = true;
-                break;
-            }
-        endforeach;
+        // Phone
+        $check['phone_number'] = Director::select('phone_number')
+                                        ->where('status', 1)
+                                        ->where('phone_number', $validated['phone_number'])
+                                        ->first();
+        if ($check['phone_number']!=null){
+            $check['phone_number'] = $check['phone_number']->toArray();
+            foreach ($check['phone_number'] AS $key => $value):
+                $check[$key] = '~Exsist~';
+            endforeach;
+        }
+        unset($check['phone_number']);
 
-        if ($exsist){
+        #endregion
+
+        if (count($check)>0){
             return response()->json([
-                        'data' => $result_check,
+                        'data' => $check,
                     ], 409);
         }
 
@@ -395,60 +474,133 @@ class DirectorController extends Controller
 
         #endregion
 
-        #region Check exsist models
+        #region Check exsist data
 
-        $result_check = [];
-        // Check Email
+        $check = [];
+
+        #region Check Email
+
         if (isset($validated['emails'])){
-            $result_check['emails'] = Email::where('entity_uuid', '!=', $director['uuid'])
-                                                ->where(function($query) use ($validated){
-                                                        $query->where('email', $validated['emails']['email'])
-                                                                ->where('hosting_uuid', $validated['emails']['hosting_uuid'])
-                                                                ->orWhere('phone', $validated['emails']['phone']);
-                                                })
-                                                ->first();
+            // Hosting & Email
+            $check['hosting_email'] = Email::select('hosting_uuid', 'email')
+                                                ->where('entity_uuid', '!=', $director['uuid'])
+                                                ->where('status', 1)
+                                                ->where('hosting_uuid', $validated['emails']['hosting_uuid'])
+                                                ->where('email', $validated['emails']['email'])->first();
+            if ($check['hosting_email']!=null){
+                $check['hosting_email'] = $check['hosting_email']->toArray();
+                foreach ($check['hosting_email'] AS $key => $value):
+                    $check['emails.'.$key] = '~Exsist~';
+                endforeach;
+            }
+            unset($check['hosting_email']);
+
+            // Phone
+            $check['phone'] = Email::select('phone')
+                                        ->where('entity_uuid', '!=', $director['uuid'])
+                                        ->where('status', 1)
+                                        ->where('phone', $validated['emails']['phone'])->first();
+            if ($check['phone']!=null){
+                $check['phone'] = $check['phone']->toArray();
+                foreach ($check['phone'] AS $key => $value):
+                    $check['emails.'.$key] = '~Exsist~';
+                endforeach;
+            }
+            unset($check['phone']);
         }
 
-        // Check Address
+        #endregion
+
+        #region Check Address
+
         if (isset($validated['address'])){
             foreach ($validated['address'] AS $key => $value):
-                $result_check[$key] = Address::where('entity_uuid', '!=', $director['uuid'])
-                                                ->where(function($query) use ($value){
-                                                        $query->where('street_address', $value['street_address'])
-                                                                ->where('address_line_2', $value['address_line_2'])
-                                                                ->where('city', $value['city'])
-                                                                ->where('postal', $value['postal']);
-                                                })
-                                                ->first();
-                if ($result_check[$key]!=null){
-                    break;
+                $check[$key] = Address::select('street_address', 'address_line_2', 'city', 'postal')
+                                        ->where('entity_uuid', '!=', $director['uuid'])
+                                        ->where('status', 1)
+                                        ->where(function($query) use ($value){
+                                                $query->where('street_address', $value['street_address'])
+                                                        ->where('address_line_2', $value['address_line_2'])
+                                                        ->where('city', $value['city'])
+                                                        ->where('postal', $value['postal']);
+                                        })->first();
+                if ($check[$key]!=null){
+                    $check[$key] = $check[$key]->toArray();
+                    foreach ($check[$key] AS $key1 => $value1):
+                        $check['address.'.$key.'.'.$key1] = '~Exsist~';
+                    endforeach;
                 }
+                unset($check[$key]);                
             endforeach;
         }
 
-        // Check Director
-        $result_check['director'] = Director::where('uuid', '!=', $director['uuid'])
-                                                ->where(function($query) use ($validated){
-                                                        $query->where('first_name', $validated['first_name'])
-                                                                ->where('middle_name', $validated['middle_name'])
-                                                                ->where('last_name', $validated['last_name'])
-                                                                ->orWhere('ssn_cpn', $validated['ssn_cpn'])
-                                                                ->orWhere('company_association', $validated['company_association'])
-                                                                ->orWhere('phone_number', $validated['phone_number']);
-                                                })
-                                                ->first();
+        #endregion
 
-        $exsist = false;
-        foreach ($result_check AS $key => $value):
-            if ($value != null){
-                $exsist = true;
-                break;
-            }
-        endforeach;
+        #region Check Director
 
-        if ($exsist){
+        // Names
+        $check['names'] = Director::select('first_name', 'middle_name', 'last_name')
+                                        ->where('uuid', '!=', $director['uuid'])
+                                        ->where('status', 1)
+                                        ->where('first_name', $validated['first_name'])
+                                        ->where('middle_name', $validated['middle_name'])
+                                        ->where('last_name', $validated['last_name'])
+                                        ->first();
+        if ($check['names']!=null){
+            $check['names'] = $check['names']->toArray();
+            foreach ($check['names'] AS $key => $value):
+                $check[$key] = '~Exsist~';
+            endforeach;
+        }
+        unset($check['names']);
+
+        // Ssn
+        $check['ssn'] = Director::select('ssn_cpn')
+                                        ->where('uuid', '!=', $director['uuid'])
+                                        ->where('status', 1)
+                                        ->where('ssn_cpn', $validated['ssn_cpn'])
+                                        ->first();
+        if ($check['ssn']!=null){
+            $check['ssn'] = $check['ssn']->toArray();
+            foreach ($check['ssn'] AS $key => $value):
+                $check[$key] = '~Exsist~';
+            endforeach;
+        }
+        unset($check['ssn']);
+
+        // Company 
+        $check['company_association'] = Director::select('company_association')
+                                        ->where('uuid', '!=', $director['uuid'])
+                                        ->where('status', 1)
+                                        ->where('company_association', $validated['company_association'])
+                                        ->first();
+        if ($check['company_association']!=null){
+            $check['company_association'] = $check['company_association']->toArray();
+            foreach ($check['company_association'] AS $key => $value):
+                $check[$key] = '~Exsist~';
+            endforeach;
+        }
+        unset($check['company_association']);
+
+        // Phone
+        $check['phone_number'] = Director::select('phone_number')
+                                        ->where('uuid', '!=', $director['uuid'])
+                                        ->where('status', 1)
+                                        ->where('phone_number', $validated['phone_number'])
+                                        ->first();
+        if ($check['phone_number']!=null){
+            $check['phone_number'] = $check['phone_number']->toArray();
+            foreach ($check['phone_number'] AS $key => $value):
+                $check[$key] = '~Exsist~';
+            endforeach;
+        }
+        unset($check['phone_number']);
+
+        #endregion
+
+        if (count($check)>0){
             return response()->json([
-                        'data' => $result_check,
+                        'data' => $check,
                     ], 409);
         }
 
