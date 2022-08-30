@@ -32,7 +32,7 @@ class CompanyResource extends JsonResource
             'bank_account' => BankAccountResource::collection($this->bank_account),
             'addresses' => AddressResource::collection($this->addresses),
             'emails' => EmailResource::collection($this->emails),
-            'files' => FileResource::collection($this->files)
+            'uploaded_files' => FileResource::collection($this->files)
         ];
     }
 }
