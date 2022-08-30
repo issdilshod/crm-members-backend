@@ -22,7 +22,7 @@ class BankAccountResource extends JsonResource
             'username' => $this->username,
             'password' => $this->password,
             'account_number' => $this->account_number,
-            'rounting_number' => $this->routing_number,
+            'routing_number' => $this->routing_number,
             'bank_account_security' => BankAccountSecurityResource::collection($this->bank_account_security)
         ];
     }

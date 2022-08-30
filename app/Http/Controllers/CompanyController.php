@@ -554,74 +554,177 @@ class CompanyController extends Controller
 
         #endregion
 
-        #region Check exsist models
+        #region Check exsist data
 
-        $result_check = [];
-        // Check Email
+        $check = [];
+
+        #region Check Email
+
         if (isset($validated['emails'])){
-            foreach($validated['emails'] AS $key => $value):
-                $result_check['emails'] = Email::where('entity_uuid', '!=', $company['uuid'])
-                                                ->where(function($query) use ($value){
-                                                        $query->where('email', $value['email'])
-                                                                ->where('hosting_uuid', $value['hosting_uuid'])
-                                                                ->orWhere('phone', $value['phone']);
-                                                })
-                                                ->first();
-                if ($result_check['emails']!=null){
-                    break;
-                }
-            endforeach;
-        }
-
-        // Check Address
-        if (isset($validated['address'])){
-            $result_check['address'] = Address::where('entity_uuid', '!=', $company['uuid'])
-                                                ->where(function($query) use ($validated){
-                                                        $query->where('street_address', $validated['address']['street_address'])
-                                                                ->where('address_line_2', $validated['address']['address_line_2'])
-                                                                ->where('city',$validated['address']['city'])
-                                                                ->where('postal', $validated['address']['postal']);
-                                                })
-                                                ->first();
-        }
-
-        // Check Company
-        if (isset($validated['legal_name'])){
-            $result_check['company'] = Company::where('uuid', '!=', $company['uuid'])
-                                                ->where(function($query) use ($validated){
-                                                        $query->where('legal_name', $validated['legal_name'])
-                                                                ->orWhere('director_uuid', $validated['director_uuid'])
-                                                                ->orWhere('ein', $validated['ein'])
-                                                                ->orWhere('phone_number', $validated['phone_number'])
-                                                                ->orwhere('website', $validated['website'])
-                                                                ->orWhere('db_report_number', $validated['db_report_number']);
-                                                })
-                                                ->first();
-        }
-
-        // Check Bank Account
-        if (isset($validated['bank_account'])){
-            $result_check['bank_account'] = BankAccount::where('entity_uuid', '!=', $company['uuid'])
-                                                        ->where(function($query) use ($validated){
-                                                                $query->where('name', $validated['bank_account']['name'])
-                                                                        ->where('username', $validated['bank_account']['username'])
-                                                                        ->orwhere('account_number', $validated['bank_account']['account_number'])
-                                                                        ->orWhere('routing_number', $validated['bank_account']['routing_number']);
-                                                        })
-                                                        ->first();
-        }
-
-        $exsist = false;
-        foreach ($result_check AS $key => $value):
-            if ($value != null){
-                $exsist = true;
-                break;
+            // Hosting & Email
+            $check['hosting_email'] = Email::select('hosting_uuid', 'email')
+                                                ->where('entity_uuid', '!=', $company['uuid'])
+                                                ->where('status', 1)
+                                                ->where('hosting_uuid', $validated['emails']['hosting_uuid'])
+                                                ->where('email', $validated['emails']['email'])->first();
+            if ($check['hosting_email']!=null){
+                $check['hosting_email'] = $check['hosting_email']->toArray();
+                foreach ($check['hosting_email'] AS $key => $value):
+                    $check['emails.'.$key] = '~Exsist~';
+                endforeach;
             }
-        endforeach;
+            unset($check['hosting_email']);
 
-        if ($exsist){
+            // Phone
+            $check['phone'] = Email::select('phone')
+                                        ->where('entity_uuid', '!=', $company['uuid'])
+                                        ->where('status', 1)
+                                        ->where('phone', $validated['emails']['phone'])->first();
+            if ($check['phone']!=null){
+                $check['phone'] = $check['phone']->toArray();
+                foreach ($check['phone'] AS $key => $value):
+                    $check['emails.'.$key] = '~Exsist~';
+                endforeach;
+            }
+            unset($check['phone']);
+        }
+
+        #endregion
+
+        #region Check Address
+
+        if (isset($validated['address'])){
+            $check['address'] = Address::select('street_address', 'address_line_2', 'city', 'postal')
+                                        ->where('entity_uuid', '!=', $company['uuid'])
+                                        ->where('status', 1)
+                                        ->where(function($query) use ($validated){
+                                                $query->where('street_address', $validated['address']['street_address'])
+                                                        ->where('address_line_2', $validated['address']['address_line_2'])
+                                                        ->where('city', $validated['address']['city'])
+                                                        ->where('postal', $validated['address']['postal']);
+                                        })->first();
+            if ($check['address']!=null){
+                $check['address'] = $check['address']->toArray();
+                foreach ($check['address'] AS $key1 => $value1):
+                    $check['address.'.$key1] = '~Exsist~';
+                endforeach;
+            }
+            unset($check['address']);
+        }
+        
+        #endregion
+
+        #region Check Bank Account
+
+        if (isset($validated['bank_account'])){
+            // Bank Account
+            $check['bank_account'] = BankAccount::select('name', 'username', 'account_number', 'routing_number')
+                                                ->where('entity_uuid', '!=', $company['uuid'])
+                                                ->where('status', 1)
+                                                ->where('name', $validated['bank_account']['name'])
+                                                ->where('username', $validated['bank_account']['username'])
+                                                ->where('account_number', $validated['bank_account']['account_number'])
+                                                ->where('routing_number', $validated['bank_account']['routing_number'])
+                                                ->first();
+            if ($check['bank_account']!=null){
+                $check['bank_account'] = $check['bank_account']->toArray();
+                foreach ($check['bank_account'] AS $key => $value):
+                    $check['bank_account.'.$key] = '~Exsist~';
+                endforeach;
+            }
+            unset($check['bank_account']);
+        }
+
+        #endregion
+
+        #region Check Company
+
+        if (isset($validated['legal_name'])){
+            // Legal name
+            $check['legal_'] = Company::select('legal_name')
+                                            ->where('uuid', '!=', $company['uuid'])
+                                            ->where('status', 1)
+                                            ->where('legal_name', $validated['legal_name'])->first();
+            if ($check['legal_']!=null){
+                $check['legal_'] = $check['legal_']->toArray();
+                foreach ($check['legal_'] AS $key => $value):
+                    $check[$key] = '~Exsist~';
+                endforeach;
+            }
+            unset($check['legal_']);
+
+            // Director
+            $check['director'] = Company::select('director_uuid')
+                                            ->where('uuid', '!=', $company['uuid'])
+                                            ->where('status', 1)
+                                            ->where('director_uuid', $validated['director_uuid'])->first();
+            if ($check['director']!=null){
+                $check['director'] = $check['director']->toArray();
+                foreach ($check['director'] AS $key => $value):
+                    $check[$key] = '~Exsist~';
+                endforeach;
+            }
+            unset($check['director']);
+
+            // EIN
+            $check['ein_c'] = Company::select('ein')
+                                            ->where('uuid', '!=', $company['uuid'])
+                                            ->where('status', 1)
+                                            ->where('ein', $validated['ein'])->first();
+            if ($check['ein_c']!=null){
+                $check['ein_c'] = $check['ein_c']->toArray();
+                foreach ($check['ein_c'] AS $key => $value):
+                    $check[$key] = '~Exsist~';
+                endforeach;
+            }
+            unset($check['ein_c']);
+
+            // Phone number
+            $check['phone'] = Company::select('phone_number')
+                                            ->where('uuid', '!=', $company['uuid'])
+                                            ->where('status', 1)
+                                            ->where('phone_number', $validated['phone_number'])->first();
+            if ($check['phone']!=null){
+                $check['phone'] = $check['phone']->toArray();
+                foreach ($check['phone'] AS $key => $value):
+                    $check[$key] = '~Exsist~';
+                endforeach;
+            }
+            unset($check['phone']);
+
+            // Website
+            $check['website_c'] = Company::select('website')
+                                            ->where('uuid', '!=', $company['uuid'])
+                                            ->where('status', 1)
+                                            ->where('website', $validated['website'])->first();
+            if ($check['website_c']!=null){
+                $check['website_c'] = $check['website_c']->toArray();
+                foreach ($check['website_c'] AS $key => $value):
+                    $check[$key] = '~Exsist~';
+                endforeach;
+            }
+            unset($check['website_c']);
+
+            // Db report number
+            $check['db'] = Company::select('db_report_number')
+                                            ->where('uuid', '!=', $company['uuid'])
+                                            ->where('status', 1)
+                                            ->where('db_report_number', $validated['db_report_number'])->first();
+            if ($check['db']!=null){
+                $check['db'] = $check['db']->toArray();
+                foreach ($check['db'] AS $key => $value):
+                    $check[$key] = '~Exsist~';
+                endforeach;
+            }
+            unset($check['db']);
+
+        }
+
+        #endregion
+
+        if (count($check)>0){
             return response()->json([
-                        'data' => $result_check,
+                        'data' => $check,
                     ], 409);
         }
 
@@ -631,12 +734,8 @@ class CompanyController extends Controller
 
         #region Email update
 
-        if (isset($validated['emails'])){
-            foreach($validated['emails'] AS $key => $value):
-                $email = Email::where('entity_uuid', $company['uuid']);
-                $email->update($value);
-            endforeach;
-        }
+        $email = Email::where('entity_uuid', $company['uuid']);
+        $email->update($validated['emails']);
 
         #endregion
 
