@@ -39,6 +39,7 @@ Route::post('api/hosting', 'HostingController@store');
 |
 */
 Route::get('api/department', 'DepartmentController@index');
+Route::get('api/department/{uuid}', 'DepartmentController@show');
 Route::post('api/department', 'DepartmentController@store');
 
 Route::get('api/user', 'UserController@index');

@@ -64,7 +64,7 @@ class DepartmentController extends Controller
      */
     public function show(Department $department)
     {
-        //
+        return new DepartmentResource($department);
     }
 
     /**

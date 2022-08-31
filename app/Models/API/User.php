@@ -11,9 +11,14 @@ class User extends Model
 {
     use HasFactory, TraitUuid;
 
-    protected $fillable = ['first_name', 'last_name', 'username', 'password', 'telegram', 'status'];
+    protected $fillable = ['department_uuid', 'role_uuid', 'first_name', 'last_name', 'username', 'password', 'telegram', 'status'];
 
     protected $attributes = ['status' => 1];
+
+    public function department(){
+        return $this->belongsTo(Department::class, 'department_uuid', 'uuid')
+                                                            ->where('status', 1);
+    }
 
     public function activities(){
         //

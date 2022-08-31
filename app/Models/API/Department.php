@@ -13,4 +13,9 @@ class Department extends Model
     protected $fillable = ['department_name', 'status'];
 
     protected $attributes = ['status' => 1];
+
+    public function users(){
+        return $this->hasMany(User::class, 'department_uuid', 'uuid')
+                                                            ->where('status', 1);
+    }
 }
