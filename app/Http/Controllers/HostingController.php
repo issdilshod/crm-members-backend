@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class HostingController extends Controller
 {
-    /**     @OA\Get(
+    /**     @OA\GET(
       *         path="/api/hosting",
       *         operationId="list_hosting",
       *         tags={"Helper"},
@@ -27,7 +27,7 @@ class HostingController extends Controller
     public function index()
     {
         //
-        return HostingResource::collection(Hosting::all()->where('status', '=', '1'));
+        return HostingResource::collection(Hosting::all()->where('status', 1));
     }
 
     /**

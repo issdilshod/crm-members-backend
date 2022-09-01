@@ -9,7 +9,7 @@ use App\Helpers\UserSystemInfoHelper;
 
 class ActivityController extends Controller
 {
-    /**     @OA\Get(
+    /**     @OA\GET(
       *         path="/api/activity",
       *         operationId="list_activity",
       *         tags={"Account"},
@@ -28,7 +28,7 @@ class ActivityController extends Controller
     public function index()
     {
         //
-        $activity = Activity::where('status', '=', '1')->paginate(100);
+        $activity = Activity::where('status', 1)->paginate(100);
         return ActivityResource::collection($activity);
     }
 
@@ -173,7 +173,7 @@ class ActivityController extends Controller
       */
     public function by_user($uuid)
     {
-        $activity = Activity::where('status', '=', '1')->where('user_uuid', '=', $uuid)->paginate(100);
+        $activity = Activity::where('status', 1)->where('user_uuid', $uuid)->paginate(100);
         return ActivityResource::collection($activity);
         //
     }
@@ -206,7 +206,7 @@ class ActivityController extends Controller
       */
     public function by_entity($uuid)
     {
-        $activity = Activity::where('status', '=', '1')->where('entity_uuid', '=', $uuid)->paginate(100);
+        $activity = Activity::where('status', 1)->where('entity_uuid', $uuid)->paginate(100);
         return ActivityResource::collection($activity);
         //
     }

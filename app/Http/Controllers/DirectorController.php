@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 
 class DirectorController extends Controller
 {
-    /**     @OA\Get(
+    /**     @OA\GET(
       *         path="/api/director",
       *         operationId="list_director",
       *         tags={"Director"},
@@ -32,7 +32,7 @@ class DirectorController extends Controller
     public function index()
     {
         //
-        $director = Director::where('status', '1')->paginate(20);
+        $director = Director::where('status', 1)->paginate(20);
         return DirectorResource::collection($director);
     }
 

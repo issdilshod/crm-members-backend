@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
-    /**     @OA\Get(
+    /**     @OA\GET(
       *         path="/api/role",
       *         operationId="list_role",
       *         tags={"Account"},
@@ -27,7 +27,7 @@ class RoleController extends Controller
     public function index()
     {
         //
-        return RoleResource::collection(Role::all()->where('status', '=', '1'));
+        return RoleResource::collection(Role::all()->where('status', 1));
     }
 
     /**

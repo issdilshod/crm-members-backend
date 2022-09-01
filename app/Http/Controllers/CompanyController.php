@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 
 class CompanyController extends Controller
 {
-    /**     @OA\Get(
+    /**     @OA\GET(
       *         path="/api/company",
       *         operationId="list_company",
       *         tags={"Company"},
@@ -33,7 +33,7 @@ class CompanyController extends Controller
     public function index()
     {
         //
-        $company = Company::where('status', '=', '1')->paginate(20);
+        $company = Company::where('status', 1)->paginate(20);
         return CompanyResource::collection($company);
     }
 

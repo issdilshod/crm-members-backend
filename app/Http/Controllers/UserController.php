@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
-    /**     @OA\Get(
+    /**     @OA\GET(
       *         path="/api/user",
       *         operationId="list_user",
       *         tags={"Account"},
@@ -59,13 +59,14 @@ class UserController extends Controller
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
       *                         type="object",
-      *                         required={"first_name", "last_name", "username", "password", "telegram", "status"},
+      *                         required={"department_uuid", "role_uuid", "first_name", "last_name", "username", "password", "telegram"},
+      *                         @OA\Property(property="department_uuid", type="text"),
+      *                         @OA\Property(property="role_uuid", type="text"),
       *                         @OA\Property(property="first_name", type="text"),
       *                         @OA\Property(property="last_name", type="text"),
       *                         @OA\Property(property="username", type="text"),
       *                         @OA\Property(property="password", type="text"),
-      *                         @OA\Property(property="telegram", type="text"),
-      *                         @OA\Property(property="status", type="int"),
+      *                         @OA\Property(property="telegram", type="text")
       *                     ),
       *                 ),
       *             ),
@@ -204,13 +205,14 @@ class UserController extends Controller
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
       *                         type="object",
-      *                         required={"first_name", "last_name", "username", "password", "telegram", "status"},
+      *                         required={},
+      *                         @OA\Property(property="department_uuid", type="text"),
+      *                         @OA\Property(property="role_uuid", type="text"),
       *                         @OA\Property(property="first_name", type="text"),
       *                         @OA\Property(property="last_name", type="text"),
       *                         @OA\Property(property="username", type="text"),
       *                         @OA\Property(property="password", type="text"),
-      *                         @OA\Property(property="telegram", type="text"),
-      *                         @OA\Property(property="status", type="int")
+      *                         @OA\Property(property="telegram", type="text")
       *                     ),
       *                 ),
       *             ),
@@ -431,12 +433,19 @@ class UserController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function logout(Request $request){
+    public function logout(Request $request)
+    {
+
+        #region Validation
+
         $validated = $request->validate([
             'token' => 'required|string'
         ]);
 
+        #endregion
+
         UserAccessToken::where('token', $validated['token'])->update(['status' => 0]);
+
         return response()->json([
             'data' => ['msg' => 'Logged out'],
         ], 200);

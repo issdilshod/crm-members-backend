@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class StateController extends Controller
 {
-    /**     @OA\Get(
+    /**     @OA\GET(
       *         path="/api/state",
       *         operationId="list_state",
       *         tags={"Helper"},
@@ -27,7 +27,7 @@ class StateController extends Controller
     public function index()
     {
         //
-        return StateResource::collection(State::all()->where('status', '=', '1'));
+        return StateResource::collection(State::all()->where('status', 1));
     }
 
     /**

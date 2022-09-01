@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 
 class TaskController extends Controller
 {
-    /**     @OA\Get(
+    /**     @OA\GET(
       *         path="/api/task",
       *         operationId="list_task",
       *         tags={"Task"},
@@ -63,7 +63,6 @@ class TaskController extends Controller
       *                         @OA\Property(property="description", type="text"),
       *                         @OA\Property(property="priority", type="integer"),
       *                         @OA\Property(property="department_uuid", type="string"),
-      *                         @OA\Property(property="users[]", type="string"),
       *
       *                         @OA\Property(property="files[attachment][]", type="file", format="binary")
       *                     ),

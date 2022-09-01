@@ -1312,9 +1312,6 @@
                                     "department_uuid": {
                                         "type": "string"
                                     },
-                                    "users[]": {
-                                        "type": "string"
-                                    },
                                     "files[attachment][]": {
                                         "type": "file",
                                         "format": "binary"
@@ -1433,14 +1430,21 @@
                         "multipart/form-data": {
                             "schema": {
                                 "required": [
+                                    "department_uuid",
+                                    "role_uuid",
                                     "first_name",
                                     "last_name",
                                     "username",
                                     "password",
-                                    "telegram",
-                                    "status"
+                                    "telegram"
                                 ],
                                 "properties": {
+                                    "department_uuid": {
+                                        "type": "text"
+                                    },
+                                    "role_uuid": {
+                                        "type": "text"
+                                    },
                                     "first_name": {
                                         "type": "text"
                                     },
@@ -1455,9 +1459,6 @@
                                     },
                                     "telegram": {
                                         "type": "text"
-                                    },
-                                    "status": {
-                                        "type": "integer"
                                     }
                                 },
                                 "type": "object"
@@ -1552,15 +1553,14 @@
                     "content": {
                         "multipart/form-data": {
                             "schema": {
-                                "required": [
-                                    "first_name",
-                                    "last_name",
-                                    "username",
-                                    "password",
-                                    "telegram",
-                                    "status"
-                                ],
+                                "required": [],
                                 "properties": {
+                                    "department_uuid": {
+                                        "type": "text"
+                                    },
+                                    "role_uuid": {
+                                        "type": "text"
+                                    },
                                     "first_name": {
                                         "type": "text"
                                     },
@@ -1575,9 +1575,6 @@
                                     },
                                     "telegram": {
                                         "type": "text"
-                                    },
-                                    "status": {
-                                        "type": "integer"
                                     }
                                 },
                                 "type": "object"
@@ -1706,6 +1703,52 @@
                 "summary": "Is Auth",
                 "description": "Is Auth",
                 "operationId": "is_auth",
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Logout",
+                "description": "Logout",
+                "operationId": "logout",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "token"
+                                ],
+                                "properties": {
+                                    "token": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "Successfully",

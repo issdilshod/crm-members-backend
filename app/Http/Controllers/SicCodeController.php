@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class SicCodeController extends Controller
 {
-    /**     @OA\Get(
+    /**     @OA\GET(
       *         path="/api/sic_code",
       *         operationId="list_sic_code",
       *         tags={"Helper"},
@@ -27,7 +27,7 @@ class SicCodeController extends Controller
     public function index()
     {
         //
-        return SicCodeResource::collection(SicCode::all()->where('status', '=', '1'));
+        return SicCodeResource::collection(SicCode::all()->where('status', 1));
     }
 
     /**

@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class DepartmentController extends Controller
 {
-    /**     @OA\Get(
+    /**     @OA\GET(
       *         path="/api/department",
       *         operationId="list_department",
       *         tags={"Account"},
@@ -27,7 +27,7 @@ class DepartmentController extends Controller
     public function index()
     {
         //
-        return DepartmentResource::collection(Department::all()->where('status', '=', '1'));
+        return DepartmentResource::collection(Department::all()->where('status', 1));
     }
 
     /**
