@@ -50,8 +50,7 @@ class RoleController extends Controller
     {
         //
         $validated = $request->validate([
-            'role_name' => 'required|string|max:100',
-            'status' => 'required|integer'
+            'role_name' => 'required|string|max:100'
         ]);
         return new RoleResource(Role::create($validated));
     }

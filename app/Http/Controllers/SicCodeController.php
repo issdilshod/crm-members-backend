@@ -52,8 +52,7 @@ class SicCodeController extends Controller
         $validated = $request->validate([
             'code' => 'required|integer',
             'office' => 'required|string|max:100',
-            'industry_title' => 'required|string|max:200',
-            'status' => 'required|integer'
+            'industry_title' => 'required|string|max:200'
         ]);
         return new SicCodeResource(SicCode::create($validated));
     }

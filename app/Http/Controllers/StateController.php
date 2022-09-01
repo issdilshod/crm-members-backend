@@ -51,8 +51,7 @@ class StateController extends Controller
         //
         $validated = $request->validate([
             'short_name' => 'required|string|max:20',
-            'full_name' => 'required|string|max:50',
-            'status' => 'required|integer'
+            'full_name' => 'required|string|max:50'
         ]);
         return new StateResource(State::create($validated));
     }
