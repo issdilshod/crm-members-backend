@@ -20,6 +20,7 @@ class AuthenticateCustom
     {
         $token = $request->bearerToken();
         $user_access_token = UserAccessToken::where('token', $token)
+                                                ->where('status', 1)
                                                 ->where('expires_at', '>', Carbon::now()->toDateTimeString())
                                                 ->first();
 

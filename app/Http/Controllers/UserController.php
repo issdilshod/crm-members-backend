@@ -404,4 +404,41 @@ class UserController extends Controller
             'data' => ['msg' => 'Authentificate'],
         ], 200);
     }
+
+    /**     @OA\POST(
+      *         path="/api/logout",
+      *         operationId="logout",
+      *         tags={"Account"},
+      *         summary="Logout",
+      *         description="Logout",
+      *             @OA\RequestBody(
+      *                 @OA\JsonContent(),
+      *                 @OA\MediaType(
+      *                     mediaType="multipart/form-data",
+      *                     @OA\Schema(
+      *                         type="object",
+      *                         required={"token"},
+      *                         @OA\Property(property="token", type="text")
+      *                     ),
+      *                 ),
+      *             ),
+      *             @OA\Response(
+      *                 response=200,
+      *                 description="Successfully",
+      *                 @OA\JsonContent()
+      *             ),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
+    public function logout(Request $request){
+        $validated = $request->validate([
+            'token' => 'required|string'
+        ]);
+
+        UserAccessToken::where('token', $validated['token'])->update(['status' => 0]);
+        return response()->json([
+            'data' => ['msg' => 'Logged out'],
+        ], 200);
+    }
 }
