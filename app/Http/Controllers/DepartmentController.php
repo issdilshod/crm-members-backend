@@ -50,8 +50,7 @@ class DepartmentController extends Controller
     {
         //
         $validated = $request->validate([
-            'department_name' => 'required|string|max:100',
-            'status' => 'required|integer'
+            'department_name' => 'required|string|max:100'
         ]);
         return new DepartmentResource(Department::create($validated));
     }
