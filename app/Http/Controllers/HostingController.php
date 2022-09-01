@@ -50,8 +50,7 @@ class HostingController extends Controller
     {
         //
         $validated = $request->validate([
-            'host' => 'required|string|max:100',
-            'status' => 'required|integer'
+            'host' => 'required|string|max:100'
         ]);
         return new HostingResource(Hosting::create($validated));
     }
