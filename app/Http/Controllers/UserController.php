@@ -81,15 +81,61 @@ class UserController extends Controller
       */
     public function store(Request $request)
     {
-        //
+        #region Validation
+
         $validated = $request->validate([
+            'department_uuid' => 'required|string',
+            'role_uuid' => 'required|string',
             'first_name' => 'required|string|max:100',
             'last_name' => 'required|string|max:100',
             'username' => 'required|string|max:100',
             'password' => 'required|string|max:200',
             'telegram' => 'required|string|max:100',
-            'status' => 'required|integer'
         ]);
+
+        #endregion
+
+        #region Check if exsist data
+
+        $check = [];
+
+        if (isset($validated['username'])){
+            // username
+            $check['user'] = User::select('username')
+                                    ->where('status', 1)
+                                    ->where('username', $validated['username'])
+                                    ->first();
+            if ($check['user']!=null){
+                $check['user'] = $check['user']->toArray();
+                foreach ($check['user'] as $key => $value):
+                    $check[$key] = '~Exsist';
+                endforeach;
+            }
+            unset($check['user']);
+
+            // telegram
+            $check['contact'] = User::select('telegram')
+                                    ->where('status', 1)
+                                    ->where('telegram', $validated['telegram'])
+                                    ->first();
+            if ($check['contact']!=null){
+                $check['contact'] = $check['contact']->toArray();
+                foreach ($check['contact'] as $key => $value):
+                    $check[$key] = '~Exsist';
+                endforeach;
+            }
+            unset($check['contact']);
+        }
+
+        if (count($check)>0){
+            return response()->json([
+                        'data' => $check,
+                    ], 409);
+        }
+
+        #endregion
+
+        $validated['status'] = 1;
         return new UserResource(User::create($validated));
     }
 
@@ -180,15 +226,72 @@ class UserController extends Controller
       */
     public function update(Request $request, User $user)
     {
-        //
+        #region Validation
+
         $validated = $request->validate([
-            'first_name' => 'required|string|max:100',
-            'last_name' => 'required|string|max:100',
-            'username' => 'required|string|max:100',
-            'password' => 'required|string|max:200',
-            'telegram' => 'required|string|max:100',
-            'status' => 'required|integer'
+            'department_uuid' => 'string',
+            'role_uuid' => 'string',
+            'first_name' => 'string|max:100',
+            'last_name' => 'string|max:100',
+            'username' => 'string|max:100',
+            'password' => 'string|max:200',
+            'telegram' => 'string|max:100'
         ]);
+
+        #endregion
+
+        #region Check if exsist data
+
+        $check = [];
+
+        #region Check Username
+
+        if (isset($validated['username'])){
+            // username
+            $check['user'] = User::select('username')
+                                    ->where('status', 1)
+                                    ->where('uuid', '!=', $user['uuid'])
+                                    ->where('username', $validated['username'])
+                                    ->first();
+            if ($check['user']!=null){
+                $check['user'] = $check['user']->toArray();
+                foreach ($check['user'] as $key => $value):
+                    $check[$key] = '~Exsist';
+                endforeach;
+            }
+            unset($check['user']);
+        }
+
+        #endregion
+
+        #region Check telegram
+
+        if (isset($validated['telegram'])){
+            // telegram
+            $check['contact'] = User::select('telegram')
+                                    ->where('status', 1)
+                                    ->where('uuid', '!=', $user['uuid'])
+                                    ->where('telegram', $validated['telegram'])
+                                    ->first();
+            if ($check['contact']!=null){
+                $check['contact'] = $check['contact']->toArray();
+                foreach ($check['contact'] as $key => $value):
+                    $check[$key] = '~Exsist';
+                endforeach;
+            }
+            unset($check['contact']);
+        }
+
+        if (count($check)>0){
+            return response()->json([
+                        'data' => $check,
+                    ], 409);
+        }
+
+        #endregion
+
+        #endregion
+
         $user->update($validated);
         return new UserResource($user);
     }
