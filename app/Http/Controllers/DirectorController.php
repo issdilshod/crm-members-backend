@@ -114,7 +114,6 @@ class DirectorController extends Controller
         $validated = $request->validate([
             'user_uuid' => 'string',
             'first_name' => 'required|string',
-            'middle_name' => 'required|string',
             'last_name' => 'required|string',
             'date_of_birth' => 'required|date',
             'ssn_cpn' => 'required|string',
@@ -209,7 +208,7 @@ class DirectorController extends Controller
         $check['names'] = Director::select('first_name', 'middle_name', 'last_name')
                                         ->where('status', 1)
                                         ->where('first_name', $validated['first_name'])
-                                        ->where('middle_name', $validated['middle_name'])
+                                        ->where('middle_name', (isset($validated['middle_name'])?$validated['middle_name']:''))
                                         ->where('last_name', $validated['last_name'])
                                         ->first();
         if ($check['names']!=null){
