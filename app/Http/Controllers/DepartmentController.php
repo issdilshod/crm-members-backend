@@ -26,8 +26,8 @@ class DepartmentController extends Controller
       */
     public function index()
     {
-        //
-        return DepartmentResource::collection(Department::all()->where('status', 1));
+        $departments = Department::orderBy('sort', 'ASC')->where('status', 1)->get();
+        return DepartmentResource::collection($departments);
     }
 
     /**
@@ -50,8 +50,9 @@ class DepartmentController extends Controller
     {
         //
         $validated = $request->validate([
-            'department_name' => 'required|string|max:100'
+            'department_name' => 'required|string|max:100',
         ]);
+        // TODO: Incrementing number sort
         return new DepartmentResource(Department::create($validated));
     }
 
