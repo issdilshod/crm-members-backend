@@ -27,7 +27,7 @@ class SicCodeController extends Controller
     public function index()
     {
         //
-        return SicCodeResource::collection(SicCode::all()->where('status', 1));
+        return SicCodeResource::collection(SicCode::orderBy('code', 'ASC')->where('status', 1)->get());
     }
 
     /**
@@ -48,13 +48,12 @@ class SicCodeController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $validated = $request->validate([
+        /*$validated = $request->validate([
             'code' => 'required|integer',
             'office' => 'required|string|max:100',
             'industry_title' => 'required|string|max:200'
         ]);
-        return new SicCodeResource(SicCode::create($validated));
+        return new SicCodeResource(SicCode::create($validated));*/
     }
 
     /**
