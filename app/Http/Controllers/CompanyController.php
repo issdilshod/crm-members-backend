@@ -59,7 +59,7 @@ class CompanyController extends Controller
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
       *                         type="object",
-      *                         required={"user_uuid", "legal_name", "sic_code_uuid", "director_uuid", "incorporation_state_uuid", "incorporation_state_name", "doing_business_in_state_uuid", "doing_business_in_state_name", "ein", "phone_type", "phone_number", "website", "db_report_number", "address[street_address]", "address[address_line_2]", "address[city]", "address[state]", "address[postal]", "address[country]", "emails[0][hosting_uuid]", "emails[0][email]", "emails[0][password]", "emails[0][phone]", "bank_account[name]", "bank_account[website]", "bank_account[username]", "bank_account[password]", "bank_account[account_number]", "bank_account[routing_number]"},
+      *                         required={"user_uuid", "legal_name", "sic_code_uuid", "director_uuid", "incorporation_state_uuid", "incorporation_state_name", "doing_business_in_state_uuid", "doing_business_in_state_name", "ein", "phone_type", "phone_number", "website", "db_report_number", "address[street_address]", "address[address_line_2]", "address[city]", "address[state]", "address[postal]", "address[country]", "emails[0][hosting_uuid]", "emails[0][email]", "emails[0][password]", "emails[0][phone]"},
       *                         @OA\Property(property="user_uuid", type="text"),
       *                         @OA\Property(property="legal_name", type="text"),
       *                         @OA\Property(property="sic_code_uuid", type="text"),
@@ -145,12 +145,7 @@ class CompanyController extends Controller
             'emails' => 'array',
 
             // bank account
-            'bank_account.name' => 'required|string',
-            'bank_account.website' => 'required|string',
-            'bank_account.username' => 'required|string',
-            'bank_account.password' => 'required|string',
-            'bank_account.account_number' => 'required|string',
-            'bank_account.routing_number' => 'required|string',
+            'bank_account' => 'array',
 
             // bank account security
             'bank_account_security' => 'array'
@@ -333,16 +328,18 @@ class CompanyController extends Controller
 
         #endregion
 
-        #region Bank account & bank account security (if exsist) add
+        #region Bank account (if exsist) & bank account security (if exsist) add
 
-        $validated['bank_account']['entity_uuid'] = $company['uuid'];
-        $bank_account = BankAccount::create($validated['bank_account']);
+        if (isset($validated['bank_account'])){
+            $validated['bank_account']['entity_uuid'] = $company['uuid'];
+            $bank_account = BankAccount::create($validated['bank_account']);
 
-        if (isset($validated['bank_account_security'])){
-            foreach ($validated['bank_account_security'] AS $key => $value):
-                $value['entity_uuid'] = $bank_account['uuid'];
-                BankAccountSecurity::create($value);
-            endforeach;
+            if (isset($validated['bank_account_security'])){
+                foreach ($validated['bank_account_security'] AS $key => $value):
+                    $value['entity_uuid'] = $bank_account['uuid'];
+                    BankAccountSecurity::create($value);
+                endforeach;
+            }
         }
 
         #endregion
@@ -535,21 +532,16 @@ class CompanyController extends Controller
             'emails' => 'array',
 
             // bank account
-            'bank_account.name' => 'string',
-            'bank_account.website' => 'string',
-            'bank_account.username' => 'string',
-            'bank_account.password' => 'string',
-            'bank_account.account_number' => 'string',
-            'bank_account.routing_number' => 'string',
-
-            // files to delete
-            'files_to_delete' => 'array',
+            'bank_account' => 'array',
 
             // bank account security
             'bank_account_security' => 'array',
 
             // bank account security to delete
-            'bank_account_security_to_delete' => 'array'
+            'bank_account_security_to_delete' => 'array',
+
+            // files to delete
+            'files_to_delete' => 'array'
         ]);
 
         #endregion
@@ -741,28 +733,33 @@ class CompanyController extends Controller
 
         #region Bank account & bank account security (delete/update) update
 
-        $bank_account = BankAccount::where('entity_uuid', $company['uuid'])->first();
         if (isset($validated['bank_account'])){
-            $bank_account->update($validated['bank_account']);
-        }
+            $bank_account = BankAccount::where('entity_uuid', $company['uuid'])->first();
+            if ($bank_account!=null){
+                $bank_account->update($validated['bank_account']);
+            }else{
+                $validated['bank_account']['entity_uuid'] = $company['uuid'];
+                $bank_account = BankAccount::create($validated['bank_account']);
+            }
 
-        if (isset($validated['bank_account_security_to_delete'])){
-            foreach($validated['bank_account_security_to_delete'] AS $key => $value):
-                $bank_account_security = BankAccountSecurity::where('uuid', $value);
-                $bank_account_security->update(['status' => '0']);
-            endforeach;
-        }
+            if (isset($validated['bank_account_security_to_delete'])){
+                foreach($validated['bank_account_security_to_delete'] AS $key => $value):
+                    $bank_account_security = BankAccountSecurity::where('uuid', $value);
+                    $bank_account_security->update(['status' => '0']);
+                endforeach;
+            }
 
-        if (isset($validated['bank_account_security'])){
-            foreach ($validated['bank_account_security'] AS $key => $value):
-                $value['entity_uuid'] = $bank_account['uuid'];
-                $bank_account_security = BankAccountSecurity::find($value);
-                if (!$bank_account_security->count()){
-                    BankAccountSecurity::create($value);
-                }else{
-                    $bank_account_security->update($value);
-                }
-            endforeach;
+            if (isset($validated['bank_account_security'])){
+                foreach ($validated['bank_account_security'] AS $key => $value):
+                    $value['entity_uuid'] = $bank_account['uuid'];
+                    $bank_account_security = BankAccountSecurity::find($value);
+                    if (!$bank_account_security->count()){
+                        BankAccountSecurity::create($value);
+                    }else{
+                        $bank_account_security->update($value);
+                    }
+                endforeach;
+            }
         }
 
         #endregion

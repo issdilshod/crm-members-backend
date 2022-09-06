@@ -429,13 +429,7 @@
                                     "emails[0][hosting_uuid]",
                                     "emails[0][email]",
                                     "emails[0][password]",
-                                    "emails[0][phone]",
-                                    "bank_account[name]",
-                                    "bank_account[website]",
-                                    "bank_account[username]",
-                                    "bank_account[password]",
-                                    "bank_account[account_number]",
-                                    "bank_account[routing_number]"
+                                    "emails[0][phone]"
                                 ],
                                 "properties": {
                                     "user_uuid": {
