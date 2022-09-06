@@ -14,8 +14,8 @@ class SicCodeSeeder extends Seeder
      */
     public function run()
     {
-        $sic_code = SicCode::where('status', 1)->first();
-        if ($sic_code==null){ // if database empty
+        $sic_codes = SicCode::where('status', 1)->first();
+        if ($sic_codes==null){ // if database empty
 
             $sic_code_list = [
                 [ 'code' => '100', 'office' => 'Office of Life Sciences', 'industry_title' => "AGRICULTURAL PRODUCTION-CROPS" ],

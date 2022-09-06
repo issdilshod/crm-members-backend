@@ -27,7 +27,7 @@ class StateController extends Controller
     public function index()
     {
         //
-        return StateResource::collection(State::all()->where('status', 1));
+        return StateResource::collection(State::orderBy('full_name')->where('status', 1)->get());
     }
 
     /**
@@ -48,12 +48,11 @@ class StateController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $validated = $request->validate([
+        /*$validated = $request->validate([
             'short_name' => 'required|string|max:20',
             'full_name' => 'required|string|max:50'
         ]);
-        return new StateResource(State::create($validated));
+        return new StateResource(State::create($validated));*/
     }
 
     /**
