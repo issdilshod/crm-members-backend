@@ -59,7 +59,7 @@ class CompanyController extends Controller
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
       *                         type="object",
-      *                         required={"user_uuid", "legal_name", "sic_code_uuid", "director_uuid", "incorporation_state_uuid", "incorporation_state_name", "doing_business_in_state_uuid", "doing_business_in_state_name", "ein", "phone_type", "phone_number", "website", "db_report_number", "address[street_address]", "address[address_line_2]", "address[city]", "address[state]", "address[postal]", "address[country]", "emails[0][hosting_uuid]", "emails[0][email]", "emails[0][password]", "emails[0][phone]"},
+      *                         required={"user_uuid", "legal_name", "sic_code_uuid", "director_uuid", "incorporation_state_uuid", "incorporation_state_name", "doing_business_in_state_uuid", "doing_business_in_state_name", "ein", "business_number", "business_number_type", "voip_provider", "voip_login", "voip_password", "business_mobile_number_provider", "business_mobile_number_login", "business_mobile_number_password", "website", "db_report_number", "address[street_address]", "address[address_line_2]", "address[city]", "address[state]", "address[postal]", "address[country]", "emails[hosting_uuid]", "emails[email]", "emails[password]", "emails[phone]"},
       *                         @OA\Property(property="user_uuid", type="text"),
       *                         @OA\Property(property="legal_name", type="text"),
       *                         @OA\Property(property="sic_code_uuid", type="text"),
@@ -69,8 +69,16 @@ class CompanyController extends Controller
       *                         @OA\Property(property="doing_business_in_state_uuid", type="text"),
       *                         @OA\Property(property="doing_business_in_state_name", type="text"),
       *                         @OA\Property(property="ein", type="text"),
-      *                         @OA\Property(property="phone_type", type="text"),
-      *                         @OA\Property(property="phone_number", type="text"),
+      *
+      *                         @OA\Property(property="business_number", type="text"),
+      *                         @OA\Property(property="business_number_type", type="text"),
+      *                         @OA\Property(property="voip_provider", type="text"),
+      *                         @OA\Property(property="voip_login", type="text"),
+      *                         @OA\Property(property="voip_password", type="text"),
+      *                         @OA\Property(property="business_mobile_number_provider", type="text"),
+      *                         @OA\Property(property="business_mobile_number_login", type="text"),
+      *                         @OA\Property(property="business_mobile_number_password", type="text"),
+      *
       *                         @OA\Property(property="website", type="text"),
       *                         @OA\Property(property="db_report_number", type="text"),
       *
@@ -81,10 +89,10 @@ class CompanyController extends Controller
       *                         @OA\Property(property="address[postal]", type="text"),
       *                         @OA\Property(property="address[country]", type="text"),
       *
-      *                         @OA\Property(property="emails[][hosting_uuid]", type="text"),
-      *                         @OA\Property(property="emails[][email]", type="text"),
-      *                         @OA\Property(property="emails[][password]", type="text"),
-      *                         @OA\Property(property="emails[][phone]", type="text"),
+      *                         @OA\Property(property="emails[hosting_uuid]", type="text"),
+      *                         @OA\Property(property="emails[email]", type="text"),
+      *                         @OA\Property(property="emails[password]", type="text"),
+      *                         @OA\Property(property="emails[phone]", type="text"),
       *
       *                         @OA\Property(property="bank_account[name]", type="text"),
       *                         @OA\Property(property="bank_account[website]", type="text"),
@@ -128,8 +136,17 @@ class CompanyController extends Controller
             'doing_business_in_state_uuid' => 'required|string',
             'doing_business_in_state_name' => 'required|string',
             'ein' => 'required|string',
-            'phone_type' => 'required|string',
-            'phone_number' => 'required|string',
+            
+            // numbers
+            'business_number' => 'required|string',
+            'business_number_type' => 'required|string',
+            'voip_provider' => 'required|string',
+            'voip_login' => 'required|string',
+            'voip_password' => 'required|string',
+            'business_mobile_number_provider' => 'required|string',
+            'business_mobile_number_login' => 'required|string',
+            'business_mobile_number_password' => 'required|string',
+
             'website' => 'required|string',
             'db_report_number' => 'required|string',
 
@@ -142,7 +159,10 @@ class CompanyController extends Controller
             'address.country' => 'required|string',
 
             // emails
-            'emails' => 'array',
+            'emails.hosting_uuid' => 'required|string',
+            'emails.email' => 'required|string',
+            'emails.password' => 'required|string',
+            'emails.phone' => 'required|string',
 
             // bank account
             'bank_account' => 'array',
@@ -213,21 +233,24 @@ class CompanyController extends Controller
         #region Check Bank Account
 
         if (isset($validated['bank_account'])){
-            // Bank Account
-            $check['bank_account'] = BankAccount::select('name', 'username', 'account_number', 'routing_number')
-                                                ->where('status', 1)
-                                                ->where('name', $validated['bank_account']['name'])
-                                                ->where('username', $validated['bank_account']['username'])
-                                                ->where('account_number', $validated['bank_account']['account_number'])
-                                                ->where('routing_number', $validated['bank_account']['routing_number'])
-                                                ->first();
-            if ($check['bank_account']!=null){
-                $check['bank_account'] = $check['bank_account']->toArray();
-                foreach ($check['bank_account'] AS $key => $value):
-                    $check['bank_account.'.$key] = '~Exsist~';
-                endforeach;
+            // Bank Account (check if not empty)
+            $tmp = $validated['bank_account'];
+            if ($tmp['name']!='' && $tmp['username']!='' && $tmp['account_number']!='' && $tmp['routing_number']!=''){
+                $check['bank_account'] = BankAccount::select('name', 'username', 'account_number', 'routing_number')
+                                                    ->where('status', 1)
+                                                    ->where('name', $validated['bank_account']['name'])
+                                                    ->where('username', $validated['bank_account']['username'])
+                                                    ->where('account_number', $validated['bank_account']['account_number'])
+                                                    ->where('routing_number', $validated['bank_account']['routing_number'])
+                                                    ->first();
+                if ($check['bank_account']!=null){
+                    $check['bank_account'] = $check['bank_account']->toArray();
+                    foreach ($check['bank_account'] AS $key => $value):
+                        $check['bank_account.'.$key] = '~Exsist~';
+                    endforeach;
+                }
+                unset($check['bank_account']);
             }
-            unset($check['bank_account']);
         }
 
         #endregion
@@ -271,10 +294,12 @@ class CompanyController extends Controller
             }
             unset($check['ein_c']);
 
-            // Phone number
-            $check['phone'] = Company::select('phone_number')
+            #region Numbers
+
+            // Business number
+            $check['phone'] = Company::select('business_number')
                                             ->where('status', 1)
-                                            ->where('phone_number', $validated['phone_number'])->first();
+                                            ->where('business_number', $validated['business_number'])->first();
             if ($check['phone']!=null){
                 $check['phone'] = $check['phone']->toArray();
                 foreach ($check['phone'] AS $key => $value):
@@ -282,6 +307,32 @@ class CompanyController extends Controller
                 endforeach;
             }
             unset($check['phone']);
+
+            // Voip Login
+            $check['phone'] = Company::select('voip_login')
+                                            ->where('status', 1)
+                                            ->where('voip_login', $validated['voip_login'])->first();
+            if ($check['phone']!=null){
+                $check['phone'] = $check['phone']->toArray();
+                foreach ($check['phone'] AS $key => $value):
+                    $check[$key] = '~Exsist~';
+                endforeach;
+            }
+            unset($check['phone']);
+
+            // Business mobile number login
+            $check['phone'] = Company::select('business_mobile_number_login')
+                                            ->where('status', 1)
+                                            ->where('business_mobile_number_login', $validated['business_mobile_number_login'])->first();
+            if ($check['phone']!=null){
+                $check['phone'] = $check['phone']->toArray();
+                foreach ($check['phone'] AS $key => $value):
+                    $check[$key] = '~Exsist~';
+                endforeach;
+            }
+            unset($check['phone']);
+
+            #endregion
 
             // Website
             $check['website_c'] = Company::select('website')
@@ -323,8 +374,10 @@ class CompanyController extends Controller
 
         #region Email add
 
-        $validated['emails']['entity_uuid'] = $company['uuid'];
-        Email::create($validated['emails']);
+        if (isset($validated['emails'])){
+            $validated['emails']['entity_uuid'] = $company['uuid'];
+            Email::create($validated['emails']);
+        }
 
         #endregion
 
@@ -452,8 +505,16 @@ class CompanyController extends Controller
       *                         @OA\Property(property="doing_business_in_state_uuid", type="text"),
       *                         @OA\Property(property="doing_business_in_state_name", type="text"),
       *                         @OA\Property(property="ein", type="text"),
-      *                         @OA\Property(property="phone_type", type="text"),
-      *                         @OA\Property(property="phone_number", type="text"),
+      *                         
+      *                         @OA\Property(property="business_number", type="text"),
+      *                         @OA\Property(property="business_number_type", type="text"),
+      *                         @OA\Property(property="voip_provider", type="text"),
+      *                         @OA\Property(property="voip_login", type="text"),
+      *                         @OA\Property(property="voip_password", type="text"),
+      *                         @OA\Property(property="business_mobile_number_provider", type="text"),
+      *                         @OA\Property(property="business_mobile_number_login", type="text"),
+      *                         @OA\Property(property="business_mobile_number_password", type="text"),
+      *
       *                         @OA\Property(property="website", type="text"),
       *                         @OA\Property(property="db_report_number", type="text"),
       *
@@ -515,8 +576,17 @@ class CompanyController extends Controller
             'doing_business_in_state_uuid' => 'string',
             'doing_business_in_state_name' => 'string',
             'ein' => 'string',
-            'phone_type' => 'string',
-            'phone_number' => 'string',
+            
+            // numbers
+            'business_number' => 'string',
+            'business_number_type' => 'string',
+            'voip_provider' => 'string',
+            'voip_login' => 'string',
+            'voip_password' => 'string',
+            'business_mobile_number_provider' => 'string',
+            'business_mobile_number_login' => 'string',
+            'business_mobile_number_password' => 'string',
+
             'website' => 'string',
             'db_report_number' => 'string',
 
@@ -609,22 +679,25 @@ class CompanyController extends Controller
         #region Check Bank Account
 
         if (isset($validated['bank_account'])){
-            // Bank Account
-            $check['bank_account'] = BankAccount::select('name', 'username', 'account_number', 'routing_number')
-                                                ->where('entity_uuid', '!=', $company['uuid'])
-                                                ->where('status', 1)
-                                                ->where('name', $validated['bank_account']['name'])
-                                                ->where('username', $validated['bank_account']['username'])
-                                                ->where('account_number', $validated['bank_account']['account_number'])
-                                                ->where('routing_number', $validated['bank_account']['routing_number'])
-                                                ->first();
-            if ($check['bank_account']!=null){
-                $check['bank_account'] = $check['bank_account']->toArray();
-                foreach ($check['bank_account'] AS $key => $value):
-                    $check['bank_account.'.$key] = '~Exsist~';
-                endforeach;
+            // Bank Account (check if not empty)
+            $tmp = $validated['bank_account'];
+            if ($tmp['name']!='' && $tmp['username']!='' && $tmp['account_number']!='' && $tmp['routing_number']!=''){
+                $check['bank_account'] = BankAccount::select('name', 'username', 'account_number', 'routing_number')
+                                                    ->where('entity_uuid', '!=', $company['uuid'])
+                                                    ->where('status', 1)
+                                                    ->where('name', $validated['bank_account']['name'])
+                                                    ->where('username', $validated['bank_account']['username'])
+                                                    ->where('account_number', $validated['bank_account']['account_number'])
+                                                    ->where('routing_number', $validated['bank_account']['routing_number'])
+                                                    ->first();
+                if ($check['bank_account']!=null){
+                    $check['bank_account'] = $check['bank_account']->toArray();
+                    foreach ($check['bank_account'] AS $key => $value):
+                        $check['bank_account.'.$key] = '~Exsist~';
+                    endforeach;
+                }
+                unset($check['bank_account']); 
             }
-            unset($check['bank_account']);
         }
 
         #endregion
@@ -671,11 +744,13 @@ class CompanyController extends Controller
             }
             unset($check['ein_c']);
 
-            // Phone number
-            $check['phone'] = Company::select('phone_number')
+            #region Numbers
+
+            // Business number
+            $check['phone'] = Company::select('business_number')
                                             ->where('uuid', '!=', $company['uuid'])
                                             ->where('status', 1)
-                                            ->where('phone_number', $validated['phone_number'])->first();
+                                            ->where('business_number', $validated['business_number'])->first();
             if ($check['phone']!=null){
                 $check['phone'] = $check['phone']->toArray();
                 foreach ($check['phone'] AS $key => $value):
@@ -683,6 +758,34 @@ class CompanyController extends Controller
                 endforeach;
             }
             unset($check['phone']);
+
+            // Voip Login
+            $check['phone'] = Company::select('voip_login')
+                                            ->where('uuid', '!=', $company['uuid'])
+                                            ->where('status', 1)
+                                            ->where('voip_login', $validated['voip_login'])->first();
+            if ($check['phone']!=null){
+                $check['phone'] = $check['phone']->toArray();
+                foreach ($check['phone'] AS $key => $value):
+                    $check[$key] = '~Exsist~';
+                endforeach;
+            }
+            unset($check['phone']);
+
+            // Business mobile number login
+            $check['phone'] = Company::select('business_mobile_number_login')
+                                            ->where('uuid', '!=', $company['uuid'])
+                                            ->where('status', 1)
+                                            ->where('business_mobile_number_login', $validated['business_mobile_number_login'])->first();
+            if ($check['phone']!=null){
+                $check['phone'] = $check['phone']->toArray();
+                foreach ($check['phone'] AS $key => $value):
+                    $check[$key] = '~Exsist~';
+                endforeach;
+            }
+            unset($check['phone']);
+
+            #endregion
 
             // Website
             $check['website_c'] = Company::select('website')
@@ -726,8 +829,10 @@ class CompanyController extends Controller
 
         #region Email update
 
-        $email = Email::where('entity_uuid', $company['uuid']);
-        $email->update($validated['emails']);
+        if (isset($validated['emails'])){
+            $email = Email::where('entity_uuid', $company['uuid']);
+            $email->update($validated['emails']);
+        }
 
         #endregion
 
