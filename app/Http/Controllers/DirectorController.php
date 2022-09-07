@@ -114,6 +114,7 @@ class DirectorController extends Controller
         $validated = $request->validate([
             'user_uuid' => 'string',
             'first_name' => 'required|string',
+            'middle_name' => '',
             'last_name' => 'required|string',
             'date_of_birth' => 'required|date',
             'ssn_cpn' => 'required|string',
@@ -441,7 +442,7 @@ class DirectorController extends Controller
         $validated = $request->validate([
             'user_uuid' => 'string',
             'first_name' => 'string',
-            'middle_name' => 'string',
+            'middle_name' => '',
             'last_name' => 'string',
             'date_of_birth' => 'date',
             'ssn_cpn' => 'string',
