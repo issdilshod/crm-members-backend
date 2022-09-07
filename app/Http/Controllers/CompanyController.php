@@ -681,7 +681,11 @@ class CompanyController extends Controller
         if (isset($validated['bank_account'])){
             // Bank Account (check if not empty)
             $tmp = $validated['bank_account'];
-            if ($tmp['name']!='' && $tmp['username']!='' && $tmp['account_number']!='' && $tmp['routing_number']!=''){
+            if (isset($tmp['name']) && $tmp['name']!='' && 
+                isset($tmp['username']) && $tmp['username']!='' && 
+                isset($tmp['account_number']) && $tmp['account_number']!='' && 
+                isset($tmp['routing_number']) && $tmp['routing_number']!='')
+                {
                 $check['bank_account'] = BankAccount::select('name', 'username', 'account_number', 'routing_number')
                                                     ->where('entity_uuid', '!=', $company['uuid'])
                                                     ->where('status', 1)
