@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\UserSystemInfoHelper;
 use App\Http\Resources\ActivityResource;
 use App\Http\Resources\UserAccessTokenResource;
 use App\Http\Resources\UserResource;
@@ -10,6 +11,7 @@ use App\Models\API\User;
 use App\Models\API\UserAccessToken;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 
 class UserController extends Controller
@@ -380,6 +382,15 @@ class UserController extends Controller
         $user['access_token'] = ['user_uuid' => $user['uuid'], 'token' => $token, 'expires_at' => $expires_at];
 
         UserAccessToken::create($user['access_token']);
+
+        // Activity log
+        Activity::create([
+            'user_uuid' => $user['uuid'],
+            'device' => UserSystemInfoHelper::device_full(),
+            'ip' =>  UserSystemInfoHelper::ip(),
+            'description' => Config::get('common.activity.logged'),
+            'status' => Config::get('common.status.actived')
+        ]);
 
         return $user;
     }

@@ -2,11 +2,16 @@
 
 return [
     'status' => [
-        'active' => 1,
+        'deleted' => 0,
+        'actived' => 1,
         'pending' => 2,
-        'delete' => 3,
+        'rejected' => 3,
         'saw' => 4,
         'open' => 5,
         'block' => 6
+    ],
+
+    'activity' => [
+        'logged' => 'Logged in',
     ],
 ];
