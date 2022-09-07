@@ -21,6 +21,8 @@ class UserResource extends JsonResource
             'username' => $this->username,
             'password' => $this->password,
             'telegram' => $this->telegram,
+            'role_uuid' => $this->role_uuid,
+            'department_uuid' => $this->department_uuid,
             'access_tokens' => UserAccessTokenResource::collection($this->access_tokens)
         ];
     }
