@@ -25,8 +25,16 @@ class CompanyResource extends JsonResource
             'doing_business_in_state_uuid' => $this->doing_business_in_state_uuid,
             'doing_business_in_state_name' => $this->doing_business_in_state_name,
             'ein' => $this->ein,
-            'phone_type' => $this->phone_type,
-            'phone_number' => $this->phone_number,
+            
+            'business_number' => $this->business_number,
+            'business_number_type' => $this->business_number_type,
+            'voip_provider' => $this->voip_provider,
+            'voip_login' => $this->voip_login,
+            'voip_password' => $this->voip_password,
+            'business_mobile_number_provider' => $this->business_mobile_number_provider,
+            'business_mobile_number_login' => $this->business_mobile_number_login,
+            'business_mobile_number_password' => $this->business_mobile_number_password,
+
             'website' => $this->website,
             'db_report_number' => $this->db_report_number,
             'bank_account' => BankAccountResource::collection($this->bank_account),
