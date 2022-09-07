@@ -543,7 +543,7 @@ class DirectorController extends Controller
                                         ->where('uuid', '!=', $director['uuid'])
                                         ->where('status', 1)
                                         ->where('first_name', $validated['first_name'])
-                                        ->where('middle_name', $validated['middle_name'])
+                                        ->where('middle_name', (isset($validated['middle_name'])?$validated['middle_name']:''))
                                         ->where('last_name', $validated['last_name'])
                                         ->first();
         if ($check['names']!=null){
