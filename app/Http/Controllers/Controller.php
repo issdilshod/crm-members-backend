@@ -9,7 +9,7 @@ use Illuminate\Routing\Controller as BaseController;
 
 /**
   *     @OA\Info(
-  *         title="Proj WebAPI",
+  *         title="Project WebAPI",
   *         version="1.0.0",
   *     )
   */

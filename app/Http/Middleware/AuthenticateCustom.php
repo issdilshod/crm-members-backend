@@ -6,6 +6,7 @@ use App\Models\API\UserAccessToken;
 use Carbon\Carbon;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 
 class AuthenticateCustom
 {
@@ -20,7 +21,7 @@ class AuthenticateCustom
     {
         $token = $request->bearerToken();
         $user_access_token = UserAccessToken::where('token', $token)
-                                                ->where('status', 1)
+                                                ->where('status', Config::get('common.status.actived'))
                                                 ->where('expires_at', '>', Carbon::now()->toDateTimeString())
                                                 ->first();
 

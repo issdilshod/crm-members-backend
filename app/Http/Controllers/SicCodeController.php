@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\SicCodeResource;
 use App\Models\API\SicCode;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 
 class SicCodeController extends Controller
 {
@@ -26,78 +27,7 @@ class SicCodeController extends Controller
       */
     public function index()
     {
-        //
-        return SicCodeResource::collection(SicCode::orderBy('code', 'ASC')->where('status', 1)->get());
+        return SicCodeResource::collection(SicCode::orderBy('code', 'ASC')->where('status', Config::get('common.status.actived'))->get());
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        /*$validated = $request->validate([
-            'code' => 'required|integer',
-            'office' => 'required|string|max:100',
-            'industry_title' => 'required|string|max:200'
-        ]);
-        return new SicCodeResource(SicCode::create($validated));*/
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\API\SicCode  $sicCode
-     * @return \Illuminate\Http\Response
-     */
-    public function show(SicCode $sicCode)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\API\SicCode  $sicCode
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(SicCode $sicCode)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\API\SicCode  $sicCode
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, SicCode $sicCode)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\API\SicCode  $sicCode
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(SicCode $sicCode)
-    {
-        //
-    }
+    
 }

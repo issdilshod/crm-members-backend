@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\DepartmentResource;
 use App\Models\API\Department;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 
 class DepartmentController extends Controller
 {
@@ -26,78 +27,53 @@ class DepartmentController extends Controller
       */
     public function index()
     {
-        $departments = Department::orderBy('sort', 'ASC')->where('status', 1)->get();
+        $departments = Department::orderBy('sort', 'ASC')
+                                    ->where('status', Config::get('common.status.actived'))
+                                    ->get();
         return DepartmentResource::collection($departments);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
-        $validated = $request->validate([
+        /*$validated = $request->validate([
             'department_name' => 'required|string|max:100',
         ]);
         // TODO: Incrementing number sort
-        return new DepartmentResource(Department::create($validated));
+        return new DepartmentResource(Department::create($validated));*/
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\API\Department  $department
-     * @return \Illuminate\Http\Response
-     */
+    /**     @OA\GET(
+      *         path="/api/department/{uuid}",
+      *         operationId="get_department",
+      *         tags={"Account"},
+      *         summary="Get department",
+      *         description="Get department",
+      *             @OA\Parameter(
+      *                 name="uuid",
+      *                 in="path",
+      *                 description="department uuid",
+      *                 @OA\Schema(
+      *                     type="string",
+      *                     format="uuid"
+      *                 ),
+      *                 required=true
+      *             ),
+      *             @OA\Response(
+      *                 response=200,
+      *                 description="Successfully",
+      *                 @OA\JsonContent()
+      *             ),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Unauthenticated"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
     public function show(Department $department)
     {
         return new DepartmentResource($department);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\API\Department  $department
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Department $department)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\API\Department  $department
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Department $department)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\API\Department  $department
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Department $department)
     {
-        //
     }
 }

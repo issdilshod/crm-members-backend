@@ -34,18 +34,9 @@ class UserController extends Controller
       */
     public function index()
     {
-        $user = User::first()->paginate(100);
+        $user = User::where('status', Config::get('common.status.actived'))
+                        ->paginate(100);
         return UserResource::collection($user);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**     @OA\POST(
@@ -104,7 +95,7 @@ class UserController extends Controller
         if (isset($validated['username'])){
             // username
             $check['user'] = User::select('username')
-                                    ->where('status', 1)
+                                    ->where('status', Config::get('common.status.actived'))
                                     ->where('username', $validated['username'])
                                     ->first();
             if ($check['user']!=null){
@@ -117,7 +108,7 @@ class UserController extends Controller
 
             // telegram
             $check['contact'] = User::select('telegram')
-                                    ->where('status', 1)
+                                    ->where('status', Config::get('common.status.actived'))
                                     ->where('telegram', $validated['telegram'])
                                     ->first();
             if ($check['contact']!=null){
@@ -137,7 +128,6 @@ class UserController extends Controller
 
         #endregion
 
-        $validated['status'] = 1;
         return new UserResource(User::create($validated));
     }
 
@@ -169,19 +159,7 @@ class UserController extends Controller
       */
     public function show(User $user)
     {
-        //
         return new UserResource($user);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\API\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(User $user)
-    {
-        //
     }
 
     /**     @OA\PUT(
@@ -252,7 +230,7 @@ class UserController extends Controller
         if (isset($validated['username'])){
             // username
             $check['user'] = User::select('username')
-                                    ->where('status', 1)
+                                    ->where('status', Config::get('common.status.actived'))
                                     ->where('uuid', '!=', $user['uuid'])
                                     ->where('username', $validated['username'])
                                     ->first();
@@ -272,7 +250,7 @@ class UserController extends Controller
         if (isset($validated['telegram'])){
             // telegram
             $check['contact'] = User::select('telegram')
-                                    ->where('status', 1)
+                                    ->where('status', Config::get('common.status.actived'))
                                     ->where('uuid', '!=', $user['uuid'])
                                     ->where('telegram', $validated['telegram'])
                                     ->first();
@@ -327,8 +305,7 @@ class UserController extends Controller
       */
     public function destroy(User $user)
     {
-        //
-        $user->update(['status' => '0']);
+        $user->update(['status' => Config::get('common.status.deleted')]);
     }
 
     /**     @OA\POST(
@@ -360,13 +337,15 @@ class UserController extends Controller
       */
     public function login(Request $request)
     {
-        //
         $validated = $request->validate([
             'username' => 'required|string|max:100',
             'password' => 'required|string|max:100',
         ]);
+
         $user = User::where('username', $validated['username'])
-                        ->where('password', $validated['password'])->first();
+                        ->where('password', $validated['password'])
+                        ->where('status', Config::get('common.status.actived'))
+                        ->first();
 
         if (!$user){
             return response()->json([
@@ -411,7 +390,7 @@ class UserController extends Controller
       */
     public function is_auth()
     {
-        //
+        // NOTE: Check in MiddleWare (AuthentificateCustom)
         return response()->json([
             'data' => ['msg' => 'Authentificate'],
         ], 200);
@@ -454,7 +433,7 @@ class UserController extends Controller
 
         #endregion
 
-        UserAccessToken::where('token', $validated['token'])->update(['status' => 0]);
+        UserAccessToken::where('token', $validated['token'])->update(['status' => Config::get('common.status.deleted')]);
 
         return response()->json([
             'data' => ['msg' => 'Logged out'],

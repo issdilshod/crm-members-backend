@@ -5,6 +5,7 @@ namespace App\Models\API;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\TraitUuid;
+use Illuminate\Support\Facades\Config;
 
 class Activity extends Model
 {
@@ -16,6 +17,6 @@ class Activity extends Model
 
     public function user(){
         return $this->belongsTo(User::class, 'user_uuid', 'uuid')
-                                                            ->where('status', 1);
+                                                            ->where('status', Config::get('common.status.actived'));
     }
 }

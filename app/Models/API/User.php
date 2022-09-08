@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\TraitUuid;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Config;
 
 class User extends Model
 {
@@ -17,19 +18,19 @@ class User extends Model
 
     public function department(){
         return $this->belongsTo(Department::class, 'department_uuid', 'uuid')
-                                                            ->where('status', 1);
+                                                            ->where('status', Config::get('common.status.actived'));
     }
 
     public function activities(){
         //
         return $this->hasMany(Activity::class, 'user_uuid', 'uuid')
-                                                                ->where('status', 1)
+                                                                ->where('status', Config::get('common.status.actived'))
                                                                 ->limit(10);
     }
 
     public function tasks(){
         return $this->hasMany(TaskToUser::class, 'user_uuid', 'uuid')
-                                                            ->where('status', 1);
+                                                            ->where('status', Config::get('common.status.actived'));
     }
 
     public function access_tokens(){

@@ -6,6 +6,7 @@ use App\Http\Resources\ActivityResource;
 use App\Models\API\Activity;
 use Illuminate\Http\Request;
 use App\Helpers\UserSystemInfoHelper;
+use Illuminate\Support\Facades\Config;
 
 class ActivityController extends Controller
 {
@@ -27,19 +28,8 @@ class ActivityController extends Controller
       */
     public function index()
     {
-        //
-        $activity = Activity::where('status', 1)->paginate(100);
+        $activity = Activity::where('status', Config::get('common.status.actived'))->paginate(100);
         return ActivityResource::collection($activity);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     public function store(Request $request)
@@ -86,31 +76,7 @@ class ActivityController extends Controller
       */
     public function show(Activity $activity)
     {
-        //
         return new ActivityResource($activity);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\API\Activity  $activity
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Activity $activity)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\API\Activity  $activity
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Activity $activity)
-    {
-        //
     }
 
     /**     @OA\DELETE(
@@ -141,8 +107,7 @@ class ActivityController extends Controller
       */
     public function destroy(Activity $activity)
     {
-        //
-        $activity->update(['status' => '0']);
+        $activity->update(['status' => Config::get('common.status.deleted')]);
     }
 
     /**     @OA\GET(
@@ -173,9 +138,10 @@ class ActivityController extends Controller
       */
     public function by_user($uuid)
     {
-        $activity = Activity::where('status', 1)->where('user_uuid', $uuid)->paginate(100);
+        $activity = Activity::where('status', Config::get('common.status.actived'))
+                                ->where('user_uuid', $uuid)
+                                ->paginate(100);
         return ActivityResource::collection($activity);
-        //
     }
 
     /**     @OA\GET(
@@ -206,8 +172,9 @@ class ActivityController extends Controller
       */
     public function by_entity($uuid)
     {
-        $activity = Activity::where('status', 1)->where('entity_uuid', $uuid)->paginate(100);
+        $activity = Activity::where('status', Config::get('common.status.actived'))
+                                ->where('entity_uuid', $uuid)
+                                ->paginate(100);
         return ActivityResource::collection($activity);
-        //
     }
 }

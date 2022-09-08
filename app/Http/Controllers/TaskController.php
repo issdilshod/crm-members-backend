@@ -7,6 +7,7 @@ use App\Models\API\File;
 use App\Models\API\Task;
 use App\Models\API\TaskToUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 
 class TaskController extends Controller
@@ -29,19 +30,9 @@ class TaskController extends Controller
       */
     public function index()
     {
-        //
-        $task = Task::where('status', '=', '1')->paginate(20);
+        $task = Task::where('status', Config::get('common.status.actived'))
+                        ->paginate(20);
         return TaskResource::collection($task);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**     @OA\POST(
@@ -202,19 +193,7 @@ class TaskController extends Controller
       */
     public function show(Task $task)
     {
-        //
         return new TaskResource($task);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\API\Task  $task
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Task $task)
-    {
-        //
     }
 
     /**     @OA\PUT(
@@ -404,14 +383,34 @@ class TaskController extends Controller
         return new TaskResource($task);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\API\Task  $task
-     * @return \Illuminate\Http\Response
-     */
+    /**     @OA\DELETE(
+      *         path="/api/task/{uuid}",
+      *         operationId="delete_task",
+      *         tags={"Task"},
+      *         summary="Delete task",
+      *         description="Delete task",
+      *             @OA\Parameter(
+      *                 name="uuid",
+      *                 in="path",
+      *                 description="task uuid",
+      *                 @OA\Schema(
+      *                     type="string",
+      *                     format="uuid"
+      *                 ),
+      *                 required=true
+      *             ),
+      *             @OA\Response(
+      *                 response=200,
+      *                 description="Successfully",
+      *                 @OA\JsonContent()
+      *             ),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Unauthenticated"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
     public function destroy(Task $task)
     {
-        //
+        $task->update(['status' => Config::get('common.status.actived')]);
     }
 }

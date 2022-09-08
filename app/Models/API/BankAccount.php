@@ -5,6 +5,7 @@ namespace App\Models\API;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\TraitUuid;
+use Illuminate\Support\Facades\Config;
 
 class BankAccount extends Model
 {
@@ -16,6 +17,6 @@ class BankAccount extends Model
 
     public function bank_account_security(){
         return $this->hasMany(BankAccountSecurity::class, 'entity_uuid', 'uuid')
-                                                            ->where('status', 1);
+                                                            ->where('status', Config::get('common.status.actived'));
     }
 }

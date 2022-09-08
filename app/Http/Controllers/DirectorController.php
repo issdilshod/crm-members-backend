@@ -9,6 +9,7 @@ use App\Models\API\Director;
 use App\Models\API\Email;
 use App\Models\API\File;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 
 class DirectorController extends Controller
@@ -31,19 +32,9 @@ class DirectorController extends Controller
       */
     public function index()
     {
-        //
-        $director = Director::where('status', 1)->paginate(20);
+        $director = Director::where('status', Config::get('common.status.actived'))
+                                ->paginate(20);
         return DirectorResource::collection($director);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**     @OA\POST(
@@ -153,7 +144,7 @@ class DirectorController extends Controller
         if (isset($validated['emails'])){
             // Hosting & Email
             $check['hosting_email'] = Email::select('hosting_uuid', 'email')
-                                                ->where('status', 1)
+                                                ->where('status', Config::get('common.status.actived'))
                                                 ->where('hosting_uuid', $validated['emails']['hosting_uuid'])
                                                 ->where('email', $validated['emails']['email'])->first();
             if ($check['hosting_email']!=null){
@@ -166,7 +157,7 @@ class DirectorController extends Controller
 
             // Phone
             $check['phone'] = Email::select('phone')
-                                        ->where('status', 1)
+                                        ->where('status', Config::get('common.status.actived'))
                                         ->where('phone', $validated['emails']['phone'])->first();
             if ($check['phone']!=null){
                 $check['phone'] = $check['phone']->toArray();
@@ -184,7 +175,7 @@ class DirectorController extends Controller
         if (isset($validated['address'])){
             foreach ($validated['address'] AS $key => $value):
                 $check[$key] = Address::select('street_address', 'address_line_2', 'city', 'postal')
-                                        ->where('status', 1)
+                                        ->where('status', Config::get('common.status.actived'))
                                         ->where(function($query) use ($value){
                                                 $query->where('street_address', $value['street_address'])
                                                         ->where('address_line_2', $value['address_line_2'])
@@ -207,7 +198,7 @@ class DirectorController extends Controller
 
         // Names
         $check['names'] = Director::select('first_name', 'middle_name', 'last_name')
-                                        ->where('status', 1)
+                                        ->where('status', Config::get('common.status.actived'))
                                         ->where('first_name', $validated['first_name'])
                                         ->where('middle_name', (isset($validated['middle_name'])?$validated['middle_name']:''))
                                         ->where('last_name', $validated['last_name'])
@@ -222,7 +213,7 @@ class DirectorController extends Controller
 
         // Ssn
         $check['ssn'] = Director::select('ssn_cpn')
-                                        ->where('status', 1)
+                                        ->where('status', Config::get('common.status.actived'))
                                         ->where('ssn_cpn', $validated['ssn_cpn'])
                                         ->first();
         if ($check['ssn']!=null){
@@ -235,7 +226,7 @@ class DirectorController extends Controller
 
         // Company 
         $check['company_association'] = Director::select('company_association')
-                                        ->where('status', 1)
+                                        ->where('status', Config::get('common.status.actived'))
                                         ->where('company_association', $validated['company_association'])
                                         ->first();
         if ($check['company_association']!=null){
@@ -248,7 +239,7 @@ class DirectorController extends Controller
 
         // Phone
         $check['phone_number'] = Director::select('phone_number')
-                                        ->where('status', 1)
+                                        ->where('status', Config::get('common.status.actived'))
                                         ->where('phone_number', $validated['phone_number'])
                                         ->first();
         if ($check['phone_number']!=null){
@@ -350,17 +341,6 @@ class DirectorController extends Controller
     public function show(Director $director)
     {
         return new DirectorResource($director);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\API\Director  $director
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Director $director)
-    {
-        //
     }
 
     /**     @OA\PUT(
@@ -484,7 +464,7 @@ class DirectorController extends Controller
             // Hosting & Email
             $check['hosting_email'] = Email::select('hosting_uuid', 'email')
                                                 ->where('entity_uuid', '!=', $director['uuid'])
-                                                ->where('status', 1)
+                                                ->where('status', Config::get('common.status.actived'))
                                                 ->where('hosting_uuid', $validated['emails']['hosting_uuid'])
                                                 ->where('email', $validated['emails']['email'])->first();
             if ($check['hosting_email']!=null){
@@ -498,7 +478,7 @@ class DirectorController extends Controller
             // Phone
             $check['phone'] = Email::select('phone')
                                         ->where('entity_uuid', '!=', $director['uuid'])
-                                        ->where('status', 1)
+                                        ->where('status', Config::get('common.status.actived'))
                                         ->where('phone', $validated['emails']['phone'])->first();
             if ($check['phone']!=null){
                 $check['phone'] = $check['phone']->toArray();
@@ -517,7 +497,7 @@ class DirectorController extends Controller
             foreach ($validated['address'] AS $key => $value):
                 $check[$key] = Address::select('street_address', 'address_line_2', 'city', 'postal')
                                         ->where('entity_uuid', '!=', $director['uuid'])
-                                        ->where('status', 1)
+                                        ->where('status', Config::get('common.status.actived'))
                                         ->where(function($query) use ($value){
                                                 $query->where('street_address', $value['street_address'])
                                                         ->where('address_line_2', $value['address_line_2'])
@@ -541,7 +521,7 @@ class DirectorController extends Controller
         // Names
         $check['names'] = Director::select('first_name', 'middle_name', 'last_name')
                                         ->where('uuid', '!=', $director['uuid'])
-                                        ->where('status', 1)
+                                        ->where('status', Config::get('common.status.actived'))
                                         ->where('first_name', $validated['first_name'])
                                         ->where('middle_name', (isset($validated['middle_name'])?$validated['middle_name']:''))
                                         ->where('last_name', $validated['last_name'])
@@ -557,7 +537,7 @@ class DirectorController extends Controller
         // Ssn
         $check['ssn'] = Director::select('ssn_cpn')
                                         ->where('uuid', '!=', $director['uuid'])
-                                        ->where('status', 1)
+                                        ->where('status', Config::get('common.status.actived'))
                                         ->where('ssn_cpn', $validated['ssn_cpn'])
                                         ->first();
         if ($check['ssn']!=null){
@@ -571,7 +551,7 @@ class DirectorController extends Controller
         // Company 
         $check['company_association'] = Director::select('company_association')
                                         ->where('uuid', '!=', $director['uuid'])
-                                        ->where('status', 1)
+                                        ->where('status', Config::get('common.status.actived'))
                                         ->where('company_association', $validated['company_association'])
                                         ->first();
         if ($check['company_association']!=null){
@@ -585,7 +565,7 @@ class DirectorController extends Controller
         // Phone
         $check['phone_number'] = Director::select('phone_number')
                                         ->where('uuid', '!=', $director['uuid'])
-                                        ->where('status', 1)
+                                        ->where('status', Config::get('common.status.actived'))
                                         ->where('phone_number', $validated['phone_number'])
                                         ->first();
         if ($check['phone_number']!=null){
@@ -674,14 +654,34 @@ class DirectorController extends Controller
         return new DirectorResource($director);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\API\Director  $director
-     * @return \Illuminate\Http\Response
-     */
+    /**     @OA\DELETE(
+      *         path="/api/director/{uuid}",
+      *         operationId="delete_director",
+      *         tags={"Director"},
+      *         summary="Delete director",
+      *         description="Delete director",
+      *             @OA\Parameter(
+      *                 name="uuid",
+      *                 in="path",
+      *                 description="director uuid",
+      *                 @OA\Schema(
+      *                     type="string",
+      *                     format="uuid"
+      *                 ),
+      *                 required=true
+      *             ),
+      *             @OA\Response(
+      *                 response=200,
+      *                 description="Successfully",
+      *                 @OA\JsonContent()
+      *             ),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Unauthenticated"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
     public function destroy(Director $director)
     {
-        //
+        $director->update(['status' => Config::get('common.status.deleted')]);
     }
 }

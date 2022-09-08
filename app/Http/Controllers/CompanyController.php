@@ -10,6 +10,7 @@ use App\Models\API\Company;
 use App\Models\API\Email;
 use App\Models\API\File;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 
 class CompanyController extends Controller
@@ -32,19 +33,9 @@ class CompanyController extends Controller
       */
     public function index()
     {
-        //
-        $company = Company::where('status', 1)->paginate(20);
+        $company = Company::where('status', Config::get('common.status.actived'))
+                            ->paginate(20);
         return CompanyResource::collection($company);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**     @OA\POST(
@@ -182,7 +173,7 @@ class CompanyController extends Controller
         if (isset($validated['emails'])){
             // Hosting & Email
             $check['hosting_email'] = Email::select('hosting_uuid', 'email')
-                                                ->where('status', 1)
+                                                ->where('status', Config::get('common.status.actived'))
                                                 ->where('hosting_uuid', $validated['emails']['hosting_uuid'])
                                                 ->where('email', $validated['emails']['email'])->first();
             if ($check['hosting_email']!=null){
@@ -195,7 +186,7 @@ class CompanyController extends Controller
 
             // Phone
             $check['phone'] = Email::select('phone')
-                                        ->where('status', 1)
+                                        ->where('status', Config::get('common.status.actived'))
                                         ->where('phone', $validated['emails']['phone'])->first();
             if ($check['phone']!=null){
                 $check['phone'] = $check['phone']->toArray();
@@ -212,7 +203,7 @@ class CompanyController extends Controller
 
         if (isset($validated['address'])){
             $check['address'] = Address::select('street_address', 'address_line_2', 'city', 'postal')
-                                        ->where('status', 1)
+                                        ->where('status', Config::get('common.status.actived'))
                                         ->where(function($query) use ($validated){
                                                 $query->where('street_address', $validated['address']['street_address'])
                                                         ->where('address_line_2', $validated['address']['address_line_2'])
@@ -237,7 +228,7 @@ class CompanyController extends Controller
             $tmp = $validated['bank_account'];
             if ($tmp['name']!='' && $tmp['username']!='' && $tmp['account_number']!='' && $tmp['routing_number']!=''){
                 $check['bank_account'] = BankAccount::select('name', 'username', 'account_number', 'routing_number')
-                                                    ->where('status', 1)
+                                                    ->where('status', Config::get('common.status.actived'))
                                                     ->where('name', $validated['bank_account']['name'])
                                                     ->where('username', $validated['bank_account']['username'])
                                                     ->where('account_number', $validated['bank_account']['account_number'])
@@ -260,7 +251,7 @@ class CompanyController extends Controller
         if (isset($validated['legal_name'])){
             // Legal name
             $check['legal_'] = Company::select('legal_name')
-                                            ->where('status', 1)
+                                            ->where('status', Config::get('common.status.actived'))
                                             ->where('legal_name', $validated['legal_name'])->first();
             if ($check['legal_']!=null){
                 $check['legal_'] = $check['legal_']->toArray();
@@ -272,7 +263,7 @@ class CompanyController extends Controller
 
             // Director
             $check['director'] = Company::select('director_uuid')
-                                            ->where('status', 1)
+                                            ->where('status', Config::get('common.status.actived'))
                                             ->where('director_uuid', $validated['director_uuid'])->first();
             if ($check['director']!=null){
                 $check['director'] = $check['director']->toArray();
@@ -284,7 +275,7 @@ class CompanyController extends Controller
 
             // EIN
             $check['ein_c'] = Company::select('ein')
-                                            ->where('status', 1)
+                                            ->where('status', Config::get('common.status.actived'))
                                             ->where('ein', $validated['ein'])->first();
             if ($check['ein_c']!=null){
                 $check['ein_c'] = $check['ein_c']->toArray();
@@ -298,7 +289,7 @@ class CompanyController extends Controller
 
             // Business number
             $check['phone'] = Company::select('business_number')
-                                            ->where('status', 1)
+                                            ->where('status', Config::get('common.status.actived'))
                                             ->where('business_number', $validated['business_number'])->first();
             if ($check['phone']!=null){
                 $check['phone'] = $check['phone']->toArray();
@@ -310,7 +301,7 @@ class CompanyController extends Controller
 
             // Voip Login
             $check['phone'] = Company::select('voip_login')
-                                            ->where('status', 1)
+                                            ->where('status', Config::get('common.status.actived'))
                                             ->where('voip_login', $validated['voip_login'])->first();
             if ($check['phone']!=null){
                 $check['phone'] = $check['phone']->toArray();
@@ -322,7 +313,7 @@ class CompanyController extends Controller
 
             // Business mobile number login
             $check['phone'] = Company::select('business_mobile_number_login')
-                                            ->where('status', 1)
+                                            ->where('status', Config::get('common.status.actived'))
                                             ->where('business_mobile_number_login', $validated['business_mobile_number_login'])->first();
             if ($check['phone']!=null){
                 $check['phone'] = $check['phone']->toArray();
@@ -336,7 +327,7 @@ class CompanyController extends Controller
 
             // Website
             $check['website_c'] = Company::select('website')
-                                            ->where('status', 1)
+                                            ->where('status', Config::get('common.status.actived'))
                                             ->where('website', $validated['website'])->first();
             if ($check['website_c']!=null){
                 $check['website_c'] = $check['website_c']->toArray();
@@ -348,7 +339,7 @@ class CompanyController extends Controller
 
             // Db report number
             $check['db'] = Company::select('db_report_number')
-                                            ->where('status', 1)
+                                            ->where('status', Config::get('common.status.actived'))
                                             ->where('db_report_number', $validated['db_report_number'])->first();
             if ($check['db']!=null){
                 $check['db'] = $check['db']->toArray();
@@ -462,17 +453,6 @@ class CompanyController extends Controller
     {
         //
         return new CompanyResource($company);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Company  $company
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Company $company)
-    {
-        //
     }
 
     /**     @OA\PUT(
@@ -626,7 +606,7 @@ class CompanyController extends Controller
             // Hosting & Email
             $check['hosting_email'] = Email::select('hosting_uuid', 'email')
                                                 ->where('entity_uuid', '!=', $company['uuid'])
-                                                ->where('status', 1)
+                                                ->where('status', Config::get('common.status.actived'))
                                                 ->where('hosting_uuid', $validated['emails']['hosting_uuid'])
                                                 ->where('email', $validated['emails']['email'])->first();
             if ($check['hosting_email']!=null){
@@ -640,7 +620,7 @@ class CompanyController extends Controller
             // Phone
             $check['phone'] = Email::select('phone')
                                         ->where('entity_uuid', '!=', $company['uuid'])
-                                        ->where('status', 1)
+                                        ->where('status', Config::get('common.status.actived'))
                                         ->where('phone', $validated['emails']['phone'])->first();
             if ($check['phone']!=null){
                 $check['phone'] = $check['phone']->toArray();
@@ -658,7 +638,7 @@ class CompanyController extends Controller
         if (isset($validated['address'])){
             $check['address'] = Address::select('street_address', 'address_line_2', 'city', 'postal')
                                         ->where('entity_uuid', '!=', $company['uuid'])
-                                        ->where('status', 1)
+                                        ->where('status', Config::get('common.status.actived'))
                                         ->where(function($query) use ($validated){
                                                 $query->where('street_address', $validated['address']['street_address'])
                                                         ->where('address_line_2', $validated['address']['address_line_2'])
@@ -688,7 +668,7 @@ class CompanyController extends Controller
                 {
                 $check['bank_account'] = BankAccount::select('name', 'username', 'account_number', 'routing_number')
                                                     ->where('entity_uuid', '!=', $company['uuid'])
-                                                    ->where('status', 1)
+                                                    ->where('status', Config::get('common.status.actived'))
                                                     ->where('name', $validated['bank_account']['name'])
                                                     ->where('username', $validated['bank_account']['username'])
                                                     ->where('account_number', $validated['bank_account']['account_number'])
@@ -712,7 +692,7 @@ class CompanyController extends Controller
             // Legal name
             $check['legal_'] = Company::select('legal_name')
                                             ->where('uuid', '!=', $company['uuid'])
-                                            ->where('status', 1)
+                                            ->where('status', Config::get('common.status.actived'))
                                             ->where('legal_name', $validated['legal_name'])->first();
             if ($check['legal_']!=null){
                 $check['legal_'] = $check['legal_']->toArray();
@@ -725,7 +705,7 @@ class CompanyController extends Controller
             // Director
             $check['director'] = Company::select('director_uuid')
                                             ->where('uuid', '!=', $company['uuid'])
-                                            ->where('status', 1)
+                                            ->where('status', Config::get('common.status.actived'))
                                             ->where('director_uuid', $validated['director_uuid'])->first();
             if ($check['director']!=null){
                 $check['director'] = $check['director']->toArray();
@@ -738,7 +718,7 @@ class CompanyController extends Controller
             // EIN
             $check['ein_c'] = Company::select('ein')
                                             ->where('uuid', '!=', $company['uuid'])
-                                            ->where('status', 1)
+                                            ->where('status', Config::get('common.status.actived'))
                                             ->where('ein', $validated['ein'])->first();
             if ($check['ein_c']!=null){
                 $check['ein_c'] = $check['ein_c']->toArray();
@@ -753,7 +733,7 @@ class CompanyController extends Controller
             // Business number
             $check['phone'] = Company::select('business_number')
                                             ->where('uuid', '!=', $company['uuid'])
-                                            ->where('status', 1)
+                                            ->where('status', Config::get('common.status.actived'))
                                             ->where('business_number', $validated['business_number'])->first();
             if ($check['phone']!=null){
                 $check['phone'] = $check['phone']->toArray();
@@ -766,7 +746,7 @@ class CompanyController extends Controller
             // Voip Login
             $check['phone'] = Company::select('voip_login')
                                             ->where('uuid', '!=', $company['uuid'])
-                                            ->where('status', 1)
+                                            ->where('status', Config::get('common.status.actived'))
                                             ->where('voip_login', $validated['voip_login'])->first();
             if ($check['phone']!=null){
                 $check['phone'] = $check['phone']->toArray();
@@ -779,7 +759,7 @@ class CompanyController extends Controller
             // Business mobile number login
             $check['phone'] = Company::select('business_mobile_number_login')
                                             ->where('uuid', '!=', $company['uuid'])
-                                            ->where('status', 1)
+                                            ->where('status', Config::get('common.status.actived'))
                                             ->where('business_mobile_number_login', $validated['business_mobile_number_login'])->first();
             if ($check['phone']!=null){
                 $check['phone'] = $check['phone']->toArray();
@@ -794,7 +774,7 @@ class CompanyController extends Controller
             // Website
             $check['website_c'] = Company::select('website')
                                             ->where('uuid', '!=', $company['uuid'])
-                                            ->where('status', 1)
+                                            ->where('status', Config::get('common.status.actived'))
                                             ->where('website', $validated['website'])->first();
             if ($check['website_c']!=null){
                 $check['website_c'] = $check['website_c']->toArray();
@@ -807,7 +787,7 @@ class CompanyController extends Controller
             // Db report number
             $check['db'] = Company::select('db_report_number')
                                             ->where('uuid', '!=', $company['uuid'])
-                                            ->where('status', 1)
+                                            ->where('status', Config::get('common.status.actived'))
                                             ->where('db_report_number', $validated['db_report_number'])->first();
             if ($check['db']!=null){
                 $check['db'] = $check['db']->toArray();
@@ -854,7 +834,7 @@ class CompanyController extends Controller
             if (isset($validated['bank_account_security_to_delete'])){
                 foreach($validated['bank_account_security_to_delete'] AS $key => $value):
                     $bank_account_security = BankAccountSecurity::where('uuid', $value);
-                    $bank_account_security->update(['status' => '0']);
+                    $bank_account_security->update(['status' => Config::get('common.status.deleted')]);
                 endforeach;
             }
 
@@ -888,7 +868,7 @@ class CompanyController extends Controller
             foreach ($validated['files_to_delete'] AS $key => $value):
                 if ($value!=null){
                     $file = File::find($value);
-                    $file->update(['status'=> 0]);
+                    $file->update(['status'=> Config::get('common.status.deleted')]);
                 }
             endforeach;
         }
@@ -921,14 +901,34 @@ class CompanyController extends Controller
         return new CompanyResource($company);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Company  $company
-     * @return \Illuminate\Http\Response
-     */
+    /**     @OA\DELETE(
+      *         path="/api/company/{uuid}",
+      *         operationId="delete_company",
+      *         tags={"Company"},
+      *         summary="Delete company",
+      *         description="Delete company",
+      *             @OA\Parameter(
+      *                 name="uuid",
+      *                 in="path",
+      *                 description="company uuid",
+      *                 @OA\Schema(
+      *                     type="string",
+      *                     format="uuid"
+      *                 ),
+      *                 required=true
+      *             ),
+      *             @OA\Response(
+      *                 response=200,
+      *                 description="Successfully",
+      *                 @OA\JsonContent()
+      *             ),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Unauthenticated"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
     public function destroy(Company $company)
     {
-        //
+        $company->update(['status' => Config::get('common.status.deleted')]);
     }
 }

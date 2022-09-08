@@ -5,6 +5,7 @@ namespace App\Models\API;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\TraitUuid;
+use Illuminate\Support\Facades\Config;
 
 class Task extends Model
 {
@@ -16,11 +17,11 @@ class Task extends Model
 
     public function users(){
         return $this->hasMany(TaskToUser::class, 'task_uuid', 'uuid')
-                                                            ->where('status', 1);
+                                                            ->where('status', Config::get('common.status.actived'));
     }
 
     public function files(){
         return $this->hasMany(File::class, 'entity_uuid', 'uuid')
-                                                            ->where('status', 1);
+                                                            ->where('status', Config::get('common.status.actived'));
     }
 }

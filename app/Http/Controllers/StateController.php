@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\StateResource;
 use App\Models\API\State;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 
 class StateController extends Controller
 {
@@ -26,26 +27,9 @@ class StateController extends Controller
       */
     public function index()
     {
-        //
-        return StateResource::collection(State::orderBy('full_name')->where('status', 1)->get());
+        return StateResource::collection(State::orderBy('full_name')->where('status', Config::get('common.status.actived'))->get());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         /*$validated = $request->validate([
@@ -53,50 +37,5 @@ class StateController extends Controller
             'full_name' => 'required|string|max:50'
         ]);
         return new StateResource(State::create($validated));*/
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\API\State  $state
-     * @return \Illuminate\Http\Response
-     */
-    public function show(State $state)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\API\State  $state
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(State $state)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\API\State  $state
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, State $state)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\API\State  $state
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(State $state)
-    {
-        //
     }
 }

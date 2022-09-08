@@ -8,6 +8,7 @@ use App\Traits\TraitUuid;
 use App\Models\API\File;
 use App\Models\API\Email;
 use App\Models\API\Address;
+use Illuminate\Support\Facades\Config;
 
 class Director extends Model
 {
@@ -19,16 +20,16 @@ class Director extends Model
 
     public function files(){
         return $this->hasMany(File::class, 'entity_uuid', 'uuid')
-                                                            ->where('status', 1);
+                                                            ->where('status', Config::get('common.status.actived'));
     }
 
     public function emails(){
         return $this->hasMany(Email::class, 'entity_uuid', 'uuid')
-                                                        ->where('status', 1);
+                                                        ->where('status', Config::get('common.status.actived'));
     }
 
     public function addresses(){
         return $this->hasMany(Address::class, 'entity_uuid', 'uuid')
-                                                            ->where('status', 1);
+                                                            ->where('status', Config::get('common.status.actived'));
     }
 }
