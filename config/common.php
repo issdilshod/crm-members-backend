@@ -16,7 +16,12 @@ return [
         'logout' => 'User logged out',
         'user' => [
             'add' => 'User Added',
-            'update' => 'User Updated'
+            'update' => 'User Updated',
         ],
+
+        'codes' => [
+            'user_add' => 1,
+            'user_update' => 2
+        ]
     ],
 ];

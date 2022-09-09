@@ -139,6 +139,7 @@ class UserController extends Controller
             'ip' => UserSystemInfoHelper::ip(),
             'description' => Config::get('common.activity.user.add'),
             'changes' => json_encode($validated),
+            'action_code' => Config::get('common.activity.codes.user_add'),
             'status' => Config::get('common.status.actived')
         ]);
 
@@ -298,6 +299,7 @@ class UserController extends Controller
             'ip' => UserSystemInfoHelper::ip(),
             'description' => Config::get('common.activity.user.update'),
             'changes' => json_encode($validated),
+            'action_code' => Config::get('common.activity.codes.user_update'),
             'status' => Config::get('common.status.actived')
         ]);
 
