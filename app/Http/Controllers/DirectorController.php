@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\UserSystemInfoHelper;
 use App\Http\Resources\DirectorMap;
 use App\Http\Resources\DirectorResource;
+use App\Models\API\Activity;
 use App\Models\API\Address;
 use App\Models\API\Director;
 use App\Models\API\Email;
@@ -99,7 +101,6 @@ class DirectorController extends Controller
       */
     public function store(Request $request)
     {
-
         #region Validate
 
         $validated = $request->validate([
@@ -131,6 +132,8 @@ class DirectorController extends Controller
             'emails.email' => 'required|string',
             'emails.password' => 'required|string',
             'emails.phone' => 'required|string',
+
+            'user_uuid' => 'string'
         ]);
 
         #endregion
@@ -269,7 +272,7 @@ class DirectorController extends Controller
 
         #endregion
 
-        #region  Address add
+        #region Address add
 
         foreach ($validated['address'] AS $key => $value){
             $address = new Address($validated['address'][$key]);
@@ -308,6 +311,18 @@ class DirectorController extends Controller
         }
 
         #endregion
+
+        // Activity log
+        Activity::create([
+            'user_uuid' => $validated['user_uuid'],
+            'entity_uuid' => $director['uuid'],
+            'device' => UserSystemInfoHelper::device_full(),
+            'ip' => UserSystemInfoHelper::ip(),
+            'description' => Config::get('common.activity.director.add'),
+            'changes' => json_encode($validated),
+            'action_code' => Config::get('common.activity.codes.director_add'),
+            'status' => Config::get('common.status.actived')
+        ]);
 
         return new DirectorResource($director);
     }
@@ -449,7 +464,9 @@ class DirectorController extends Controller
             'emails.password' => 'string',
             'emails.phone' => 'string',
             // files to delete by uuid
-            'files_to_delete' => 'array'
+            'files_to_delete' => 'array',
+
+            'user_uuid' => 'string'
         ]);
 
         #endregion
@@ -650,6 +667,18 @@ class DirectorController extends Controller
         }
 
         #endregion
+
+        // Activity log
+        Activity::create([
+            'user_uuid' => $validated['user_uuid'],
+            'entity_uuid' => $director['uuid'],
+            'device' => UserSystemInfoHelper::device_full(),
+            'ip' => UserSystemInfoHelper::ip(),
+            'description' => Config::get('common.activity.director.update'),
+            'changes' => json_encode($validated),
+            'action_code' => Config::get('common.activity.codes.director_update'),
+            'status' => Config::get('common.status.actived')
+        ]);
 
         return new DirectorResource($director);
     }
