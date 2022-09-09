@@ -84,6 +84,7 @@ class UserController extends Controller
             'username' => 'required|string|max:100',
             'password' => 'required|string|max:200',
             'telegram' => 'required|string|max:100',
+            'user_uuid' => 'string'
         ]);
 
         #endregion
@@ -128,7 +129,20 @@ class UserController extends Controller
 
         #endregion
 
-        return new UserResource(User::create($validated));
+        $user = User::create($validated);
+
+        // Activity log
+        Activity::create([
+            'user_uuid' => $validated['user_uuid'],
+            'entity_uuid' => $user['uuid'],
+            'device' => UserSystemInfoHelper::device_full(),
+            'ip' => UserSystemInfoHelper::ip(),
+            'description' => Config::get('common.activity.user.add'),
+            'changes' => json_encode($validated),
+            'status' => Config::get('common.status.actived')
+        ]);
+
+        return new UserResource($user);
     }
 
     /**     @OA\GET(
@@ -216,7 +230,8 @@ class UserController extends Controller
             'last_name' => 'string|max:100',
             'username' => 'string|max:100',
             'password' => 'string|max:200',
-            'telegram' => 'string|max:100'
+            'telegram' => 'string|max:100',
+            'user_uuid' => 'string'
         ]);
 
         #endregion
@@ -274,6 +289,18 @@ class UserController extends Controller
         #endregion
 
         $user->update($validated);
+
+        // Activity log
+        Activity::create([
+            'user_uuid' => $validated['user_uuid'],
+            'entity_uuid' => $user['uuid'],
+            'device' => UserSystemInfoHelper::device_full(),
+            'ip' => UserSystemInfoHelper::ip(),
+            'description' => Config::get('common.activity.user.update'),
+            'changes' => json_encode($validated),
+            'status' => Config::get('common.status.actived')
+        ]);
+
         return new UserResource($user);
     }
 
@@ -428,12 +455,22 @@ class UserController extends Controller
         #region Validation
 
         $validated = $request->validate([
-            'token' => 'required|string'
+            'token' => 'required|string',
+            'user_uuid' => 'string'
         ]);
 
         #endregion
 
         UserAccessToken::where('token', $validated['token'])->update(['status' => Config::get('common.status.deleted')]);
+
+        // Activity log
+        Activity::create([
+            'user_uuid' => $validated['user_uuid'],
+            'device' => UserSystemInfoHelper::device_full(),
+            'ip' => UserSystemInfoHelper::ip(),
+            'description' => Config::get('common.activity.logout'),
+            'status' => Config::get('common.status.actived')
+        ]);
 
         return response()->json([
             'data' => ['msg' => 'Logged out'],

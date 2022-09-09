@@ -12,6 +12,11 @@ return [
     ],
 
     'activity' => [
-        'logged' => 'Logged in',
+        'logged' => 'User logged in',
+        'logout' => 'User logged out',
+        'user' => [
+            'add' => 'User Added',
+            'update' => 'User Updated'
+        ],
     ],
 ];

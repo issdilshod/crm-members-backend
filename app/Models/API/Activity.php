@@ -11,7 +11,7 @@ class Activity extends Model
 {
     use HasFactory, TraitUuid;
 
-    protected $fillable = ['user_uuid', 'entity_uuid', 'device', 'ip', 'description', 'status'];
+    protected $fillable = ['user_uuid', 'entity_uuid', 'device', 'ip', 'description', 'changes', 'status'];
 
     protected $attributes = ['status' => 1];
 
