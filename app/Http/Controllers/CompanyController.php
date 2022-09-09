@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\UserSystemInfoHelper;
 use App\Http\Resources\CompanyResource;
+use App\Models\API\Activity;
 use App\Models\API\Address;
 use App\Models\API\BankAccount;
 use App\Models\API\BankAccountSecurity;
@@ -159,7 +161,9 @@ class CompanyController extends Controller
             'bank_account' => 'array',
 
             // bank account security
-            'bank_account_security' => 'array'
+            'bank_account_security' => 'array',
+
+            'user_uuid' => 'string'
         ]);
 
         #endregion
@@ -420,6 +424,18 @@ class CompanyController extends Controller
 
         #endregion
 
+        // Activity log
+        Activity::create([
+            'user_uuid' => $validated['user_uuid'],
+            'entity_uuid' => $company['uuid'],
+            'device' => UserSystemInfoHelper::device_full(),
+            'ip' => UserSystemInfoHelper::ip(),
+            'description' => Config::get('common.activity.company.add'),
+            'changes' => json_encode($validated),
+            'action_code' => Config::get('common.activity.codes.company_add'),
+            'status' => Config::get('common.status.actived')
+        ]);
+
         return new CompanyResource($company);
     }
 
@@ -591,7 +607,9 @@ class CompanyController extends Controller
             'bank_account_security_to_delete' => 'array',
 
             // files to delete
-            'files_to_delete' => 'array'
+            'files_to_delete' => 'array',
+
+            'user_uuid' => 'string'
         ]);
 
         #endregion
@@ -897,6 +915,18 @@ class CompanyController extends Controller
         }
 
         #endregion
+
+        // Activity log
+        Activity::create([
+            'user_uuid' => $validated['user_uuid'],
+            'entity_uuid' => $company['uuid'],
+            'device' => UserSystemInfoHelper::device_full(),
+            'ip' => UserSystemInfoHelper::ip(),
+            'description' => Config::get('common.activity.company.updated'),
+            'changes' => json_encode($validated),
+            'action_code' => Config::get('common.activity.codes.company_update'),
+            'status' => Config::get('common.status.actived')
+        ]);
 
         return new CompanyResource($company);
     }

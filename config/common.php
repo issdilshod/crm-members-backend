@@ -15,12 +15,16 @@ return [
         'logged' => 'User logged in',
         'logout' => 'User logged out',
         'user' => [
-            'add' => 'User Added',
-            'update' => 'User Updated',
+            'add' => 'User added',
+            'update' => 'User updated',
         ],
         'director' => [
-            'add' => 'Director Added',
-            'update' => 'Director Updated',
+            'add' => 'Director added',
+            'update' => 'Director updated',
+        ],
+        'company' => [
+            'add' => 'Company added',
+            'updated' => 'Company updated',
         ],
 
         'codes' => [
@@ -28,6 +32,8 @@ return [
             'user_update' => 2,
             'director_add' => 3,
             'director_update' => 4,
+            'company_add' => 5,
+            'company_update' => 6,
         ]
     ],
 ];
