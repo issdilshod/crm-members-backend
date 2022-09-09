@@ -28,7 +28,9 @@ class ActivityController extends Controller
       */
     public function index()
     {
-        $activity = Activity::where('status', Config::get('common.status.actived'))->paginate(100);
+        $activity = Activity::orderBy('updated_at', 'DESC')
+                              ->where('status', Config::get('common.status.actived'))
+                              ->paginate(10);
         return ActivityResource::collection($activity);
     }
 
@@ -138,9 +140,10 @@ class ActivityController extends Controller
       */
     public function by_user($uuid)
     {
-        $activity = Activity::where('status', Config::get('common.status.actived'))
+        $activity = Activity::orderBy('updated_at', 'DESC')
+                                ->where('status', Config::get('common.status.actived'))
                                 ->where('user_uuid', $uuid)
-                                ->paginate(100);
+                                ->paginate(10);
         return ActivityResource::collection($activity);
     }
 
@@ -172,9 +175,10 @@ class ActivityController extends Controller
       */
     public function by_entity($uuid)
     {
-        $activity = Activity::where('status', Config::get('common.status.actived'))
+        $activity = Activity::orderBy('updated_at', 'DESC')
+                                ->where('status', Config::get('common.status.actived'))
                                 ->where('entity_uuid', $uuid)
-                                ->paginate(100);
+                                ->paginate(10);
         return ActivityResource::collection($activity);
     }
 }
