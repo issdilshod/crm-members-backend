@@ -36,4 +36,9 @@ return [
             'company_update' => 6,
         ]
     ],
+
+    'invite' => [
+        'telegram' => 1,
+        'email' => 2,
+    ],
 ];

@@ -10,6 +10,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DirectorController;
+use App\Http\Controllers\InviteUserController;
 use App\Http\Controllers\TaskController;
 
 /*
@@ -76,3 +77,12 @@ Route::resource('api/company', CompanyController::class)->middleware('auth.custo
 |
 */
 Route::resource('api/task', TaskController::class)->middleware('auth.custom');
+
+/*
+|--------------------------------------------------------------------------
+| Invite user via Routes
+|--------------------------------------------------------------------------
+|
+*/
+//Route::post('api/invite-via-telegram', [InviteUserController::class, 'via_telegram'])->middleware('auth.custom');
+Route::post('api/invite-via-email', [InviteUserController::class, 'via_email'])->middleware('auth.custom');
