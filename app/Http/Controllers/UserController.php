@@ -7,6 +7,7 @@ use App\Http\Resources\ActivityResource;
 use App\Http\Resources\UserAccessTokenResource;
 use App\Http\Resources\UserResource;
 use App\Models\API\Activity;
+use App\Models\API\InviteUser;
 use App\Models\API\User;
 use App\Models\API\UserAccessToken;
 use Carbon\Carbon;
@@ -477,5 +478,88 @@ class UserController extends Controller
         return response()->json([
             'data' => ['msg' => 'Logged out'],
         ], 200);
+    }
+
+    /**     @OA\POST(
+      *         path="/api/invite_register",
+      *         operationId="invite_register",
+      *         tags={"Invite"},
+      *         summary="Invite register",
+      *         description="Invite register",
+      *             @OA\RequestBody(
+      *                 @OA\JsonContent(),
+      *                 @OA\MediaType(
+      *                     mediaType="multipart/form-data",
+      *                     @OA\Schema(
+      *                         type="object",
+      *                         required={"entry_token", "username", "password"},
+      *                         @OA\Property(property="entry_token", type="text"),
+      *                         @OA\Property(property="username", type="text"),
+      *                         @OA\Property(property="password", type="text")
+      *                     ),
+      *                 ),
+      *             ),
+      *             @OA\Response(
+      *                 response=200,
+      *                 description="Successfully",
+      *                 @OA\JsonContent()
+      *             ),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
+    public function invite_register(Request $request){
+
+        $validated = $request->validate([
+            'entry_token' => 'required',
+            'username' => 'required',
+            'password' => 'required'
+        ]);
+
+        $invite_user = InviteUser::select('uuid', 'via', 'unique_identify')
+                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('entry_token', $validated['entry_token'])
+                                    ->first();
+        
+        if ($invite_user!=null){
+            $user = User::select('username')
+                            ->where('status', Config::get('common.status.actived'))
+                            ->where('username', $validated['username'])
+                            ->first();
+            
+            #region Check for exsist
+
+            if ($user!=null){
+                
+                $check = [];
+                $check['user'] = $user->toArray();
+                foreach ($check['user'] as $key => $value):
+                    $check[$key] = '~Exsist';
+                endforeach;
+                unset($check['user']);
+
+                
+
+                return response()->json([
+                    'data' => ['msg' => $check],
+                ], 409);
+
+            }
+
+            #endregion
+
+            $validated['status'] = Config::get('common.status.pending');
+            User::create($validated);
+
+            $invite_user->update(['status'=> Config::get('common.status.deleted')]);
+            
+            return response()->json([
+                'data' => ['msg' => 'Succesfully sent request for register.'],
+            ], 200);
+        }
+
+        return response()->json([
+            'data' => ['msg' => 'Invalid token!'],
+        ], 404);
     }
 }

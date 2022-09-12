@@ -1273,6 +1273,55 @@
                 }
             }
         },
+        "/api/invite-check-token": {
+            "post": {
+                "tags": [
+                    "Invite"
+                ],
+                "summary": "Invite Check Token",
+                "description": "Invite Check",
+                "operationId": "post_invite_check_token",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "entry_token"
+                                ],
+                                "properties": {
+                                    "entry_token": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
         "/api/role": {
             "get": {
                 "tags": [
@@ -1981,6 +2030,60 @@
                                 ],
                                 "properties": {
                                     "token": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/invite_register": {
+            "post": {
+                "tags": [
+                    "Invite"
+                ],
+                "summary": "Invite register",
+                "description": "Invite register",
+                "operationId": "invite_register",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "entry_token",
+                                    "username",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "entry_token": {
+                                        "type": "text"
+                                    },
+                                    "username": {
+                                        "type": "text"
+                                    },
+                                    "password": {
                                         "type": "text"
                                     }
                                 },

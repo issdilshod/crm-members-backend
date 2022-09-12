@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\UserSystemInfoHelper;
 use App\Mail\EmailInvite;
+use App\Models\API\Activity;
 use App\Models\API\InviteUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -42,18 +44,31 @@ class InviteUserController extends Controller
   public function via_email(Request $request)
   {
       $validated = $request->validate([
-          'unique_identify' => 'required'
+          'unique_identify' => 'required',
+          'user_uuid' => 'string'
       ]);
 
       $validated['entry_token'] = Str::random(32);
       $validated['via'] = Config::get('common.invite.email');
 
-      InviteUser::create($validated);
+      $invite_user = InviteUser::create($validated);
 
       // Send mail
       $link = '?token='.$validated['entry_token'];
       Mail::to($validated['unique_identify'])
               ->send(new EmailInvite($link));
+
+      // Activity log
+      Activity::create([
+        'user_uuid' => $validated['user_uuid'],
+        'entity_uuid' => $invite_user['uuid'],
+        'device' => UserSystemInfoHelper::device_full(),
+        'ip' => UserSystemInfoHelper::ip(),
+        'description' => Config::get('common.activity.user.invite_via_email'),
+        'changes' => json_encode($validated),
+        'action_code' => Config::get('common.activity.codes.user_invite_via_email'),
+        'status' => Config::get('common.status.actived')
+      ]);
 
       return response()->json([
                 'data' => 'Success',
@@ -87,7 +102,8 @@ class InviteUserController extends Controller
     *             @OA\Response(response=404, description="Resource Not Found")
     *     )
     */
-  public function check_token(Request $request){
+  public function check_token(Request $request)
+  {
 
       $validated = $request->validate([
         'entry_token' => 'required'
@@ -105,7 +121,7 @@ class InviteUserController extends Controller
       }
 
       return response()->json([
-                'data' => 'Not found!',
+                'data' => 'Invalid token!',
             ], 404);
   }
 
