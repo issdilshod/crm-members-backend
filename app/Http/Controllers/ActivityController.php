@@ -7,6 +7,7 @@ use App\Models\API\Activity;
 use Illuminate\Http\Request;
 use App\Helpers\UserSystemInfoHelper;
 use Illuminate\Support\Facades\Config;
+use App\Helpers\WebSocket;
 
 class ActivityController extends Controller
 {
@@ -31,6 +32,8 @@ class ActivityController extends Controller
         $activity = Activity::orderBy('updated_at', 'DESC')
                               ->where('status', Config::get('common.status.actived'))
                               ->paginate(10);
+        // websocket
+        // event(new WebSocket('Activities get'));
         return ActivityResource::collection($activity);
     }
 
