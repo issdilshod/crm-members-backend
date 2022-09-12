@@ -538,10 +538,9 @@ class UserController extends Controller
                 endforeach;
                 unset($check['user']);
 
-                
 
                 return response()->json([
-                    'data' => ['msg' => $check],
+                    'data' => ['msg' => 'Username is exsist.', 'data' => $check],
                 ], 409);
 
             }

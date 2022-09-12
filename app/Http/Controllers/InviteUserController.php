@@ -54,7 +54,7 @@ class InviteUserController extends Controller
       $invite_user = InviteUser::create($validated);
 
       // Send mail
-      $link = '?token='.$validated['entry_token'];
+      $link = env('APP_FRONTEND_ENDPOINT') . '/register/'. $validated['entry_token'];
       Mail::to($validated['unique_identify'])
               ->send(new EmailInvite($link));
 
