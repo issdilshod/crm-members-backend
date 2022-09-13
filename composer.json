@@ -11,6 +11,7 @@
         "doctrine/dbal": "^3.4",
         "guzzlehttp/guzzle": "^7.2",
         "jenssegers/agent": "^2.6",
+        "laravel-notification-channels/telegram": "^2.1",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",

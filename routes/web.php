@@ -84,7 +84,7 @@ Route::resource('api/task', TaskController::class)->middleware('auth.custom');
 |--------------------------------------------------------------------------
 |
 */
-//Route::post('api/invite-via-telegram', [InviteUserController::class, 'via_telegram'])->middleware('auth.custom');
 Route::post('api/invite-via-email', [InviteUserController::class, 'via_email'])->middleware('auth.custom');
+Route::post('api/invite-via-telegram', [InviteUserController::class, 'via_telegram'])->middleware('auth.custom');
 Route::post('api/invite-check-token', [InviteUserController::class, 'check_token']);
 Route::post('api/invite-register', [UserController::class, 'invite_register']);

@@ -6,10 +6,13 @@ use App\Helpers\UserSystemInfoHelper;
 use App\Mail\EmailInvite;
 use App\Models\API\Activity;
 use App\Models\API\InviteUser;
+use App\Notifications\TelegramNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
+use NotificationChannels\Telegram\TelegramUpdates;
 
 class InviteUserController extends Controller
 {
@@ -67,6 +70,86 @@ class InviteUserController extends Controller
         'description' => Config::get('common.activity.user.invite_via_email'),
         'changes' => json_encode($validated),
         'action_code' => Config::get('common.activity.codes.user_invite_via_email'),
+        'status' => Config::get('common.status.actived')
+      ]);
+
+      return response()->json([
+                'data' => 'Success',
+            ], 200);
+  }
+
+  /**     @OA\POST(
+    *         path="/api/invite-via-telegram",
+    *         operationId="post_invite_via_telegram",
+    *         tags={"Invite"},
+    *         summary="Invite User via Telegram",
+    *         description="Invite User",
+    *             @OA\RequestBody(
+    *                 @OA\JsonContent(),
+    *                 @OA\MediaType(
+    *                     mediaType="multipart/form-data",
+    *                     @OA\Schema(
+    *                         type="object",
+    *                         required={"unique_identify"},
+    *                         @OA\Property(property="unique_identify", type="text")
+    *                     ),
+    *                 ),
+    *             ),
+    *             @OA\Response(
+    *                 response=200,
+    *                 description="Successfully",
+    *                 @OA\JsonContent()
+    *             ),
+    *             @OA\Response(response=400, description="Bad request"),
+    *             @OA\Response(response=401, description="Unauthenticated"),
+    *             @OA\Response(response=404, description="Resource Not Found")
+    *     )
+    */
+  public function via_telegram(Request $request)
+  {
+      $validated = $request->validate([
+          'unique_identify' => 'required',
+          'user_uuid' => 'string'
+      ]);
+
+      $validated['entry_token'] = Str::random(32);
+      $validated['via'] = Config::get('common.invite.telegram');
+
+      $invite_user = InviteUser::create($validated);
+
+      #region Send telegram message
+
+      $link = env('APP_FRONTEND_ENDPOINT') . '/register/'. $validated['entry_token'];
+ 
+      $updates = TelegramUpdates::create()->get();
+      // search user
+      $chat_id = null;
+      foreach ($updates['result'] AS $key => $value):
+          if ($value['message']['chat']['username'] == $validated['unique_identify']){
+              $chat_id = $value['message']['chat']['id'];
+              break;
+          }
+      endforeach; 
+      if ($chat_id==null){
+        return response()->json([
+            'data' => 'Not founв chat with this user.',
+        ], 404);
+      }
+
+      Notification::route('telegram', $chat_id)
+                      ->notify(new TelegramNotification(['link' => $link]));
+
+      #endregion
+
+      // Activity log
+      Activity::create([
+        'user_uuid' => $validated['user_uuid'],
+        'entity_uuid' => $invite_user['uuid'],
+        'device' => UserSystemInfoHelper::device_full(),
+        'ip' => UserSystemInfoHelper::ip(),
+        'description' => Config::get('common.activity.user.invite_via_telegram'),
+        'changes' => json_encode($validated),
+        'action_code' => Config::get('common.activity.codes.user_invite_via_telegram'),
         'status' => Config::get('common.status.actived')
       ]);
 

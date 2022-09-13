@@ -17,7 +17,8 @@ return [
         'user' => [
             'add' => 'User added',
             'update' => 'User updated',
-            'invite_via_email' => 'User invited via email'
+            'invite_via_email' => 'User invited via email',
+            'invite_via_telegram' => 'User invited via telegram'
         ],
         'director' => [
             'add' => 'Director added',
@@ -36,6 +37,7 @@ return [
             'company_add' => 5,
             'company_update' => 6,
             'user_invite_via_email' => 7,
+            'user_invite_via_telegram' => 8,
         ]
     ],
 
