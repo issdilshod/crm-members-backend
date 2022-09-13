@@ -233,6 +233,7 @@ class UserController extends Controller
             'username' => 'string|max:100',
             'password' => 'string|max:200',
             'telegram' => 'string|max:100',
+            'active' => 'bool',
             'user_uuid' => 'string'
         ]);
 
@@ -290,6 +291,9 @@ class UserController extends Controller
 
         #endregion
 
+        if (isset($validated['active'])){ // active user
+            $validated['status'] = Config::get('common.status.actived');
+        }
         $user->update($validated);
 
         // Activity log
@@ -560,5 +564,28 @@ class UserController extends Controller
         return response()->json([
             'data' => ['msg' => 'Invalid token!'],
         ], 404);
+    }
+
+    /**     @OA\GET(
+      *         path="/api/pending-users",
+      *         operationId="get_pending_users",
+      *         tags={"Account"},
+      *         summary="Get pending users",
+      *         description="Get pending users",
+      *             @OA\Response(
+      *                 response=200,
+      *                 description="Successfully",
+      *                 @OA\JsonContent()
+      *             ),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Unauthenticated"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
+    public function pending_users()
+    {
+        $users = User::where('status', Config::get('common.status.pending'))
+                        ->paginate(100);
+        return UserResource::collection($users);
     }
 }
