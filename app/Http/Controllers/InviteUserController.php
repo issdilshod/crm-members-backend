@@ -132,7 +132,7 @@ class InviteUserController extends Controller
       endforeach; 
       if ($chat_id==null){
         return response()->json([
-            'data' => 'Not founв chat with this user.',
+            'data' => 'Not found chat with this user.',
         ], 404);
       }
 
