@@ -31,7 +31,7 @@ class TelegramUserController extends Controller
         ];
 
         $telegram_user = TelegramUser::where('telegram_id', $entity['telegram_id'])->first();
-        if ($telegram_user!=null){
+        if ($telegram_user==null){
             TelegramUser::create($entity);
         }
 
