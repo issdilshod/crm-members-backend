@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\TelegramHelper;
 use App\Helpers\UserSystemInfoHelper;
 use App\Http\Resources\ActivityResource;
 use App\Http\Resources\UserAccessTokenResource;
@@ -298,14 +299,7 @@ class UserController extends Controller
             $validated['status'] = Config::get('common.status.actived');
 
             // send notification
-            $updates = TelegramUpdates::create()->get();
-            $chat_id = null;
-            foreach ($updates['result'] AS $key => $value):
-                if ($value['message']['chat']['username'] == $validated['telegram']){
-                    $chat_id = $value['message']['chat']['id'];
-                    break;
-                }
-            endforeach;
+            $chat_id = TelegramHelper::getTelegramChatId($validated['telegram']);
             if ($chat_id!=null){
                 $link = env('APP_FRONTEND_ENDPOINT') . '/login/';
                 Notification::route('telegram', $chat_id)

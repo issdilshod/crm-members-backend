@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\TelegramHelper;
 use App\Helpers\UserSystemInfoHelper;
 use App\Mail\EmailInvite;
 use App\Models\API\Activity;
@@ -120,17 +121,10 @@ class InviteUserController extends Controller
       #region Send telegram message
 
       $link = env('APP_FRONTEND_ENDPOINT') . '/register/'. $validated['entry_token'];
- 
-      $updates = TelegramUpdates::create()->get();
+
       // search user
-      $chat_id = null;
-      foreach ($updates['result'] AS $key => $value):
-          if ($value['message']['chat']['username'] == $validated['unique_identify']){
-              $chat_id = $value['message']['chat']['id'];
-              break;
-          }
-      endforeach; 
-      if ($chat_id==null){
+      $chat_id = TelegramHelper::getTelegramChatId($validated['unique_identify']);
+      if ($chat_id==null){ // if user not start bot
         return response()->json([
             'data' => 'Not found chat with this user.',
         ], 404);

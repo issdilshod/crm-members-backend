@@ -15,22 +15,11 @@ class TelegramNotification extends Notification
 
     public $data;
 
-    /**
-     * Create a new notification instance.
-     *
-     * @return void
-     */
     public function __construct($data)
     {
         $this->data = $data;
     }
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
     public function via($notifiable)
     {
         return ['telegram'];
