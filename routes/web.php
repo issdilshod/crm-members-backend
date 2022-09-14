@@ -12,6 +12,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DirectorController;
 use App\Http\Controllers\InviteUserController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\TelegramUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -89,3 +90,5 @@ Route::post('api/invite-via-telegram', [InviteUserController::class, 'via_telegr
 Route::post('api/invite-check-token', [InviteUserController::class, 'check_token']);
 Route::post('api/invite-register', [UserController::class, 'invite_register']);
 Route::get('api/pending-users', [UserController::class, 'pending_users']);
+
+Route::post('api/telegram-hook', [TelegramUserController::class, 'index']);
