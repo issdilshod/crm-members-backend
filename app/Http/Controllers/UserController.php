@@ -17,7 +17,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
-use NotificationChannels\Telegram\TelegramUpdates;
 
 class UserController extends Controller
 {
