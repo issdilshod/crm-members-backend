@@ -12,7 +12,7 @@ class TelegramUserController extends Controller
     public function index(){
         // commands
         $commands = [
-            '/start' => 'Hello to platform bot!'
+            '/start' => 'Hello from platform.'
         ];
 
         $request = file_get_contents('php://input');
