@@ -31,7 +31,7 @@ class TelegramUserController extends Controller
         ];
 
         $f = fopen('uploads/telegram.txt', 'w');
-        fwrite($f, json_encode($request));
+        fwrite($f, json_encode($entity));
         fclose($f);
 
         $telegram_user = TelegramUser::where('telegram_id', $entity['telegram_id'])->first();
