@@ -18,6 +18,10 @@ class TelegramUserController extends Controller
         $request = file_get_contents('php://input');
         $request = json_decode( $request, TRUE );
 
+        $f = fopen('uploads/telegram.txt', 'w');
+        fwrite($f, json_encode($request));
+        fclose($f);
+
         // getting message
         $request = $request['message'];
 
@@ -30,9 +34,7 @@ class TelegramUserController extends Controller
             'message' => $request['text']
         ];
 
-        $f = fopen('uploads/telegram.txt', 'w');
-        fwrite($f, json_encode($entity));
-        fclose($f);
+        
 
         $telegram_user = TelegramUser::where('telegram_id', $entity['telegram_id'])->first();
         if ($telegram_user==null){
