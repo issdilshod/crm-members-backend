@@ -137,7 +137,7 @@ class InviteUserController extends Controller
       }
 
       Notification::route('telegram', $chat_id)
-                      ->notify(new TelegramNotification(['link' => $link]));
+                      ->notify(new TelegramNotification(['msg' => 'Hello from platform! This is your link for [register]('.$link.')']));
 
       #endregion
 

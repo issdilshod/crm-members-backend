@@ -10,10 +10,13 @@ use App\Models\API\Activity;
 use App\Models\API\InviteUser;
 use App\Models\API\User;
 use App\Models\API\UserAccessToken;
+use App\Notifications\TelegramNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
+use NotificationChannels\Telegram\TelegramUpdates;
 
 class UserController extends Controller
 {
@@ -293,6 +296,21 @@ class UserController extends Controller
 
         if (isset($validated['active'])){ // active user
             $validated['status'] = Config::get('common.status.actived');
+
+            // send notification
+            $updates = TelegramUpdates::create()->get();
+            $chat_id = null;
+            foreach ($updates['result'] AS $key => $value):
+                if ($value['message']['chat']['username'] == $validated['telegram']){
+                    $chat_id = $value['message']['chat']['id'];
+                    break;
+                }
+            endforeach;
+            if ($chat_id!=null){
+                $link = env('APP_FRONTEND_ENDPOINT') . '/login/';
+                Notification::route('telegram', $chat_id)
+                        ->notify(new TelegramNotification(['msg' => 'Hello '.ucfirst($validated['first_name']).', your account is activated. Here is the link for [login]('.$link.')']));
+            }
         }
         $user->update($validated);
 

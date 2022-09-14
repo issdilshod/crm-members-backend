@@ -38,7 +38,7 @@ class TelegramNotification extends Notification
 
     public function toTelegram($notifiable){
         return TelegramMessage::create()
-                    ->content('Hello from platform! This is your link for [register]('.$this->data['link'].')');
+                    ->content($this->data['msg']);
     }
 
     /**
