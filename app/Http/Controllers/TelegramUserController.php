@@ -37,8 +37,8 @@ class TelegramUserController extends Controller
 
         // send message response
         $msg_response = 'If there are some news on platform, we will send message to you!';
-        if (isset($commands[$entity['text']])){
-            $msg_response = $commands[$entity['text']];
+        if (isset($commands[$entity['message']])){
+            $msg_response = $commands[$entity['message']];
         }
 
         $f = fopen('uploads/telegram.txt', 'w');
