@@ -99,3 +99,15 @@ Route::post('api/task', [TaskController::class, 'store']);
 Route::get('api/task/{uuid}', [TaskController::class, 'show']);
 Route::put('api/task/{uuid}', [TaskController::class, 'update']);
 Route::delete('api/task/{uuid}', [TaskController::class, 'destroy']);
+
+/*
+|--------------------------------------------------------------------------
+| Note Group
+|--------------------------------------------------------------------------
+|
+*/
+//Route::get('api/note', [TaskController::class, 'index']);
+Route::post('api/note', [TaskController::class, 'store']);
+Route::get('api/note/{uuid}', [TaskController::class, 'show']);
+Route::put('api/note/{uuid}', [TaskController::class, 'update']);
+//Route::delete('api/note/{uuid}', [TaskController::class, 'destroy']);

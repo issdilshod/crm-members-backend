@@ -22,7 +22,6 @@ class User extends Model
     }
 
     public function activities(){
-        //
         return $this->hasMany(Activity::class, 'user_uuid', 'uuid')
                                                                 ->where('status', Config::get('common.status.actived'))
                                                                 ->limit(10);
@@ -36,5 +35,10 @@ class User extends Model
     public function access_tokens(){
         return $this->hasMany(UserAccessToken::class, 'user_uuid', 'uuid')
                                                             ->where('expires_at', '>', Carbon::now()->toDateTimeString());
+    }
+
+    public function notes(){
+        return $this->hasMany(Note::class, 'user_uuid', 'uuid')
+                        ->where('status', Config::get('common.status.actived'));
     }
 }
