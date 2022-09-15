@@ -101,4 +101,4 @@ Route::post('api/telegram-hook', [TelegramUserController::class, 'index']);
 |
 */
 Route::resource('api/note', NoteController::class)->middleware('auth.custom');
-Route::get('api/note_by_user', [TaskController::class, 'show_by_user'])->middleware('auth.custom');
+Route::get('api/note_by_user', [NoteController::class, 'show_by_user'])->middleware('auth.custom');

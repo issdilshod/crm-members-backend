@@ -5,6 +5,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DirectorController;
 use App\Http\Controllers\HostingController;
+use App\Http\Controllers\NoteController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SicCodeController;
 use App\Http\Controllers\StateController;
@@ -106,8 +107,8 @@ Route::delete('api/task/{uuid}', [TaskController::class, 'destroy']);
 |--------------------------------------------------------------------------
 |
 */
-//Route::get('api/note', [TaskController::class, 'index']);
-Route::post('api/note', [TaskController::class, 'store']);
-Route::get('api/note/{uuid}', [TaskController::class, 'show']);
-Route::put('api/note/{uuid}', [TaskController::class, 'update']);
-//Route::delete('api/note/{uuid}', [TaskController::class, 'destroy']);
+//Route::get('api/note', [NoteController::class, 'index']);
+Route::post('api/note', [NoteController::class, 'store']);
+Route::get('api/note/{uuid}', [NoteController::class, 'show']);
+Route::put('api/note/{uuid}', [NoteController::class, 'update']);
+//Route::delete('api/note/{uuid}', [NoteController::class, 'destroy']);

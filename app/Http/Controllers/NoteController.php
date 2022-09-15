@@ -113,11 +113,11 @@ class NoteController extends Controller
     }
 
     /**     @OA\PUT(
-      *         path="/api/note",
-      *         operationId="note_task",
+      *         path="/api/note/{uuid}",
+      *         operationId="update_note",
       *         tags={"Note"},
-      *         summary="Note task",
-      *         description="Note task",
+      *         summary="Update note",
+      *         description="Update note",
       *             @OA\Parameter(
       *                 name="uuid",
       *                 in="path",
