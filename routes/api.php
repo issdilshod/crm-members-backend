@@ -1,6 +1,15 @@
 <?php
 
+use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\DirectorController;
+use App\Http\Controllers\HostingController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SicCodeController;
+use App\Http\Controllers\StateController;
+use App\Http\Controllers\TaskController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,14 +32,12 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 |
 */
-Route::get('api/sic_code', 'SicCodeController@index');
-Route::post('api/sic_code', 'SicCodeController@store');
-
-Route::get('api/state', 'StateController@index');
-Route::post('api/state', 'StateController@store');
-
-Route::get('api/hosting', 'HostingController@index');
-Route::post('api/hosting', 'HostingController@store');
+Route::get('api/sic_code', [SicCodeController::class, 'index']);
+//Route::post('api/sic_code', 'SicCodeController@store');
+Route::get('api/state', [StateController::class, 'index']);
+//Route::post('api/state', 'StateController@store');
+Route::get('api/hosting', [HostingController::class, 'index']);
+Route::post('api/hosting', [HostingController::class, 'store']);
 
 /*
 |--------------------------------------------------------------------------
@@ -38,24 +45,24 @@ Route::post('api/hosting', 'HostingController@store');
 |--------------------------------------------------------------------------
 |
 */
-Route::get('api/department', 'DepartmentController@index');
-Route::get('api/department/{uuid}', 'DepartmentController@show');
-Route::post('api/department', 'DepartmentController@store');
+Route::get('api/department', [DepartmentController::class, 'index']);
+Route::get('api/department/{uuid}', [DepartmentController::class, 'show']);
+//Route::post('api/department', 'DepartmentController@store');
 
-Route::get('api/user', 'UserController@index');
-Route::post('api/user', 'UserController@store');
-Route::get('api/user/{uuid}', 'UserController@show');
-Route::put('api/user/{uuid}', 'UserController@update');
-Route::delete('api/user/{uuid}', 'UserController@delete');
+Route::get('api/user', [UserController::class, 'index']);
+Route::post('api/user', [UserController::class, 'store']);
+Route::get('api/user/{uuid}', [UserController::class, 'show']);
+Route::put('api/user/{uuid}', [UserController::class, 'update']);
+Route::delete('api/user/{uuid}', [UserController::class, 'destroy']);
 
-Route::get('api/role', 'RoleController@index');
-Route::post('api/role', 'RoleController@store');
+Route::get('api/role', [RoleController::class, 'index']);
+//Route::post('api/role', 'RoleController@store');
 
-Route::get('api/activity', 'ActivityController@index');
+Route::get('api/activity', [ActivityController::class, 'index']);
 //Route::post('api/activity', 'ActivityController@store');
-Route::get('api/activity/{uuid}', 'ActivityController@show');
-Route::put('api/activity/{uuid}', 'ActivityController@update');
-Route::delete('api/activity/{uuid}', 'ActivityController@delete');
+Route::get('api/activity/{uuid}', [ActivityController::class, 'show']);
+Route::put('api/activity/{uuid}', [ActivityController::class, 'update']);
+Route::delete('api/activity/{uuid}', [ActivityController::class, 'destroy']);
 
 /*
 |--------------------------------------------------------------------------
@@ -63,11 +70,11 @@ Route::delete('api/activity/{uuid}', 'ActivityController@delete');
 |--------------------------------------------------------------------------
 |
 */
-Route::get('api/director', 'DirectorController@index');
-Route::post('api/director', 'DirectorController@store');
-Route::get('api/director/{uuid}', 'DirectorController@show');
-Route::put('api/director/{uuid}', 'DirectorController@update');
-Route::delete('api/director/{uuid}', 'DirectorController@delete');
+Route::get('api/director', [DirectorController::class, 'index']);
+Route::post('api/director', [DirectorController::class, 'store']);
+Route::get('api/director/{uuid}', [DirectorController::class, 'show']);
+Route::put('api/director/{uuid}', [DirectorController::class, 'update']);
+Route::delete('api/director/{uuid}', [DirectorController::class, 'destroy']);
 
 /*
 |--------------------------------------------------------------------------
@@ -75,11 +82,11 @@ Route::delete('api/director/{uuid}', 'DirectorController@delete');
 |--------------------------------------------------------------------------
 |
 */
-Route::get('api/company', 'CompanyController@index');
-Route::post('api/company', 'CompanyController@store');
-Route::get('api/company/{uuid}', 'CompanyController@show');
-Route::put('api/company/{uuid}', 'CompanyController@update');
-Route::delete('api/company/{uuid}', 'CompanyController@delete');
+Route::get('api/company', [CompanyController::class, 'index']);
+Route::post('api/company', [CompanyController::class, 'store']);
+Route::get('api/company/{uuid}', [CompanyController::class, 'show']);
+Route::put('api/company/{uuid}', [CompanyController::class, 'update']);
+Route::delete('api/company/{uuid}', [CompanyController::class, 'destroy']);
 
 /*
 |--------------------------------------------------------------------------
@@ -87,8 +94,8 @@ Route::delete('api/company/{uuid}', 'CompanyController@delete');
 |--------------------------------------------------------------------------
 |
 */
-Route::get('api/task', 'TaskController@index');
-Route::post('api/task', 'TaskController@store');
-Route::get('api/task/{uuid}', 'TaskController@show');
-Route::put('api/task/{uuid}', 'TaskController@update');
-Route::delete('api/task/{uuid}', 'TaskController@delete');
+Route::get('api/task', [TaskController::class, 'index']);
+Route::post('api/task', [TaskController::class, 'store']);
+Route::get('api/task/{uuid}', [TaskController::class, 'show']);
+Route::put('api/task/{uuid}', [TaskController::class, 'update']);
+Route::delete('api/task/{uuid}', [TaskController::class, 'destroy']);
