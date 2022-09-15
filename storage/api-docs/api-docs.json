@@ -1523,6 +1523,35 @@
                 }
             }
         },
+        "/api/note_by_user": {
+            "get": {
+                "tags": [
+                    "Note"
+                ],
+                "summary": "Get note by user",
+                "description": "Get note by user",
+                "operationId": "get_note_by_user",
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
         "/api/role": {
             "get": {
                 "tags": [

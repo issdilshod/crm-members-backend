@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\NoteResource;
 use App\Models\API\Note;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 
 class NoteController extends Controller
 {
@@ -76,6 +77,38 @@ class NoteController extends Controller
       */
     public function show(Note $note)
     {
+        return new NoteResource($note);
+    }
+
+    /**     @OA\GET(
+      *         path="/api/note_by_user",
+      *         operationId="get_note_by_user",
+      *         tags={"Note"},
+      *         summary="Get note by user",
+      *         description="Get note by user",
+      *             @OA\Response(
+      *                 response=200,
+      *                 description="Successfully",
+      *                 @OA\JsonContent()
+      *             ),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Unauthenticated"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
+    public function show_by_user(Request $request)
+    {
+        $validated = $request->validate([
+            'user_uuid' => 'string'
+        ]);
+        $note = Note::where('status', Config::get('common.status.actived'))
+                        ->where('user_uuid', $validated['user_uuid'])
+                        ->first();
+        if ($note==null){
+            return response()->json([
+                'data' => ['msg' => 'User does\'t have a note.']
+            ], 404);
+        }
         return new NoteResource($note);
     }
 
