@@ -2371,6 +2371,35 @@
                     }
                 }
             }
+        },
+        "/api/get_me": {
+            "get": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Get Me",
+                "description": "Get Me",
+                "operationId": "get_me",
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
         }
     }
 }

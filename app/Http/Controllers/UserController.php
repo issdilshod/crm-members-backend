@@ -599,4 +599,31 @@ class UserController extends Controller
                         ->paginate(100);
         return UserResource::collection($users);
     }
+
+    /**     @OA\GET(
+      *         path="/api/get_me",
+      *         operationId="get_me",
+      *         tags={"Account"},
+      *         summary="Get Me",
+      *         description="Get Me",
+      *             @OA\Response(
+      *                 response=200,
+      *                 description="Successfully",
+      *                 @OA\JsonContent()
+      *             ),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Unauthenticated"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
+    public function get_me(Request $request)
+    {
+        $validated = $request->validate([
+            'user_uuid' => 'string'
+        ]);
+
+        $user = User::where('uuid', $validated['user_uuid'])->first();
+
+        return new UserResource($user);
+    }
 }
