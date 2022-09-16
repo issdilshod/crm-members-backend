@@ -27,7 +27,10 @@ class RoleController extends Controller
       */
     public function index()
     {
-        return RoleResource::collection(Role::all()->where('status', Config::get('common.status.actived')));
+        $role = Role::orderBy('sort', 'ASC')
+                        ->where('status', Config::get('common.status.actived'))
+                        ->get();
+        return RoleResource::collection($role);
     }
 
     public function store(Request $request)

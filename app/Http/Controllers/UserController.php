@@ -569,7 +569,7 @@ class UserController extends Controller
 
             $invite_user->update(['status'=> Config::get('common.status.deleted')]);
 
-            // get general admins and send notif
+            // get general admins and send push-notification
             $users = User::where('status', Config::get('common.status.actived'))
                             ->where('role_uuid', Config::get('common.role.general'))
                             ->get();
