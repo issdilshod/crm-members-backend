@@ -569,7 +569,7 @@ class UserController extends Controller
 
             $invite_user->update(['status'=> Config::get('common.status.deleted')]);
 
-            // get general admins and send push-notification
+            // get general admins and send push-notification & telegram
             $users = User::where('status', Config::get('common.status.actived'))
                             ->where('role_uuid', Config::get('common.role.general'))
                             ->get();
@@ -577,6 +577,7 @@ class UserController extends Controller
                 // websocket send message
                 $users = $users->toArray();
                 foreach ($users AS $key => $user):
+                    // push 
                     event(new WebSocket([
                                             'user' => $user, 
                                             'data' => [
@@ -586,6 +587,13 @@ class UserController extends Controller
                                             ]
                                         ])
                         );
+
+                    // telegram
+                    $chat_id = TelegramHelper::getTelegramChatId($user['telegram']);
+                    if ($chat_id!=null){
+                        Notification::route('telegram', $chat_id)
+                                ->notify(new TelegramNotification(['msg' => 'Sended request for register from *'.$validated['username'].'*']));
+                    }
                 endforeach;
             }
             
