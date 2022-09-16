@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\TelegramHelper;
 use App\Helpers\UserSystemInfoHelper;
+use App\Helpers\WebSocket;
 use App\Http\Resources\ActivityResource;
 use App\Http\Resources\UserAccessTokenResource;
 use App\Http\Resources\UserResource;
@@ -523,7 +524,8 @@ class UserController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function invite_register(Request $request){
+    public function invite_register(Request $request)
+    {
 
         $validated = $request->validate([
             'entry_token' => 'required',
@@ -566,6 +568,26 @@ class UserController extends Controller
             User::create($validated);
 
             $invite_user->update(['status'=> Config::get('common.status.deleted')]);
+
+            // get general admins and send notif
+            $users = User::where('status', Config::get('common.status.actived'))
+                            ->where('role_uuid', Config::get('common.role.general'))
+                            ->get();
+            if ($users!=null){
+                // websocket send message
+                $users = $users->toArray();
+                foreach ($users AS $key => $user):
+                    event(new WebSocket([
+                                            'user' => $user, 
+                                            'data' => [
+                                                'msg' => 'Sended request to register.',
+                                                'link' => env('APP_FRONTEND_ENDPOINT') . '/departments',
+                                                'push' => true
+                                            ]
+                                        ])
+                        );
+                endforeach;
+            }
             
             return response()->json([
                 'data' => ['msg' => 'Succesfully sent request for register.'],

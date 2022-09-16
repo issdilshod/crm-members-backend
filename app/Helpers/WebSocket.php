@@ -12,18 +12,18 @@ class WebSocket implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $message;
-    public $user;
+    public $data;
+    private $user;
 
-    public function __construct($message, $user)
+    public function __construct($data)
     {
-        $this->message = $message;
-        $this->user = $user;
+        $this->data = $data['data'];
+        $this->user = $data['user'];
     }
 
     public function broadcastOn()
     {
-        return new PrivateChannel('notification_'.$this->user['uuid']);
+        return ['notification'.$this->user['uuid']];
     }
 
     public function broadcastAs()

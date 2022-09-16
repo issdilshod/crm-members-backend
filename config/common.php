@@ -1,6 +1,15 @@
 <?php
 
 return [
+    'role' => [
+        'general' => 'ab1c1795-0f45-4d05-a7db-d1bdcce1ba0d',
+        'headquarters' => '88690813-1dc6-49ee-9496-55af93cc4b10',
+        'product' => '3e191b6b-47a2-4b91-98ce-09db3ed147ae',
+        'admin' => 'c92df6d5-b7e5-455f-801e-e1c8146cdb2b',
+        'design' => 'e5972007-3aad-4ee1-9619-2a9e30c4fd9c',
+        'finance' => '2b768d35-8624-429a-9783-7c506a391dd2',
+    ],
+
     'status' => [
         'deleted' => 0,
         'actived' => 1,

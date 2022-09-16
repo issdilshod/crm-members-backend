@@ -32,25 +32,7 @@ class ActivityController extends Controller
         $activity = Activity::orderBy('updated_at', 'DESC')
                               ->where('status', Config::get('common.status.actived'))
                               ->paginate(10);
-        // websocket
-        // event(new WebSocket('Activities get'));
         return ActivityResource::collection($activity);
-    }
-
-    public function store(Request $request)
-    {
-        //
-        /*$validated = $request->validate([
-            'user_uuid' => 'required|string',
-            'entity_uuid' => 'required|string',
-            'status' => 'required|integer'
-        ]);
-        // Get device & IP
-        // TODO: Change statistic description to dynamic
-        $validated['description'] = 'static description';
-        $validated['device'] = UserSystemInfoHelper::device_full();
-        $validated['ip'] = UserSystemInfoHelper::ip();
-        return new ActivityResource(Activity::create($validated));*/
     }
 
     /**     @OA\GET(
