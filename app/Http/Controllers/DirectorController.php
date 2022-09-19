@@ -34,7 +34,8 @@ class DirectorController extends Controller
       */
     public function index()
     {
-        $director = Director::where('status', Config::get('common.status.actived'))
+        $director = Director::orderBy('created_at', 'DESC')
+                                ->where('status', Config::get('common.status.actived'))
                                 ->paginate(20);
         return DirectorResource::collection($director);
     }
