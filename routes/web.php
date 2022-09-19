@@ -73,6 +73,7 @@ Route::get('api/director-search/{search}', [DirectorController::class, 'search']
 |
 */
 Route::resource('api/company', CompanyController::class)->middleware('auth.custom');
+Route::get('api/company-search/{search}', [CompanyController::class, 'search'])->middleware('auth.custom');
 
 /*
 |--------------------------------------------------------------------------

@@ -35,7 +35,8 @@ class CompanyController extends Controller
       */
     public function index()
     {
-        $company = Company::where('status', Config::get('common.status.actived'))
+        $company = Company::orderBy('created_at', 'DESC')
+                            ->where('status', Config::get('common.status.actived'))
                             ->paginate(20);
         return CompanyResource::collection($company);
     }
@@ -960,5 +961,40 @@ class CompanyController extends Controller
     public function destroy(Company $company)
     {
         $company->update(['status' => Config::get('common.status.deleted')]);
+    }
+
+    /**     @OA\GET(
+      *         path="/api/company-search/{search}",
+      *         operationId="get_company_search",
+      *         tags={"Company"},
+      *         summary="Get company search",
+      *         description="Get company search",
+      *             @OA\Parameter(
+      *                 name="search",
+      *                 in="path",
+      *                 description="company search",
+      *                 @OA\Schema(
+      *                     type="string",
+      *                     format="text"
+      *                 ),
+      *                 required=true
+      *             ),
+      *             @OA\Response(
+      *                 response=200,
+      *                 description="Successfully",
+      *                 @OA\JsonContent()
+      *             ),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Unauthenticated"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
+    public function search($search)
+    {
+        $company = Company::orderBy('created_at', 'DESC')
+                                ->where('status', Config::get('common.status.actived'))
+                                ->where('legal_name', 'like', '%'.$search.'%')
+                                ->paginate(20);
+        return CompanyResource::collection($company);
     }
 }

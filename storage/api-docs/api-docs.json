@@ -696,6 +696,47 @@
                 }
             }
         },
+        "/api/company-search/{search}": {
+            "get": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Get company search",
+                "description": "Get company search",
+                "operationId": "get_company_search",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "path",
+                        "description": "company search",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "text"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
         "/api/department": {
             "get": {
                 "tags": [
