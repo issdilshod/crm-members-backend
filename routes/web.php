@@ -64,6 +64,7 @@ Route::get('api/activity/entity/{uuid}', [ActivityController::class, 'by_entity'
 |
 */
 Route::resource('api/director', DirectorController::class)->middleware('auth.custom');
+Route::get('api/director-search/{search}', [DirectorController::class, 'search'])->middleware('auth.custom');
 
 /*
 |--------------------------------------------------------------------------

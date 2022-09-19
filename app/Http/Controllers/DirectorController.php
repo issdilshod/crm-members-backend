@@ -714,4 +714,39 @@ class DirectorController extends Controller
     {
         $director->update(['status' => Config::get('common.status.deleted')]);
     }
+
+    /**     @OA\GET(
+      *         path="/api/director-search/{search}",
+      *         operationId="get_director_search",
+      *         tags={"Director"},
+      *         summary="Get director search",
+      *         description="Get director search",
+      *             @OA\Parameter(
+      *                 name="search",
+      *                 in="path",
+      *                 description="director search",
+      *                 @OA\Schema(
+      *                     type="string",
+      *                     format="text"
+      *                 ),
+      *                 required=true
+      *             ),
+      *             @OA\Response(
+      *                 response=200,
+      *                 description="Successfully",
+      *                 @OA\JsonContent()
+      *             ),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Unauthenticated"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
+    public function search($search)
+    {
+        $director = Director::orderBy('created_at', 'DESC')
+                                ->where('status', Config::get('common.status.actived'))
+                                ->whereRaw("concat(first_name, ' ', last_name) like '%".$search."%'")
+                                ->paginate(20);
+        return DirectorResource::collection($director);
+    }
 }
