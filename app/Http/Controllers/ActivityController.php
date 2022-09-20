@@ -4,10 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ActivityResource;
 use App\Models\API\Activity;
-use Illuminate\Http\Request;
-use App\Helpers\UserSystemInfoHelper;
 use Illuminate\Support\Facades\Config;
-use App\Helpers\WebSocket;
 
 class ActivityController extends Controller
 {
@@ -32,6 +29,16 @@ class ActivityController extends Controller
         $activity = Activity::orderBy('updated_at', 'DESC')
                               ->where('status', Config::get('common.status.actived'))
                               ->paginate(10);
+
+        // get links
+        foreach ($activity AS $key => $value):
+            $link = '';
+            if ($value['action_code']!=0){
+                $link = '/' . Config::get('common.activity.codes_link.'.$value['action_code']) . '/' . $value['entity_uuid'];
+            }
+            $activity[$key]['link'] = $link;
+        endforeach;
+
         return ActivityResource::collection($activity);
     }
 

@@ -47,7 +47,18 @@ return [
             'company_update' => 6,
             'user_invite_via_email' => 7,
             'user_invite_via_telegram' => 8,
-        ]
+        ],
+
+        'codes_link' => [
+            1 => 'departments',
+            2 => 'departments',
+            3 => 'directors',
+            4 => 'directors',
+            5 => 'companies',
+            6 => 'companies',
+            7 => 'departments',
+            8 => 'departments',
+        ],
     ],
 
     'invite' => [

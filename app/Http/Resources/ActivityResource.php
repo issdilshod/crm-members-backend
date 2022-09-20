@@ -22,6 +22,7 @@ class ActivityResource extends JsonResource
             'ip' => $this->ip,
             'description' => $this->description,
             'updated_at' => $this->updated_at,
+            'link' => $this->link,
             'status' => $this->status
         ];
     }
