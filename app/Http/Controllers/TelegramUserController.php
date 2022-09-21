@@ -10,6 +10,10 @@ class TelegramUserController extends Controller
     public function index(TelegramUserService $telegramUserService){
         $updates = $telegramUserService->getUpdates();
 
+        $f = fopen('telegram.txt', 'w');
+        fwrite($f, print_r($updates));
+        fclose($f);
+
         $entity = $telegramUserService->getEntity($updates['message']);
 
         $telegramUserService->createTelegramUser($entity);
