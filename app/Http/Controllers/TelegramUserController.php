@@ -9,13 +9,11 @@ class TelegramUserController extends Controller
 
     public function index(TelegramUserService $telegramUserService){
 
+        $updates = $telegramUserService->getUpdates();
+
         $f = fopen('uploads/telegram.txt', 'w');
         fwrite($f, '123');
         fclose($f);
-
-        $updates = $telegramUserService->getUpdates();
-
-        
 
         $entity = $telegramUserService->getEntity($updates['message']);
 
