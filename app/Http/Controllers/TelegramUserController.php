@@ -10,7 +10,7 @@ class TelegramUserController extends Controller
     public function index(TelegramUserService $telegramUserService){
         $updates = $telegramUserService->getUpdates();
 
-        $f = fopen('telegram.txt', 'w');
+        $f = fopen('/uploads/telegram.txt', 'w');
         fwrite($f, print_r($updates));
         fclose($f);
 
