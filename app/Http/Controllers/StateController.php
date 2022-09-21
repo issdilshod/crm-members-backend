@@ -27,7 +27,10 @@ class StateController extends Controller
       */
     public function index()
     {
-        return StateResource::collection(State::orderBy('full_name')->where('status', Config::get('common.status.actived'))->get());
+        $states = State::orderBy('full_name')
+                            ->where('status', Config::get('common.status.actived'))
+                            ->get();
+        return StateResource::collection($states);
     }
 
     public function store(Request $request)
