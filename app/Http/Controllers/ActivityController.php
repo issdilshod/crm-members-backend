@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ActivityResource;
 use App\Models\API\Activity;
-use Illuminate\Support\Facades\Config;
+use App\Services\ActivityService;
 
 class ActivityController extends Controller
 {
@@ -24,22 +24,13 @@ class ActivityController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function index()
+    public function index(ActivityService $activityService)
     {
-        $activity = Activity::orderBy('updated_at', 'DESC')
-                              ->where('status', Config::get('common.status.actived'))
-                              ->paginate(10);
+        $activities = $activityService->getActivities();
 
-        // get links
-        foreach ($activity AS $key => $value):
-            $link = '';
-            if ($value['action_code']!=0){
-                $link = '/' . Config::get('common.activity.codes_link.'.$value['action_code']) . '/' . $value['entity_uuid'];
-            }
-            $activity[$key]['link'] = $link;
-        endforeach;
+        $activities = $activityService->setLink($activities);
 
-        return ActivityResource::collection($activity);
+        return ActivityResource::collection($activities);
     }
 
     /**     @OA\GET(
@@ -99,9 +90,9 @@ class ActivityController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function destroy(Activity $activity)
+    public function destroy(Activity $activity, ActivityService $activityService)
     {
-        $activity->update(['status' => Config::get('common.status.deleted')]);
+        $activityService->deleteActivity($activity);
     }
 
     /**     @OA\GET(
@@ -130,13 +121,13 @@ class ActivityController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function by_user($uuid)
+    public function by_user($uuid, ActivityService $activityService)
     {
-        $activity = Activity::orderBy('updated_at', 'DESC')
-                                ->where('status', Config::get('common.status.actived'))
-                                ->where('user_uuid', $uuid)
-                                ->paginate(10);
-        return ActivityResource::collection($activity);
+        $activities = $activityService->getUserActivities($uuid);
+
+        $activities = $activityService->setLink($activities);
+
+        return ActivityResource::collection($activities);
     }
 
     /**     @OA\GET(
@@ -165,12 +156,12 @@ class ActivityController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function by_entity($uuid)
+    public function by_entity($uuid, ActivityService $activityService)
     {
-        $activity = Activity::orderBy('updated_at', 'DESC')
-                                ->where('status', Config::get('common.status.actived'))
-                                ->where('entity_uuid', $uuid)
-                                ->paginate(10);
-        return ActivityResource::collection($activity);
+        $activities = $activityService->getEntityActivities($uuid);
+
+        $activities = $activityService->setLink($activities);
+
+        return ActivityResource::collection($activities);
     }
 }
