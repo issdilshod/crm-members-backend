@@ -81,7 +81,7 @@ class TelegramUserService {
 
         if (isset($this->commands[$entity['message']])){
             // special commands
-            switch ($this->commands[$entity['message']]){
+            switch ($entity['message']){
                 case '/start':
                 case '/help':
                 case '/link':
