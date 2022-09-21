@@ -8,10 +8,21 @@ use Illuminate\Support\Facades\Notification;
 
 class TelegramUserService {
 
-    public $commands = [
-        '/start' => 'Hello from platform.',
-        '/help' => 'Help section.',
-    ];
+    private $commands = [];
+
+    /**
+     * Bootstrap class
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->commands = [    
+            '/start' => 'Hello from platform.',
+            '/help' => 'Help section.',
+            '/link' => env('APP_FRONTEND_ENDPOINT'),
+        ];
+    }
 
     /**
      * Return telegram updates
