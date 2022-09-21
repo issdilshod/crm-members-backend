@@ -13,6 +13,7 @@ use App\Models\API\InviteUser;
 use App\Models\API\User;
 use App\Models\API\UserAccessToken;
 use App\Notifications\TelegramNotification;
+use App\Services\UserService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -37,11 +38,11 @@ class UserController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function index()
+    public function index(UserService $userService)
     {
-        $user = User::where('status', Config::get('common.status.actived'))
-                        ->paginate(100);
-        return UserResource::collection($user);
+        $users = $userService->getUsers();
+
+        return UserResource::collection($users);
     }
 
     /**     @OA\POST(
@@ -349,9 +350,9 @@ class UserController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function destroy(User $user)
+    public function destroy(User $user, UserService $userService)
     {
-        $user->update(['status' => Config::get('common.status.deleted')]);
+        $userService->deleteUser($user);
     }
 
     /**     @OA\POST(
@@ -623,10 +624,10 @@ class UserController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function pending_users()
+    public function pending_users(UserService $userService)
     {
-        $users = User::where('status', Config::get('common.status.pending'))
-                        ->paginate(100);
+        $users = $userService->getPendingUsers();
+
         return UserResource::collection($users);
     }
 
@@ -646,13 +647,9 @@ class UserController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function get_me(Request $request)
+    public function get_me(Request $request, UserService $userService)
     {
-        $validated = $request->validate([
-            'user_uuid' => 'string'
-        ]);
-
-        $user = User::where('uuid', $validated['user_uuid'])->first();
+        $user = $userService->getMe($request);
 
         return new UserResource($user);
     }
