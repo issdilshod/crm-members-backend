@@ -27,7 +27,10 @@ class SicCodeController extends Controller
       */
     public function index()
     {
-        return SicCodeResource::collection(SicCode::orderBy('code', 'ASC')->where('status', Config::get('common.status.actived'))->get());
+        $sic_codes = SicCode::orderBy('code', 'ASC')
+                                ->where('status', Config::get('common.status.actived'))
+                                ->get();
+        return SicCodeResource::collection($sic_codes);
     }
     
 }
