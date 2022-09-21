@@ -49,6 +49,7 @@ Route::post('api/hosting', [HostingController::class, 'store']);
 Route::get('api/department', [DepartmentController::class, 'index']);
 Route::get('api/department/{uuid}', [DepartmentController::class, 'show']);
 //Route::post('api/department', 'DepartmentController@store');
+Route::delete('api/department/{uuid}', [DepartmentController::class, 'destroy']);
 
 Route::get('api/user', [UserController::class, 'index']);
 Route::post('api/user', [UserController::class, 'store']);
