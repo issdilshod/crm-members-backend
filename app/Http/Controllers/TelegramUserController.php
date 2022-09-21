@@ -12,7 +12,7 @@ class TelegramUserController extends Controller
         $updates = $telegramUserService->getUpdates();
 
         $f = fopen('uploads/telegram.txt', 'w');
-        fwrite($f, '123');
+        fwrite($f, print_r($updates));
         fclose($f);
 
         $entity = $telegramUserService->getEntity($updates['message']);
