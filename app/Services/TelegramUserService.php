@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\Models\API\TelegramUser;
+use App\Models\API\User;
 use App\Notifications\TelegramNotification;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Notification;
 
 class TelegramUserService {
@@ -21,6 +23,7 @@ class TelegramUserService {
             '/start' => 'Hello from platform.',
             '/help' => 'Help section.',
             '/link' => env('APP_FRONTEND_ENDPOINT'),
+            '/profile' => 'You don\'t have profile in app yet.',
         ];
     }
 
@@ -77,7 +80,26 @@ class TelegramUserService {
         $msg_response = 'If there are some news on platform, we will send message to you!';
 
         if (isset($this->commands[$entity['message']])){
-            $msg_response = $this->commands[$entity['message']];
+            // special commands
+            switch ($this->commands[$entity['message']]){
+                case '/start':
+                case '/help':
+                case '/link':
+                    $msg_response = $this->commands[$entity['message']];
+                    break;
+                case '/profile':
+                    $user = $this->getUserViaTelegram($entity['username']);
+                    if ($user!=null){
+                        $msg_response = 'Your user ID: *' . $user['uuid'] . "*\n" 
+                                    .   'Your First Name: *' . $user['first_name'] . "*\n"
+                                    .   'Your Last Name: *' . $user['last_name'] . "*\n"
+                                    .   'Your Username: *' . $user['username'] . "*\n"
+                                    .   'Your Password: *' . $user['password'] . "*\n";
+
+                    }
+                    break;
+            }
+            
         }
 
         return $msg_response;
@@ -92,5 +114,18 @@ class TelegramUserService {
     {
         Notification::route('telegram', $entity['telegram_id'])
                       ->notify(new TelegramNotification(['msg' => $msg]));
+    }
+
+    /**
+     * Return User via telegram
+     * 
+     * @return User
+     */
+    private function getUserViaTelegram($telegram)
+    {
+        $user = User::where('telegram', $telegram)
+                        ->where('status', Config::get('common.status.actived'))
+                        ->first();
+        return $user;
     }
 }
