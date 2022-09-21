@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\RoleResource;
 use App\Models\API\Role;
+use App\Services\RoleService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 
@@ -25,12 +26,11 @@ class RoleController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function index()
+    public function index(RoleService $roleService)
     {
-        $role = Role::orderBy('sort', 'ASC')
-                        ->where('status', Config::get('common.status.actived'))
-                        ->get();
-        return RoleResource::collection($role);
+        $roles = $roleService->getRoles();
+        
+        return RoleResource::collection($roles);
     }
 
     public function store(Request $request)
