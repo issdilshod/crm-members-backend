@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\HostingResource;
-use App\Models\API\Hosting;
+use App\Services\HostingService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
 
 class HostingController extends Controller
 {
@@ -25,9 +24,10 @@ class HostingController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function index()
+    public function index(HostingService $hostingService)
     {
-        return HostingResource::collection(Hosting::all()->where('status', Config::get('common.status.actived')));
+        $hostings = $hostingService->getHostings();
+        return HostingResource::collection($hostings);
     }
 
     public function store(Request $request)
