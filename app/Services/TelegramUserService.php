@@ -88,6 +88,8 @@ class TelegramUserService {
                     $msg_response = $this->commands[$entity['message']];
                     break;
                 case '/profile':
+                    $msg_response = $this->commands[$entity['message']];
+                    // find user
                     $user = $this->getUserViaTelegram($entity['username']);
                     if ($user!=null){
                         $msg_response = 'Your user ID: *' . $user['uuid'] . "*\n" 
