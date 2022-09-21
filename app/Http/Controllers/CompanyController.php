@@ -11,6 +11,7 @@ use App\Models\API\BankAccountSecurity;
 use App\Models\API\Company;
 use App\Models\API\Email;
 use App\Models\API\File;
+use App\Services\CompanyService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
@@ -33,12 +34,11 @@ class CompanyController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function index()
+    public function index(CompanyService $companyService)
     {
-        $company = Company::orderBy('created_at', 'DESC')
-                            ->where('status', Config::get('common.status.actived'))
-                            ->paginate(20);
-        return CompanyResource::collection($company);
+        $companies = $companyService->getCompanies();
+        
+        return CompanyResource::collection($companies);
     }
 
     /**     @OA\POST(
@@ -468,7 +468,6 @@ class CompanyController extends Controller
       */
     public function show(Company $company)
     {
-        //
         return new CompanyResource($company);
     }
 
@@ -958,9 +957,9 @@ class CompanyController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function destroy(Company $company)
+    public function destroy(Company $company, CompanyService $companyService)
     {
-        $company->update(['status' => Config::get('common.status.deleted')]);
+        $companyService->deleteCompany($company);
     }
 
     /**     @OA\GET(
@@ -989,12 +988,10 @@ class CompanyController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function search($search)
+    public function search($search, CompanyService $companyService)
     {
-        $company = Company::orderBy('created_at', 'DESC')
-                                ->where('status', Config::get('common.status.actived'))
-                                ->where('legal_name', 'like', '%'.$search.'%')
-                                ->paginate(20);
-        return CompanyResource::collection($company);
+        $companies = $companyService->searchCompany($search);
+
+        return CompanyResource::collection($companies);
     }
 }
