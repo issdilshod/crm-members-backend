@@ -10,6 +10,7 @@ use App\Models\API\Address;
 use App\Models\API\Director;
 use App\Models\API\Email;
 use App\Models\API\File;
+use App\Services\DirectorService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
@@ -32,12 +33,11 @@ class DirectorController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function index()
+    public function index(DirectorService $directorService)
     {
-        $director = Director::orderBy('created_at', 'DESC')
-                                ->where('status', Config::get('common.status.actived'))
-                                ->paginate(20);
-        return DirectorResource::collection($director);
+        $directors = $directorService->getDirectors();
+
+        return DirectorResource::collection($directors);
     }
 
     /**     @OA\POST(
@@ -710,9 +710,9 @@ class DirectorController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function destroy(Director $director)
+    public function destroy(Director $director, DirectorService $directorService)
     {
-        $director->update(['status' => Config::get('common.status.deleted')]);
+        $directorService->deleteDirector($director);
     }
 
     /**     @OA\GET(
@@ -741,12 +741,10 @@ class DirectorController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function search($search)
+    public function search($search, DirectorService $directorService)
     {
-        $director = Director::orderBy('created_at', 'DESC')
-                                ->where('status', Config::get('common.status.actived'))
-                                ->whereRaw("concat(first_name, ' ', last_name) like '%".$search."%'")
-                                ->paginate(20);
-        return DirectorResource::collection($director);
+        $directors = $directorService->searchDirector($search);
+
+        return DirectorResource::collection($directors);
     }
 }
