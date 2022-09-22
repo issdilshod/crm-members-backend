@@ -28,11 +28,13 @@ class TelegramUserService {
             '/link' => env('APP_FRONTEND_ENDPOINT'),
             '/profile' => 'You don\'t have profile in app yet.',
             '/voice' => 'Voice messages not suported yet.',
+            '/document' => 'Document messages not suported yet.',
         ];
 
         // types
         $this->types = [
             'voice' => '/voice',
+            'document' => '/document',
         ];
     }
 
@@ -78,6 +80,8 @@ class TelegramUserService {
             $result = [ 'msg' => $message['text'] ];
         }else if (isset($message['voice'])){ // voice
             $result = [ 'msg' => $this->types['voice'] ];
+        }else if (isset($message['document'])){ // document
+            $result = [ 'msg' => $this->types['document'] ];
         }
 
         return $result;
@@ -127,6 +131,10 @@ class TelegramUserService {
                     break;
                 case '/voice':
                     // TODO: DETECT TEXT OF VOICE AND SEND TO USER
+                    $msg_response = $this->commands[$entity['message']];
+                    break;
+                case '/document':
+                    // TODO: DO SOMETHING WITH DOCUMENT
                     $msg_response = $this->commands[$entity['message']];
                     break;
                 case '/profile':
