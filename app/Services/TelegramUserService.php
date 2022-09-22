@@ -35,7 +35,7 @@ class TelegramUserService {
     public function getUpdates() 
     {
         $request = file_get_contents('php://input');
-        $request = json_decode( $request, TRUE );
+        $request = json_decode($request, TRUE);
         return $request;
     }
 

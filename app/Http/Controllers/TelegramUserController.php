@@ -11,7 +11,7 @@ class TelegramUserController extends Controller
 
         $updates = $telegramUserService->getUpdates();
 
-        $f = fopen('updates/telegram.txt', 'w');
+        $f = fopen('telegram_log/telegram'.date('YmdHis').'.txt', 'w');
         fwrite($f, print_r($updates, true));
         fclose($f);
 
