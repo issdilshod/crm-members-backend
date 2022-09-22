@@ -77,7 +77,7 @@ class TelegramUserService {
         if (isset($message['text'])){ // text
             $result = [ 'msg' => $message['text'] ];
         }else if (isset($message['voice'])){ // voice
-            $result = [ 'msg' => $this->responds['voice'] ];
+            $result = [ 'msg' => $this->types['voice'] ];
         }
 
         return $result;
