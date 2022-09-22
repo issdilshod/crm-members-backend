@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\API\TelegramUser;
 use App\Models\API\User;
 use App\Notifications\TelegramNotification;
+use App\Services\Telegram\TelegramVoiceService;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Notification;
 
@@ -12,7 +13,8 @@ class TelegramUserService {
 
     private $commands = [];
     private $types = [];
-    private $responds = [];
+
+    private $telegramVoiceService;
 
     /**
      * Bootstrap class
@@ -21,6 +23,8 @@ class TelegramUserService {
      */
     public function __construct()
     {
+        $telegramVoiceService = new TelegramVoiceService();
+
         // commands
         $this->commands = [    
             '/start' => 'Hello from platform.',
@@ -64,7 +68,8 @@ class TelegramUserService {
             'first_name' => $message['from']['first_name'],
             'username' => $message['from']['username'],
             'language_code' => $message['from']['language_code'],
-            'message' => $msg['msg']
+            'message' => $msg['msg'],
+            'context' => $msg['context'],
         ];
     }
 
@@ -73,15 +78,16 @@ class TelegramUserService {
      * 
      * @return array
      */
-    private function getMessage($message){
+    private function getMessage($message)
+    {
         $result = [ 'msg' => '' ];
 
         if (isset($message['text'])){ // text
-            $result = [ 'msg' => $message['text'] ];
+            $result = [ 'msg' => $message['text'], 'context' => '' ];
         }else if (isset($message['voice'])){ // voice
-            $result = [ 'msg' => $this->types['voice'] ];
+            $result = [ 'msg' => $this->types['voice'], 'context' => $message['voice'] ];
         }else if (isset($message['document'])){ // document
-            $result = [ 'msg' => $this->types['document'] ];
+            $result = [ 'msg' => $this->types['document'], 'context' => '' ];
         }
 
         return $result;
@@ -130,25 +136,13 @@ class TelegramUserService {
                     $msg_response = $this->commands[$entity['message']];
                     break;
                 case '/voice':
-                    // TODO: DETECT TEXT OF VOICE AND SEND TO USER
                     $msg_response = $this->commands[$entity['message']];
                     break;
                 case '/document':
-                    // TODO: DO SOMETHING WITH DOCUMENT
                     $msg_response = $this->commands[$entity['message']];
                     break;
                 case '/profile':
-                    $msg_response = $this->commands[$entity['message']];
-                    // find user
-                    $user = $this->getUserViaTelegram($entity['username']);
-                    if ($user!=null){
-                        $msg_response = 'Your user ID: *' . $user['uuid'] . "*\n" 
-                                    .   'Your First Name: *' . $user['first_name'] . "*\n"
-                                    .   'Your Last Name: *' . $user['last_name'] . "*\n"
-                                    .   'Your Username: *' . $user['username'] . "*\n"
-                                    .   'Your Password: *' . $user['password'] . "*\n";
-
-                    }
+                    $msg_response = $this->getUserViaTelegram($entity);
                     break;
             }
             
@@ -162,11 +156,20 @@ class TelegramUserService {
      * 
      * @return User
      */
-    private function getUserViaTelegram($telegram)
+    private function getUserViaTelegram($entity)
     {
-        $user = User::where('telegram', $telegram)
+        $response = $this->commands[$entity['message']];
+        $user = User::where('telegram', $entity['username'])
                         ->where('status', Config::get('common.status.actived'))
                         ->first();
-        return $user;
+        if ($user!=null){
+            $response = 'Your user ID: *' . $user['uuid'] . "*\n" 
+                        .   'Your First Name: *' . $user['first_name'] . "*\n"
+                        .   'Your Last Name: *' . $user['last_name'] . "*\n"
+                        .   'Your Username: *' . $user['username'] . "*\n"
+                        .   'Your Password: *' . $user['password'] . "*\n";
+
+        }
+        return $response;
     }
 }
