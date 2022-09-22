@@ -17,6 +17,7 @@ class BankAccount extends Model
 
     public function bank_account_security(){
         return $this->hasMany(BankAccountSecurity::class, 'entity_uuid', 'uuid')
-                                                            ->where('status', Config::get('common.status.actived'));
+                        ->orderBy('created_at', 'ASC')
+                        ->where('status', Config::get('common.status.actived'));
     }
 }
