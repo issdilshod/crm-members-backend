@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Notification;
 class TelegramUserService {
 
     private $commands = [];
+    private $types = [];
+    private $responds = [];
 
     /**
      * Bootstrap class
@@ -19,11 +21,23 @@ class TelegramUserService {
      */
     public function __construct()
     {
+        // commands
         $this->commands = [    
             '/start' => 'Hello from platform.',
             '/help' => 'Help section.',
             '/link' => env('APP_FRONTEND_ENDPOINT'),
             '/profile' => 'You don\'t have profile in app yet.',
+        ];
+
+        // types
+        $this->types = [
+            'text' => 1,
+            'voice' => 2,
+        ];
+
+        // responds
+        $this->responds = [
+            'voice_not_support' => 'Voice message not supported yet.',
         ];
     }
 
@@ -46,14 +60,34 @@ class TelegramUserService {
      */
     public function getEntity($message)
     {
+        $msg_type_array = $this->detectMessageType($message);
         return [
             'telegram_id' => $message['from']['id'],
             'is_bot' => $message['from']['is_bot'],
             'first_name' => $message['from']['first_name'],
             'username' => $message['from']['username'],
             'language_code' => $message['from']['language_code'],
-            'message' => $message['text']
+            'message' => $msg_type_array['msg']
         ];
+    }
+
+    /**
+     * Return telegram message type
+     * 
+     * @return array
+     */
+    private function detectMessageType($message){
+        if (isset($message['text'])){ // text
+            return [
+                'type' => $this->types['text'], 
+                'msg' => $message['text']
+            ];
+        }else if (isset($message['voice'])){ // voice
+            return [
+                'type' => $this->types['voice'], 
+                'msg' => $this->responds['voice_not_support']
+            ];
+        }
     }
 
     /**
@@ -68,6 +102,17 @@ class TelegramUserService {
         if ($telegram_user==null){
             TelegramUser::create($entity);
         }
+    }
+
+    /**
+     * Send response to user from bot
+     * 
+     * @return void
+     */
+    public function sendResponse($entity, $msg)
+    {
+        Notification::route('telegram', $entity['telegram_id'])
+                      ->notify(new TelegramNotification(['msg' => $msg]));
     }
 
     /**
@@ -105,17 +150,6 @@ class TelegramUserService {
         }
 
         return $msg_response;
-    }
-
-    /**
-     * Send response to user from bot
-     * 
-     * @return void
-     */
-    public function sendResponse($entity, $msg)
-    {
-        Notification::route('telegram', $entity['telegram_id'])
-                      ->notify(new TelegramNotification(['msg' => $msg]));
     }
 
     /**
