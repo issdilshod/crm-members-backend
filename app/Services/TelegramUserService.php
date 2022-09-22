@@ -27,17 +27,12 @@ class TelegramUserService {
             '/help' => 'Help section.',
             '/link' => env('APP_FRONTEND_ENDPOINT'),
             '/profile' => 'You don\'t have profile in app yet.',
+            '/voice' => 'Voice messages not suported yet.',
         ];
 
         // types
         $this->types = [
-            'text' => 1,
-            'voice' => 2,
-        ];
-
-        // responds
-        $this->responds = [
-            'voice_not_support' => 'Voice message not supported yet.',
+            'voice' => '/voice',
         ];
     }
 
@@ -60,14 +55,14 @@ class TelegramUserService {
      */
     public function getEntity($message)
     {
-        $msg_type_array = $this->detectMessageType($message);
+        $msg = $this->getMessage($message);
         return [
             'telegram_id' => $message['from']['id'],
             'is_bot' => $message['from']['is_bot'],
             'first_name' => $message['from']['first_name'],
             'username' => $message['from']['username'],
             'language_code' => $message['from']['language_code'],
-            'message' => $msg_type_array['msg']
+            'message' => $msg['msg']
         ];
     }
 
@@ -76,18 +71,16 @@ class TelegramUserService {
      * 
      * @return array
      */
-    private function detectMessageType($message){
+    private function getMessage($message){
+        $result = [ 'msg' => '' ];
+
         if (isset($message['text'])){ // text
-            return [
-                'type' => $this->types['text'], 
-                'msg' => $message['text']
-            ];
+            $result = [ 'msg' => $message['text'] ];
         }else if (isset($message['voice'])){ // voice
-            return [
-                'type' => $this->types['voice'], 
-                'msg' => $this->responds['voice_not_support']
-            ];
+            $result = [ 'msg' => $this->responds['voice'] ];
         }
+
+        return $result;
     }
 
     /**
