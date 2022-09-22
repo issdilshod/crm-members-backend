@@ -125,6 +125,10 @@ class TelegramUserService {
                 case '/link':
                     $msg_response = $this->commands[$entity['message']];
                     break;
+                case '/voice':
+                    // TODO: DETECT TEXT OF VOICE AND SEND TO USER
+                    $msg_response = $this->commands[$entity['message']];
+                    break;
                 case '/profile':
                     $msg_response = $this->commands[$entity['message']];
                     // find user
