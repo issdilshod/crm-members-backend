@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\API\TelegramUser;
 use App\Models\API\User;
 use App\Notifications\TelegramNotification;
-use App\Services\Telegram\TelegramVoiceService;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Notification;
 
@@ -14,8 +13,6 @@ class TelegramUserService {
     private $commands = [];
     private $types = [];
 
-    private $telegramVoiceService;
-
     /**
      * Bootstrap class
      * 
@@ -23,8 +20,6 @@ class TelegramUserService {
      */
     public function __construct()
     {
-        $telegramVoiceService = new TelegramVoiceService();
-
         // commands
         $this->commands = [    
             '/start' => 'Hello from platform.',
