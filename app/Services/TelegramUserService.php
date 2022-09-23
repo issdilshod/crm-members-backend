@@ -67,7 +67,7 @@ class TelegramUserService {
      */
     private function getMessage($message)
     {
-        $result = [ 'msg' => '' ];
+        $result = [ 'msg' => '', 'context' => '' ];
 
         if (isset($message['text'])){ // text
             $result = [ 'msg' => $message['text'], 'context' => '' ];
