@@ -26,21 +26,6 @@ class TelegramUserService {
             '/help' => 'Help section.',
             '/link' => env('APP_FRONTEND_ENDPOINT'),
             '/profile' => 'You don\'t have profile in app yet.',
-            '/voice' => 'Voice messages not supported yet.',
-            '/document' => 'Document messages not supported yet.',
-            '/audio' => 'Audio not supported yet.',
-            '/video' => 'Video not supported yet.',
-            '/photo' => 'Video not supported yet.',
-        ];
-
-        // types
-        $this->types = [
-            'voice' => '/voice',
-            'document' => '/document',
-            'video_note' => '/video_note',
-            'audio' => '/video_note',
-            'video' => '/video',
-            'photo' => '/photo',
         ];
     }
 
@@ -82,22 +67,10 @@ class TelegramUserService {
      */
     private function getMessage($message)
     {
-        $result = [ 'msg' => '/unknown' ];
+        $result = [ 'msg' => '' ];
 
         if (isset($message['text'])){ // text
             $result = [ 'msg' => $message['text'], 'context' => '' ];
-        }else if (isset($message['voice'])){ // voice
-            $result = [ 'msg' => $this->types['voice'], 'context' => $message['voice'] ];
-        }else if (isset($message['document'])){ // document
-            $result = [ 'msg' => $this->types['document'], 'context' => '' ];
-        }else if (isset($message['video_note'])){ // video note
-            $result = [ 'msg' => $this->types['video_note'], 'context' => '' ];
-        }else if (isset($message['audio'])){ // audio
-            $result = [ 'msg' => $this->types['audio'], 'context' => '' ];
-        }else if (isset($message['video'])){ // video
-            $result = [ 'msg' => $this->types['video'], 'context' => '' ];
-        }else if (isset($message['photo'])){ // photo
-            $result = [ 'msg' => $this->types['photo'], 'context' => '' ];
         }
 
         return $result;
@@ -143,24 +116,6 @@ class TelegramUserService {
                 case '/start':
                 case '/help':
                 case '/link':
-                    $msg_response = $this->commands[$entity['message']];
-                    break;
-                case '/voice':
-                    $msg_response = $this->commands[$entity['message']];
-                    break;
-                case '/document':
-                    $msg_response = $this->commands[$entity['message']];
-                    break;
-                case '/video_note':
-                    $msg_response = $this->commands[$entity['message']];
-                    break;
-                case '/audio':
-                    $msg_response = $this->commands[$entity['message']];
-                    break;
-                case '/video':
-                    $msg_response = $this->commands[$entity['message']];
-                    break;
-                case '/photo':
                     $msg_response = $this->commands[$entity['message']];
                     break;
                 case '/profile':
