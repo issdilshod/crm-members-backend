@@ -28,7 +28,7 @@ class TelegramUserService {
             '/profile' => 'You don\'t have profile in app yet.',
             '/voice' => 'Voice messages not supported yet.',
             '/document' => 'Document messages not supported yet.',
-            '/video_note' => 'Video note not supported yet.',
+            '/audio' => 'Audio not supported yet.',
         ];
 
         // types
@@ -36,6 +36,7 @@ class TelegramUserService {
             'voice' => '/voice',
             'document' => '/document',
             'video_note' => '/video_note',
+            'audio' => '/video_note',
         ];
     }
 
@@ -87,6 +88,8 @@ class TelegramUserService {
             $result = [ 'msg' => $this->types['document'], 'context' => '' ];
         }else if (isset($message['video_note'])){ // video note
             $result = [ 'msg' => $this->types['video_note'], 'context' => '' ];
+        }else if (isset($message['audio'])){ // audio
+            $result = [ 'msg' => $this->types['audio'], 'context' => '' ];
         }
 
         return $result;
@@ -143,11 +146,11 @@ class TelegramUserService {
                 case '/video_note':
                     $msg_response = $this->commands[$entity['message']];
                     break;
+                case '/audio':
+                    $msg_response = $this->commands[$entity['message']];
+                    break;
                 case '/profile':
                     $msg_response = $this->getUserViaTelegram($entity);
-                    break;
-                case '/video_note':
-
                     break;
             }
             
