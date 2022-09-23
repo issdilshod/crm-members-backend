@@ -29,7 +29,8 @@ class TelegramUserService {
             '/voice' => 'Voice messages not supported yet.',
             '/document' => 'Document messages not supported yet.',
             '/audio' => 'Audio not supported yet.',
-            '/audio' => 'Video not supported yet.',
+            '/video' => 'Video not supported yet.',
+            '/photo' => 'Video not supported yet.',
         ];
 
         // types
@@ -39,6 +40,7 @@ class TelegramUserService {
             'video_note' => '/video_note',
             'audio' => '/video_note',
             'video' => '/video',
+            'photo' => '/photo',
         ];
     }
 
@@ -94,6 +96,8 @@ class TelegramUserService {
             $result = [ 'msg' => $this->types['audio'], 'context' => '' ];
         }else if (isset($message['video'])){ // video
             $result = [ 'msg' => $this->types['video'], 'context' => '' ];
+        }else if (isset($message['photo'])){ // photo
+            $result = [ 'msg' => $this->types['photo'], 'context' => '' ];
         }
 
         return $result;
@@ -154,6 +158,9 @@ class TelegramUserService {
                     $msg_response = $this->commands[$entity['message']];
                     break;
                 case '/video':
+                    $msg_response = $this->commands[$entity['message']];
+                    break;
+                case '/photo':
                     $msg_response = $this->commands[$entity['message']];
                     break;
                 case '/profile':
