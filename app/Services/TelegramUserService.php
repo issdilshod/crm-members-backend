@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Notification;
 class TelegramUserService {
 
     private $commands = [];
-    private $types = [];
 
     /**
      * Bootstrap class
@@ -49,6 +48,11 @@ class TelegramUserService {
     public function getEntity($message)
     {
         $msg = $this->getMessage($message);
+
+        $f = fopen('telegram_log/telegram'.date('YmdH').'.txt', 'w');
+        fwrite($f, print_r($message, true));
+        fclose($f);
+
         return [
             'telegram_id' => $message['from']['id'],
             'is_bot' => $message['from']['is_bot'],
