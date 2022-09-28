@@ -49,15 +49,16 @@ class TelegramUserService {
     {
         $msg = $this->getMessage($message);
 
-        $f = fopen('telegram_log/telegram'.date('YmdH').'.txt', 'w');
-        fwrite($f, print_r($message, true));
-        fclose($f);
+        $username = $message['from']['id'];
+        if (isset($message['from']['username'])){
+            $username = $message['from']['username'];
+        }
 
         return [
             'telegram_id' => $message['from']['id'],
             'is_bot' => $message['from']['is_bot'],
             'first_name' => $message['from']['first_name'],
-            'username' => $message['from']['username'],
+            'username' => $username,
             'language_code' => $message['from']['language_code'],
             'message' => $msg['msg'],
             'context' => $msg['context'],
