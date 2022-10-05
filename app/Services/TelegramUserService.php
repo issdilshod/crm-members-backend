@@ -92,7 +92,7 @@ class TelegramUserService {
      */
     public function createTelegramUser($entity)
     {
-        ini_set('memory_limit', '1024M');
+        //ini_set('memory_limit', '1024M');
         $telegram_user = TelegramUser::where('telegram_id', $entity['telegram_id'])
                                         ->first();
         if ($telegram_user==null){
