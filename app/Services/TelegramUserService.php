@@ -59,7 +59,7 @@ class TelegramUserService {
         }
 
         return [
-            'telegram_id' => $message['from']['id'],
+            'telegram_id' => (string) $message['from']['id'],
             'is_bot' => $message['from']['is_bot'],
             'first_name' => $message['from']['first_name'],
             'username' => $username,
@@ -92,6 +92,7 @@ class TelegramUserService {
      */
     public function createTelegramUser($entity)
     {
+        ini_set('memory_limit', '1024M');
         $telegram_user = TelegramUser::where('telegram_id', $entity['telegram_id'])
                                         ->first();
         if ($telegram_user==null){
