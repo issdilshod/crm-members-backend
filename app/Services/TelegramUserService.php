@@ -94,9 +94,10 @@ class TelegramUserService {
     {
         $telegram_user = TelegramUser::where('telegram_id', $entity['telegram_id'])
                                         ->first();
-        $this->telegramLog->to_file(['get' => $telegram_user, 'entity' => $entity]);
         if ($telegram_user==null){
             TelegramUser::create($entity);
+        }else{
+            $telegram_user->update($entity);
         }
     }
 
