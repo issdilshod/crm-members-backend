@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Logs\TelegramLog;
 use App\Models\API\TelegramUser;
 use App\Models\API\User;
 use App\Notifications\TelegramNotification;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Notification;
 class TelegramUserService {
 
     private $commands = [];
+    private $telegramLog;
 
     /**
      * Bootstrap class
@@ -26,6 +28,8 @@ class TelegramUserService {
             '/link' => env('APP_FRONTEND_ENDPOINT'),
             '/profile' => 'You don\'t have profile in app yet.',
         ];
+
+        $this->telegramLog = new TelegramLog();
     }
 
     /**
@@ -90,6 +94,7 @@ class TelegramUserService {
     {
         $telegram_user = TelegramUser::where('telegram_id', $entity['telegram_id'])
                                         ->first();
+        $this->telegramLog->to_file(['get' => $telegram_user, 'entity' => $entity]);
         if ($telegram_user==null){
             TelegramUser::create($entity);
         }
