@@ -9,6 +9,7 @@ use App\Http\Controllers\Director\DirectorController;
 use App\Http\Controllers\Helper\DepartmentController;
 use App\Http\Controllers\Helper\HostingController;
 use App\Http\Controllers\Helper\NoteController;
+use App\Http\Controllers\Helper\PendingController;
 use App\Http\Controllers\Helper\RoleController;
 use App\Http\Controllers\Helper\SicCodeController;
 use App\Http\Controllers\Helper\StateController;
@@ -110,3 +111,11 @@ Route::post('api/telegram-hook', [TelegramUserController::class, 'index']);
 */
 Route::resource('api/note', NoteController::class)->middleware('auth.custom');
 Route::get('api/note_by_user', [NoteController::class, 'show_by_user'])->middleware('auth.custom');
+
+/*
+|--------------------------------------------------------------------------
+| Pending Routes
+|--------------------------------------------------------------------------
+|
+*/
+Route::get('api/pending', [PendingController::class, 'index']);

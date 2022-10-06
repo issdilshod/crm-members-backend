@@ -506,7 +506,7 @@ class UserController extends Controller
     /**     @OA\POST(
       *         path="/api/invite_register",
       *         operationId="invite_register",
-      *         tags={"Invite"},
+      *         tags={"Account"},
       *         summary="Invite register",
       *         description="Invite register",
       *             @OA\RequestBody(

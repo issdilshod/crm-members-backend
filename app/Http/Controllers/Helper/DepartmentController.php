@@ -13,7 +13,7 @@ class DepartmentController extends Controller
     /**     @OA\GET(
       *         path="/api/department",
       *         operationId="list_department",
-      *         tags={"Account"},
+      *         tags={"Helper"},
       *         summary="List of department",
       *         description="List of department",
       *             @OA\Response(
@@ -45,7 +45,7 @@ class DepartmentController extends Controller
     /**     @OA\GET(
       *         path="/api/department/{uuid}",
       *         operationId="get_department",
-      *         tags={"Account"},
+      *         tags={"Helper"},
       *         summary="Get department",
       *         description="Get department",
       *             @OA\Parameter(
@@ -76,7 +76,7 @@ class DepartmentController extends Controller
     /**     @OA\DELETE(
       *         path="/api/department/{uuid}",
       *         operationId="delete_department",
-      *         tags={"Account"},
+      *         tags={"Helper"},
       *         summary="Delete department",
       *         description="Delete department",
       *             @OA\Parameter(

@@ -196,6 +196,642 @@
                 }
             }
         },
+        "/api/invite-via-email": {
+            "post": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Invite User via Email",
+                "description": "Invite User",
+                "operationId": "post_invite_via_email",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "unique_identify"
+                                ],
+                                "properties": {
+                                    "unique_identify": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/invite-via-telegram": {
+            "post": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Invite User via Telegram",
+                "description": "Invite User",
+                "operationId": "post_invite_via_telegram",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "unique_identify"
+                                ],
+                                "properties": {
+                                    "unique_identify": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/invite-check-token": {
+            "post": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Invite Check Token",
+                "description": "Invite Check",
+                "operationId": "post_invite_check_token",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "entry_token"
+                                ],
+                                "properties": {
+                                    "entry_token": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/user": {
+            "get": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "List of user",
+                "description": "List of user",
+                "operationId": "list_user",
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Add user",
+                "description": "Add user",
+                "operationId": "post_user",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "department_uuid",
+                                    "role_uuid",
+                                    "first_name",
+                                    "last_name",
+                                    "username",
+                                    "password",
+                                    "telegram"
+                                ],
+                                "properties": {
+                                    "department_uuid": {
+                                        "type": "text"
+                                    },
+                                    "role_uuid": {
+                                        "type": "text"
+                                    },
+                                    "first_name": {
+                                        "type": "text"
+                                    },
+                                    "last_name": {
+                                        "type": "text"
+                                    },
+                                    "username": {
+                                        "type": "text"
+                                    },
+                                    "password": {
+                                        "type": "text"
+                                    },
+                                    "telegram": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/user/{uuid}": {
+            "get": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Get user",
+                "description": "Get user",
+                "operationId": "get_user",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "user uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Update user",
+                "description": "Update user",
+                "operationId": "update_user",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "user uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [],
+                                "properties": {
+                                    "department_uuid": {
+                                        "type": "text"
+                                    },
+                                    "role_uuid": {
+                                        "type": "text"
+                                    },
+                                    "first_name": {
+                                        "type": "text"
+                                    },
+                                    "last_name": {
+                                        "type": "text"
+                                    },
+                                    "username": {
+                                        "type": "text"
+                                    },
+                                    "password": {
+                                        "type": "text"
+                                    },
+                                    "telegram": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Delete user",
+                "description": "Delete user",
+                "operationId": "delete_user",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "user uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Login",
+                "description": "Login",
+                "operationId": "login",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "username",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "username": {
+                                        "type": "text"
+                                    },
+                                    "password": {
+                                        "type": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/is_auth": {
+            "get": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Is Auth",
+                "description": "Is Auth",
+                "operationId": "is_auth",
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Logout",
+                "description": "Logout",
+                "operationId": "logout",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "token"
+                                ],
+                                "properties": {
+                                    "token": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/invite_register": {
+            "post": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Invite register",
+                "description": "Invite register",
+                "operationId": "invite_register",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "entry_token",
+                                    "username",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "entry_token": {
+                                        "type": "text"
+                                    },
+                                    "username": {
+                                        "type": "text"
+                                    },
+                                    "password": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/pending-users": {
+            "get": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Get pending users",
+                "description": "Get pending users",
+                "operationId": "get_pending_users",
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/get_me": {
+            "get": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Get Me",
+                "description": "Get Me",
+                "operationId": "get_me",
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
         "/api/company": {
             "get": {
                 "tags": [
@@ -737,115 +1373,6 @@
                 }
             }
         },
-        "/api/department": {
-            "get": {
-                "tags": [
-                    "Account"
-                ],
-                "summary": "List of department",
-                "description": "List of department",
-                "operationId": "list_department",
-                "responses": {
-                    "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    }
-                }
-            }
-        },
-        "/api/department/{uuid}": {
-            "get": {
-                "tags": [
-                    "Account"
-                ],
-                "summary": "Get department",
-                "description": "Get department",
-                "operationId": "get_department",
-                "parameters": [
-                    {
-                        "name": "uuid",
-                        "in": "path",
-                        "description": "department uuid",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "Account"
-                ],
-                "summary": "Delete department",
-                "description": "Delete department",
-                "operationId": "delete_department",
-                "parameters": [
-                    {
-                        "name": "uuid",
-                        "in": "path",
-                        "description": "department uuid",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    }
-                }
-            }
-        },
         "/api/director": {
             "get": {
                 "tags": [
@@ -1316,6 +1843,115 @@
                 }
             }
         },
+        "/api/department": {
+            "get": {
+                "tags": [
+                    "Helper"
+                ],
+                "summary": "List of department",
+                "description": "List of department",
+                "operationId": "list_department",
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/department/{uuid}": {
+            "get": {
+                "tags": [
+                    "Helper"
+                ],
+                "summary": "Get department",
+                "description": "Get department",
+                "operationId": "get_department",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "department uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Helper"
+                ],
+                "summary": "Delete department",
+                "description": "Delete department",
+                "operationId": "delete_department",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "department uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
         "/api/hosting": {
             "get": {
                 "tags": [
@@ -1345,157 +1981,10 @@
                 }
             }
         },
-        "/api/invite-via-email": {
-            "post": {
-                "tags": [
-                    "Invite"
-                ],
-                "summary": "Invite User via Email",
-                "description": "Invite User",
-                "operationId": "post_invite_via_email",
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [
-                                    "unique_identify"
-                                ],
-                                "properties": {
-                                    "unique_identify": {
-                                        "type": "text"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        },
-                        "application/json": {
-                            "schema": {}
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    }
-                }
-            }
-        },
-        "/api/invite-via-telegram": {
-            "post": {
-                "tags": [
-                    "Invite"
-                ],
-                "summary": "Invite User via Telegram",
-                "description": "Invite User",
-                "operationId": "post_invite_via_telegram",
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [
-                                    "unique_identify"
-                                ],
-                                "properties": {
-                                    "unique_identify": {
-                                        "type": "text"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        },
-                        "application/json": {
-                            "schema": {}
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    }
-                }
-            }
-        },
-        "/api/invite-check-token": {
-            "post": {
-                "tags": [
-                    "Invite"
-                ],
-                "summary": "Invite Check Token",
-                "description": "Invite Check",
-                "operationId": "post_invite_check_token",
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [
-                                    "entry_token"
-                                ],
-                                "properties": {
-                                    "entry_token": {
-                                        "type": "text"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        },
-                        "application/json": {
-                            "schema": {}
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    }
-                }
-            }
-        },
         "/api/note": {
             "post": {
                 "tags": [
-                    "Note"
+                    "Helper"
                 ],
                 "summary": "Post note",
                 "description": "Post note",
@@ -1544,7 +2033,7 @@
         "/api/note/{uuid}": {
             "get": {
                 "tags": [
-                    "Note"
+                    "Helper"
                 ],
                 "summary": "Get note",
                 "description": "Get note",
@@ -1583,7 +2072,7 @@
             },
             "put": {
                 "tags": [
-                    "Note"
+                    "Helper"
                 ],
                 "summary": "Update note",
                 "description": "Update note",
@@ -1647,7 +2136,7 @@
         "/api/note_by_user": {
             "get": {
                 "tags": [
-                    "Note"
+                    "Helper"
                 ],
                 "summary": "Get note by user",
                 "description": "Get note by user",
@@ -1673,10 +2162,39 @@
                 }
             }
         },
+        "/api/pending": {
+            "get": {
+                "tags": [
+                    "Helper"
+                ],
+                "summary": "List of pending",
+                "description": "List of pending",
+                "operationId": "list_pending",
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
         "/api/role": {
             "get": {
                 "tags": [
-                    "Account"
+                    "Helper"
                 ],
                 "summary": "List of role",
                 "description": "List of role",
@@ -2012,495 +2530,6 @@
                         }
                     }
                 ],
-                "responses": {
-                    "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    }
-                }
-            }
-        },
-        "/api/user": {
-            "get": {
-                "tags": [
-                    "Account"
-                ],
-                "summary": "List of user",
-                "description": "List of user",
-                "operationId": "list_user",
-                "responses": {
-                    "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    }
-                }
-            },
-            "post": {
-                "tags": [
-                    "Account"
-                ],
-                "summary": "Add user",
-                "description": "Add user",
-                "operationId": "post_user",
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [
-                                    "department_uuid",
-                                    "role_uuid",
-                                    "first_name",
-                                    "last_name",
-                                    "username",
-                                    "password",
-                                    "telegram"
-                                ],
-                                "properties": {
-                                    "department_uuid": {
-                                        "type": "text"
-                                    },
-                                    "role_uuid": {
-                                        "type": "text"
-                                    },
-                                    "first_name": {
-                                        "type": "text"
-                                    },
-                                    "last_name": {
-                                        "type": "text"
-                                    },
-                                    "username": {
-                                        "type": "text"
-                                    },
-                                    "password": {
-                                        "type": "text"
-                                    },
-                                    "telegram": {
-                                        "type": "text"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        },
-                        "application/json": {
-                            "schema": {}
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    }
-                }
-            }
-        },
-        "/api/user/{uuid}": {
-            "get": {
-                "tags": [
-                    "Account"
-                ],
-                "summary": "Get user",
-                "description": "Get user",
-                "operationId": "get_user",
-                "parameters": [
-                    {
-                        "name": "uuid",
-                        "in": "path",
-                        "description": "user uuid",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    }
-                }
-            },
-            "put": {
-                "tags": [
-                    "Account"
-                ],
-                "summary": "Update user",
-                "description": "Update user",
-                "operationId": "update_user",
-                "parameters": [
-                    {
-                        "name": "uuid",
-                        "in": "path",
-                        "description": "user uuid",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [],
-                                "properties": {
-                                    "department_uuid": {
-                                        "type": "text"
-                                    },
-                                    "role_uuid": {
-                                        "type": "text"
-                                    },
-                                    "first_name": {
-                                        "type": "text"
-                                    },
-                                    "last_name": {
-                                        "type": "text"
-                                    },
-                                    "username": {
-                                        "type": "text"
-                                    },
-                                    "password": {
-                                        "type": "text"
-                                    },
-                                    "telegram": {
-                                        "type": "text"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        },
-                        "application/json": {
-                            "schema": {}
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "Account"
-                ],
-                "summary": "Delete user",
-                "description": "Delete user",
-                "operationId": "delete_user",
-                "parameters": [
-                    {
-                        "name": "uuid",
-                        "in": "path",
-                        "description": "user uuid",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    }
-                }
-            }
-        },
-        "/api/login": {
-            "post": {
-                "tags": [
-                    "Account"
-                ],
-                "summary": "Login",
-                "description": "Login",
-                "operationId": "login",
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [
-                                    "username",
-                                    "password"
-                                ],
-                                "properties": {
-                                    "username": {
-                                        "type": "text"
-                                    },
-                                    "password": {
-                                        "type": "password"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        },
-                        "application/json": {
-                            "schema": {}
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    }
-                }
-            }
-        },
-        "/api/is_auth": {
-            "get": {
-                "tags": [
-                    "Account"
-                ],
-                "summary": "Is Auth",
-                "description": "Is Auth",
-                "operationId": "is_auth",
-                "responses": {
-                    "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    }
-                }
-            }
-        },
-        "/api/logout": {
-            "post": {
-                "tags": [
-                    "Account"
-                ],
-                "summary": "Logout",
-                "description": "Logout",
-                "operationId": "logout",
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [
-                                    "token"
-                                ],
-                                "properties": {
-                                    "token": {
-                                        "type": "text"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        },
-                        "application/json": {
-                            "schema": {}
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    }
-                }
-            }
-        },
-        "/api/invite_register": {
-            "post": {
-                "tags": [
-                    "Invite"
-                ],
-                "summary": "Invite register",
-                "description": "Invite register",
-                "operationId": "invite_register",
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [
-                                    "entry_token",
-                                    "username",
-                                    "password"
-                                ],
-                                "properties": {
-                                    "entry_token": {
-                                        "type": "text"
-                                    },
-                                    "username": {
-                                        "type": "text"
-                                    },
-                                    "password": {
-                                        "type": "text"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        },
-                        "application/json": {
-                            "schema": {}
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    }
-                }
-            }
-        },
-        "/api/pending-users": {
-            "get": {
-                "tags": [
-                    "Account"
-                ],
-                "summary": "Get pending users",
-                "description": "Get pending users",
-                "operationId": "get_pending_users",
-                "responses": {
-                    "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    }
-                }
-            }
-        },
-        "/api/get_me": {
-            "get": {
-                "tags": [
-                    "Account"
-                ],
-                "summary": "Get Me",
-                "description": "Get Me",
-                "operationId": "get_me",
                 "responses": {
                     "200": {
                         "description": "Successfully",

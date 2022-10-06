@@ -19,7 +19,7 @@ class InviteUserController extends Controller
     /**     @OA\POST(
         *         path="/api/invite-via-email",
         *         operationId="post_invite_via_email",
-        *         tags={"Invite"},
+        *         tags={"Account"},
         *         summary="Invite User via Email",
         *         description="Invite User",
         *             @OA\RequestBody(
@@ -58,7 +58,7 @@ class InviteUserController extends Controller
     /**     @OA\POST(
         *         path="/api/invite-via-telegram",
         *         operationId="post_invite_via_telegram",
-        *         tags={"Invite"},
+        *         tags={"Account"},
         *         summary="Invite User via Telegram",
         *         description="Invite User",
         *             @OA\RequestBody(
@@ -97,7 +97,7 @@ class InviteUserController extends Controller
     /**     @OA\POST(
         *         path="/api/invite-check-token",
         *         operationId="post_invite_check_token",
-        *         tags={"Invite"},
+        *         tags={"Account"},
         *         summary="Invite Check Token",
         *         description="Invite Check",
         *             @OA\RequestBody(

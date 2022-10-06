@@ -12,7 +12,7 @@ class RoleController extends Controller
     /**     @OA\GET(
       *         path="/api/role",
       *         operationId="list_role",
-      *         tags={"Account"},
+      *         tags={"Helper"},
       *         summary="List of role",
       *         description="List of role",
       *             @OA\Response(

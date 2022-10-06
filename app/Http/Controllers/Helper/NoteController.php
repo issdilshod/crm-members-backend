@@ -14,7 +14,7 @@ class NoteController extends Controller
     /**     @OA\POST(
       *         path="/api/note",
       *         operationId="post_note",
-      *         tags={"Note"},
+      *         tags={"Helper"},
       *         summary="Post note",
       *         description="Post note",
       *             @OA\RequestBody(
@@ -53,7 +53,7 @@ class NoteController extends Controller
     /**     @OA\GET(
       *         path="/api/note/{uuid}",
       *         operationId="get_note",
-      *         tags={"Note"},
+      *         tags={"Helper"},
       *         summary="Get note",
       *         description="Get note",
       *             @OA\Parameter(
@@ -84,7 +84,7 @@ class NoteController extends Controller
     /**     @OA\GET(
       *         path="/api/note_by_user",
       *         operationId="get_note_by_user",
-      *         tags={"Note"},
+      *         tags={"Helper"},
       *         summary="Get note by user",
       *         description="Get note by user",
       *             @OA\Response(
@@ -116,7 +116,7 @@ class NoteController extends Controller
     /**     @OA\PUT(
       *         path="/api/note/{uuid}",
       *         operationId="update_note",
-      *         tags={"Note"},
+      *         tags={"Helper"},
       *         summary="Update note",
       *         description="Update note",
       *             @OA\Parameter(
