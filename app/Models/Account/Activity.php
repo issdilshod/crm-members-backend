@@ -2,6 +2,8 @@
 
 namespace App\Models\Account;
 
+use App\Models\Company\Company;
+use App\Models\Director\Director;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\TraitUuid;
@@ -16,7 +18,6 @@ class Activity extends Model
     protected $attributes = ['status' => 1];
 
     public function user(){
-        return $this->belongsTo(User::class, 'user_uuid', 'uuid')
-                                                            ->where('status', Config::get('common.status.actived'));
+        return $this->belongsTo(User::class, 'user_uuid', 'uuid');
     }
 }

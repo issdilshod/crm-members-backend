@@ -169,7 +169,11 @@ class DirectorController extends Controller
             ], 409);
         }
 
-        $director = $this->directorService->create($validated);
+        if ($validated['role_alias']==Config::get('common.role.headquarters')){ // headquarters
+            $director = $this->directorService->create($validated);
+        }else{
+            $director = $this->directorService->pending($validated);
+        }
 
         // email
         $validated['emails']['entity_uuid'] = $director['uuid'];

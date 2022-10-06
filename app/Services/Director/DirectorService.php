@@ -116,18 +116,6 @@ class DirectorService {
 
     public function create($entity)
     {
-        $activity = [];
-        //permission
-        if ($entity['role_alias']==Config::get('common.role.headquarters')){
-            $entity['status'] = Config::get('common.status.actived');
-            $activity['description'] = Config::get('common.activity.director.add');
-            $activity['action_code'] = Config::get('common.activity.codes.director_add');
-        }else{
-            $entity['status'] = Config::get('common.status.pending');
-            $activity['description'] = Config::get('common.activity.director.send_request');
-            $activity['action_code'] = Config::get('common.activity.codes.director_add_send_request');
-        }
-
         $director = Director::create($entity);
 
         Activity::create([
@@ -135,9 +123,9 @@ class DirectorService {
             'entity_uuid' => $director['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
-            'description' => $activity['description'],
+            'description' => Config::get('common.activity.director.add'),
             'changes' => json_encode($entity),
-            'action_code' => $activity['action_code'],
+            'action_code' => Config::get('common.activity.codes.director_add'),
             'status' => Config::get('common.status.actived')
         ]);
 
@@ -148,6 +136,35 @@ class DirectorService {
     {
         $director->update($entity);
         return $director;
+    }
+
+    public function pending($entity)
+    {
+        $entity['status'] = Config::get('common.status.pending');
+        $director = Director::create($entity);
+
+        Activity::create([
+            'user_uuid' => $entity['user_uuid'],
+            'entity_uuid' => $director['uuid'],
+            'device' => UserSystemInfoHelper::device_full(),
+            'ip' => UserSystemInfoHelper::ip(),
+            'description' => Config::get('common.activity.director.pending'),
+            'changes' => json_encode($entity),
+            'action_code' => Config::get('common.activity.codes.director_pending'),
+            'status' => Config::get('common.status.actived')
+        ]);
+
+        return $director;
+    }
+
+    public function accept($entity)
+    {
+        //
+    }
+
+    public function reject($entity)
+    {
+        //
     }
 
 }

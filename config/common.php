@@ -31,7 +31,7 @@ return [
         'director' => [
             'add' => 'Director added',
             'update' => 'Director updated',
-            'send_request' => 'Director approval request sent'
+            'pending' => 'Director approval request sent'
         ],
         'company' => [
             'add' => 'Company added',
@@ -47,7 +47,7 @@ return [
             'company_update' => 6,
             'user_invite_via_email' => 7,
             'user_invite_via_telegram' => 8,
-            'director_add_send_request' => 9,
+            'director_pending' => 9,
         ],
 
         'codes_link' => [
