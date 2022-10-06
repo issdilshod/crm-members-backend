@@ -7,9 +7,18 @@ use App\Http\Resources\Helper\DepartmentResource;
 use App\Models\Helper\Department;
 use App\Services\Helper\DepartmentService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 
 class DepartmentController extends Controller
 {
+
+    private $departmentService;
+
+    public function __construct()
+    {
+        $this->departmentService = new DepartmentService();
+    }
+
     /**     @OA\GET(
       *         path="/api/department",
       *         operationId="list_department",
@@ -26,9 +35,19 @@ class DepartmentController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function index(DepartmentService $departmentService)
+    public function index(Request $request)
     {
-        $departments = $departmentService->getDepartments();
+        $role = $request->validate([
+            'role_alias' => 'string'
+        ]);
+
+        if ($role['role_alias']!=Config::get('common.role.headquarters')){
+            return response()->json([
+                'msg' => 'You don\'t have permission to do this action.'
+            ], 403);
+        }
+
+        $departments = $this->departmentService->getDepartments();
         
         return DepartmentResource::collection($departments);
     }
