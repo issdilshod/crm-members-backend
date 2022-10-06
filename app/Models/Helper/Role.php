@@ -10,7 +10,7 @@ class Role extends Model
 {
     use HasFactory, TraitUuid;
 
-    protected $fillable = ['role_name', 'status'];
+    protected $fillable = ['role_name', 'alias', 'status'];
 
     protected $attributes = ['status' => 1];
 }
