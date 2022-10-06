@@ -3,12 +3,19 @@
 namespace App\Http\Controllers\Account;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Account\ActivityResource;
 use App\Models\Account\Activity;
 use App\Services\Account\ActivityService;
 
 class ActivityController extends Controller
 {
+
+    private $activityService;
+
+    public function __construct()
+    {
+        $this->activityService = new ActivityService();
+    }
+
     /**     @OA\GET(
       *         path="/api/activity",
       *         operationId="list_activity",
@@ -25,13 +32,10 @@ class ActivityController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function index(ActivityService $activityService)
+    public function index()
     {
-        $activities = $activityService->getActivities();
-
-        $activities = $activityService->setLink($activities);
-
-        return ActivityResource::collection($activities);
+        $activities = $this->activityService->all();
+        return $activities;
     }
 
     /**     @OA\GET(
@@ -62,7 +66,8 @@ class ActivityController extends Controller
       */
     public function show(Activity $activity)
     {
-        return new ActivityResource($activity);
+        $activity = $this->activityService->one($activity);
+        return $activity;
     }
 
     /**     @OA\DELETE(
@@ -91,9 +96,9 @@ class ActivityController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function destroy(Activity $activity, ActivityService $activityService)
+    public function destroy(Activity $activity)
     {
-        $activityService->deleteActivity($activity);
+        $this->activityService->delete($activity);
     }
 
     /**     @OA\GET(
@@ -122,13 +127,10 @@ class ActivityController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function by_user($uuid, ActivityService $activityService)
+    public function by_user($uuid)
     {
-        $activities = $activityService->getUserActivities($uuid);
-
-        $activities = $activityService->setLink($activities);
-
-        return ActivityResource::collection($activities);
+        $activities = $this->activityService->by_user($uuid);
+        return $activities;
     }
 
     /**     @OA\GET(
@@ -157,12 +159,9 @@ class ActivityController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function by_entity($uuid, ActivityService $activityService)
+    public function by_entity($uuid)
     {
-        $activities = $activityService->getEntityActivities($uuid);
-
-        $activities = $activityService->setLink($activities);
-
-        return ActivityResource::collection($activities);
+        $activities = $this->activityService->by_entity($uuid);
+        return $activities;
     }
 }

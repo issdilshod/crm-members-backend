@@ -2,50 +2,45 @@
 
 namespace App\Services\Account;
 
+use App\Http\Resources\Account\ActivityResource;
 use App\Models\Account\Activity;
 use Illuminate\Support\Facades\Config;
 
 class ActivityService {
 
-    /**
-     * Return 10 last activities
-     *
-     * @return Activity
-     */
-    public function getActivities()
+    public function all()
     {
         $activities = Activity::orderBy('updated_at', 'DESC')
                                 ->where('status', Config::get('common.status.actived'))
                                 ->paginate(10);
-        return $activities;            
+        $activities = $this->setLinks($activities);
+        return ActivityResource::collection($activities);         
     }
 
-    /**
-     * Return 10 last activities of user
-     *
-     * @return Activity
-     */
-    public function getUserActivities($uuid)
+    public function by_user($uuid)
     {
         $activities = Activity::orderBy('updated_at', 'DESC')
-                                ->where('status', Config::get('common.status.actived'))
                                 ->where('user_uuid', $uuid)
+                                ->where('status', Config::get('common.status.actived'))
                                 ->paginate(10);
-        return $activities;
+        $activities = $this->setLinks($activities);
+        return ActivityResource::collection($activities);         
     }
 
-    /**
-     * Return 10 last activities of entity
-     *
-     * @return Activity
-     */
-    public function getEntityActivities($uuid)
+    public function by_entity($uuid)
     {
         $activities = Activity::orderBy('updated_at', 'DESC')
-                                ->where('status', Config::get('common.status.actived'))
                                 ->where('entity_uuid', $uuid)
+                                ->where('status', Config::get('common.status.actived'))
                                 ->paginate(10);
-        return $activities;
+        $activities = $this->setLinks($activities);
+        return ActivityResource::collection($activities);         
+    }
+
+    public function one(Activity $activity)
+    {
+        $activity = new ActivityResource($activity);
+        return $activity;
     }
 
     /**
@@ -53,17 +48,17 @@ class ActivityService {
      *
      * @return void
      */
-    public function deleteActivity(Activity $activity)
+    public function delete(Activity $activity)
     {
         $activity->update(['status' => Config::get('common.status.deleted')]);
     }
 
     /**
-     * Return Activity with links
-     *
-     * @return Activity
+     * Set mapping links to activity
+     * 
+     * @return Array(Activity)
      */
-    public function setLink($activities)
+    private function setLinks($activities)
     {
         foreach ($activities AS $key => $value):
             $link = '';

@@ -11,7 +11,10 @@ use Illuminate\Support\Facades\Notification;
 
 class TelegramUserService {
 
-    private $commands = [];
+    private $commands;
+    private $updates;
+    private $entity;
+    private $response;
     private $telegramLog;
 
     /**
@@ -32,112 +35,80 @@ class TelegramUserService {
         $this->telegramLog = new TelegramLog();
     }
 
-    /**
-     * Return telegram updates
-     * 
-     * @return array
-     */
-    public function getUpdates() 
+    public function init()
     {
-        $request = file_get_contents('php://input');
-        $request = json_decode($request, TRUE);
-        return $request;
+        $this->updates = file_get_contents('php://input');
+        $this->updates = json_decode($this->updates, TRUE);
+        $this->set_entity();
+        $this->create_user();
+        $this->set_response();
+        $this->send_response();
     }
 
-    /**
-     * Return entity
-     * 
-     * @return array
-     */
-    public function getEntity($message)
+    private function set_entity()
     {
-        $msg = $this->getMessage($message);
+        $this->entity = $this->updates['messages'];
+        $message = $this->get_message($this->entity);
 
         $username = $message['from']['id'];
         if (isset($message['from']['username'])){
             $username = $message['from']['username'];
         }
 
-        return [
-            'telegram_id' => (string) $message['from']['id'],
-            'is_bot' => $message['from']['is_bot'],
-            'first_name' => $message['from']['first_name'],
+        $this->entity = [
+            'telegram_id' => (string) $this->entity['from']['id'],
+            'is_bot' => $this->entity['from']['is_bot'],
+            'first_name' => $this->entity['from']['first_name'],
             'username' => $username,
-            'language_code' => $message['from']['language_code'],
-            'message' => $msg['msg'],
-            'context' => $msg['context'],
+            'language_code' => $this->entity['from']['language_code'],
+            'message' => $message['msg'],
+            'context' => $message['context'],
         ];
     }
 
-    /**
-     * Return telegram message type
-     * 
-     * @return array
-     */
-    private function getMessage($message)
+    private function get_message($message)
     {
         $result = [ 'msg' => '', 'context' => '' ];
-
         if (isset($message['text'])){ // text
             $result = [ 'msg' => $message['text'], 'context' => '' ];
         }
-
         return $result;
     }
 
-    /**
-     * Return telegram user by telegram id
-     * 
-     * @return void
-     */
-    public function createTelegramUser($entity)
+    private function create_user()
     {
-        //ini_set('memory_limit', '1024M');
-        $telegram_user = TelegramUser::where('telegram_id', $entity['telegram_id'])
+        $telegram_user = TelegramUser::where('telegram_id', $this->entity['telegram_id'])
                                         ->first();
         if ($telegram_user==null){
-            TelegramUser::create($entity);
+            TelegramUser::create($this->entity);
         }else{
-            $telegram_user->update($entity);
+            $telegram_user->update($this->entity);
         }
     }
 
-    /**
-     * Send response to user from bot
-     * 
-     * @return void
-     */
-    public function sendResponse($entity, $msg)
+    private function set_response()
     {
-        Notification::route('telegram', $entity['telegram_id'])
-                      ->notify(new TelegramNotification(['msg' => $msg]));
-    }
+        $this->msg_response = 'If there are some news on platform, we will send message to you!';
 
-    /**
-     * Return message of respond
-     * 
-     * @return string
-     */
-    public function getResponse($entity)
-    {
-        $msg_response = 'If there are some news on platform, we will send message to you!';
-
-        if (isset($this->commands[$entity['message']])){
+        if (isset($this->commands[$this->entity['message']])){
             // special commands
-            switch ($entity['message']){
+            switch ($this->entity['message']){
                 case '/start':
                 case '/help':
                 case '/link':
-                    $msg_response = $this->commands[$entity['message']];
+                    $this->msg_response = $this->commands[$this->entity['message']];
                     break;
                 case '/profile':
-                    $msg_response = $this->getUserViaTelegram($entity);
+                    $this->msg_response = $this->getUserViaTelegram($this->entity);
                     break;
             }
-            
         }
+    }
 
-        return $msg_response;
+    private function send_response()
+    {
+        Notification::route('telegram', $this->entity['telegram_id'])
+                      ->notify(new TelegramNotification(['msg' => $this->response]));
     }
 
     /**

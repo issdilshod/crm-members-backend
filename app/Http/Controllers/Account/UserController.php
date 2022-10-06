@@ -21,6 +21,14 @@ use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
+
+    private $userService;
+
+    public function __construct()
+    {
+        $this->userService = new UserService();
+    }
+
     /**     @OA\GET(
       *         path="/api/user",
       *         operationId="list_user",
@@ -37,11 +45,10 @@ class UserController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function index(UserService $userService)
+    public function index()
     {
-        $users = $userService->getUsers();
-
-        return UserResource::collection($users);
+        $users = $this->userService->all();
+        return $users;
     }
 
     /**     @OA\POST(
@@ -179,7 +186,8 @@ class UserController extends Controller
       */
     public function show(User $user)
     {
-        return new UserResource($user);
+        $user = $this->userService->one($user);
+        return $user;
     }
 
     /**     @OA\PUT(
@@ -351,7 +359,7 @@ class UserController extends Controller
       */
     public function destroy(User $user, UserService $userService)
     {
-        $userService->deleteUser($user);
+        $userService->delete($user);
     }
 
     /**     @OA\POST(
@@ -470,7 +478,6 @@ class UserController extends Controller
       */
     public function logout(Request $request)
     {
-
         #region Validation
 
         $validated = $request->validate([
@@ -526,85 +533,15 @@ class UserController extends Controller
       */
     public function invite_register(Request $request)
     {
-
         $validated = $request->validate([
             'entry_token' => 'required',
             'username' => 'required',
             'password' => 'required'
         ]);
 
-        $invite_user = InviteUser::select('uuid', 'via', 'unique_identify')
-                                    ->where('status', Config::get('common.status.actived'))
-                                    ->where('entry_token', $validated['entry_token'])
-                                    ->first();
-        
-        if ($invite_user!=null){
-            $user = User::select('username')
-                            ->where('status', Config::get('common.status.actived'))
-                            ->where('username', $validated['username'])
-                            ->first();
-            
-            #region Check for exsist
+        $response = $this->userService->register($validated);
 
-            if ($user!=null){
-                
-                $check = [];
-                $check['user'] = $user->toArray();
-                foreach ($check['user'] as $key => $value):
-                    $check[$key] = '~Exsist';
-                endforeach;
-                unset($check['user']);
-
-
-                return response()->json([
-                    'data' => ['msg' => 'Username is exsist.', 'data' => $check],
-                ], 409);
-
-            }
-
-            #endregion
-
-            $validated['status'] = Config::get('common.status.pending');
-            User::create($validated);
-
-            $invite_user->update(['status'=> Config::get('common.status.deleted')]);
-
-            // get general admins and send push-notification & telegram
-            $users = User::where('status', Config::get('common.status.actived'))
-                            ->where('role_uuid', Config::get('common.role.general'))
-                            ->get();
-            if ($users!=null){
-                // websocket send message
-                $users = $users->toArray();
-                foreach ($users AS $key => $user):
-                    // push 
-                    event(new WebSocket([
-                                            'user' => $user, 
-                                            'data' => [
-                                                'msg' => 'Sended request to register.',
-                                                'link' => env('APP_FRONTEND_ENDPOINT') . '/departments',
-                                                'push' => true
-                                            ]
-                                        ])
-                        );
-
-                    // telegram
-                    $chat_id = TelegramHelper::getTelegramChatId($user['telegram']);
-                    if ($chat_id!=null){
-                        Notification::route('telegram', $chat_id)
-                                ->notify(new TelegramNotification(['msg' => 'Sended request for register from *'.$validated['username'].'*']));
-                    }
-                endforeach;
-            }
-            
-            return response()->json([
-                'data' => ['msg' => 'Succesfully sent request for register.'],
-            ], 200);
-        }
-
-        return response()->json([
-            'data' => ['msg' => 'Invalid token!'],
-        ], 404);
+        return $response;
     }
 
     /**     @OA\GET(
@@ -623,11 +560,10 @@ class UserController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function pending_users(UserService $userService)
+    public function pending_users()
     {
-        $users = $userService->getPendingUsers();
-
-        return UserResource::collection($users);
+        $users = $this->userService->pendings();
+        return $users;
     }
 
     /**     @OA\GET(
@@ -646,10 +582,9 @@ class UserController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function get_me(Request $request, UserService $userService)
+    public function get_me(Request $request,)
     {
-        $user = $userService->getMe($request);
-
-        return new UserResource($user);
+        $user = $this->userService->me($request);
+        return $user;
     }
 }
