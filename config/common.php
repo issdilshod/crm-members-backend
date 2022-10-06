@@ -31,6 +31,7 @@ return [
         'director' => [
             'add' => 'Director added',
             'update' => 'Director updated',
+            'send_request' => 'Director approval request sent'
         ],
         'company' => [
             'add' => 'Company added',
@@ -46,6 +47,7 @@ return [
             'company_update' => 6,
             'user_invite_via_email' => 7,
             'user_invite_via_telegram' => 8,
+            'director_add_send_request' => 9,
         ],
 
         'codes_link' => [
@@ -57,11 +59,16 @@ return [
             6 => 'companies',
             7 => 'departments',
             8 => 'departments',
+            9 => 'directors'
         ],
     ],
 
     'invite' => [
         'telegram' => 1,
         'email' => 2,
+    ],
+
+    'errors' => [
+        'exsist' => 'Data exsist.'
     ],
 ];

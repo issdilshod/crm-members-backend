@@ -11,12 +11,26 @@ use App\Models\Helper\Address;
 use App\Models\Helper\Email;
 use App\Models\Helper\File;
 use App\Services\Director\DirectorService;
+use App\Services\Helper\AddressService;
+use App\Services\Helper\EmailService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 
 class DirectorController extends Controller
 {
+
+    private $directorService;
+    private $addressService;
+    private $emailService;
+
+    public function __construct()
+    {
+        $this->directorService = new DirectorService();
+        $this->addressService = new AddressService();
+        $this->emailService = new EmailService();
+    }
+
     /**     @OA\GET(
       *         path="/api/director",
       *         operationId="list_director",
@@ -33,11 +47,10 @@ class DirectorController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function index(DirectorService $directorService)
+    public function index()
     {
-        $directors = $directorService->getDirectors();
-
-        return DirectorResource::collection($directors);
+        $directors = $this->directorService->all();
+        return $directors;
     }
 
     /**     @OA\POST(
@@ -102,8 +115,6 @@ class DirectorController extends Controller
       */
     public function store(Request $request)
     {
-        #region Validate
-
         $validated = $request->validate([
             'user_uuid' => 'string',
             'first_name' => 'required|string',
@@ -134,155 +145,44 @@ class DirectorController extends Controller
             'emails.password' => 'required|string',
             'emails.phone' => 'required|string',
 
-            'user_uuid' => 'string'
+            'user_uuid' => 'string',
+            'role_alias' => 'string'
         ]);
-
-        #endregion
-
-        #region Check exsist data
 
         $check = [];
 
-        #region Check Email
+        $tmpCheck = $this->emailService->check($validated['emails']);
+        $check = array_merge($check, $tmpCheck);
 
-        if (isset($validated['emails'])){
-            // Hosting & Email
-            $check['hosting_email'] = Email::select('hosting_uuid', 'email')
-                                                ->where('status', Config::get('common.status.actived'))
-                                                ->where('hosting_uuid', $validated['emails']['hosting_uuid'])
-                                                ->where('email', $validated['emails']['email'])->first();
-            if ($check['hosting_email']!=null){
-                $check['hosting_email'] = $check['hosting_email']->toArray();
-                foreach ($check['hosting_email'] AS $key => $value):
-                    $check['emails.'.$key] = '~Exsist~';
-                endforeach;
-            }
-            unset($check['hosting_email']);
+        $tmpCheck = $this->addressService->check($validated['address']['dl_address'], 'dl_address');
+        $check = array_merge($check, $tmpCheck);
+        $tmpCheck = $this->addressService->check($validated['address']['credit_home_address'], 'credit_home_address');
+        $check = array_merge($check, $tmpCheck);
 
-            // Phone
-            $check['phone'] = Email::select('phone')
-                                        ->where('status', Config::get('common.status.actived'))
-                                        ->where('phone', $validated['emails']['phone'])->first();
-            if ($check['phone']!=null){
-                $check['phone'] = $check['phone']->toArray();
-                foreach ($check['phone'] AS $key => $value):
-                    $check['emails.'.$key] = '~Exsist~';
-                endforeach;
-            }
-            unset($check['phone']);
-        }
-
-        #endregion
-
-        #region Check Address
-
-        if (isset($validated['address'])){
-            foreach ($validated['address'] AS $key => $value):
-                $check[$key] = Address::select('street_address', 'address_line_2', 'city', 'postal')
-                                        ->where('status', Config::get('common.status.actived'))
-                                        ->where(function($query) use ($value){
-                                                $query->where('street_address', $value['street_address'])
-                                                        ->where('address_line_2', $value['address_line_2'])
-                                                        ->where('city', $value['city'])
-                                                        ->where('postal', $value['postal']);
-                                        })->first();
-                if ($check[$key]!=null){
-                    $check[$key] = $check[$key]->toArray();
-                    foreach ($check[$key] AS $key1 => $value1):
-                        $check['address.'.$key.'.'.$key1] = '~Exsist~';
-                    endforeach;
-                }
-                unset($check[$key]);                
-            endforeach;
-        }
-
-        #endregion
-
-        #region Check Director
-
-        // Names
-        $check['names'] = Director::select('first_name', 'middle_name', 'last_name')
-                                        ->where('status', Config::get('common.status.actived'))
-                                        ->where('first_name', $validated['first_name'])
-                                        ->where('middle_name', (isset($validated['middle_name'])?$validated['middle_name']:''))
-                                        ->where('last_name', $validated['last_name'])
-                                        ->first();
-        if ($check['names']!=null){
-            $check['names'] = $check['names']->toArray();
-            foreach ($check['names'] AS $key => $value):
-                $check[$key] = '~Exsist~';
-            endforeach;
-        }
-        unset($check['names']);
-
-        // Ssn
-        $check['ssn'] = Director::select('ssn_cpn')
-                                        ->where('status', Config::get('common.status.actived'))
-                                        ->where('ssn_cpn', $validated['ssn_cpn'])
-                                        ->first();
-        if ($check['ssn']!=null){
-            $check['ssn'] = $check['ssn']->toArray();
-            foreach ($check['ssn'] AS $key => $value):
-                $check[$key] = '~Exsist~';
-            endforeach;
-        }
-        unset($check['ssn']);
-
-        // Company 
-        $check['company_association'] = Director::select('company_association')
-                                        ->where('status', Config::get('common.status.actived'))
-                                        ->where('company_association', $validated['company_association'])
-                                        ->first();
-        if ($check['company_association']!=null){
-            $check['company_association'] = $check['company_association']->toArray();
-            foreach ($check['company_association'] AS $key => $value):
-                $check[$key] = '~Exsist~';
-            endforeach;
-        }
-        unset($check['company_association']);
-
-        // Phone
-        $check['phone_number'] = Director::select('phone_number')
-                                        ->where('status', Config::get('common.status.actived'))
-                                        ->where('phone_number', $validated['phone_number'])
-                                        ->first();
-        if ($check['phone_number']!=null){
-            $check['phone_number'] = $check['phone_number']->toArray();
-            foreach ($check['phone_number'] AS $key => $value):
-                $check[$key] = '~Exsist~';
-            endforeach;
-        }
-        unset($check['phone_number']);
-
-        #endregion
-
+        $tmpCheck = $this->directorService->check($validated);
+        $check = array_merge($check, $tmpCheck);
+        
+        // exsist
         if (count($check)>0){
             return response()->json([
-                        'data' => $check,
-                    ], 409);
+                'data' => $check,
+            ], 409);
         }
 
-        #endregion
+        $director = $this->directorService->create($validated);
 
-        $director = Director::create($validated);
-
-        #region Email add
-
+        // email
         $validated['emails']['entity_uuid'] = $director['uuid'];
-        Email::create($validated['emails']);
+        $this->emailService->create($validated['emails']);
 
-        #endregion
+        //address
+        $validated['address']['dl_address']['address_parent'] = 'dl_address';
+        $validated['address']['dl_address']['entity_uuid'] = $director['uuid'];
+        $this->addressService->create($validated['address']['dl_address']);
+        $validated['address']['credit_home_address']['address_parent'] = 'credit_home_address';
+        $validated['address']['credit_home_address']['entity_uuid'] = $director['uuid'];
+        $this->addressService->create($validated['address']['credit_home_address']);
 
-        #region Address add
-
-        foreach ($validated['address'] AS $key => $value){
-            $address = new Address($validated['address'][$key]);
-            $address->address_parent = $key;
-            $address->entity_uuid = $director['uuid'];
-            $address->save();
-        }
-
-        #endregion
 
         #region Files upload (if exsist)
 
@@ -312,18 +212,6 @@ class DirectorController extends Controller
         }
 
         #endregion
-
-        // Activity log
-        Activity::create([
-            'user_uuid' => $validated['user_uuid'],
-            'entity_uuid' => $director['uuid'],
-            'device' => UserSystemInfoHelper::device_full(),
-            'ip' => UserSystemInfoHelper::ip(),
-            'description' => Config::get('common.activity.director.add'),
-            'changes' => json_encode($validated),
-            'action_code' => Config::get('common.activity.codes.director_add'),
-            'status' => Config::get('common.status.actived')
-        ]);
 
         return new DirectorResource($director);
     }
@@ -356,7 +244,8 @@ class DirectorController extends Controller
       */
     public function show(Director $director)
     {
-        return new DirectorResource($director);
+        $director = $this->directorService->one($director);
+        return $director;
     }
 
     /**     @OA\PUT(
@@ -604,7 +493,7 @@ class DirectorController extends Controller
 
         #endregion
 
-        $director->update($validated);
+        $director = $this->directorService->update($director, $validated);
 
         #region Email update (if exsist)
 
@@ -710,9 +599,9 @@ class DirectorController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function destroy(Director $director, DirectorService $directorService)
+    public function destroy(Director $director)
     {
-        $directorService->deleteDirector($director);
+        $this->directorService->delete($director);
     }
 
     /**     @OA\GET(
@@ -741,10 +630,9 @@ class DirectorController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function search($search, DirectorService $directorService)
+    public function search($search)
     {
-        $directors = $directorService->searchDirector($search);
-
-        return DirectorResource::collection($directors);
+        $directors = $this->directorService->search($search);
+        return $directors;
     }
 }

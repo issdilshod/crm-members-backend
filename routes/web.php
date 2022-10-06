@@ -64,6 +64,11 @@ Route::get('api/activity/entity/{uuid}', [ActivityController::class, 'by_entity'
 |
 */
 Route::resource('api/director', DirectorController::class)->middleware('auth.custom');
+Route::get('api/director', [DirectorController::class, 'index'])->middleware('auth.custom');
+Route::get('api/director/{uuid}', [DirectorController::class, 'show'])->middleware('auth.custom');
+Route::post('api/director', [DirectorController::class, 'store'])->middleware('auth.custom');
+Route::put('api/director/{uuid}', [DirectorController::class, 'update'])->middleware('auth.custom');
+Route::get('api/director/{uuid}', [DirectorController::class, 'destroy'])->middleware('auth.custom');
 Route::get('api/director-search/{search}', [DirectorController::class, 'search'])->middleware('auth.custom');
 
 /*
