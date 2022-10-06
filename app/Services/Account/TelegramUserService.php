@@ -47,7 +47,7 @@ class TelegramUserService {
 
     private function set_entity()
     {
-        $this->entity = $this->updates['messages'];
+        $this->entity = $this->updates['message'];
         $message = $this->get_message($this->entity);
 
         $username = $message['from']['id'];
@@ -65,7 +65,6 @@ class TelegramUserService {
             'context' => $message['context'],
         ];
 
-        $this->telegramLog->to_file($this->entity);
     }
 
     private function get_message($message)
