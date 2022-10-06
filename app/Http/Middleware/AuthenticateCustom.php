@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\API\UserAccessToken;
+use App\Models\Account\UserAccessToken;
 use Carbon\Carbon;
 use Closure;
 use Illuminate\Http\Request;

@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 
-use App\Models\API\TelegramUser;
+use App\Models\Account\TelegramUser;
 
 class TelegramHelper{
 

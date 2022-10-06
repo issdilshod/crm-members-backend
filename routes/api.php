@@ -1,17 +1,16 @@
 <?php
 
-use App\Http\Controllers\ActivityController;
-use App\Http\Controllers\CompanyController;
-use App\Http\Controllers\DepartmentController;
-use App\Http\Controllers\DirectorController;
-use App\Http\Controllers\HostingController;
-use App\Http\Controllers\NoteController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\SicCodeController;
-use App\Http\Controllers\StateController;
-use App\Http\Controllers\TaskController;
-use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Account\ActivityController;
+use App\Http\Controllers\Account\UserController;
+use App\Http\Controllers\Company\CompanyController;
+use App\Http\Controllers\Director\DirectorController;
+use App\Http\Controllers\Helper\DepartmentController;
+use App\Http\Controllers\Helper\HostingController;
+use App\Http\Controllers\Helper\NoteController;
+use App\Http\Controllers\Helper\RoleController;
+use App\Http\Controllers\Helper\SicCodeController;
+use App\Http\Controllers\Helper\StateController;
+use App\Http\Controllers\Task\TaskController;
 use Illuminate\Support\Facades\Route;
 
 /*
