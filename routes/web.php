@@ -9,42 +9,16 @@ use App\Http\Controllers\Director\DirectorController;
 use App\Http\Controllers\Helper\DepartmentController;
 use App\Http\Controllers\Helper\HostingController;
 use App\Http\Controllers\Helper\NoteController;
-use App\Http\Controllers\Helper\PendingController;
 use App\Http\Controllers\Helper\RoleController;
 use App\Http\Controllers\Helper\SicCodeController;
 use App\Http\Controllers\Helper\StateController;
 use App\Http\Controllers\Task\TaskController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-//Route::get('/', function () { return view('welcome'); });
-
-/*
-|--------------------------------------------------------------------------
-| Helper Group Routes
-|--------------------------------------------------------------------------
-|
-*/
 Route::resource('api/sic_code', SicCodeController::class)->middleware('auth.custom');
 Route::resource('api/state', StateController::class)->middleware('auth.custom');
 Route::resource('api/hosting', HostingController::class)->middleware('auth.custom');
 
-/*
-|--------------------------------------------------------------------------
-| Account Group Routes
-|--------------------------------------------------------------------------
-|
-*/
 Route::resource('api/department', DepartmentController::class)->middleware('auth.custom');
 Route::resource('api/role', RoleController::class)->middleware('auth.custom');
 // Login
@@ -58,12 +32,6 @@ Route::get('api/activity', [ActivityController::class, 'index'])->middleware('au
 Route::get('api/activity/user/{uuid}', [ActivityController::class, 'by_user'])->middleware('auth.custom');
 Route::get('api/activity/entity/{uuid}', [ActivityController::class, 'by_entity'])->middleware('auth.custom');
 
-/*
-|--------------------------------------------------------------------------
-| Director Group Routes
-|--------------------------------------------------------------------------
-|
-*/
 Route::resource('api/director', DirectorController::class)->middleware('auth.custom');
 Route::get('api/director', [DirectorController::class, 'index'])->middleware('auth.custom');
 Route::get('api/director/{uuid}', [DirectorController::class, 'show'])->middleware('auth.custom');
@@ -72,29 +40,11 @@ Route::put('api/director/{uuid}', [DirectorController::class, 'update'])->middle
 Route::get('api/director/{uuid}', [DirectorController::class, 'destroy'])->middleware('auth.custom');
 Route::get('api/director-search/{search}', [DirectorController::class, 'search'])->middleware('auth.custom');
 
-/*
-|--------------------------------------------------------------------------
-| Company Group Routes
-|--------------------------------------------------------------------------
-|
-*/
 Route::resource('api/company', CompanyController::class)->middleware('auth.custom');
 Route::get('api/company-search/{search}', [CompanyController::class, 'search'])->middleware('auth.custom');
 
-/*
-|--------------------------------------------------------------------------
-| Task Group Routes
-|--------------------------------------------------------------------------
-|
-*/
 Route::resource('api/task', TaskController::class)->middleware('auth.custom');
 
-/*
-|--------------------------------------------------------------------------
-| Invite user via Routes
-|--------------------------------------------------------------------------
-|
-*/
 Route::post('api/invite-via-email', [InviteUserController::class, 'via_email'])->middleware('auth.custom');
 Route::post('api/invite-via-telegram', [InviteUserController::class, 'via_telegram'])->middleware('auth.custom');
 Route::post('api/invite-check-token', [InviteUserController::class, 'check_token']);
@@ -103,19 +53,5 @@ Route::get('api/pending-users', [UserController::class, 'pending_users']);
 
 Route::post('api/telegram-hook', [TelegramUserController::class, 'index']);
 
-/*
-|--------------------------------------------------------------------------
-| Invite user via Routes
-|--------------------------------------------------------------------------
-|
-*/
 Route::resource('api/note', NoteController::class)->middleware('auth.custom');
 Route::get('api/note_by_user', [NoteController::class, 'show_by_user'])->middleware('auth.custom');
-
-/*
-|--------------------------------------------------------------------------
-| Pending Routes
-|--------------------------------------------------------------------------
-|
-*/
-Route::get('api/pending', [PendingController::class, 'index']);
