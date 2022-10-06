@@ -47,12 +47,12 @@ class TelegramUserService {
 
     private function set_entity()
     {
-        $this->entity = $this->updates['message'];$this->telegramLog->to_file($this->entity);
+        $this->entity = $this->updates['message'];
         $message = $this->get_message($this->entity);
 
-        $username = $message['from']['id'];
-        if (isset($message['from']['username'])){
-            $username = $message['from']['username'];
+        $username = $this->entity['from']['id'];
+        if (isset($this->entity['from']['username'])){
+            $username = $this->entity['from']['username'];
         }
 
         $this->entity = [
