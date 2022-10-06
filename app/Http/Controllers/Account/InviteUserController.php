@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Account;
 use App\Http\Controllers\Controller;
 use App\Services\Account\InviteUserService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 
 class InviteUserController extends Controller
 {
@@ -47,8 +48,16 @@ class InviteUserController extends Controller
     {
         $validated = $request->validate([
             'unique_identify' => 'required',
-            'user_uuid' => 'string'
+            'user_uuid' => 'string',
+            'role_alias' => 'string'
         ]);
+
+        // permission
+        if ($validated['role_alias']!=Config::get('common.role.headquarters')){
+            return response()->json([
+                'msg' => 'You don\'t have permission to do this action.'
+            ], 403);
+        }
 
         $response = $this->inviteUserService->via_email($validated);
 
@@ -86,8 +95,16 @@ class InviteUserController extends Controller
     {
         $validated = $request->validate([
             'unique_identify' => 'required',
-            'user_uuid' => 'string'
+            'user_uuid' => 'string',
+            'role_alias' => 'string'
         ]);
+
+        // permission
+        if ($validated['role_alias']!=Config::get('common.role.headquarters')){
+            return response()->json([
+                'msg' => 'You don\'t have permission to do this action.'
+            ], 403);
+        }
 
         $response = $this->inviteUserService->via_telegram($validated);
 

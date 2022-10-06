@@ -86,8 +86,7 @@ class UserController extends Controller
       */
     public function store(Request $request)
     {
-        #region Validation
-
+        
         $validated = $request->validate([
             'department_uuid' => 'required|string',
             'role_uuid' => 'required|string',
@@ -96,10 +95,16 @@ class UserController extends Controller
             'username' => 'required|string|max:100',
             'password' => 'required|string|max:200',
             'telegram' => 'required|string|max:100',
-            'user_uuid' => 'string'
+            'user_uuid' => 'string',
+            'role_alias' => 'string'
         ]);
 
-        #endregion
+        // permission
+        if ($validated['role_alias']!=Config::get('common.role.headquarters')){
+            return response()->json([
+                'msg' => 'You don\'t have permission to do this action.'
+            ], 403);
+        }
 
         #region Check if exsist data
 
@@ -184,7 +189,7 @@ class UserController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function show(User $user)
+    public function show(Request $request, User $user)
     {
         $user = $this->userService->one($user);
         return $user;
@@ -235,8 +240,7 @@ class UserController extends Controller
       */
     public function update(Request $request, User $user)
     {
-        #region Validation
-
+        
         $validated = $request->validate([
             'department_uuid' => 'string',
             'role_uuid' => 'string',
@@ -246,10 +250,16 @@ class UserController extends Controller
             'password' => 'string|max:200',
             'telegram' => 'string|max:100',
             'active' => 'bool',
-            'user_uuid' => 'string'
+            'user_uuid' => 'string',
+            'role_alias' => 'string'
         ]);
 
-        #endregion
+        // permission
+        if ($validated['role_alias']!=Config::get('common.role.headquarters')){
+            return response()->json([
+                'msg' => 'You don\'t have permission to do this action.'
+            ], 403);
+        }
 
         #region Check if exsist data
 
@@ -357,8 +367,19 @@ class UserController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function destroy(User $user)
+    public function destroy(Request $request, User $user)
     {
+        $role = $request->validate([
+            'role_alias' => 'string'
+        ]);
+
+        // permission
+        if ($role['role_alias']!=Config::get('common.role.headquarters')){
+            return response()->json([
+                'msg' => 'You don\'t have permission to do this action.'
+            ], 403);
+        }
+
         $this->userService->delete($user);
     }
 
