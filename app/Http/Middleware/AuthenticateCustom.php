@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Account\User;
 use App\Models\Account\UserAccessToken;
 use Carbon\Carbon;
 use Closure;
@@ -31,7 +32,12 @@ class AuthenticateCustom
             ], 401);
         }
 
-        $request->merge(['user_uuid' => $user_access_token->user_uuid]);
+        $user = User::join('roles', 'users.role_uuid', '=', 'roles.uuid')
+                        ->where('users.uuid', $user_access_token->user_uuid)
+                        ->where('users.status', Config::get('common.status.actived'))
+                        ->first(['roles.alias']);
+
+        $request->merge(['user_uuid' => $user_access_token->user_uuid, 'role_alias' => $user->alias]);
         return $next($request);
     }
 }

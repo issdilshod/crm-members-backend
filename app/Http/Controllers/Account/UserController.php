@@ -357,9 +357,9 @@ class UserController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function destroy(User $user, UserService $userService)
+    public function destroy(User $user)
     {
-        $userService->delete($user);
+        $this->userService->delete($user);
     }
 
     /**     @OA\POST(

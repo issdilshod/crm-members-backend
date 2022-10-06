@@ -53,7 +53,7 @@ Route::post('api/login', [UserController::class, 'login']);
 Route::post('api/logout', [UserController::class, 'logout'])->middleware('auth.custom');
 Route::get('api/get_me', [UserController::class, 'get_me'])->middleware('auth.custom');
 // Activity
-Route::resource('api/activity', ActivityController::class);
+Route::get('api/activity', [ActivityController::class, 'index'])->middleware('auth.custom');
 Route::get('api/activity/user/{uuid}', [ActivityController::class, 'by_user'])->middleware('auth.custom');
 Route::get('api/activity/entity/{uuid}', [ActivityController::class, 'by_entity'])->middleware('auth.custom');
 

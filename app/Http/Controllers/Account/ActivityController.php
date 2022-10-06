@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Account;
 use App\Http\Controllers\Controller;
 use App\Models\Account\Activity;
 use App\Services\Account\ActivityService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 
 class ActivityController extends Controller
 {
@@ -32,9 +34,21 @@ class ActivityController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function index()
+    public function index(Request $request)
     {
-        $activities = $this->activityService->all();
+        $role = $request->validate([
+            'user_uuid' => 'string',
+            'role_alias' => 'string'
+        ]);
+
+        // permission
+        if ($role['role_alias']==Config::get('common.role.headquarters')){ 
+            $activities = $this->activityService->all();
+        }else{
+            $activities = $this->activityService->by_user($role['user_uuid']);
+        }
+
+        
         return $activities;
     }
 
