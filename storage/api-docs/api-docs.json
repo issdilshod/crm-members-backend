@@ -2162,35 +2162,6 @@
                 }
             }
         },
-        "/api/pending": {
-            "get": {
-                "tags": [
-                    "Helper"
-                ],
-                "summary": "List of pending",
-                "description": "List of pending",
-                "operationId": "list_pending",
-                "responses": {
-                    "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    }
-                }
-            }
-        },
         "/api/role": {
             "get": {
                 "tags": [
