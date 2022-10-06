@@ -39,7 +39,7 @@ class TelegramUserService {
     {
         $this->updates = file_get_contents('php://input');
         $this->updates = json_decode($this->updates, TRUE);
-        $this->set_entity();$this->telegramLog->to_file($this->entity);
+        $this->set_entity();
         $this->create_user();
         $this->set_response();
         $this->send_response();
@@ -64,6 +64,8 @@ class TelegramUserService {
             'message' => $message['msg'],
             'context' => $message['context'],
         ];
+
+        $this->telegramLog->to_file($this->entity);
     }
 
     private function get_message($message)
