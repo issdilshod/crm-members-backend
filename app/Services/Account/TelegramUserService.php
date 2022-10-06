@@ -55,6 +55,8 @@ class TelegramUserService {
             $username = $this->entity['from']['username'];
         }
 
+        $this->telegramLog->to_file($this->entity);
+
         $this->entity = [
             'telegram_id' => (string) $this->entity['from']['id'],
             'is_bot' => $this->entity['from']['is_bot'],
