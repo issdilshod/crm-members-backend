@@ -65,8 +65,6 @@ class TelegramUserService {
             'context' => $message['context'],
         ];
 
-        $this->telegramLog->to_file($this->entity);
-
     }
 
     private function get_message($message)
@@ -91,7 +89,7 @@ class TelegramUserService {
 
     private function set_response()
     {
-        $this->msg_response = 'If there are some news on platform, we will send message to you!';
+        $this->response = 'If there are some news on platform, we will send message to you!';
 
         if (isset($this->commands[$this->entity['message']])){
             // special commands
@@ -99,10 +97,10 @@ class TelegramUserService {
                 case '/start':
                 case '/help':
                 case '/link':
-                    $this->msg_response = $this->commands[$this->entity['message']];
+                    $this->response = $this->commands[$this->entity['message']];
                     break;
                 case '/profile':
-                    $this->msg_response = $this->getUserViaTelegram($this->entity);
+                    $this->response = $this->getUserViaTelegram($this->entity);
                     break;
             }
         }
