@@ -34,6 +34,7 @@ return [
             'pending' => 'Director approval request sent',
             'pending_update' => 'Director update approval request sent',
             'reject' => 'Director rejected',
+            'accept' => 'Director accepted',
         ],
         'company' => [
             'add' => 'Company added',
@@ -52,6 +53,7 @@ return [
             'director_pending' => 9,
             'director_pending_update' => 10,
             'director_reject' => 11,
+            'director_accept' => 12,
         ],
 
         'codes_link' => [
@@ -66,6 +68,7 @@ return [
             9 => 'directors',
             10 => 'directors',
             11 => 'directors',
+            12 => 'directors',
         ],
     ],
 

@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers\Director;
 
-use App\Helpers\UserSystemInfoHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Director\DirectorResource;
-use App\Models\Account\Activity;
 use App\Models\Director\Director;
 use App\Models\Helper\Address;
 use App\Models\Helper\Email;
@@ -116,6 +114,13 @@ class DirectorController extends Controller
       */
     public function store(Request $request)
     {
+        // permission
+        if ($request->role_alias!=Config::get('common.role.headquarters')){ // not headquarters 403
+            return response()->json([
+                'data' => 'Not Authentificated',
+            ], 403);
+        }
+
         $validated = $request->validate([
             'first_name' => 'required|string',
             'middle_name' => '',
@@ -167,13 +172,6 @@ class DirectorController extends Controller
             return response()->json([
                 'data' => $check,
             ], 409);
-        }
-
-        // permission
-        if ($validated['role_alias']!=Config::get('common.role.headquarters')){ // not headquarters 403
-            return response()->json([
-                'data' => 'Not Authentificated',
-            ], 403);
         }
 
         $director = $this->directorService->create($validated);
@@ -277,7 +275,6 @@ class DirectorController extends Controller
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
       *                         required={},
-      *                         @OA\Property(property="user_uuid", type="text"),
       *                         @OA\Property(property="first_name", type="text"),
       *                         @OA\Property(property="middle_name", type="text"),
       *                         @OA\Property(property="last_name", type="text"),
@@ -330,8 +327,14 @@ class DirectorController extends Controller
       */
     public function update(Request $request, Director $director)
     {
+        // permission
+        if ($request->role_alias!=Config::get('common.role.headquarters')){ // not headquarters 403
+            return response()->json([
+                'data' => 'Not Authentificated',
+            ], 403);
+        }
+
         $validated = $request->validate([
-            'user_uuid' => 'required|string',
             'first_name' => 'required|string',
             'middle_name' => '',
             'last_name' => 'required|string',
@@ -384,13 +387,6 @@ class DirectorController extends Controller
             return response()->json([
                 'data' => $check,
             ], 409);
-        }
-
-        // permission
-        if ($validated['role_alias']!=Config::get('common.role.headquarters')){ // not headquarters 403
-            return response()->json([
-                'data' => 'Not Authentificated',
-            ], 403);
         }
 
         $director = $this->directorService->update($director, $validated);
@@ -446,18 +442,6 @@ class DirectorController extends Controller
         }
 
         #endregion
-
-        // Activity log
-        Activity::create([
-            'user_uuid' => $validated['user_uuid'],
-            'entity_uuid' => $director['uuid'],
-            'device' => UserSystemInfoHelper::device_full(),
-            'ip' => UserSystemInfoHelper::ip(),
-            'description' => Config::get('common.activity.director.update'),
-            'changes' => json_encode($validated),
-            'action_code' => Config::get('common.activity.codes.director_update'),
-            'status' => Config::get('common.status.actived')
-        ]);
 
         return new DirectorResource($director);
     }
@@ -696,7 +680,6 @@ class DirectorController extends Controller
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
       *                         required={},
-      *                         @OA\Property(property="user_uuid", type="text"),
       *                         @OA\Property(property="first_name", type="text"),
       *                         @OA\Property(property="middle_name", type="text"),
       *                         @OA\Property(property="last_name", type="text"),
@@ -845,11 +828,11 @@ class DirectorController extends Controller
         return new DirectorResource($director);
     }
 
-    /**     @OA\GET(
-      *         path="/api/director-accept/{uuid}",
+    /**     @OA\PUT(
+      *         path="/api/director-accept",
       *         operationId="accept_director",
       *         tags={"Director"},
-      *         summary="Accept director",
+      *         summary="Accept director (not working on swagger)",
       *         description="Accept director",
       *             @OA\Parameter(
       *                 name="uuid",
@@ -861,6 +844,50 @@ class DirectorController extends Controller
       *                 ),
       *                 required=true
       *             ),
+      *             @OA\RequestBody(
+      *                 @OA\JsonContent(),
+      *                 @OA\MediaType(
+      *                     mediaType="multipart/form-data",
+      *                     @OA\Schema(
+      *                         required={},
+      *                         @OA\Property(property="first_name", type="text"),
+      *                         @OA\Property(property="middle_name", type="text"),
+      *                         @OA\Property(property="last_name", type="text"),
+      *                         @OA\Property(property="date_of_birth", type="string", format="date"),
+      *                         @OA\Property(property="ssn_cpn", type="text"),
+      *                         @OA\Property(property="company_association", type="text"),
+      *                         @OA\Property(property="phone_type", type="text"),
+      *                         @OA\Property(property="phone_number", type="text"),
+      *
+      *                         @OA\Property(property="address[dl_address][street_address]", type="text"),
+      *                         @OA\Property(property="address[dl_address][address_line_2]", type="text"),
+      *                         @OA\Property(property="address[dl_address][city]", type="text"),
+      *                         @OA\Property(property="address[dl_address][state]", type="text"),
+      *                         @OA\Property(property="address[dl_address][postal]", type="text"),
+      *                         @OA\Property(property="address[dl_address][country]", type="text"),
+      *
+      *                         @OA\Property(property="address[credit_home_address][street_address]", type="text"),
+      *                         @OA\Property(property="address[credit_home_address][address_line_2]", type="text"),
+      *                         @OA\Property(property="address[credit_home_address][city]", type="text"),
+      *                         @OA\Property(property="address[credit_home_address][state]", type="text"),
+      *                         @OA\Property(property="address[credit_home_address][postal]", type="text"),
+      *                         @OA\Property(property="address[credit_home_address][country]", type="text"),
+      *
+      *                         @OA\Property(property="emails[hosting_uuid]", type="text"),
+      *                         @OA\Property(property="emails[email]", type="text"),
+      *                         @OA\Property(property="emails[password]", type="text"),
+      *                         @OA\Property(property="emails[phone]", type="text"),
+      *
+      *                         @OA\Property(property="files[dl_upload][front][]", type="file", format="binary"),
+      *                         @OA\Property(property="files[dl_upload][back][]", type="file", format="binary"),
+      *                         @OA\Property(property="files[ssn_upload][front][]", type="file", format="binary"),
+      *                         @OA\Property(property="files[ssn_upload][back][]", type="file", format="binary"),
+      *                         @OA\Property(property="files[cpn_docs_upload][]", type="file", format="binary"),
+      *
+      *                         @OA\Property(property="files_to_delete[]", type="text")
+      *                     ),
+      *                 ),
+      *             ),
       *             @OA\Response(
       *                 response=200,
       *                 description="Successfully",
@@ -868,18 +895,132 @@ class DirectorController extends Controller
       *             ),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=401, description="Not Authorized"),
-      *             @OA\Response(response=403, description="Not Authenticate"),
+      *             @OA\Response(response=403, description="Not Authentificated"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *             @OA\Response(response=409, description="Conflict"),
       *     )
       */
     public function accept(Request $request, $uuid)
     {
-        
+        // permission
+        if ($request->role_alias!=Config::get('common.role.headquarters')){
+            return response()->json([
+                'data' => 'Not Authentificated',
+            ], 403);
+        }
+    
+        $validated = $request->validate([
+            'first_name' => 'required|string',
+            'middle_name' => '',
+            'last_name' => 'required|string',
+            'date_of_birth' => 'required|date',
+            'ssn_cpn' => 'required|string',
+            'company_association' => 'required|string',
+            'phone_type' => 'required|string',
+            'phone_number' => 'required|string',
+            // addresses
+            'address.dl_address.street_address' => 'required|string',
+            'address.dl_address.address_line_2' => 'required|string',
+            'address.dl_address.city' => 'required|string',
+            'address.dl_address.state' => 'required|string',
+            'address.dl_address.postal' => 'required|string',
+            'address.dl_address.country' => 'required|string',
 
+            'address.credit_home_address.street_address' => 'required|string',
+            'address.credit_home_address.address_line_2' => 'required|string',
+            'address.credit_home_address.city' => 'required|string',
+            'address.credit_home_address.state' => 'required|string',
+            'address.credit_home_address.postal' => 'required|string',
+            'address.credit_home_address.country' => 'required|string',
+            // emails
+            'emails.hosting_uuid' => 'required|string',
+            'emails.email' => 'required|string',
+            'emails.password' => 'required|string',
+            'emails.phone' => 'required|string',
+            // files to delete by uuid
+            'files_to_delete' => 'array',
+        ]);
+
+        $director = Director::where('uuid', $uuid)->first();
+
+        $check = [];
+
+        $tmpCheck = $this->emailService->check_ignore($validated['emails'], $director->uuid);
+        $check = array_merge($check, $tmpCheck);
+
+        $tmpCheck = $this->addressService->check_ignore($validated['address']['dl_address'], $director->uuid, 'dl_address');
+        $check = array_merge($check, $tmpCheck);
+        $tmpCheck = $this->addressService->check_ignore($validated['address']['credit_home_address'], $director->uuid, 'credit_home_address');
+        $check = array_merge($check, $tmpCheck);
+
+        $tmpCheck = $this->directorService->check_ignore($validated, $director->uuid);
+        $check = array_merge($check, $tmpCheck);
+        
+        // exsist
+        if (count($check)>0){
+            return response()->json([
+                'data' => $check,
+            ], 409);
+        }
+
+        $director = $this->directorService->accept($director, $validated, $request->user_uuid);
+
+        $email = Email::where('entity_uuid', $director['uuid']);
+        $email->update($validated['emails']);
+
+        $address = Address::where('entity_uuid', $director['uuid'])
+                                    ->where('address_parent', 'dl_address');
+        $address->update($validated['address']['dl_address']);
+        $address = Address::where('entity_uuid', $director['uuid'])
+                                    ->where('address_parent', 'credit_home_address');
+        $address->update($validated['address']['credit_home_address']);
+
+        #region Files delete (if exsist)
+
+        if (isset($validated['files_to_delete'])){
+            foreach ($validated['files_to_delete'] AS $key => $value):
+                if ($value!=null){
+                    $file = File::find($value);
+                    $file->update(['status'=> 0]);
+                }
+            endforeach;
+        }
+
+        #endregion
+
+        #region Files upload (if exsist)
+
+        if ($request->has('files')){
+            $files = $request->file('files');
+            foreach ($files AS $key => $value):
+                foreach ($value AS $key1 => $value1):
+                    if ($key1=='back' || $key1=='front'){
+                        $tmp_file = $value1;
+                        $file_parent = $key . '/' . $key1;
+                    }else{
+                        $tmp_file = $value;
+                        $file_parent = $key;
+                    }
+                    foreach ($tmp_file AS $key2 => $value2):
+                        $file = new File();
+                        $file->user_uuid = $validated['user_uuid'];
+                        $file->entity_uuid = $director['uuid'];
+                        $file->file_name = Str::uuid()->toString() . '.' . $value2->getClientOriginalExtension();
+                        $file->file_path = $file->file_name;
+                        $file->file_parent = $file_parent;
+                        $value2->move('uploads', $file->file_path);
+                        $file->save();
+                    endforeach;
+                endforeach;
+            endforeach;
+        }
+
+        #endregion
+
+        return new DirectorResource($director);
     }
 
-    /**     @OA\POST(
+    /**     @OA\PUT(
       *         path="/api/director-reject/{uuid}",
       *         operationId="reject_director",
       *         tags={"Director"},

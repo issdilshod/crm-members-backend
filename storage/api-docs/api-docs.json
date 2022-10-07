@@ -1426,9 +1426,6 @@
                             "schema": {
                                 "required": [],
                                 "properties": {
-                                    "user_uuid": {
-                                        "type": "text"
-                                    },
                                     "first_name": {
                                         "type": "text"
                                     },
@@ -2018,9 +2015,6 @@
                             "schema": {
                                 "required": [],
                                 "properties": {
-                                    "user_uuid": {
-                                        "type": "text"
-                                    },
                                     "first_name": {
                                         "type": "text"
                                     },
@@ -2153,12 +2147,12 @@
                 }
             }
         },
-        "/api/director-accept/{uuid}": {
-            "get": {
+        "/api/director-accept": {
+            "put": {
                 "tags": [
                     "Director"
                 ],
-                "summary": "Accept director",
+                "summary": "Accept director (not working on swagger)",
                 "description": "Accept director",
                 "operationId": "accept_director",
                 "parameters": [
@@ -2173,6 +2167,117 @@
                         }
                     }
                 ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [],
+                                "properties": {
+                                    "first_name": {
+                                        "type": "text"
+                                    },
+                                    "middle_name": {
+                                        "type": "text"
+                                    },
+                                    "last_name": {
+                                        "type": "text"
+                                    },
+                                    "date_of_birth": {
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "ssn_cpn": {
+                                        "type": "text"
+                                    },
+                                    "company_association": {
+                                        "type": "text"
+                                    },
+                                    "phone_type": {
+                                        "type": "text"
+                                    },
+                                    "phone_number": {
+                                        "type": "text"
+                                    },
+                                    "address[dl_address][street_address]": {
+                                        "type": "text"
+                                    },
+                                    "address[dl_address][address_line_2]": {
+                                        "type": "text"
+                                    },
+                                    "address[dl_address][city]": {
+                                        "type": "text"
+                                    },
+                                    "address[dl_address][state]": {
+                                        "type": "text"
+                                    },
+                                    "address[dl_address][postal]": {
+                                        "type": "text"
+                                    },
+                                    "address[dl_address][country]": {
+                                        "type": "text"
+                                    },
+                                    "address[credit_home_address][street_address]": {
+                                        "type": "text"
+                                    },
+                                    "address[credit_home_address][address_line_2]": {
+                                        "type": "text"
+                                    },
+                                    "address[credit_home_address][city]": {
+                                        "type": "text"
+                                    },
+                                    "address[credit_home_address][state]": {
+                                        "type": "text"
+                                    },
+                                    "address[credit_home_address][postal]": {
+                                        "type": "text"
+                                    },
+                                    "address[credit_home_address][country]": {
+                                        "type": "text"
+                                    },
+                                    "emails[hosting_uuid]": {
+                                        "type": "text"
+                                    },
+                                    "emails[email]": {
+                                        "type": "text"
+                                    },
+                                    "emails[password]": {
+                                        "type": "text"
+                                    },
+                                    "emails[phone]": {
+                                        "type": "text"
+                                    },
+                                    "files[dl_upload][front][]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "files[dl_upload][back][]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "files[ssn_upload][front][]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "files[ssn_upload][back][]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "files[cpn_docs_upload][]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "files_to_delete[]": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "Successfully",
@@ -2189,7 +2294,7 @@
                         "description": "Not Authorized"
                     },
                     "403": {
-                        "description": "Not Authenticate"
+                        "description": "Not Authentificated"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -2201,7 +2306,7 @@
             }
         },
         "/api/director-reject/{uuid}": {
-            "post": {
+            "put": {
                 "tags": [
                     "Director"
                 ],

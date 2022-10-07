@@ -204,6 +204,18 @@ class DirectorService {
     public function update(Director $director, $entity)
     {
         $director->update($entity);
+
+        Activity::create([
+            'user_uuid' => $entity['user_uuid'],
+            'entity_uuid' => $director['uuid'],
+            'device' => UserSystemInfoHelper::device_full(),
+            'ip' => UserSystemInfoHelper::ip(),
+            'description' => Config::get('common.activity.director.update'),
+            'changes' => json_encode($entity),
+            'action_code' => Config::get('common.activity.codes.director_update'),
+            'status' => Config::get('common.status.actived')
+        ]);
+
         return $director;
     }
 
@@ -267,9 +279,33 @@ class DirectorService {
         return $director;
     }
 
-    public function accept($entity)
+    public function accept(Director $director, $entity, $user_uuid)
     {
-        
+        $entity['status'] = Config::get('common.status.actived');
+        $director->update($entity);
+
+        // log
+        Activity::create([
+            'user_uuid' => $user_uuid,
+            'entity_uuid' => $director['uuid'],
+            'device' => UserSystemInfoHelper::device_full(),
+            'ip' => UserSystemInfoHelper::ip(),
+            'description' => Config::get('common.activity.director.accept'),
+            'changes' => json_encode($entity),
+            'action_code' => Config::get('common.activity.codes.director_accept'),
+            'status' => Config::get('common.status.actived')
+        ]);
+
+        // notification
+        $user = User::where('uuid', $director['user_uuid'])->first();
+
+        $this->notificationService->telegram([
+            'telegram' => $user['telegram'],
+            'msg' => Config::get('common.activity.director.accept') . "\n" .
+                        '[link to view](' .env('APP_FRONTEND_ENDPOINT').'/directors/'.$director['uuid']. ')'
+        ]);
+
+        return $director;
     }
 
     public function reject($uuid, $user_uuid)
