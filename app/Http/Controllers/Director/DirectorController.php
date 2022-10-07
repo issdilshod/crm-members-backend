@@ -596,9 +596,9 @@ class DirectorController extends Controller
     public function pending(Request $request)
     {
         $validated = $request->validate([
-            'first_name' => '',
+            'first_name' => 'required',
             'middle_name' => '',
-            'last_name' => '',
+            'last_name' => 'required',
             'date_of_birth' => '',
             'ssn_cpn' => '',
             'company_association' => '',
@@ -619,7 +619,7 @@ class DirectorController extends Controller
             'address.credit_home_address.postal' => '',
             'address.credit_home_address.country' => '',
             // emails
-            'emails.hosting_uuid' => '',
+            'emails.hosting_uuid' => 'required',
             'emails.email' => '',
             'emails.password' => '',
             'emails.phone' => '',
@@ -750,11 +750,11 @@ class DirectorController extends Controller
     public function pending_update(Request $request, $uuid)
     {
         $director = Director::where('uuid', $uuid)->get();
-        
+
         $validated = $request->validate([
-            'first_name' => '',
+            'first_name' => 'required',
             'middle_name' => '',
-            'last_name' => '',
+            'last_name' => 'required',
             'date_of_birth' => '',
             'ssn_cpn' => '',
             'company_association' => '',
@@ -775,7 +775,7 @@ class DirectorController extends Controller
             'address.credit_home_address.postal' => '',
             'address.credit_home_address.country' => '',
             // emails
-            'emails.hosting_uuid' => '',
+            'emails.hosting_uuid' => 'required',
             'emails.email' => '',
             'emails.password' => '',
             'emails.phone' => '',
