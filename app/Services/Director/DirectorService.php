@@ -5,20 +5,24 @@ namespace App\Services\Director;
 use App\Helpers\UserSystemInfoHelper;
 use App\Http\Resources\Director\DirectorResource;
 use App\Models\Account\Activity;
+use App\Models\Account\User;
 use App\Models\Director\Director;
 use App\Services\Helper\AddressService;
 use App\Services\Helper\EmailService;
+use App\Services\Helper\NotificationService;
 use Illuminate\Support\Facades\Config;
 
 class DirectorService {
 
     private $addressService;
     private $emailService;
+    private $notificationService;
 
     public function __construct()
     {
         $this->addressService = new AddressService();
         $this->emailService = new EmailService();
+        $this->notificationService = new NotificationService();
     }
 
     public function all()
@@ -227,10 +231,11 @@ class DirectorService {
         $director = Director::where('uuid', $uuid)
                                 ->where('status', Config::get('common.status.pending'))
                                 ->first();
-                                
+
         $entity['status'] = Config::get('common.status.pending');
         $director->update($entity);
 
+        // logs
         Activity::create([
             'user_uuid' => $entity['user_uuid'],
             'entity_uuid' => $director['uuid'],
@@ -241,6 +246,14 @@ class DirectorService {
             'action_code' => Config::get('common.activity.codes.director_pending_update'),
             'status' => Config::get('common.status.actived')
         ]);
+
+        // notification
+        $user = User::where('uuid', $entity['user_uuid'])->first();
+
+        $msg = '*' . $user->first_name . ' ' . $user->last_name . "*\n" .
+                Config::get('common.activity.director.pending_update') . "\n" .
+                '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/directors/'.$director['uuid'].')';
+        $this->notificationService->telegram_to_headqurters($msg);
 
         return $director;
     }
