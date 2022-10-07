@@ -37,8 +37,10 @@ Route::get('api/director', [DirectorController::class, 'index'])->middleware('au
 Route::get('api/director/{uuid}', [DirectorController::class, 'show'])->middleware('auth.custom');
 Route::post('api/director', [DirectorController::class, 'store'])->middleware('auth.custom');
 Route::put('api/director/{uuid}', [DirectorController::class, 'update'])->middleware('auth.custom');
-Route::get('api/director/{uuid}', [DirectorController::class, 'destroy'])->middleware('auth.custom');
+Route::delete('api/director/{uuid}', [DirectorController::class, 'destroy'])->middleware('auth.custom');
 Route::get('api/director-search/{search}', [DirectorController::class, 'search'])->middleware('auth.custom');
+Route::post('api/director-pending', [DirectorController::class, 'pending'])->middleware('auth.custom');
+Route::put('api/director-pending-update/{uuid}', [DirectorController::class, 'pending_update'])->middleware('auth.custom');
 
 Route::resource('api/company', CompanyController::class)->middleware('auth.custom');
 Route::get('api/company-search/{search}', [CompanyController::class, 'search'])->middleware('auth.custom');

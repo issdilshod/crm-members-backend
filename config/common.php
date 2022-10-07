@@ -31,7 +31,8 @@ return [
         'director' => [
             'add' => 'Director added',
             'update' => 'Director updated',
-            'pending' => 'Director approval request sent'
+            'pending' => 'Director approval request sent',
+            'pending_update' => 'Director update approval request sent'
         ],
         'company' => [
             'add' => 'Company added',
@@ -48,6 +49,7 @@ return [
             'user_invite_via_email' => 7,
             'user_invite_via_telegram' => 8,
             'director_pending' => 9,
+            'director_pending_update' => 10,
         ],
 
         'codes_link' => [
@@ -59,7 +61,8 @@ return [
             6 => 'companies',
             7 => 'departments',
             8 => 'departments',
-            9 => 'directors'
+            9 => 'directors',
+            10 => 'directors'
         ],
     ],
 

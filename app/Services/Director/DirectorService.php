@@ -21,7 +21,6 @@ class DirectorService {
         $this->emailService = new EmailService();
     }
 
-
     public function all()
     {
         $directors = Director::orderBy('created_at', 'DESC')
@@ -58,7 +57,7 @@ class DirectorService {
         $check = [];
 
         // Names
-        $check['tmp'] = Director::select('first_name', 'middle_name', 'last_name')
+        /*$check['tmp'] = Director::select('first_name', 'middle_name', 'last_name')
                                     ->where('status', Config::get('common.status.actived'))
                                     ->where('first_name', $entity['first_name'])
                                     ->where('middle_name', (isset($entity['middle_name'])?$entity['middle_name']:''))
@@ -70,10 +69,10 @@ class DirectorService {
                 $check[$key] = Config::get('common.errors.exsist');
             endforeach;
         }
-        unset($check['tmp']);
+        unset($check['tmp']);*/
 
         // Ssn
-        $check['ssn'] = Director::select('ssn_cpn')
+        $check['tmp'] = Director::select('ssn_cpn')
                                     ->where('status', Config::get('common.status.actived'))
                                     ->where('ssn_cpn', $entity['ssn_cpn'])
                                     ->first();
@@ -120,7 +119,7 @@ class DirectorService {
         $check = [];
 
         // Names
-        $check['tmp'] = Director::select('first_name', 'middle_name', 'last_name')
+        /*$check['tmp'] = Director::select('first_name', 'middle_name', 'last_name')
                                     ->where('uuid', '!=', $ignore_uuid)
                                     ->where('status', Config::get('common.status.actived'))
                                     ->where('first_name', $entity['first_name'])
@@ -133,7 +132,7 @@ class DirectorService {
                 $check[$key] = Config::get('common.errors.exsist');
             endforeach;
         }
-        unset($check['tmp']);
+        unset($check['tmp']);*/
 
         // Ssn
         $check['tmp'] = Director::select('ssn_cpn')
@@ -217,6 +216,25 @@ class DirectorService {
             'description' => Config::get('common.activity.director.pending'),
             'changes' => json_encode($entity),
             'action_code' => Config::get('common.activity.codes.director_pending'),
+            'status' => Config::get('common.status.actived')
+        ]);
+
+        return $director;
+    }
+
+    public function pending_update(Director $director, $entity)
+    {
+        $entity['status'] = Config::get('common.status.pending');
+        $director->update($entity);
+
+        Activity::create([
+            'user_uuid' => $entity['user_uuid'],
+            'entity_uuid' => $director['uuid'],
+            'device' => UserSystemInfoHelper::device_full(),
+            'ip' => UserSystemInfoHelper::ip(),
+            'description' => Config::get('common.activity.director.pending_update'),
+            'changes' => json_encode($entity),
+            'action_code' => Config::get('common.activity.codes.director_pending_update'),
             'status' => Config::get('common.status.actived')
         ]);
 
