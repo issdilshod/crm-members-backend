@@ -488,8 +488,15 @@ class DirectorController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function destroy(Director $director)
+    public function destroy(Request $request, Director $director)
     {
+        // permission
+        if ($request->role_alias!=Config::get('common.role.headquarters')){
+            return response()->json([
+                'data' => 'Not Authentificated',
+            ], 403);
+        }
+
         $this->directorService->delete($director);
     }
 
@@ -740,8 +747,10 @@ class DirectorController extends Controller
       *             @OA\Response(response=409, description="Conflict"),
       *     )
       */
-    public function pending_update(Request $request, Director $director)
+    public function pending_update(Request $request, $uuid)
     {
+        $director = Director::where('uuid', $uuid)->get();
+        
         $validated = $request->validate([
             'first_name' => '',
             'middle_name' => '',
