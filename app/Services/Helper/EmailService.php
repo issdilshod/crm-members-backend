@@ -46,8 +46,41 @@ class EmailService {
         return $check;
     }
 
+    public function check_ignore($entity, $ignore_uuid)
+    {
+        $check = [];
+
+        $check['hosting_email'] = Email::select('hosting_uuid', 'email')
+                                        ->where('entity_uuid', '!=', $ignore_uuid)
+                                        ->where('status', Config::get('common.status.actived'))
+                                        ->where('hosting_uuid', $entity['hosting_uuid'])
+                                        ->where('email', $entity['email'])->first();
+        if ($check['hosting_email']!=null){
+            $check['hosting_email'] = $check['hosting_email']->toArray();
+            foreach ($check['hosting_email'] AS $key => $value):
+                $check['emails.'.$key] = Config::get('common.errors.exsist');
+            endforeach;
+        }
+        unset($check['hosting_email']);
+
+        // Phone
+        $check['phone'] = Email::select('phone')
+                                ->where('entity_uuid', '!=', $ignore_uuid)
+                                ->where('status', Config::get('common.status.actived'))
+                                ->where('phone', $entity['phone'])->first();
+        if ($check['phone']!=null){
+            $check['phone'] = $check['phone']->toArray();
+            foreach ($check['phone'] AS $key => $value):
+                $check['emails.'.$key] = Config::get('common.errors.exsist');
+            endforeach;
+        }
+        unset($check['phone']);
+
+        return $check;
+    }
+
     public function delete_by_entity($uuid)
     {
-        Email::where('entity_uuid', $uuid)->update('status', Config::get('common.status.deleted'));
+        Email::where('entity_uuid', $uuid)->update(['status' => Config::get('common.status.deleted')]);
     }
 }

@@ -52,7 +52,7 @@ class DirectorService {
         return DirectorResource::collection($directors);
     }
 
-    public function check($entity, $type = 'c')
+    public function check($entity)
     {
 
         $check = [];
@@ -103,6 +103,72 @@ class DirectorService {
                                         ->where('status', Config::get('common.status.actived'))
                                         ->where('phone_number', $entity['phone_number'])
                                         ->first();
+        if ($check['phone_number']!=null){
+            $check['phone_number'] = $check['phone_number']->toArray();
+            foreach ($check['phone_number'] AS $key => $value):
+                $check[$key] = Config::get('common.errors.exsist');
+            endforeach;
+        }
+        unset($check['phone_number']);
+
+        return $check;
+    }
+
+    public function check_ignore($entity, $ignore_uuid)
+    {
+
+        $check = [];
+
+        // Names
+        $check['names'] = Director::select('first_name', 'middle_name', 'last_name')
+                                        ->where('uuid', '!=', $ignore_uuid)
+                                        ->where('status', Config::get('common.status.actived'))
+                                        ->where('first_name', $entity['first_name'])
+                                        ->where('middle_name', (isset($entity['middle_name'])?$entity['middle_name']:''))
+                                        ->where('last_name', $entity['last_name'])
+                                        ->first();
+        if ($check['names']!=null){
+            $check['names'] = $check['names']->toArray();
+            foreach ($check['names'] AS $key => $value):
+                $check[$key] = Config::get('common.errors.exsist');
+            endforeach;
+        }
+        unset($check['names']);
+
+        // Ssn
+        $check['ssn'] = Director::select('ssn_cpn')
+                                    ->where('uuid', '!=', $ignore_uuid)
+                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('ssn_cpn', $entity['ssn_cpn'])
+                                    ->first();
+        if ($check['ssn']!=null){
+            $check['ssn'] = $check['ssn']->toArray();
+            foreach ($check['ssn'] AS $key => $value):
+                $check[$key] = Config::get('common.errors.exsist');
+            endforeach;
+        }
+        unset($check['ssn']);
+
+        // Company 
+        $check['company_association'] = Director::select('company_association')
+                                                ->where('uuid', '!=', $ignore_uuid)
+                                                ->where('status', Config::get('common.status.actived'))
+                                                ->where('company_association', $entity['company_association'])
+                                                ->first();
+        if ($check['company_association']!=null){
+            $check['company_association'] = $check['company_association']->toArray();
+            foreach ($check['company_association'] AS $key => $value):
+                $check[$key] = Config::get('common.errors.exsist');
+            endforeach;
+        }
+        unset($check['company_association']);
+
+        // Phone
+        $check['phone_number'] = Director::select('phone_number')
+                                            ->where('uuid', '!=', $ignore_uuid)
+                                            ->where('status', Config::get('common.status.actived'))
+                                            ->where('phone_number', $entity['phone_number'])
+                                            ->first();
         if ($check['phone_number']!=null){
             $check['phone_number'] = $check['phone_number']->toArray();
             foreach ($check['phone_number'] AS $key => $value):

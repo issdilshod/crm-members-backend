@@ -116,7 +116,6 @@ class DirectorController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'user_uuid' => 'string',
             'first_name' => 'required|string',
             'middle_name' => '',
             'last_name' => 'required|string',
@@ -169,6 +168,7 @@ class DirectorController extends Controller
             ], 409);
         }
 
+        // permission
         if ($validated['role_alias']==Config::get('common.role.headquarters')){ // headquarters
             $director = $this->directorService->create($validated);
         }else{
@@ -326,199 +326,73 @@ class DirectorController extends Controller
       */
     public function update(Request $request, Director $director)
     {
-        #region Validate
-
         $validated = $request->validate([
-            'user_uuid' => 'string',
-            'first_name' => 'string',
+            'user_uuid' => 'required|string',
+            'first_name' => 'required|string',
             'middle_name' => '',
-            'last_name' => 'string',
-            'date_of_birth' => 'date',
-            'ssn_cpn' => 'string',
-            'company_association' => 'string',
-            'phone_type' => 'string',
-            'phone_number' => 'string',
+            'last_name' => 'required|string',
+            'date_of_birth' => 'required|date',
+            'ssn_cpn' => 'required|string',
+            'company_association' => 'required|string',
+            'phone_type' => 'required|string',
+            'phone_number' => 'required|string',
             // addresses
-            'address.dl_address.street_address' => 'string',
-            'address.dl_address.address_line_2' => 'string',
-            'address.dl_address.city' => 'string',
-            'address.dl_address.state' => 'string',
-            'address.dl_address.postal' => 'string',
-            'address.dl_address.country' => 'string',
+            'address.dl_address.street_address' => 'required|string',
+            'address.dl_address.address_line_2' => 'required|string',
+            'address.dl_address.city' => 'required|string',
+            'address.dl_address.state' => 'required|string',
+            'address.dl_address.postal' => 'required|string',
+            'address.dl_address.country' => 'required|string',
 
-            'address.credit_home_address.street_address' => 'string',
-            'address.credit_home_address.address_line_2' => 'string',
-            'address.credit_home_address.city' => 'string',
-            'address.credit_home_address.state' => 'string',
-            'address.credit_home_address.postal' => 'string',
-            'address.credit_home_address.country' => 'string',
+            'address.credit_home_address.street_address' => 'required|string',
+            'address.credit_home_address.address_line_2' => 'required|string',
+            'address.credit_home_address.city' => 'required|string',
+            'address.credit_home_address.state' => 'required|string',
+            'address.credit_home_address.postal' => 'required|string',
+            'address.credit_home_address.country' => 'required|string',
             // emails
-            'emails.hosting_uuid' => 'string',
-            'emails.email' => 'string',
-            'emails.password' => 'string',
-            'emails.phone' => 'string',
+            'emails.hosting_uuid' => 'required|string',
+            'emails.email' => 'required|string',
+            'emails.password' => 'required|string',
+            'emails.phone' => 'required|string',
             // files to delete by uuid
             'files_to_delete' => 'array',
 
-            'user_uuid' => 'string'
+            'user_uuid' => 'string',
+            'role_alias' => 'string'
         ]);
-
-        #endregion
-
-        #region Check exsist data
 
         $check = [];
 
-        #region Check Email
+        $tmpCheck = $this->emailService->check_ignore($validated['emails'], $director->uuid);
+        $check = array_merge($check, $tmpCheck);
 
-        if (isset($validated['emails'])){
-            // Hosting & Email
-            $check['hosting_email'] = Email::select('hosting_uuid', 'email')
-                                                ->where('entity_uuid', '!=', $director['uuid'])
-                                                ->where('status', Config::get('common.status.actived'))
-                                                ->where('hosting_uuid', $validated['emails']['hosting_uuid'])
-                                                ->where('email', $validated['emails']['email'])->first();
-            if ($check['hosting_email']!=null){
-                $check['hosting_email'] = $check['hosting_email']->toArray();
-                foreach ($check['hosting_email'] AS $key => $value):
-                    $check['emails.'.$key] = '~Exsist~';
-                endforeach;
-            }
-            unset($check['hosting_email']);
+        $tmpCheck = $this->addressService->check_ignore($validated['address']['dl_address'], $director->uuid, 'dl_address');
+        $check = array_merge($check, $tmpCheck);
+        $tmpCheck = $this->addressService->check_ignore($validated['address']['credit_home_address'], $director->uuid, 'credit_home_address');
+        $check = array_merge($check, $tmpCheck);
 
-            // Phone
-            $check['phone'] = Email::select('phone')
-                                        ->where('entity_uuid', '!=', $director['uuid'])
-                                        ->where('status', Config::get('common.status.actived'))
-                                        ->where('phone', $validated['emails']['phone'])->first();
-            if ($check['phone']!=null){
-                $check['phone'] = $check['phone']->toArray();
-                foreach ($check['phone'] AS $key => $value):
-                    $check['emails.'.$key] = '~Exsist~';
-                endforeach;
-            }
-            unset($check['phone']);
-        }
-
-        #endregion
-
-        #region Check Address
-
-        if (isset($validated['address'])){
-            foreach ($validated['address'] AS $key => $value):
-                $check[$key] = Address::select('street_address', 'address_line_2', 'city', 'postal')
-                                        ->where('entity_uuid', '!=', $director['uuid'])
-                                        ->where('status', Config::get('common.status.actived'))
-                                        ->where(function($query) use ($value){
-                                                $query->where('street_address', $value['street_address'])
-                                                        ->where('address_line_2', $value['address_line_2'])
-                                                        ->where('city', $value['city'])
-                                                        ->where('postal', $value['postal']);
-                                        })->first();
-                if ($check[$key]!=null){
-                    $check[$key] = $check[$key]->toArray();
-                    foreach ($check[$key] AS $key1 => $value1):
-                        $check['address.'.$key.'.'.$key1] = '~Exsist~';
-                    endforeach;
-                }
-                unset($check[$key]);                
-            endforeach;
-        }
-
-        #endregion
-
-        #region Check Director
-
-        // Names
-        $check['names'] = Director::select('first_name', 'middle_name', 'last_name')
-                                        ->where('uuid', '!=', $director['uuid'])
-                                        ->where('status', Config::get('common.status.actived'))
-                                        ->where('first_name', $validated['first_name'])
-                                        ->where('middle_name', (isset($validated['middle_name'])?$validated['middle_name']:''))
-                                        ->where('last_name', $validated['last_name'])
-                                        ->first();
-        if ($check['names']!=null){
-            $check['names'] = $check['names']->toArray();
-            foreach ($check['names'] AS $key => $value):
-                $check[$key] = '~Exsist~';
-            endforeach;
-        }
-        unset($check['names']);
-
-        // Ssn
-        $check['ssn'] = Director::select('ssn_cpn')
-                                        ->where('uuid', '!=', $director['uuid'])
-                                        ->where('status', Config::get('common.status.actived'))
-                                        ->where('ssn_cpn', $validated['ssn_cpn'])
-                                        ->first();
-        if ($check['ssn']!=null){
-            $check['ssn'] = $check['ssn']->toArray();
-            foreach ($check['ssn'] AS $key => $value):
-                $check[$key] = '~Exsist~';
-            endforeach;
-        }
-        unset($check['ssn']);
-
-        // Company 
-        $check['company_association'] = Director::select('company_association')
-                                        ->where('uuid', '!=', $director['uuid'])
-                                        ->where('status', Config::get('common.status.actived'))
-                                        ->where('company_association', $validated['company_association'])
-                                        ->first();
-        if ($check['company_association']!=null){
-            $check['company_association'] = $check['company_association']->toArray();
-            foreach ($check['company_association'] AS $key => $value):
-                $check[$key] = '~Exsist~';
-            endforeach;
-        }
-        unset($check['company_association']);
-
-        // Phone
-        $check['phone_number'] = Director::select('phone_number')
-                                        ->where('uuid', '!=', $director['uuid'])
-                                        ->where('status', Config::get('common.status.actived'))
-                                        ->where('phone_number', $validated['phone_number'])
-                                        ->first();
-        if ($check['phone_number']!=null){
-            $check['phone_number'] = $check['phone_number']->toArray();
-            foreach ($check['phone_number'] AS $key => $value):
-                $check[$key] = '~Exsist~';
-            endforeach;
-        }
-        unset($check['phone_number']);
-
-        #endregion
-
+        $tmpCheck = $this->directorService->check_ignore($validated, $director->uuid);
+        $check = array_merge($check, $tmpCheck);
+        
+        // exsist
         if (count($check)>0){
             return response()->json([
-                        'data' => $check,
-                    ], 409);
+                'data' => $check,
+            ], 409);
         }
-
-        #endregion
 
         $director = $this->directorService->update($director, $validated);
 
-        #region Email update (if exsist)
+        $email = Email::where('entity_uuid', $director['uuid']);
+        $email->update($validated['emails']);
 
-        if (isset($validated['emails'])){
-            $email = Email::where('entity_uuid', $director['uuid']);
-            $email->update($validated['emails']);
-        }
-
-        #endregion
-
-        #region Address update (if exsist)
-
-        if (isset($validated['address'])){
-            foreach ($validated['address'] AS $key => $value){
-                $address = Address::where('entity_uuid', $director['uuid'])
-                                    ->where('address_parent', $key);
-                $address->update($validated['address'][$key]);
-            }
-        }
-
-        #endregion
+        $address = Address::where('entity_uuid', $director['uuid'])
+                                    ->where('address_parent', 'dl_address');
+        $address->update($validated['address']['dl_address']);
+        $address = Address::where('entity_uuid', $director['uuid'])
+                                    ->where('address_parent', 'credit_home_address');
+        $address->update($validated['address']['credit_home_address']);
 
         #region Files delete (if exsist)
 
