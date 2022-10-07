@@ -749,8 +749,6 @@ class DirectorController extends Controller
       */
     public function pending_update(Request $request, $uuid)
     {
-        $director = Director::where('uuid', $uuid)->get();
-
         $validated = $request->validate([
             'first_name' => 'required',
             'middle_name' => '',
@@ -784,7 +782,7 @@ class DirectorController extends Controller
             'role_alias' => 'string'
         ]);
 
-        $director = $this->directorService->update($director, $validated);
+        $director = $this->directorService->pending_update($uuid, $validated);
 
         if (isset($validated['emails'])){
             $email = Email::where('entity_uuid', $director['uuid']);   

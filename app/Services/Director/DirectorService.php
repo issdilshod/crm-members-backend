@@ -222,8 +222,12 @@ class DirectorService {
         return $director;
     }
 
-    public function pending_update(Director $director, $entity)
+    public function pending_update($uuid, $entity)
     {
+        $director = Director::where('uuid', $uuid)
+                                ->where('status', Config::get('common.status.pending'))
+                                ->first();
+                                
         $entity['status'] = Config::get('common.status.pending');
         $director->update($entity);
 
