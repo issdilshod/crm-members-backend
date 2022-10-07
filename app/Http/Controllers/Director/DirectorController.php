@@ -675,7 +675,7 @@ class DirectorController extends Controller
     }
 
     /**     @OA\PUT(
-      *         path="/api/director-pending-update",
+      *         path="/api/director-pending-update/{uuid}",
       *         operationId="pending_update_director",
       *         tags={"Director"},
       *         summary="Pending update director (not working on swagger)",
@@ -843,6 +843,80 @@ class DirectorController extends Controller
         #endregion
 
         return new DirectorResource($director);
+    }
+
+    /**     @OA\GET(
+      *         path="/api/director-accept/{uuid}",
+      *         operationId="accept_director",
+      *         tags={"Director"},
+      *         summary="Accept director",
+      *         description="Accept director",
+      *             @OA\Parameter(
+      *                 name="uuid",
+      *                 in="path",
+      *                 description="director uuid",
+      *                 @OA\Schema(
+      *                     type="string",
+      *                     format="uuid"
+      *                 ),
+      *                 required=true
+      *             ),
+      *             @OA\Response(
+      *                 response=200,
+      *                 description="Successfully",
+      *                 @OA\JsonContent()
+      *             ),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Not Authorized"),
+      *             @OA\Response(response=403, description="Not Authenticate"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *             @OA\Response(response=409, description="Conflict"),
+      *     )
+      */
+    public function accept(Request $request, $uuid)
+    {
+        
+
+    }
+
+    /**     @OA\POST(
+      *         path="/api/director-reject/{uuid}",
+      *         operationId="reject_director",
+      *         tags={"Director"},
+      *         summary="Reject director",
+      *         description="Reject director",
+      *             @OA\Parameter(
+      *                 name="uuid",
+      *                 in="path",
+      *                 description="director uuid",
+      *                 @OA\Schema(
+      *                     type="string",
+      *                     format="uuid"
+      *                 ),
+      *                 required=true
+      *             ),
+      *             @OA\Response(
+      *                 response=200,
+      *                 description="Successfully",
+      *                 @OA\JsonContent()
+      *             ),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Not Authorized"),
+      *             @OA\Response(response=403, description="Not Authenticate"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *             @OA\Response(response=409, description="Conflict"),
+      *     )
+      */
+    public function reject(Request $request, $uuid)
+    {
+        // permission
+        if ($request->role_alias!=Config::get('common.role.headquarters')){
+            return response()->json([
+                'data' => 'Not Authentificated',
+            ], 403);
+        }
+
+        $this->directorService->reject($uuid, $request->user_uuid);
     }
 
 }

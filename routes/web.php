@@ -41,6 +41,8 @@ Route::delete('api/director/{uuid}', [DirectorController::class, 'destroy'])->mi
 Route::get('api/director-search/{search}', [DirectorController::class, 'search'])->middleware('auth.custom');
 Route::post('api/director-pending', [DirectorController::class, 'pending'])->middleware('auth.custom');
 Route::put('api/director-pending-update/{uuid}', [DirectorController::class, 'pending_update'])->middleware('auth.custom');
+Route::get('api/director-accept/{uuid}', [DirectorController::class, 'accept'])->middleware('auth.custom');
+Route::post('api/director-reject/{uuid}', [DirectorController::class, 'reject'])->middleware('auth.custom');
 
 Route::resource('api/company', CompanyController::class)->middleware('auth.custom');
 Route::get('api/company-search/{search}', [CompanyController::class, 'search'])->middleware('auth.custom');

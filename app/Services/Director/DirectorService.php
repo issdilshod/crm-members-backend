@@ -269,12 +269,35 @@ class DirectorService {
 
     public function accept($entity)
     {
-        //
+        
     }
 
-    public function reject($entity)
+    public function reject($uuid, $user_uuid)
     {
-        //
+        $director = Director::where('uuid', $uuid)->first();
+        $director->update(['status' => Config::get('common.status.rejected')]);
+
+        // logs
+        Activity::create([
+            'user_uuid' => $user_uuid,
+            'entity_uuid' => $director['uuid'],
+            'device' => UserSystemInfoHelper::device_full(),
+            'ip' => UserSystemInfoHelper::ip(),
+            'description' => Config::get('common.activity.director.reject'),
+            'changes' => '',
+            'action_code' => Config::get('common.activity.codes.director_reject'),
+            'status' => Config::get('common.status.actived')
+        ]);
+
+        // notification
+        $user = User::where('uuid', $director['user_uuid'])->first();
+
+        $this->notificationService->telegram([
+            'telegram' => $user['telegram'],
+            'msg' => Config::get('common.activity.director.reject') . "\n" .
+                        '[link to change](' .env('APP_FRONTEND_ENDPOINT').'/directors/'.$director['uuid']. ')'
+        ]);
+
     }
 
 }
