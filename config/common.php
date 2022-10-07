@@ -9,6 +9,18 @@ return [
         'finance' => 'finance',
     ],
 
+    'permission' => [
+        'director' => [
+            'store' => 'director_store',
+            'update' => 'director_update',
+            'delete' => 'director_delete',
+            'save' => 'director_save', // pending add/update
+            'accept' => 'director_accept',
+            'reject' => 'director_reject',
+            'view' => 'director_view'
+        ],
+    ],
+
     'status' => [
         'deleted' => 0,
         'actived' => 1,
