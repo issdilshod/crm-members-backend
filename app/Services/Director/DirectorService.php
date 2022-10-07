@@ -212,6 +212,7 @@ class DirectorService {
         $entity['status'] = Config::get('common.status.pending');
         $director = Director::create($entity);
 
+        // logs
         Activity::create([
             'user_uuid' => $entity['user_uuid'],
             'entity_uuid' => $director['uuid'],
@@ -222,6 +223,14 @@ class DirectorService {
             'action_code' => Config::get('common.activity.codes.director_pending'),
             'status' => Config::get('common.status.actived')
         ]);
+
+        // notification
+        $user = User::where('uuid', $entity['user_uuid'])->first();
+
+        $msg = '*' . $user->first_name . ' ' . $user->last_name . "*\n" .
+                Config::get('common.activity.director.pending') . "\n" .
+                '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/directors/'.$director['uuid'].')';
+        $this->notificationService->telegram_to_headqurters($msg);
 
         return $director;
     }
