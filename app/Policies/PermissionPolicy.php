@@ -3,9 +3,9 @@
 namespace App\Policies;
 
 use App\Models\Account\Permission;
+use App\Models\Account\RolePermission;
 use App\Models\Account\User;
 use App\Models\Account\UserPermission;
-use App\Models\RolePermission;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Support\Facades\Config;
 
