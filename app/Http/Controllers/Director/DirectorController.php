@@ -8,6 +8,7 @@ use App\Models\Director\Director;
 use App\Models\Helper\Address;
 use App\Models\Helper\Email;
 use App\Models\Helper\File;
+use App\Policies\PermissionPolicy;
 use App\Services\Director\DirectorService;
 use App\Services\Helper\AddressService;
 use App\Services\Helper\EmailService;
@@ -45,8 +46,13 @@ class DirectorController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function index()
+    public function index(Request $request)
     {
+        // permission
+        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.view'))){
+            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        }
+
         $directors = $this->directorService->all();
         return $directors;
     }
@@ -115,10 +121,8 @@ class DirectorController extends Controller
     public function store(Request $request)
     {
         // permission
-        if ($request->role_alias!=Config::get('common.role.headquarters')){ // not headquarters 403
-            return response()->json([
-                'data' => 'Not Authentificated',
-            ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.store'))){
+            return response()->json([ 'data' => 'Not Authorized' ], 403);
         }
 
         $validated = $request->validate([
@@ -328,10 +332,8 @@ class DirectorController extends Controller
     public function update(Request $request, Director $director)
     {
         // permission
-        if ($request->role_alias!=Config::get('common.role.headquarters')){ // not headquarters 403
-            return response()->json([
-                'data' => 'Not Authentificated',
-            ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.update'))){
+            return response()->json([ 'data' => 'Not Authorized' ], 403);
         }
 
         $validated = $request->validate([
@@ -475,10 +477,8 @@ class DirectorController extends Controller
     public function destroy(Request $request, Director $director)
     {
         // permission
-        if ($request->role_alias!=Config::get('common.role.headquarters')){
-            return response()->json([
-                'data' => 'Not Authentificated',
-            ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.delete'))){
+            return response()->json([ 'data' => 'Not Authorized' ], 403);
         }
 
         $this->directorService->delete($director);
@@ -510,8 +510,13 @@ class DirectorController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function search($search)
+    public function search(Request $request, $search)
     {
+        // permission
+        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.view'))){
+            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        }
+
         $directors = $this->directorService->search($search);
         return $directors;
     }
@@ -579,6 +584,11 @@ class DirectorController extends Controller
       */
     public function pending(Request $request)
     {
+        // permission
+        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.save'))){
+            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        }
+
         $validated = $request->validate([
             'first_name' => 'required',
             'middle_name' => '',
@@ -732,6 +742,11 @@ class DirectorController extends Controller
       */
     public function pending_update(Request $request, $uuid)
     {
+        // permission
+        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.save'))){
+            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        }
+
         $validated = $request->validate([
             'first_name' => 'required',
             'middle_name' => '',
@@ -903,10 +918,8 @@ class DirectorController extends Controller
     public function accept(Request $request, $uuid)
     {
         // permission
-        if ($request->role_alias!=Config::get('common.role.headquarters')){
-            return response()->json([
-                'data' => 'Not Authentificated',
-            ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.accept'))){
+            return response()->json([ 'data' => 'Not Authorized' ], 403);
         }
     
         $validated = $request->validate([
@@ -1051,10 +1064,8 @@ class DirectorController extends Controller
     public function reject(Request $request, $uuid)
     {
         // permission
-        if ($request->role_alias!=Config::get('common.role.headquarters')){
-            return response()->json([
-                'data' => 'Not Authentificated',
-            ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.reject'))){
+            return response()->json([ 'data' => 'Not Authorized' ], 403);
         }
 
         $this->directorService->reject($uuid, $request->user_uuid);

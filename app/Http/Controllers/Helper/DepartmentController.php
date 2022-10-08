@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Helper\DepartmentResource;
 use App\Models\Helper\Department;
+use App\Policies\PermissionPolicy;
 use App\Services\Helper\DepartmentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -37,28 +38,13 @@ class DepartmentController extends Controller
       */
     public function index(Request $request)
     {
-        $role = $request->validate([
-            'role_alias' => 'string'
-        ]);
-
-        if ($role['role_alias']!=Config::get('common.role.headquarters')){
-            return response()->json([
-                'msg' => 'You don\'t have permission to do this action.'
-            ], 403);
+        // permission
+        if (!PermissionPolicy::permission($request->user_uuid)){
+            return response()->json([ 'data' => 'Not Authorized' ], 403);
         }
 
         $departments = $this->departmentService->getDepartments();
-        
         return DepartmentResource::collection($departments);
-    }
-
-    public function store(Request $request)
-    {
-        /*$validated = $request->validate([
-            'department_name' => 'required|string|max:100',
-        ]);
-        // TODO: Incrementing number sort
-        return new DepartmentResource(Department::create($validated));*/
     }
 
     /**     @OA\GET(
@@ -118,8 +104,13 @@ class DepartmentController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function destroy(Department $department, DepartmentService $departmentService)
+    public function destroy(Request $request, Department $department)
     {
-        $departmentService->deleteDepartment($department);
+        // permission
+        if (!PermissionPolicy::permission($request->user_uuid)){
+            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        }
+
+        $this->departmentService->deleteDepartment($department);
     }
 }

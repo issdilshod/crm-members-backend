@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Helper;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Helper\RoleResource;
+use App\Policies\PermissionPolicy;
 use App\Services\Helper\RoleService;
 use Illuminate\Http\Request;
 
@@ -25,18 +26,14 @@ class RoleController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function index(RoleService $roleService)
+    public function index(Request $request, RoleService $roleService)
     {
-        $roles = $roleService->getRoles();
-        
-        return RoleResource::collection($roles);
-    }
+        // permission
+        if (!PermissionPolicy::permission($request->user_uuid)){
+            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        }
 
-    public function store(Request $request)
-    {
-        /*$validated = $request->validate([
-            'role_name' => 'required|string|max:100'
-        ]);
-        return new RoleResource(Role::create($validated));*/
+        $roles = $roleService->getRoles();
+        return RoleResource::collection($roles);
     }
 }
