@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Director;
 
+use App\Http\Resources\Account\ActivityResource;
 use App\Http\Resources\Helper\AddressResource;
 use App\Http\Resources\Helper\EmailResource;
 use App\Http\Resources\Helper\FileResource;
@@ -30,7 +31,9 @@ class DirectorResource extends JsonResource
             'phone_number' => $this->phone_number,
             'uploaded_files' => FileResource::collection($this->files),
             'emails' => EmailResource::collection($this->emails),
-            'address' => AddressResource::collection($this->addresses)
+            'address' => AddressResource::collection($this->addresses),
+            'last_activity' => new ActivityResource($this->last_activity),
+            'status' => $this->status
         ];
     }
 }
