@@ -1075,4 +1075,23 @@ class DirectorController extends Controller
         $this->directorService->reject($uuid, $request->user_uuid);
     }
 
+    /**     @OA\GET(
+      *         path="/api/director-user",
+      *         operationId="list_director_by_user",
+      *         tags={"Director"},
+      *         summary="List of director by user",
+      *         description="List of director by user",
+      *             @OA\Response(response=200, description="Successfully"),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=403, description="Not Authorized"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
+    public function by_user(Request $request)
+    {
+        $directors = $this->directorService->by_user($request->user_uuid);
+        return $directors;
+    }
+
 }

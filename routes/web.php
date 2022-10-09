@@ -51,6 +51,7 @@ Route::post('api/director-pending', [DirectorController::class, 'pending'])->mid
 Route::put('api/director-pending-update/{uuid}', [DirectorController::class, 'pending_update'])->middleware('auth.custom');
 Route::put('api/director-accept/{uuid}', [DirectorController::class, 'accept'])->middleware('auth.custom');
 Route::put('api/director-reject/{uuid}', [DirectorController::class, 'reject'])->middleware('auth.custom');
+Route::get('api/director-user/', [DirectorController::class, 'by_user'])->middleware('auth.custom');
 
 // companies
 Route::resource('api/company', CompanyController::class)->middleware('auth.custom');

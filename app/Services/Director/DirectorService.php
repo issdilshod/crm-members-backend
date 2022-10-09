@@ -3,10 +3,12 @@
 namespace App\Services\Director;
 
 use App\Helpers\UserSystemInfoHelper;
+use App\Http\Resources\Director\DirectorPendingResource;
 use App\Http\Resources\Director\DirectorResource;
 use App\Models\Account\Activity;
 use App\Models\Account\User;
 use App\Models\Director\Director;
+use App\Services\Account\ActivityService;
 use App\Services\Helper\AddressService;
 use App\Services\Helper\EmailService;
 use App\Services\Helper\NotificationService;
@@ -17,12 +19,14 @@ class DirectorService {
     private $addressService;
     private $emailService;
     private $notificationService;
+    private $activityService;
 
     public function __construct()
     {
         $this->addressService = new AddressService();
         $this->emailService = new EmailService();
         $this->notificationService = new NotificationService();
+        $this->activityService = new ActivityService();
     }
 
     public function all()
@@ -31,6 +35,20 @@ class DirectorService {
                             ->where('status', Config::get('common.status.actived'))
                             ->paginate(20);
         return DirectorResource::collection($directors);
+    }
+
+    public function by_user($user_uuid)
+    {
+        $directors = Director::orderBy('updated_at', 'DESC')
+                                ->where('status', '!=', Config::get('common.status.deleted'))
+                                ->where('user_uuid', $user_uuid)
+                                ->paginate(20);
+
+        foreach($directors AS $key => $value):
+            $directors[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
+        endforeach;
+
+        return DirectorPendingResource::collection($directors);
     }
 
     public function one(Director $director)

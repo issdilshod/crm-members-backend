@@ -2595,6 +2595,33 @@
                 }
             }
         },
+        "/api/director-user": {
+            "get": {
+                "tags": [
+                    "Director"
+                ],
+                "summary": "List of director by user",
+                "description": "List of director by user",
+                "operationId": "list_director_by_user",
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Authorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
         "/api/department": {
             "get": {
                 "tags": [

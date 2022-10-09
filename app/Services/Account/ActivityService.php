@@ -37,6 +37,16 @@ class ActivityService {
         return ActivityResource::collection($activities);         
     }
 
+    public function by_entity_last($uuid)
+    {
+        $activity = Activity::orderBy('updated_at', 'DESC')
+                                ->where('entity_uuid', $uuid)
+                                ->where('status', Config::get('common.status.actived'))
+                                ->first();
+        $activity = $this->setLink($activity);
+        return new ActivityResource($activity);
+    }
+
     public function one(Activity $activity)
     {
         $activity = new ActivityResource($activity);
@@ -51,6 +61,16 @@ class ActivityService {
     public function delete(Activity $activity)
     {
         $activity->update(['status' => Config::get('common.status.deleted')]);
+    }
+
+    private function setLink($activity)
+    {
+        $link = '';
+        if ($activity['action_code']!=0){
+            $link = '/' . Config::get('common.activity.codes_link.'.$activity['action_code']) . '/' . $activity['entity_uuid'];
+        }
+        $activity['link'] = $link;
+        return $activity;
     }
 
     /**

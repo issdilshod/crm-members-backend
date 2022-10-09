@@ -2,12 +2,15 @@
 
 namespace App\Models\Director;
 
+use App\Models\Account\Activity;
 use App\Models\Helper\Address;
 use App\Models\Helper\Email;
 use App\Models\Helper\File;
+use App\Services\Account\ActivityService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\TraitUuid;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Config;
 
 class Director extends Model
@@ -20,16 +23,16 @@ class Director extends Model
 
     public function files(){
         return $this->hasMany(File::class, 'entity_uuid', 'uuid')
-                                                            ->where('status', Config::get('common.status.actived'));
+                        ->where('status', Config::get('common.status.actived'));
     }
 
     public function emails(){
         return $this->hasMany(Email::class, 'entity_uuid', 'uuid')
-                                                        ->where('status', Config::get('common.status.actived'));
+                        ->where('status', Config::get('common.status.actived'));
     }
 
     public function addresses(){
         return $this->hasMany(Address::class, 'entity_uuid', 'uuid')
-                                                            ->where('status', Config::get('common.status.actived'));
+                        ->where('status', Config::get('common.status.actived'));
     }
 }
