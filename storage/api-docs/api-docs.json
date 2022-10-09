@@ -853,7 +853,10 @@
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Authorized"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -1039,7 +1042,10 @@
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Authorized"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -1241,7 +1247,10 @@
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Authorized"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -1285,7 +1294,10 @@
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Authorized"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -1324,7 +1336,10 @@
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Authorized"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -1365,10 +1380,226 @@
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Authorized"
                     },
                     "404": {
                         "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/comapny-pending": {
+            "post": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Pending company (not working on swagger)",
+                "description": "Pending company",
+                "operationId": "pending_company",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [],
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Authorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    }
+                }
+            }
+        },
+        "/api/company-pending-update/{uuid}": {
+            "put": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Pending update company (not working on swagger)",
+                "description": "Pending update company",
+                "operationId": "pending_update_company",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "company uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": []
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Authorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    }
+                }
+            }
+        },
+        "/api/company-accept": {
+            "put": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Accept company (not working on swagger)",
+                "description": "Accept company",
+                "operationId": "accept_company",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "company uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": []
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Authorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    }
+                }
+            }
+        },
+        "/api/company-reject/{uuid}": {
+            "put": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Reject company",
+                "description": "Reject company",
+                "operationId": "reject_company",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "company uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Authorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
                     }
                 }
             }
@@ -1394,7 +1625,10 @@
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Authorized"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -1544,10 +1778,10 @@
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Not Authorized"
+                        "description": "Not Authenticated"
                     },
                     "403": {
-                        "description": "Not Authentificated"
+                        "description": "Not Authorized"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -1711,10 +1945,10 @@
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Not Authorized"
+                        "description": "Not Authenticated"
                     },
                     "403": {
-                        "description": "Not Authentificated"
+                        "description": "Not Authorized"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -1758,7 +1992,10 @@
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Authorized"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -1797,7 +2034,10 @@
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Authorized"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -1838,7 +2078,10 @@
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Authorized"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -1975,10 +2218,10 @@
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Not Authorized"
+                        "description": "Not Authenticated"
                     },
                     "403": {
-                        "description": "Not Authenticate"
+                        "description": "Not Authorized"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -2133,10 +2376,10 @@
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Not Authorized"
+                        "description": "Not Authenticated"
                     },
                     "403": {
-                        "description": "Not Authenticate"
+                        "description": "Not Authorized"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -2291,10 +2534,10 @@
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Not Authorized"
+                        "description": "Not Authenticated"
                     },
                     "403": {
-                        "description": "Not Authentificated"
+                        "description": "Not Authorized"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -2338,10 +2581,10 @@
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Not Authorized"
+                        "description": "Not Authenticated"
                     },
                     "403": {
-                        "description": "Not Authenticate"
+                        "description": "Not Authorized"
                     },
                     "404": {
                         "description": "Resource Not Found"
