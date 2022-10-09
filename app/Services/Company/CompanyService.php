@@ -7,14 +7,25 @@ use App\Http\Resources\Company\CompanyResource;
 use App\Models\Account\Activity;
 use App\Models\Account\User;
 use App\Models\Company\Company;
+use App\Services\Helper\AddressService;
+use App\Services\Helper\BankAccountService;
+use App\Services\Helper\EmailService;
+use App\Services\Helper\NotificationService;
 use Illuminate\Support\Facades\Config;
 
 class CompanyService {
 
+    private $addressService;
+    private $emailService;
+    private $bankAccountService;
+    private $notificationService;
 
     public function __construct()
     {
-        //
+        $this->addressService = new AddressService();
+        $this->emailService = new EmailService();
+        $this->notificationService = new NotificationService();
+        $this->bankAccountService = new BankAccountService();
     }
 
     public function all()
@@ -34,6 +45,9 @@ class CompanyService {
     public function delete(Company $company)
     {
         $company->update(['status' => Config::get('common.status.deleted')]);
+        $this->addressService->delete_by_entity($company->uuid);
+        $this->emailService->delete_by_entity($company->uuid);
+        $this->bankAccountService->delete_by_entity($company->uuid);
     }
 
     public function search($value)
