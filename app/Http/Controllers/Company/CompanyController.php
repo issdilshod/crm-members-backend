@@ -690,7 +690,7 @@ class CompanyController extends Controller
             'address.country' => '',
 
             // emails
-            'emails.hosting_uuid' => '',
+            'emails.hosting_uuid' => 'required',
             'emails.email' => '',
             'emails.password' => '',
             'emails.phone' => '',
@@ -837,7 +837,7 @@ class CompanyController extends Controller
             'address.country' => '',
 
             // emails
-            'emails.hosting_uuid' => '',
+            'emails.hosting_uuid' => 'required|string',
             'emails.email' => '',
             'emails.password' => '',
             'emails.phone' => '',
