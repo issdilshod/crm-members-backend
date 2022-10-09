@@ -19,6 +19,15 @@ return [
             'reject' => 'director_reject',
             'view' => 'director_view'
         ],
+        'company' => [
+            'store' => 'company_store',
+            'update' => 'company_update',
+            'delete' => 'company_delete',
+            'save' => 'company_save', // pending add/update
+            'accept' => 'company_accept',
+            'reject' => 'company_reject',
+            'view' => 'company_view'
+        ],
     ],
 
     'status' => [
@@ -51,6 +60,10 @@ return [
         'company' => [
             'add' => 'Company added',
             'updated' => 'Company updated',
+            'pending' => 'Company approval request sent',
+            'pending_update' => 'Company update approval request sent',
+            'reject' => 'Company rejected',
+            'accept' => 'Company accepted',
         ],
 
         'codes' => [
@@ -66,6 +79,10 @@ return [
             'director_pending_update' => 10,
             'director_reject' => 11,
             'director_accept' => 12,
+            'company_pending' => 13,
+            'company_pending_update' => 14,
+            'company_reject' => 15,
+            'company_accept' => 16,
         ],
 
         'codes_link' => [
@@ -81,6 +98,10 @@ return [
             10 => 'directors',
             11 => 'directors',
             12 => 'directors',
+            13 => 'directors',
+            14 => 'directors',
+            15 => 'directors',
+            16 => 'directors',
         ],
     ],
 
