@@ -1094,4 +1094,48 @@ class DirectorController extends Controller
         return $directors;
     }
 
+    /**     @OA\GET(
+      *         path="/api/director-permission",
+      *         operationId="director_permission",
+      *         tags={"Director"},
+      *         summary="Get director permission of user",
+      *         description="Get director permission of user",
+      *             @OA\Response(response=200, description="Successfully"),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
+    public function permission(Request $request)
+    {
+        $permissions = [];
+
+        // permission
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.view'))){
+            $permissions[] = Config::get('common.permission.director.view');
+        }
+
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.store'))){
+            $permissions[] = Config::get('common.permission.director.store');
+        }
+
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.update'))){
+            $permissions[] = Config::get('common.permission.director.update');
+        }
+
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.delete'))){
+            $permissions[] = Config::get('common.permission.director.delete');
+        }
+
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.accept'))){
+            $permissions[] = Config::get('common.permission.director.accept');
+        }
+
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.reject'))){
+            $permissions[] = Config::get('common.permission.director.reject');
+        }
+
+        return $permissions;
+    }
+
 }
