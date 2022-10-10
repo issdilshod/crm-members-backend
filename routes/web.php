@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Account\ActivityController;
 use App\Http\Controllers\Account\InviteUserController;
+use App\Http\Controllers\Account\PermissionController;
 use App\Http\Controllers\Account\TelegramUserController;
 use App\Http\Controllers\Account\UserController;
 use App\Http\Controllers\Company\CompanyController;
@@ -33,8 +34,13 @@ Route::get('api/get_me', [UserController::class, 'get_me'])->middleware('auth.cu
 Route::post('api/invite-via-email', [InviteUserController::class, 'via_email'])->middleware('auth.custom');
 Route::post('api/invite-via-telegram', [InviteUserController::class, 'via_telegram'])->middleware('auth.custom');
 Route::post('api/invite-check-token', [InviteUserController::class, 'check_token']);
-Route::post('api/invite-register', [UserController::class, 'invite_register']);
-Route::get('api/pending-users', [UserController::class, 'pending_users']);
+Route::post('api/invite-register', [UserController::class, 'invite_register'])->middleware('auth.custom');
+Route::get('api/pending-users', [UserController::class, 'pending_users'])->middleware('auth.custom');
+
+// account
+Route::get('api/permission', [PermissionController::class, 'index'])->middleware('auth.custom');
+Route::get('api/permission-department/{uuid}', [PermissionController::class, 'by_department'])->middleware('auth.custom');
+Route::get('api/permission-user/{uuid}', [PermissionController::class, 'by_user'])->middleware('auth.custom');
 
 // activities
 Route::get('api/activity', [ActivityController::class, 'index'])->middleware('auth.custom');

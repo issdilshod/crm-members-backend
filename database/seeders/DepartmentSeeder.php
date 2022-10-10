@@ -17,9 +17,31 @@ class DepartmentSeeder extends Seeder
     {
         $departments = Department::where('status', 1)->first();
         if ($departments==null){ // if database empty
-            $department_list = ['Headquarters', 'Production', 'Admin', 'Design', 'Finance'];
+            $department_list = [
+                [
+                    'department_name' => 'Headquarters',
+                    'alias' => 'headquarters'
+                ],
+                [
+                    'department_name' => 'Production',
+                    'alias' => 'production'
+                ],
+                [
+                    'department_name' => 'Admin',
+                    'alias' => 'admin'
+                ],
+                [
+                    'department_name' => 'Design',
+                    'alias' => 'design'
+                ],
+                [
+                    'department_name' => 'Finance',
+                    'alias' => 'finance'
+                ],
+            ];
             foreach($department_list AS $key => $value):
-                Department::create(['department_name' => $value, 'sort' => ($key+1)]);
+                $value['sort'] = ($key+1);
+                Department::create($value);
             endforeach;
         }
     }
