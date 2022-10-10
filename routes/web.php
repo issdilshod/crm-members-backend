@@ -65,6 +65,7 @@ Route::post('api/company-pending', [CompanyController::class, 'pending'])->middl
 Route::put('api/company-pending-update/{uuid}', [CompanyController::class, 'pending_update'])->middleware('auth.custom');
 Route::put('api/company-accept/{uuid}', [CompanyController::class, 'accept'])->middleware('auth.custom');
 Route::put('api/company-reject/{uuid}', [CompanyController::class, 'reject'])->middleware('auth.custom');
+Route::get('api/company-user/', [CompanyController::class, 'by_user'])->middleware('auth.custom');
 
 // tasks
 Route::resource('api/task', TaskController::class)->middleware('auth.custom');

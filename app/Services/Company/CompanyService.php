@@ -3,10 +3,12 @@
 namespace App\Services\Company;
 
 use App\Helpers\UserSystemInfoHelper;
+use App\Http\Resources\Company\CompanyPendingResource;
 use App\Http\Resources\Company\CompanyResource;
 use App\Models\Account\Activity;
 use App\Models\Account\User;
 use App\Models\Company\Company;
+use App\Services\Account\ActivityService;
 use App\Services\Helper\AddressService;
 use App\Services\Helper\BankAccountService;
 use App\Services\Helper\EmailService;
@@ -19,6 +21,7 @@ class CompanyService {
     private $emailService;
     private $bankAccountService;
     private $notificationService;
+    private $activityService;
 
     public function __construct()
     {
@@ -26,6 +29,7 @@ class CompanyService {
         $this->emailService = new EmailService();
         $this->notificationService = new NotificationService();
         $this->bankAccountService = new BankAccountService();
+        $this->activityService = new ActivityService();
     }
 
     public function all()
@@ -34,6 +38,20 @@ class CompanyService {
                                 ->where('status', Config::get('common.status.actived'))
                                 ->paginate(20);
         return CompanyResource::collection($companies);
+    }
+
+    public function by_user($user_uuid)
+    {
+        $companies = Company::orderBy('updated_at', 'DESC')
+                                ->where('status', '!=', Config::get('common.status.deleted'))
+                                ->where('user_uuid', $user_uuid)
+                                ->paginate(20);
+
+        foreach($companies AS $key => $value):
+            $companies[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
+        endforeach;
+
+        return CompanyPendingResource::collection($companies);
     }
 
     public function one(Company $company)

@@ -1177,4 +1177,23 @@ class CompanyController extends Controller
 
         $this->companyService->reject($uuid, $request->user_uuid);
     }
+
+    /**     @OA\GET(
+      *         path="/api/company-user",
+      *         operationId="list_company_by_user",
+      *         tags={"Company"},
+      *         summary="List of company by user",
+      *         description="List of company by user",
+      *             @OA\Response(response=200, description="Successfully"),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=403, description="Not Authorized"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
+    public function by_user(Request $request)
+    {
+        $companies = $this->companyService->by_user($request->user_uuid);
+        return $companies;
+    }
 }

@@ -1604,6 +1604,33 @@
                 }
             }
         },
+        "/api/company-user": {
+            "get": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "List of company by user",
+                "description": "List of company by user",
+                "operationId": "list_company_by_user",
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Authorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
         "/api/director": {
             "get": {
                 "tags": [
