@@ -1631,6 +1631,30 @@
                 }
             }
         },
+        "/api/company-permission": {
+            "get": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Get company permission of user",
+                "description": "Get company permission of user",
+                "operationId": "company_permission",
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
         "/api/director": {
             "get": {
                 "tags": [
@@ -2649,6 +2673,30 @@
                 }
             }
         },
+        "/api/director-permission": {
+            "get": {
+                "tags": [
+                    "Director"
+                ],
+                "summary": "Get director permission of user",
+                "description": "Get director permission of user",
+                "operationId": "director_permission",
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
         "/api/department": {
             "get": {
                 "tags": [
@@ -2961,6 +3009,33 @@
                     },
                     "401": {
                         "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/pending": {
+            "get": {
+                "tags": [
+                    "Helper"
+                ],
+                "summary": "List of pending by user",
+                "description": "List of pending by user",
+                "operationId": "list_pending_by_user",
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Authorized"
                     },
                     "404": {
                         "description": "Resource Not Found"

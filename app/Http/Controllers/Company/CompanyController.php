@@ -1196,4 +1196,52 @@ class CompanyController extends Controller
         $companies = $this->companyService->by_user($request->user_uuid);
         return $companies;
     }
+
+    /**     @OA\GET(
+      *         path="/api/company-permission",
+      *         operationId="company_permission",
+      *         tags={"Company"},
+      *         summary="Get company permission of user",
+      *         description="Get company permission of user",
+      *             @OA\Response(response=200, description="Successfully"),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
+    public function permission(Request $request)
+    {
+        $permissions = [];
+
+        // permission
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.view'))){
+            $permissions[] = Config::get('common.permission.company.view');
+        }
+
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.store'))){
+            $permissions[] = Config::get('common.permission.company.store');
+        }
+
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.update'))){
+            $permissions[] = Config::get('common.permission.company.update');
+        }
+
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.save'))){
+            $permissions[] = Config::get('common.permission.company.save');
+        }
+
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.delete'))){
+            $permissions[] = Config::get('common.permission.company.delete');
+        }
+
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.accept'))){
+            $permissions[] = Config::get('common.permission.company.accept');
+        }
+
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.reject'))){
+            $permissions[] = Config::get('common.permission.company.reject');
+        }
+
+        return $permissions;
+    }
 }
