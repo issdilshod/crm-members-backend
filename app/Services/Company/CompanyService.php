@@ -357,7 +357,6 @@ class CompanyService {
     public function pending_update($uuid, $entity)
     {
         $company = Company::where('uuid', $uuid)
-                            ->where('status', Config::get('common.status.pending'))
                             ->first();
 
         $entity['status'] = Config::get('common.status.pending');
