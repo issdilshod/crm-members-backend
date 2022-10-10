@@ -123,4 +123,120 @@ class PermissionController extends Controller
                                     
         return UserPermissionResource::collection($permissions);
     }
+
+    /**     @OA\POST(
+      *         path="/api/permission-department",
+      *         operationId="alter_department_permission",
+      *         tags={"Account"},
+      *         summary="Alter department permission",
+      *         description="Alter department permission",
+      *             @OA\RequestBody(
+      *                 @OA\JsonContent(),
+      *                 @OA\MediaType(
+      *                     mediaType="multipart/form-data",
+      *                     @OA\Schema(
+      *                         type="object",
+      *                         required={"permission_uuid", "department_uuid", "status"},
+      *                         @OA\Property(property="permission_uuid", type="text"),
+      *                         @OA\Property(property="department_uuid", type="text"),
+      *                         @OA\Property(property="status", type="text")
+      *                     ),
+      *                 ),
+      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=403, description="Not Autorized"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
+    public function department(Request $request)
+    {
+        // permission
+        if (!PermissionPolicy::permission($request->user_uuid)){
+            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        }
+
+        $validated = $request->validate([
+            'department_uuid' => 'required',
+            'permission_uuid' => 'required',
+            'status' => 'required'
+        ]);
+
+        $department = Department::where('status', Config::get('common.status.actived'))
+                                    ->where('uuid', $validated['department_uuid'])
+                                    ->first();
+
+        $role = Role::where('status', Config::get('common.status.actived'))
+                        ->where('alias', $department->alias)
+                        ->first();
+
+        $validated['role_uuid'] = $role->uuid;
+
+        $permission = RolePermission::where('role_uuid', $validated['role_uuid'])
+                                        ->where('permission_uuid', $validated['permission_uuid'])
+                                        ->first();
+        if ($permission==null){
+            RolePermission::create($validated);
+        }else{
+            if ($validated['status']){
+                $permission->update(['status' => Config::get('common.status.actived')]);
+            }else{
+                $permission->update(['status' => Config::get('common.status.deleted')]); 
+            }
+        }
+    }
+
+    /**     @OA\POST(
+      *         path="/api/permission-user",
+      *         operationId="alter_user_permission",
+      *         tags={"Account"},
+      *         summary="Alter user permission",
+      *         description="Alter user permission",
+      *             @OA\RequestBody(
+      *                 @OA\JsonContent(),
+      *                 @OA\MediaType(
+      *                     mediaType="multipart/form-data",
+      *                     @OA\Schema(
+      *                         type="object",
+      *                         required={"permission_uuid", "user_uuid", "status"},
+      *                         @OA\Property(property="user_uuid", type="text"),
+      *                         @OA\Property(property="department_uuid", type="text"),
+      *                         @OA\Property(property="status", type="text")
+      *                     ),
+      *                 ),
+      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=403, description="Not Autorized"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
+    public function user(Request $request)
+    {
+        // permission
+        if (!PermissionPolicy::permission($request->user_uuid)){
+            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        }
+
+        $validated = $request->validate([
+            'user_uuid' => 'required',
+            'permission_uuid' => 'required',
+            'status' => 'required'
+        ]);
+
+        $permission = UserPermission::where('user_uuid', $validated['user_uuid'])
+                                        ->where('permission_uuid', $validated['permission_uuid'])
+                                        ->first();
+        if ($permission==null){
+            UserPermission::create($validated);
+        }else{
+            if ($validated['status']){
+                $permission->update(['status' => Config::get('common.status.actived')]);
+            }else{
+                $permission->update(['status' => Config::get('common.status.deleted')]); 
+            }
+        }
+    }
 }

@@ -448,6 +448,116 @@
                 }
             }
         },
+        "/api/permission-department": {
+            "post": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Alter department permission",
+                "description": "Alter department permission",
+                "operationId": "alter_department_permission",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "permission_uuid",
+                                    "department_uuid",
+                                    "status"
+                                ],
+                                "properties": {
+                                    "permission_uuid": {
+                                        "type": "text"
+                                    },
+                                    "department_uuid": {
+                                        "type": "text"
+                                    },
+                                    "status": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/permission-user": {
+            "post": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Alter user permission",
+                "description": "Alter user permission",
+                "operationId": "alter_user_permission",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "permission_uuid",
+                                    "user_uuid",
+                                    "status"
+                                ],
+                                "properties": {
+                                    "user_uuid": {
+                                        "type": "text"
+                                    },
+                                    "department_uuid": {
+                                        "type": "text"
+                                    },
+                                    "status": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
         "/api/user": {
             "get": {
                 "tags": [

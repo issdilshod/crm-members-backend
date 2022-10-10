@@ -41,6 +41,8 @@ Route::get('api/pending-users', [UserController::class, 'pending_users'])->middl
 Route::get('api/permission', [PermissionController::class, 'index'])->middleware('auth.custom');
 Route::get('api/permission-department/{uuid}', [PermissionController::class, 'by_department'])->middleware('auth.custom');
 Route::get('api/permission-user/{uuid}', [PermissionController::class, 'by_user'])->middleware('auth.custom');
+Route::post('api/permission-department', [PermissionController::class, 'department'])->middleware('auth.custom');
+Route::post('api/permission-user', [PermissionController::class, 'user'])->middleware('auth.custom');
 
 // activities
 Route::get('api/activity', [ActivityController::class, 'index'])->middleware('auth.custom');
