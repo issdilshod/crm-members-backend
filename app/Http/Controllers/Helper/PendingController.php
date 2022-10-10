@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Helper;
 
 use App\Http\Controllers\Controller;
+use App\Policies\PermissionPolicy;
 use App\Services\Company\CompanyService;
 use App\Services\Director\DirectorService;
 use Illuminate\Http\Request;
@@ -34,8 +35,15 @@ class PendingController extends Controller
       */
     public function by_user(Request $request)
     {
-        $directors = $this->directorService->by_user($request->user_uuid);
-        $companies = $this->companyService->by_user($request->user_uuid);
+        // if headquarters then show all
+        if (!PermissionPolicy::permission($request->user_uuid)){
+            $directors = $this->directorService->by_user($request->user_uuid);
+            $companies = $this->companyService->by_user($request->user_uuid);
+            return ['directors' => $directors, 'companies' => $companies];
+        }
+
+        $directors = $this->directorService->headquarters();
+        $companies = $this->companyService->headquarters();
         return ['directors' => $directors, 'companies' => $companies];
     }
 

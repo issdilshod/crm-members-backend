@@ -54,6 +54,19 @@ class CompanyService {
         return CompanyPendingResource::collection($companies);
     }
 
+    public function headquarters()
+    {
+        $companies = Company::orderBy('updated_at', 'DESC')
+                                ->where('status', '!=', Config::get('common.status.deleted'))
+                                ->paginate(20);
+
+        foreach($companies AS $key => $value):
+            $companies[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
+        endforeach;
+
+        return CompanyPendingResource::collection($companies);
+    }
+
     public function one(Company $company)
     {
         $company = new CompanyResource($company);

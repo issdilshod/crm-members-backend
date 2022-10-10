@@ -51,6 +51,19 @@ class DirectorService {
         return DirectorPendingResource::collection($directors);
     }
 
+    public function headquarters()
+    {
+        $directors = Director::orderBy('updated_at', 'DESC')
+                                ->where('status', '!=', Config::get('common.status.deleted'))
+                                ->paginate(20);
+
+        foreach($directors AS $key => $value):
+            $directors[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
+        endforeach;
+
+        return DirectorPendingResource::collection($directors);
+    }
+
     public function one(Director $director)
     {
         $director = new DirectorResource($director);
