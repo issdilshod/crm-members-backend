@@ -1123,6 +1123,10 @@ class DirectorController extends Controller
             $permissions[] = Config::get('common.permission.director.update');
         }
 
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.save'))){
+            $permissions[] = Config::get('common.permission.director.save');
+        }
+
         if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.delete'))){
             $permissions[] = Config::get('common.permission.director.delete');
         }
