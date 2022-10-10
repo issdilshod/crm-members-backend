@@ -9,6 +9,7 @@ use App\Http\Controllers\Director\DirectorController;
 use App\Http\Controllers\Helper\DepartmentController;
 use App\Http\Controllers\Helper\HostingController;
 use App\Http\Controllers\Helper\NoteController;
+use App\Http\Controllers\Helper\PendingController;
 use App\Http\Controllers\Helper\RoleController;
 use App\Http\Controllers\Helper\SicCodeController;
 use App\Http\Controllers\Helper\StateController;
@@ -21,6 +22,7 @@ Route::resource('api/state', StateController::class)->middleware('auth.custom');
 Route::resource('api/hosting', HostingController::class)->middleware('auth.custom');
 Route::resource('api/department', DepartmentController::class)->middleware('auth.custom');
 Route::resource('api/role', RoleController::class)->middleware('auth.custom');
+Route::get('api/pending', [PendingController::class, 'by_user'])->middleware('auth.custom');
 
 // login
 Route::resource('api/user', UserController::class)->middleware('auth.custom');
