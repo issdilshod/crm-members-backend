@@ -34,7 +34,7 @@ Route::get('api/get_me', [UserController::class, 'get_me'])->middleware('auth.cu
 Route::post('api/invite-via-email', [InviteUserController::class, 'via_email'])->middleware('auth.custom');
 Route::post('api/invite-via-telegram', [InviteUserController::class, 'via_telegram'])->middleware('auth.custom');
 Route::post('api/invite-check-token', [InviteUserController::class, 'check_token']);
-Route::post('api/invite-register', [UserController::class, 'invite_register'])->middleware('auth.custom');
+Route::post('api/invite-register', [UserController::class, 'invite_register']);
 Route::get('api/pending-users', [UserController::class, 'pending_users'])->middleware('auth.custom');
 
 // account
