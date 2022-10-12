@@ -736,6 +736,9 @@ class CompanyController extends Controller
             // bank account security
             'bank_account_security' => 'array',
 
+            // future web
+            'future_web' => 'array',
+
             'user_uuid' => 'string'
         ]);
 
@@ -762,6 +765,14 @@ class CompanyController extends Controller
                     BankAccountSecurity::create($value);
                 endforeach;
             }
+        }
+
+        // future websites
+        if (isset($validated['future_web'])){
+            foreach ($validated['future_web'] as $key => $value):
+                $value['entity_uuid'] = $company['uuid'];
+                $this->futureWebsiteService->save($value);
+            endforeach;
         }
 
         #region Files upload (if exsist)
@@ -883,6 +894,9 @@ class CompanyController extends Controller
             // bank account security
             'bank_account_security' => 'array',
 
+            'future_web' => 'array',
+            'future_web_to_delete' => 'array',
+
             'user_uuid' => 'string'
         ]);
 
@@ -931,6 +945,20 @@ class CompanyController extends Controller
                 endforeach;
             }
 
+        }
+
+        // future websites
+        if (isset($validated['future_web'])){
+            foreach ($validated['future_web'] as $key => $value):
+                $value['entity_uuid'] = $company['uuid'];
+                $this->futureWebsiteService->save($value);
+            endforeach;
+        }
+
+        if (isset($validated['future_web_to_delete'])){
+            foreach ($validated['future_web_to_delete'] as $key => $value):
+                $this->futureWebsiteService->delete($value);
+            endforeach;
         }
 
         #region Files delete (if exsist)
@@ -1065,6 +1093,9 @@ class CompanyController extends Controller
             // bank account security to delete
             'bank_account_security_to_delete' => 'array',
 
+            'future_web' => 'array',
+            'future_web_to_delete' => 'array',
+
             // files to delete
             'files_to_delete' => 'array'
         ]);
@@ -1128,6 +1159,20 @@ class CompanyController extends Controller
                 endforeach;
             }
 
+        }
+
+        // future websites
+        if (isset($validated['future_web'])){
+            foreach ($validated['future_web'] as $key => $value):
+                $value['entity_uuid'] = $company['uuid'];
+                $this->futureWebsiteService->save($value);
+            endforeach;
+        }
+
+        if (isset($validated['future_web_to_delete'])){
+            foreach ($validated['future_web_to_delete'] as $key => $value):
+                $this->futureWebsiteService->delete($value);
+            endforeach;
         }
 
         #region Files delete (if exsist)
