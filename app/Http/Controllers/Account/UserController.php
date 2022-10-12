@@ -556,6 +556,9 @@ class UserController extends Controller
     {
         $validated = $request->validate([
             'entry_token' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'telegram' => 'required',
             'username' => 'required',
             'password' => 'required'
         ]);

@@ -47,7 +47,8 @@ return [
             'add' => 'User added',
             'update' => 'User updated',
             'invite_via_email' => 'User invited via email',
-            'invite_via_telegram' => 'User invited via telegram'
+            'invite_via_telegram' => 'User invited via telegram',
+            'register' => 'User sent request to register'
         ],
         'director' => [
             'add' => 'Director added',
@@ -83,6 +84,7 @@ return [
             'company_pending_update' => 14,
             'company_reject' => 15,
             'company_accept' => 16,
+            'user_register' => 17,
         ],
 
         'codes_link' => [
@@ -102,6 +104,7 @@ return [
             14 => 'companies',
             15 => 'companies',
             16 => 'companies',
+            17 => 'departments/user'
         ],
     ],
 
