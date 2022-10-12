@@ -12,6 +12,7 @@ use App\Models\Account\InviteUser;
 use App\Models\Account\User;
 use App\Models\Account\UserAccessToken;
 use App\Notifications\TelegramNotification;
+use App\Policies\PermissionPolicy;
 use App\Services\Account\UserService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -45,8 +46,13 @@ class UserController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function index()
+    public function index(Request $request)
     {
+        // permission
+        if (!PermissionPolicy::permission($request->user_uuid)){
+            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        }
+        
         $users = $this->userService->all();
         return $users;
     }
@@ -86,79 +92,33 @@ class UserController extends Controller
       */
     public function store(Request $request)
     {
+        // permission
+        if (!PermissionPolicy::permission($request->user_uuid)){
+            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        }
         
         $validated = $request->validate([
             'department_uuid' => 'required|string',
             'role_uuid' => 'required|string',
-            'first_name' => 'required|string|max:100',
-            'last_name' => 'required|string|max:100',
-            'username' => 'required|string|max:100',
-            'password' => 'required|string|max:200',
-            'telegram' => 'required|string|max:100',
-            'user_uuid' => 'string',
-            'role_alias' => 'string'
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'username' => 'required|string',
+            'password' => 'required|string',
+            'telegram' => 'required|string',
+            'user_uuid' => 'string'
         ]);
-
-        // permission
-        if ($validated['role_alias']!=Config::get('common.role.headquarters')){
-            return response()->json([
-                'msg' => 'You don\'t have permission to do this action.'
-            ], 403);
-        }
-
-        #region Check if exsist data
 
         $check = [];
 
-        if (isset($validated['username'])){
-            // username
-            $check['user'] = User::select('username')
-                                    ->where('status', Config::get('common.status.actived'))
-                                    ->where('username', $validated['username'])
-                                    ->first();
-            if ($check['user']!=null){
-                $check['user'] = $check['user']->toArray();
-                foreach ($check['user'] as $key => $value):
-                    $check[$key] = '~Exsist';
-                endforeach;
-            }
-            unset($check['user']);
-
-            // telegram
-            $check['contact'] = User::select('telegram')
-                                    ->where('status', Config::get('common.status.actived'))
-                                    ->where('telegram', $validated['telegram'])
-                                    ->first();
-            if ($check['contact']!=null){
-                $check['contact'] = $check['contact']->toArray();
-                foreach ($check['contact'] as $key => $value):
-                    $check[$key] = '~Exsist';
-                endforeach;
-            }
-            unset($check['contact']);
-        }
-
+        $check = $this->userService->check($validated);
+        
         if (count($check)>0){
             return response()->json([
-                        'data' => $check,
-                    ], 409);
+                'data' => $check,
+            ], 409);
         }
 
-        #endregion
-
-        $user = User::create($validated);
-
-        // Activity log
-        Activity::create([
-            'user_uuid' => $validated['user_uuid'],
-            'entity_uuid' => $user['uuid'],
-            'device' => UserSystemInfoHelper::device_full(),
-            'ip' => UserSystemInfoHelper::ip(),
-            'description' => Config::get('common.activity.user.add'),
-            'changes' => json_encode($validated),
-            'action_code' => Config::get('common.activity.codes.user_add'),
-            'status' => Config::get('common.status.actived')
-        ]);
+        $user = $this->userService->create($validated);
 
         return new UserResource($user);
     }
@@ -240,103 +200,33 @@ class UserController extends Controller
       */
     public function update(Request $request, User $user)
     {
+        // permission
+        if (!PermissionPolicy::permission($request->user_uuid)){
+            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        }
         
         $validated = $request->validate([
-            'department_uuid' => 'string',
-            'role_uuid' => 'string',
-            'first_name' => 'string|max:100',
-            'last_name' => 'string|max:100',
-            'username' => 'string|max:100',
-            'password' => 'string|max:200',
-            'telegram' => 'string|max:100',
-            'active' => 'bool',
-            'user_uuid' => 'string',
-            'role_alias' => 'string'
+            'department_uuid' => 'required',
+            'role_uuid' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'username' => 'required',
+            'password' => 'required',
+            'telegram' => 'required',
+            'user_uuid' => 'string'
         ]);
-
-        // permission
-        if ($validated['role_alias']!=Config::get('common.role.headquarters')){
-            return response()->json([
-                'msg' => 'You don\'t have permission to do this action.'
-            ], 403);
-        }
-
-        #region Check if exsist data
 
         $check = [];
 
-        #region Check Username
-
-        if (isset($validated['username'])){
-            // username
-            $check['user'] = User::select('username')
-                                    ->where('status', Config::get('common.status.actived'))
-                                    ->where('uuid', '!=', $user['uuid'])
-                                    ->where('username', $validated['username'])
-                                    ->first();
-            if ($check['user']!=null){
-                $check['user'] = $check['user']->toArray();
-                foreach ($check['user'] as $key => $value):
-                    $check[$key] = '~Exsist';
-                endforeach;
-            }
-            unset($check['user']);
-        }
-
-        #endregion
-
-        #region Check telegram
-
-        if (isset($validated['telegram'])){
-            // telegram
-            $check['contact'] = User::select('telegram')
-                                    ->where('status', Config::get('common.status.actived'))
-                                    ->where('uuid', '!=', $user['uuid'])
-                                    ->where('telegram', $validated['telegram'])
-                                    ->first();
-            if ($check['contact']!=null){
-                $check['contact'] = $check['contact']->toArray();
-                foreach ($check['contact'] as $key => $value):
-                    $check[$key] = '~Exsist';
-                endforeach;
-            }
-            unset($check['contact']);
-        }
+        $check = $this->userService->check_ignore($validated, $user->uuid);
 
         if (count($check)>0){
             return response()->json([
-                        'data' => $check,
-                    ], 409);
+                'data' => $check,
+            ], 409);
         }
 
-        #endregion
-
-        #endregion
-
-        if (isset($validated['active'])){ // active user
-            $validated['status'] = Config::get('common.status.actived');
-
-            // send notification
-            $chat_id = TelegramHelper::getTelegramChatId($validated['telegram']);
-            if ($chat_id!=null){
-                $link = env('APP_FRONTEND_ENDPOINT') . '/login/';
-                Notification::route('telegram', $chat_id)
-                        ->notify(new TelegramNotification(['msg' => 'Hello '.ucfirst($validated['first_name']).', your account is activated. Here is the link for [login]('.$link.')']));
-            }
-        }
-        $user->update($validated);
-
-        // Activity log
-        Activity::create([
-            'user_uuid' => $validated['user_uuid'],
-            'entity_uuid' => $user['uuid'],
-            'device' => UserSystemInfoHelper::device_full(),
-            'ip' => UserSystemInfoHelper::ip(),
-            'description' => Config::get('common.activity.user.update'),
-            'changes' => json_encode($validated),
-            'action_code' => Config::get('common.activity.codes.user_update'),
-            'status' => Config::get('common.status.actived')
-        ]);
+        $this->userService->update($user, $validated);
 
         return new UserResource($user);
     }
@@ -369,18 +259,119 @@ class UserController extends Controller
       */
     public function destroy(Request $request, User $user)
     {
-        $role = $request->validate([
-            'role_alias' => 'string'
-        ]);
-
         // permission
-        if ($role['role_alias']!=Config::get('common.role.headquarters')){
-            return response()->json([
-                'msg' => 'You don\'t have permission to do this action.'
-            ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){
+            return response()->json([ 'data' => 'Not Authorized' ], 403);
         }
 
         $this->userService->delete($user);
+    }
+
+    /**     @OA\PUT(
+      *         path="/api/user/accept/{uuid}",
+      *         operationId="accept_user",
+      *         tags={"Account"},
+      *         summary="Accept user",
+      *         description="Acccept user",
+      *             @OA\Parameter(
+      *                 name="uuid",
+      *                 in="path",
+      *                 description="user uuid",
+      *                 @OA\Schema(
+      *                     type="string",
+      *                     format="uuid"
+      *                 ),
+      *                 required=true
+      *             ),
+      *             @OA\RequestBody(
+      *                 @OA\JsonContent(),
+      *                 @OA\MediaType(
+      *                     mediaType="multipart/form-data",
+      *                     @OA\Schema(
+      *                         type="object",
+      *                         required={},
+      *                         @OA\Property(property="department_uuid", type="text"),
+      *                         @OA\Property(property="role_uuid", type="text"),
+      *                         @OA\Property(property="first_name", type="text"),
+      *                         @OA\Property(property="last_name", type="text"),
+      *                         @OA\Property(property="username", type="text"),
+      *                         @OA\Property(property="password", type="text"),
+      *                         @OA\Property(property="telegram", type="text")
+      *                     ),
+      *                 ),
+      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Unauthenticated"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
+    public function accept(Request $request, $uuid)
+    {
+        // permission
+        if (!PermissionPolicy::permission($request->user_uuid)){
+            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        }
+
+        $validated = $request->validate([
+            'department_uuid' => 'required',
+            'role_uuid' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'username' => 'required',
+            'password' => 'required',
+            'telegram' => 'required',
+            'user_uuid' => 'string'
+        ]);
+
+        $user = User::where('uuid', $uuid)->first();
+
+        $check = [];
+
+        $check = $this->userService->check_ignore($validated, $user->uuid);
+
+        if (count($check)>0){
+            return response()->json([
+                'data' => $check,
+            ], 409);
+        }
+
+        $this->userService->accept($user, $validated);
+
+        return new UserResource($user);
+    }
+
+    /**     @OA\PUT(
+      *         path="/api/user/reject/{uuid}",
+      *         operationId="reject_user",
+      *         tags={"Account"},
+      *         summary="Reject user",
+      *         description="Reject user",
+      *             @OA\Parameter(
+      *                 name="uuid",
+      *                 in="path",
+      *                 description="user uuid",
+      *                 @OA\Schema(
+      *                     type="string",
+      *                     format="uuid"
+      *                 ),
+      *                 required=true
+      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=403, description="Not Authorized"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
+    public function reject(Request $request, $uuid)
+    {
+        // permission
+        if (!PermissionPolicy::permission($request->user_uuid)){
+            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        }
+
+        $this->userService->reject($uuid, $request->user_uuid);
     }
 
     /**     @OA\POST(
@@ -413,39 +404,13 @@ class UserController extends Controller
     public function login(Request $request)
     {
         $validated = $request->validate([
-            'username' => 'required|string|max:100',
-            'password' => 'required|string|max:100',
+            'username' => 'required',
+            'password' => 'required',
         ]);
 
-        $user = User::where('username', $validated['username'])
-                        ->where('password', $validated['password'])
-                        ->where('status', Config::get('common.status.actived'))
-                        ->first();
+        $respond = $this->userService->login($validated);
 
-        if (!$user){
-            return response()->json([
-                'data' => ['msg' => 'Invalid username or password'],
-            ], 404);
-        }
-
-        $token = Str::random(32);
-        $expires_at = Carbon::now();
-        $expires_at = $expires_at->addDays(7)->toDateTimeString(); // after 7 day expires
-
-        $user['access_token'] = ['user_uuid' => $user['uuid'], 'token' => $token, 'expires_at' => $expires_at];
-
-        UserAccessToken::create($user['access_token']);
-
-        // Activity log
-        Activity::create([
-            'user_uuid' => $user['uuid'],
-            'device' => UserSystemInfoHelper::device_full(),
-            'ip' =>  UserSystemInfoHelper::ip(),
-            'description' => Config::get('common.activity.logged'),
-            'status' => Config::get('common.status.actived')
-        ]);
-
-        return $user;
+        return $respond;
     }
 
     /**     @OA\GET(
@@ -499,25 +464,12 @@ class UserController extends Controller
       */
     public function logout(Request $request)
     {
-        #region Validation
-
         $validated = $request->validate([
-            'token' => 'required|string',
+            'token' => 'required',
             'user_uuid' => 'string'
         ]);
 
-        #endregion
-
-        UserAccessToken::where('token', $validated['token'])->update(['status' => Config::get('common.status.deleted')]);
-
-        // Activity log
-        Activity::create([
-            'user_uuid' => $validated['user_uuid'],
-            'device' => UserSystemInfoHelper::device_full(),
-            'ip' => UserSystemInfoHelper::ip(),
-            'description' => Config::get('common.activity.logout'),
-            'status' => Config::get('common.status.actived')
-        ]);
+        $this->userService->logout($validated);
 
         return response()->json([
             'data' => ['msg' => 'Logged out'],
@@ -525,11 +477,11 @@ class UserController extends Controller
     }
 
     /**     @OA\POST(
-      *         path="/api/invite_register",
-      *         operationId="invite_register",
+      *         path="/api/register",
+      *         operationId="register",
       *         tags={"Account"},
-      *         summary="Invite register",
-      *         description="Invite register",
+      *         summary="Register user",
+      *         description="Register user",
       *             @OA\RequestBody(
       *                 @OA\JsonContent(),
       *                 @OA\MediaType(
@@ -552,7 +504,7 @@ class UserController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function invite_register(Request $request)
+    public function register(Request $request)
     {
         $validated = $request->validate([
             'entry_token' => 'required',
@@ -606,7 +558,7 @@ class UserController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function get_me(Request $request,)
+    public function get_me(Request $request)
     {
         $user = $this->userService->me($request);
         return $user;

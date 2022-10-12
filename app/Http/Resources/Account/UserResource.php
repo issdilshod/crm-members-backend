@@ -23,7 +23,8 @@ class UserResource extends JsonResource
             'telegram' => $this->telegram,
             'role_uuid' => $this->role_uuid,
             'department_uuid' => $this->department_uuid,
-            'access_tokens' => UserAccessTokenResource::collection($this->access_tokens)
+            'access_tokens' => UserAccessTokenResource::collection($this->access_tokens),
+            'status' => $this->status
         ];
     }
 }

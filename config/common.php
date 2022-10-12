@@ -30,6 +30,10 @@ return [
         ],
     ],
 
+    'session' => [
+        'token_deadline' => 7, // expires in days
+    ], 
+
     'status' => [
         'deleted' => 0,
         'actived' => 1,
@@ -48,23 +52,25 @@ return [
             'update' => 'User updated',
             'invite_via_email' => 'User invited via email',
             'invite_via_telegram' => 'User invited via telegram',
-            'register' => 'User sent request to register'
+            'register' => 'User sent request to register',
+            'reject' => 'User register rejected',
+            'accept' => 'User register accepted'
         ],
         'director' => [
-            'add' => 'Director added',
-            'update' => 'Director updated',
-            'pending' => 'Director approval request sent',
-            'pending_update' => 'Director update approval request sent',
-            'reject' => 'Director rejected',
-            'accept' => 'Director accepted',
+            'add' => 'Director card added',
+            'update' => 'Director card updated',
+            'pending' => 'Director card approval request sent',
+            'pending_update' => 'Director card update approval request sent',
+            'reject' => 'Director card rejected',
+            'accept' => 'Director card accepted',
         ],
         'company' => [
-            'add' => 'Company added',
-            'updated' => 'Company updated',
-            'pending' => 'Company approval request sent',
-            'pending_update' => 'Company update approval request sent',
-            'reject' => 'Company rejected',
-            'accept' => 'Company accepted',
+            'add' => 'Company card added',
+            'updated' => 'Company card updated',
+            'pending' => 'Company card approval request sent',
+            'pending_update' => 'Company card update approval request sent',
+            'reject' => 'Company card rejected',
+            'accept' => 'Company card accepted',
         ],
 
         'codes' => [
@@ -85,11 +91,13 @@ return [
             'company_reject' => 15,
             'company_accept' => 16,
             'user_register' => 17,
+            'user_reject' => 18,
+            'user_accept' => 19,
         ],
 
         'codes_link' => [
-            1 => 'departments',
-            2 => 'departments',
+            1 => 'departments/user',
+            2 => 'departments/user',
             3 => 'directors',
             4 => 'directors',
             5 => 'companies',
@@ -104,7 +112,9 @@ return [
             14 => 'companies',
             15 => 'companies',
             16 => 'companies',
-            17 => 'departments/user'
+            17 => 'departments/user',
+            18 => '',
+            19 => 'departments/user',
         ],
     ],
 
@@ -114,6 +124,7 @@ return [
     ],
 
     'errors' => [
-        'exsist' => 'Data exsist.'
+        'exsist' => 'Data exsist.',
+        'invalid_login' => 'Invalid username or password',
     ],
 ];

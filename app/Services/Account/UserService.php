@@ -7,9 +7,11 @@ use App\Http\Resources\Account\UserResource;
 use App\Models\Account\Activity;
 use App\Models\Account\InviteUser;
 use App\Models\Account\User;
+use App\Models\Account\UserAccessToken;
 use App\Services\Helper\NotificationService;
-use Illuminate\Http\Request;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Str;
 
 class UserService {
 
@@ -33,11 +35,6 @@ class UserService {
         return $user;
     }
 
-    public function delete(User $user)
-    {
-        $user->update(['status' => Config::get('common.status.deleted')]);
-    }
-
     public function pendings()
     {
         $users = User::where('status', Config::get('common.status.pending'))
@@ -45,15 +42,218 @@ class UserService {
         return UserResource::collection($users);
     }
 
-    public function me(Request $request)
+    public function me($user_uuid)
     {
-        $validated = $request->validate([
-            'user_uuid' => 'string'
-        ]);
-
-        $user = User::where('uuid', $validated['user_uuid'])
+        $user = User::where('uuid', $user_uuid)
                         ->first();
         return new UserResource($user);
+    }
+
+    public function check($entity)
+    {
+        $check = [];
+
+        // username
+        $check['tmp'] = User::select('username')
+                        ->where('status', Config::get('common.status.actived'))
+                        ->where('username', $entity['username'])
+                        ->first();
+
+        if ($check['tmp']!=null){
+            $check['tmp'] = $check['tmp']->toArray();
+            foreach ($check['tmp'] as $key => $value):
+                $check[$key] = Config::get('common.errors.exsist');
+            endforeach;
+        }
+        unset($check['tmp']);
+
+        // telegram
+        $check['tmp'] = User::select('telegram')
+                            ->where('status', Config::get('common.status.actived'))
+                            ->where('telegram', $entity['telegram'])
+                            ->first();
+        if ($check['tmp']!=null){
+            $check['tmp'] = $check['tmp']->toArray();
+            foreach ($check['tmp'] as $key => $value):
+                $check[$key] = Config::get('common.errors.exsist');
+            endforeach;
+        }
+        unset($check['tmp']);
+
+        return $check;
+    }
+
+    public function check_ignore($entity, $ignore_uuid)
+    {
+        $check = [];
+
+        // username
+        $check['tmp'] = User::select('username')
+                        ->where('uuid', '!=', $ignore_uuid)
+                        ->where('status', Config::get('common.status.actived'))
+                        ->where('username', $entity['username'])
+                        ->first();
+
+        if ($check['tmp']!=null){
+            $check['tmp'] = $check['tmp']->toArray();
+            foreach ($check['tmp'] as $key => $value):
+                $check[$key] = Config::get('common.errors.exsist');
+            endforeach;
+        }
+        unset($check['tmp']);
+
+        // telegram
+        $check['tmp'] = User::select('telegram')
+                            ->where('uuid', '!=', $ignore_uuid)
+                            ->where('status', Config::get('common.status.actived'))
+                            ->where('telegram', $entity['telegram'])
+                            ->first();
+        if ($check['tmp']!=null){
+            $check['tmp'] = $check['tmp']->toArray();
+            foreach ($check['tmp'] as $key => $value):
+                $check[$key] = Config::get('common.errors.exsist');
+            endforeach;
+        }
+        unset($check['tmp']);
+
+        return $check;
+    }
+
+    public function create($entity)
+    {
+        $user = User::create($entity);
+
+        // Activity log
+        Activity::create([
+            'user_uuid' => $entity['user_uuid'],
+            'entity_uuid' => $user['uuid'],
+            'device' => UserSystemInfoHelper::device_full(),
+            'ip' => UserSystemInfoHelper::ip(),
+            'description' => Config::get('common.activity.user.add'),
+            'changes' => json_encode($entity),
+            'action_code' => Config::get('common.activity.codes.user_add'),
+            'status' => Config::get('common.status.actived')
+        ]);
+
+        return $user;
+    }
+
+    public function update(User $user, $entity)
+    {
+        $user->update($entity);
+
+        // Activity
+        Activity::create([
+            'user_uuid' => $entity['user_uuid'],
+            'entity_uuid' => $user->uuid,
+            'device' => UserSystemInfoHelper::device_full(),
+            'ip' => UserSystemInfoHelper::ip(),
+            'description' => Config::get('common.activity.user.update'),
+            'changes' => json_encode($entity),
+            'action_code' => Config::get('common.activity.codes.user_update'),
+            'status' => Config::get('common.status.actived')
+        ]);
+
+        return $user;
+    }
+
+    public function accept(User $user, $entity)
+    {
+        $entity['status'] = Config::get('common.status.actived');
+        $user->update($entity);
+
+        // logs
+        Activity::create([
+            'user_uuid' => $entity['user_uuid'],
+            'entity_uuid' => $user['uuid'],
+            'device' => UserSystemInfoHelper::device_full(),
+            'ip' => UserSystemInfoHelper::ip(),
+            'description' => Config::get('common.activity.user.accept'),
+            'changes' => '',
+            'action_code' => Config::get('common.activity.codes.user_accept'),
+            'status' => Config::get('common.status.actived')
+        ]);
+
+        // notification
+        $this->notificationService->telegram([
+            'telegram' => $user['telegram'],
+            'msg' => Config::get('common.activity.user.accept') . '! ' . 
+                    'This is your link for [login]('.env('APP_FRONTEND_ENDPOINT'). '/login/' .')' 
+        ]);
+
+        return $user;
+    }
+
+    public function reject($uuid, $user_uuid)
+    {
+        $user = User::where('uuid', $uuid)->first();
+        $user->update(['status' => Config::get('common.status.deleted')]);
+
+        // logs
+        Activity::create([
+            'user_uuid' => $user_uuid,
+            'entity_uuid' => $user['uuid'],
+            'device' => UserSystemInfoHelper::device_full(),
+            'ip' => UserSystemInfoHelper::ip(),
+            'description' => Config::get('common.activity.user.reject'),
+            'changes' => '',
+            'action_code' => Config::get('common.activity.codes.user_reject'),
+            'status' => Config::get('common.status.actived')
+        ]);
+
+        // notification
+        $this->notificationService->telegram([
+            'telegram' => $user['telegram'],
+            'msg' => Config::get('common.activity.user.reject')
+        ]);
+    }
+
+    public function login($entity)
+    {
+        $user = User::where('username', $entity['username'])
+                        ->where('password', $entity['password'])
+                        ->where('status', Config::get('common.status.actived'))
+                        ->first();
+
+        if (!$user){ // invalid
+            return response()->json([
+                'data' => ['msg' => Config::get('common.errors.invalid_login')],
+            ], 404);
+        }
+
+        $token = Str::random(32);
+        $expires_at = Carbon::now();
+        $expires_at = $expires_at->addDays(Config::get('common.session.token_deadline'))->toDateTimeString(); // after CONFIG day expires
+
+        $user['access_token'] = ['user_uuid' => $user['uuid'], 'token' => $token, 'expires_at' => $expires_at];
+
+        UserAccessToken::create($user['access_token']);
+
+        // Activity log
+        Activity::create([
+            'user_uuid' => $user['uuid'],
+            'device' => UserSystemInfoHelper::device_full(),
+            'ip' =>  UserSystemInfoHelper::ip(),
+            'description' => Config::get('common.activity.logged'),
+            'status' => Config::get('common.status.actived')
+        ]);
+
+        return $user;
+    }
+
+    public function logout($entity)
+    {
+        UserAccessToken::where('token', $entity['token'])
+                        ->update(['status' => Config::get('common.status.deleted')]);
+
+        // Activity log
+        Activity::create([
+            'user_uuid' => $entity['user_uuid'],
+            'device' => UserSystemInfoHelper::device_full(),
+            'ip' => UserSystemInfoHelper::ip(),
+            'description' => Config::get('common.activity.logout'),
+            'status' => Config::get('common.status.actived')
+        ]);
     }
 
     public function register($entity)
@@ -135,6 +335,11 @@ class UserService {
         return response()->json([
             'data' => ['msg' => 'Invalid token!'],
         ], 404);
+    }
+
+    public function delete(User $user)
+    {
+        $user->update(['status' => Config::get('common.status.deleted')]);
     }
 
 }

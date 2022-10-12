@@ -848,7 +848,7 @@ class DirectorController extends Controller
     }
 
     /**     @OA\PUT(
-      *         path="/api/director-accept",
+      *         path="/api/director-accept/{uuid}",
       *         operationId="accept_director",
       *         tags={"Director"},
       *         summary="Accept director (not working on swagger)",

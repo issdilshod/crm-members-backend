@@ -25,19 +25,29 @@ Route::resource('api/department', DepartmentController::class)->middleware('auth
 Route::resource('api/role', RoleController::class)->middleware('auth.custom');
 Route::get('api/pending', [PendingController::class, 'by_user'])->middleware('auth.custom');
 
-// login
+// account
 Route::resource('api/user', UserController::class)->middleware('auth.custom');
-Route::get('api/is_auth', [UserController::class, 'is_auth'])->middleware('auth.custom');
+Route::get('api/user', [UserController::class, 'index'])->middleware('auth.custom');
+Route::post('api/user', [UserController::class, 'store'])->middleware('auth.custom');
+Route::get('api/user/{uuid}', [UserController::class, 'show'])->middleware('auth.custom');
+Route::put('api/user/{uuid}', [UserController::class, 'update'])->middleware('auth.custom');
+Route::delete('api/user/{uuid}', [UserController::class, 'destroy'])->middleware('auth.custom');
+Route::get('api/pending-users', [UserController::class, 'pending_users'])->middleware('auth.custom');
+//login
 Route::post('api/login', [UserController::class, 'login']);
 Route::post('api/logout', [UserController::class, 'logout'])->middleware('auth.custom');
 Route::get('api/get_me', [UserController::class, 'get_me'])->middleware('auth.custom');
+Route::get('api/is_auth', [UserController::class, 'is_auth'])->middleware('auth.custom');
+//invite
 Route::post('api/invite-via-email', [InviteUserController::class, 'via_email'])->middleware('auth.custom');
 Route::post('api/invite-via-telegram', [InviteUserController::class, 'via_telegram'])->middleware('auth.custom');
+//register
 Route::post('api/invite-check-token', [InviteUserController::class, 'check_token']);
-Route::post('api/invite-register', [UserController::class, 'invite_register']);
-Route::get('api/pending-users', [UserController::class, 'pending_users'])->middleware('auth.custom');
+Route::post('api/register', [UserController::class, 'register']);
+Route::put('api/user/accept/{uuid}', [UserController::class, 'accept'])->middleware('auth.custom');
+Route::put('api/user/reject/{uuid}', [UserController::class, 'reject'])->middleware('auth.custom');
 
-// account
+// permissions
 Route::get('api/permission', [PermissionController::class, 'index'])->middleware('auth.custom');
 Route::get('api/permission-department/{uuid}', [PermissionController::class, 'by_department'])->middleware('auth.custom');
 Route::get('api/permission-user/{uuid}', [PermissionController::class, 'by_user'])->middleware('auth.custom');

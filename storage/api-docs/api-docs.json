@@ -813,6 +813,117 @@
                 }
             }
         },
+        "/api/user/accept/{uuid}": {
+            "put": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Accept user",
+                "description": "Acccept user",
+                "operationId": "accept_user",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "user uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [],
+                                "properties": {
+                                    "department_uuid": {
+                                        "type": "text"
+                                    },
+                                    "role_uuid": {
+                                        "type": "text"
+                                    },
+                                    "first_name": {
+                                        "type": "text"
+                                    },
+                                    "last_name": {
+                                        "type": "text"
+                                    },
+                                    "username": {
+                                        "type": "text"
+                                    },
+                                    "password": {
+                                        "type": "text"
+                                    },
+                                    "telegram": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/user/reject/{uuid}": {
+            "put": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Reject user",
+                "description": "Reject user",
+                "operationId": "reject_user",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "user uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Authorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
         "/api/login": {
             "post": {
                 "tags": [
@@ -935,14 +1046,14 @@
                 }
             }
         },
-        "/api/invite_register": {
+        "/api/register": {
             "post": {
                 "tags": [
                     "Account"
                 ],
-                "summary": "Invite register",
-                "description": "Invite register",
-                "operationId": "invite_register",
+                "summary": "Register user",
+                "description": "Register user",
+                "operationId": "register",
                 "requestBody": {
                     "content": {
                         "multipart/form-data": {
@@ -2656,7 +2767,7 @@
                 }
             }
         },
-        "/api/director-accept": {
+        "/api/director-accept/{uuid}": {
             "put": {
                 "tags": [
                     "Director"
