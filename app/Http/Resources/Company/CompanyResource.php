@@ -6,6 +6,7 @@ use App\Http\Resources\Helper\AddressResource;
 use App\Http\Resources\Helper\BankAccountResource;
 use App\Http\Resources\Helper\EmailResource;
 use App\Http\Resources\Helper\FileResource;
+use App\Http\Resources\Helper\FutureWebsiteResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CompanyResource extends JsonResource
@@ -41,6 +42,9 @@ class CompanyResource extends JsonResource
 
             'website' => $this->website,
             'db_report_number' => $this->db_report_number,
+
+            'future_websites' => FutureWebsiteResource::collection($this->future_websites),
+
             'bank_account' => BankAccountResource::collection($this->bank_account),
             'address' => AddressResource::collection($this->addresses),
             'emails' => EmailResource::collection($this->emails),

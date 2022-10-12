@@ -10,11 +10,13 @@ use App\Models\Helper\BankAccount;
 use App\Models\Helper\BankAccountSecurity;
 use App\Models\Helper\Email;
 use App\Models\Helper\File;
+use App\Models\Helper\FutureWebsite;
 use App\Policies\PermissionPolicy;
 use App\Services\Company\CompanyService;
 use App\Services\Helper\AddressService;
 use App\Services\Helper\BankAccountService;
 use App\Services\Helper\EmailService;
+use App\Services\Helper\FutureWebsiteService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
@@ -26,6 +28,7 @@ class CompanyController extends Controller
     private $emailService;
     private $addressService;
     private $bankAccountService;
+    private $futureWebsiteService;
 
     public function __construct()
     {
@@ -33,6 +36,7 @@ class CompanyController extends Controller
         $this->emailService = new EmailService();
         $this->addressService = new AddressService();
         $this->bankAccountService = new BankAccountService();
+        $this->futureWebsiteService = new FutureWebsiteService();
     }
 
     /**     @OA\GET(
@@ -120,6 +124,9 @@ class CompanyController extends Controller
       *                         @OA\Property(property="bank_account_security[][question]", type="text"),
       *                         @OA\Property(property="bank_account_security[][answer]", type="text"),
       *
+      *                         @OA\Property(property="future_website[][domain]", type="text"),
+      *                         @OA\Property(property="future_website[][category]", type="text"),
+      *
       *                         @OA\Property(property="files[incorporation_state][]", type="file", format="binary"),
       *                         @OA\Property(property="files[doing_business_in_state][]", type="file", format="binary"),
       *                         @OA\Property(property="files[company_ein][]", type="file", format="binary"),
@@ -147,41 +154,41 @@ class CompanyController extends Controller
         }
 
         $validated = $request->validate([
-            'legal_name' => 'required|string',
-            'sic_code_uuid' => 'required|string',
-            'director_uuid' => 'required|string',
-            'incorporation_state_uuid' => 'required|string',
-            'incorporation_state_name' => 'required|string',
-            'doing_business_in_state_uuid' => 'required|string',
-            'doing_business_in_state_name' => 'required|string',
-            'ein' => 'required|string',
+            'legal_name' => 'required',
+            'sic_code_uuid' => 'required',
+            'director_uuid' => 'required',
+            'incorporation_state_uuid' => 'required',
+            'incorporation_state_name' => 'required',
+            'doing_business_in_state_uuid' => 'required',
+            'doing_business_in_state_name' => 'required',
+            'ein' => 'required',
             
             // numbers
-            'business_number' => 'required|string',
-            'business_number_type' => 'required|string',
-            'voip_provider' => 'required|string',
-            'voip_login' => 'required|string',
-            'voip_password' => 'required|string',
-            'business_mobile_number_provider' => 'required|string',
-            'business_mobile_number_login' => 'required|string',
-            'business_mobile_number_password' => 'required|string',
+            'business_number' => 'required',
+            'business_number_type' => 'required',
+            'voip_provider' => 'required',
+            'voip_login' => 'required',
+            'voip_password' => 'required',
+            'business_mobile_number_provider' => 'required',
+            'business_mobile_number_login' => 'required',
+            'business_mobile_number_password' => 'required',
 
-            'website' => 'required|string',
-            'db_report_number' => 'required|string',
+            'website' => 'required',
+            'db_report_number' => 'required',
 
             // addresses
-            'address.street_address' => 'required|string',
-            'address.address_line_2' => 'required|string',
-            'address.city' => 'required|string',
-            'address.state' => 'required|string',
-            'address.postal' => 'required|string',
-            'address.country' => 'required|string',
+            'address.street_address' => 'required',
+            'address.address_line_2' => 'required',
+            'address.city' => 'required',
+            'address.state' => 'required',
+            'address.postal' => 'required',
+            'address.country' => 'required',
 
             // emails
-            'emails.hosting_uuid' => 'required|string',
-            'emails.email' => 'required|string',
-            'emails.password' => 'required|string',
-            'emails.phone' => 'required|string',
+            'emails' => 'required|array',
+
+            //future websites
+            'future_websites' => 'array',
 
             // bank account
             'bank_account' => 'array',
@@ -239,6 +246,14 @@ class CompanyController extends Controller
         $validated['address']['address_parent'] = '';
         $validated['address']['entity_uuid'] = $company['uuid'];
         $this->addressService->create($validated['address']);
+
+        // future websites
+        if (isset($validated['future_websites'])){
+            foreach ($validated['future_websites'] as $key => $value):
+                $value['entity_uuid'] = $company['uuid'];
+                $this->futureWebsiteService->save($value);
+            endforeach;
+        }
 
         #region Files upload (if exsist)
 
@@ -366,6 +381,9 @@ class CompanyController extends Controller
       *
       *                         @OA\Property(property="bank_account_security_to_delete[]", type="text"),
       *
+      *                         @OA\Property(property="future_website[][domain]", type="text"),
+      *                         @OA\Property(property="future_website[][category]", type="text"),
+      *
       *                         @OA\Property(property="files[incorporation_state][]", type="file", format="binary"),
       *                         @OA\Property(property="files[doing_business_in_state][]", type="file", format="binary"),
       *                         @OA\Property(property="files[company_ein][]", type="file", format="binary"),
@@ -395,35 +413,35 @@ class CompanyController extends Controller
         }
 
         $validated = $request->validate([
-            'legal_name' => 'required|string',
-            'sic_code_uuid' => 'required|string',
-            'director_uuid' => 'required|string',
-            'incorporation_state_uuid' => 'required|string',
-            'incorporation_state_name' => 'required|string',
-            'doing_business_in_state_uuid' => 'required|string',
-            'doing_business_in_state_name' => 'required|string',
-            'ein' => 'required|string',
+            'legal_name' => 'required',
+            'sic_code_uuid' => 'required',
+            'director_uuid' => 'required',
+            'incorporation_state_uuid' => 'required',
+            'incorporation_state_name' => 'required',
+            'doing_business_in_state_uuid' => 'required',
+            'doing_business_in_state_name' => 'required',
+            'ein' => 'required',
             
             // numbers
-            'business_number' => 'required|string',
-            'business_number_type' => 'required|string',
-            'voip_provider' => 'required|string',
-            'voip_login' => 'required|string',
-            'voip_password' => 'required|string',
-            'business_mobile_number_provider' => 'required|string',
-            'business_mobile_number_login' => 'required|string',
-            'business_mobile_number_password' => 'required|string',
+            'business_number' => 'required',
+            'business_number_type' => 'required',
+            'voip_provider' => 'required',
+            'voip_login' => 'required',
+            'voip_password' => 'required',
+            'business_mobile_number_provider' => 'required',
+            'business_mobile_number_login' => 'required',
+            'business_mobile_number_password' => 'required',
 
-            'website' => 'required|string',
-            'db_report_number' => 'required|string',
+            'website' => 'required',
+            'db_report_number' => 'required',
 
             // addresses
-            'address.street_address' => 'required|string',
-            'address.address_line_2' => 'required|string',
-            'address.city' => 'required|string',
-            'address.state' => 'required|string',
-            'address.postal' => 'required|string',
-            'address.country' => 'required|string',
+            'address.street_address' => 'required',
+            'address.address_line_2' => 'required',
+            'address.city' => 'required',
+            'address.state' => 'required',
+            'address.postal' => 'required',
+            'address.country' => 'required',
 
             // emails
             'emails' => 'required|array',
@@ -436,6 +454,9 @@ class CompanyController extends Controller
 
             // bank account security to delete
             'bank_account_security_to_delete' => 'array',
+
+            'future_websites' => 'array',
+            'future_websites_to_delete' => 'array',
 
             // files to delete
             'files_to_delete' => 'array',
@@ -507,6 +528,20 @@ class CompanyController extends Controller
                 endforeach;
             }
 
+        }
+
+        // future websites
+        if (isset($validated['future_websites'])){
+            foreach ($validated['future_websites'] as $key => $value):
+                $value['entity_uuid'] = $company['uuid'];
+                $this->futureWebsiteService->save($value);
+            endforeach;
+        }
+
+        if (isset($validated['future_websites_to_delete'])){
+            foreach ($validated['future_websites_to_delete'] as $key => $value):
+                $this->futureWebsiteService->delete($value);
+            endforeach;
         }
 
         #region Files delete (if exsist)
