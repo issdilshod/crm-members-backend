@@ -124,8 +124,8 @@ class CompanyController extends Controller
       *                         @OA\Property(property="bank_account_security[][question]", type="text"),
       *                         @OA\Property(property="bank_account_security[][answer]", type="text"),
       *
-      *                         @OA\Property(property="future_website[][domain]", type="text"),
-      *                         @OA\Property(property="future_website[][category]", type="text"),
+      *                         @OA\Property(property="future_web[][domain]", type="text"),
+      *                         @OA\Property(property="future_web[][category]", type="text"),
       *
       *                         @OA\Property(property="files[incorporation_state][]", type="file", format="binary"),
       *                         @OA\Property(property="files[doing_business_in_state][]", type="file", format="binary"),
@@ -188,7 +188,7 @@ class CompanyController extends Controller
             'emails' => 'required|array',
 
             //future websites
-            'future_websites' => 'array',
+            'future_web' => 'array',
 
             // bank account
             'bank_account' => 'array',
@@ -248,8 +248,8 @@ class CompanyController extends Controller
         $this->addressService->create($validated['address']);
 
         // future websites
-        if (isset($validated['future_websites'])){
-            foreach ($validated['future_websites'] as $key => $value):
+        if (isset($validated['future_web'])){
+            foreach ($validated['future_web'] as $key => $value):
                 $value['entity_uuid'] = $company['uuid'];
                 $this->futureWebsiteService->save($value);
             endforeach;
@@ -381,8 +381,8 @@ class CompanyController extends Controller
       *
       *                         @OA\Property(property="bank_account_security_to_delete[]", type="text"),
       *
-      *                         @OA\Property(property="future_website[][domain]", type="text"),
-      *                         @OA\Property(property="future_website[][category]", type="text"),
+      *                         @OA\Property(property="future_web[][domain]", type="text"),
+      *                         @OA\Property(property="future_web[][category]", type="text"),
       *
       *                         @OA\Property(property="files[incorporation_state][]", type="file", format="binary"),
       *                         @OA\Property(property="files[doing_business_in_state][]", type="file", format="binary"),
@@ -455,8 +455,8 @@ class CompanyController extends Controller
             // bank account security to delete
             'bank_account_security_to_delete' => 'array',
 
-            'future_websites' => 'array',
-            'future_websites_to_delete' => 'array',
+            'future_web' => 'array',
+            'future_web_to_delete' => 'array',
 
             // files to delete
             'files_to_delete' => 'array',
@@ -531,15 +531,15 @@ class CompanyController extends Controller
         }
 
         // future websites
-        if (isset($validated['future_websites'])){
-            foreach ($validated['future_websites'] as $key => $value):
+        if (isset($validated['future_web'])){
+            foreach ($validated['future_web'] as $key => $value):
                 $value['entity_uuid'] = $company['uuid'];
                 $this->futureWebsiteService->save($value);
             endforeach;
         }
 
-        if (isset($validated['future_websites_to_delete'])){
-            foreach ($validated['future_websites_to_delete'] as $key => $value):
+        if (isset($validated['future_web_to_delete'])){
+            foreach ($validated['future_web_to_delete'] as $key => $value):
                 $this->futureWebsiteService->delete($value);
             endforeach;
         }
