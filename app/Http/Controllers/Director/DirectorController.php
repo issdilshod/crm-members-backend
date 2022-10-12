@@ -597,11 +597,11 @@ class DirectorController extends Controller
             'first_name' => 'required',
             'middle_name' => '',
             'last_name' => 'required',
-            'date_of_birth' => '',
-            'ssn_cpn' => '',
-            'company_association' => '',
-            'phone_type' => '',
-            'phone_number' => '',
+            'date_of_birth' => 'required',
+            'ssn_cpn' => 'required',
+            'company_association' => 'required',
+            'phone_type' => 'required',
+            'phone_number' => 'required',
             // addresses
             'address.dl_address.street_address' => '',
             'address.dl_address.address_line_2' => '',
@@ -617,7 +617,7 @@ class DirectorController extends Controller
             'address.credit_home_address.postal' => '',
             'address.credit_home_address.country' => '',
             // emails
-            'emails.hosting_uuid' => 'required',
+            'emails.hosting_uuid' => '',
             'emails.email' => '',
             'emails.password' => '',
             'emails.phone' => '',
@@ -775,7 +775,7 @@ class DirectorController extends Controller
             'address.credit_home_address.postal' => '',
             'address.credit_home_address.country' => '',
             // emails
-            'emails.hosting_uuid' => 'required',
+            'emails.hosting_uuid' => '',
             'emails.email' => '',
             'emails.password' => '',
             'emails.phone' => '',
@@ -936,24 +936,11 @@ class DirectorController extends Controller
             'phone_type' => 'required|string',
             'phone_number' => 'required|string',
             // addresses
-            'address.dl_address.street_address' => 'required|string',
-            'address.dl_address.address_line_2' => 'required|string',
-            'address.dl_address.city' => 'required|string',
-            'address.dl_address.state' => 'required|string',
-            'address.dl_address.postal' => 'required|string',
-            'address.dl_address.country' => 'required|string',
+            'address' => 'array',
 
-            'address.credit_home_address.street_address' => 'required|string',
-            'address.credit_home_address.address_line_2' => 'required|string',
-            'address.credit_home_address.city' => 'required|string',
-            'address.credit_home_address.state' => 'required|string',
-            'address.credit_home_address.postal' => 'required|string',
-            'address.credit_home_address.country' => 'required|string',
             // emails
-            'emails.hosting_uuid' => 'required|string',
-            'emails.email' => 'required|string',
-            'emails.password' => 'required|string',
-            'emails.phone' => 'required|string',
+            'emails' => 'array',
+
             // files to delete by uuid
             'files_to_delete' => 'array',
         ]);
@@ -962,13 +949,13 @@ class DirectorController extends Controller
 
         $check = [];
 
-        $tmpCheck = $this->emailService->check_ignore($validated['emails'], $director->uuid);
-        $check = array_merge($check, $tmpCheck);
+        //$tmpCheck = $this->emailService->check_ignore($validated['emails'], $director->uuid);
+        //$check = array_merge($check, $tmpCheck);
 
-        $tmpCheck = $this->addressService->check_ignore($validated['address']['dl_address'], $director->uuid, 'dl_address');
-        $check = array_merge($check, $tmpCheck);
-        $tmpCheck = $this->addressService->check_ignore($validated['address']['credit_home_address'], $director->uuid, 'credit_home_address');
-        $check = array_merge($check, $tmpCheck);
+        //$tmpCheck = $this->addressService->check_ignore($validated['address']['dl_address'], $director->uuid, 'dl_address');
+        //$check = array_merge($check, $tmpCheck);
+        //$tmpCheck = $this->addressService->check_ignore($validated['address']['credit_home_address'], $director->uuid, 'credit_home_address');
+        //$check = array_merge($check, $tmpCheck);
 
         $tmpCheck = $this->directorService->check_ignore($validated, $director->uuid);
         $check = array_merge($check, $tmpCheck);
@@ -982,15 +969,19 @@ class DirectorController extends Controller
 
         $director = $this->directorService->accept($director, $validated, $request->user_uuid);
 
-        $email = Email::where('entity_uuid', $director['uuid']);
-        $email->update($validated['emails']);
-
-        $address = Address::where('entity_uuid', $director['uuid'])
+        if (isset($validated['emails'])){
+            $email = Email::where('entity_uuid', $director['uuid']);
+            $email->update($validated['emails']);
+        }
+        
+        if (isset($validated['address'])){
+            $address = Address::where('entity_uuid', $director['uuid'])
                                     ->where('address_parent', 'dl_address');
-        $address->update($validated['address']['dl_address']);
-        $address = Address::where('entity_uuid', $director['uuid'])
-                                    ->where('address_parent', 'credit_home_address');
-        $address->update($validated['address']['credit_home_address']);
+            $address->update($validated['address']['dl_address']);
+            $address = Address::where('entity_uuid', $director['uuid'])
+                                        ->where('address_parent', 'credit_home_address');
+            $address->update($validated['address']['credit_home_address']);
+        }     
 
         #region Files delete (if exsist)
 
