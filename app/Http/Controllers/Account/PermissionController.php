@@ -221,10 +221,12 @@ class PermissionController extends Controller
         }
 
         $validated = $request->validate([
-            'user_uuid' => 'required',
+            'sel_user_uuid' => 'required',
             'permission_uuid' => 'required',
             'status' => 'required'
         ]);
+        // change doing user to selected
+        $validated['user_uuid'] = $validated['sel_user_uuid'];
 
         $permission = UserPermission::where('user_uuid', $validated['user_uuid'])
                                         ->where('permission_uuid', $validated['permission_uuid'])
