@@ -94,100 +94,116 @@ class CompanyService {
     {
         $check = [];
 
-        $check['tmp'] = Company::select('legal_name')
-                                ->where('status', Config::get('common.status.actived'))
-                                ->where('legal_name', $entity['legal_name'])->first();
-        if ($check['tmp']!=null){
-            $check['tmp'] = $check['tmp']->toArray();
-            foreach ($check['tmp'] AS $key => $value):
-                $check[$key] = Config::get('common.errors.exsist');
-            endforeach;
+        if (isset($entity['legal_name'])){
+            $check['tmp'] = Company::select('legal_name')
+                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('legal_name', $entity['legal_name'])->first();
+            if ($check['tmp']!=null){
+                $check['tmp'] = $check['tmp']->toArray();
+                foreach ($check['tmp'] AS $key => $value):
+                    $check[$key] = Config::get('common.errors.exsist');
+                endforeach;
+            }
+            unset($check['tmp']);
         }
-        unset($check['tmp']);
 
         // Director
-        $check['tmp'] = Company::select('director_uuid')
-                                ->where('status', Config::get('common.status.actived'))
-                                ->where('director_uuid', $entity['director_uuid'])->first();
-        if ($check['tmp']!=null){
-            $check['tmp'] = $check['tmp']->toArray();
-            foreach ($check['tmp'] AS $key => $value):
-                $check[$key] = Config::get('common.errors.exsist');
-            endforeach;
+        if (isset($entity['director_uuid'])){
+            $check['tmp'] = Company::select('director_uuid')
+                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('director_uuid', $entity['director_uuid'])->first();
+            if ($check['tmp']!=null){
+                $check['tmp'] = $check['tmp']->toArray();
+                foreach ($check['tmp'] AS $key => $value):
+                    $check[$key] = Config::get('common.errors.exsist');
+                endforeach;
+            }
+            unset($check['tmp']);
         }
-        unset($check['tmp']);
 
         // EIN
-        $check['tmp'] = Company::select('ein')
-                                ->where('status', Config::get('common.status.actived'))
-                                ->where('ein', $entity['ein'])->first();
-        if ($check['tmp']!=null){
-            $check['tmp'] = $check['tmp']->toArray();
-            foreach ($check['tmp'] AS $key => $value):
-                $check[$key] = Config::get('common.errors.exsist');
-            endforeach;
+        if (isset($entity['ein'])){
+            $check['tmp'] = Company::select('ein')
+                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('ein', $entity['ein'])->first();
+            if ($check['tmp']!=null){
+                $check['tmp'] = $check['tmp']->toArray();
+                foreach ($check['tmp'] AS $key => $value):
+                    $check[$key] = Config::get('common.errors.exsist');
+                endforeach;
+            }
+            unset($check['tmp']);
         }
-        unset($check['tmp']);
 
         // Business number
-        $check['tmp'] = Company::select('business_number')
-                                ->where('status', Config::get('common.status.actived'))
-                                ->where('business_number', $entity['business_number'])->first();
-        if ($check['tmp']!=null){
-            $check['tmp'] = $check['tmp']->toArray();
-            foreach ($check['tmp'] AS $key => $value):
-                $check[$key] = Config::get('common.errors.exsist');
-            endforeach;
+        if (isset($entity['business_number'])){
+            $check['tmp'] = Company::select('business_number')
+                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('business_number', $entity['business_number'])->first();
+            if ($check['tmp']!=null){
+                $check['tmp'] = $check['tmp']->toArray();
+                foreach ($check['tmp'] AS $key => $value):
+                    $check[$key] = Config::get('common.errors.exsist');
+                endforeach;
+            }
+            unset($check['tmp']);
         }
-        unset($check['tmp']);
 
         // Voip Login
-        $check['tmp'] = Company::select('voip_login')
-                                    ->where('status', Config::get('common.status.actived'))
-                                    ->where('voip_login', $entity['voip_login'])->first();
-        if ($check['tmp']!=null){
-            $check['tmp'] = $check['tmp']->toArray();
-            foreach ($check['tmp'] AS $key => $value):
-                $check[$key] = Config::get('common.errors.exsist');
-            endforeach;
+        if (isset($entity['voip_login'])){
+            $check['tmp'] = Company::select('voip_login')
+                                        ->where('status', Config::get('common.status.actived'))
+                                        ->where('voip_login', $entity['voip_login'])->first();
+            if ($check['tmp']!=null){
+                $check['tmp'] = $check['tmp']->toArray();
+                foreach ($check['tmp'] AS $key => $value):
+                    $check[$key] = Config::get('common.errors.exsist');
+                endforeach;
+            }
+            unset($check['tmp']);
         }
-        unset($check['tmp']);
 
         // Business mobile number login
-        $check['tmp'] = Company::select('business_mobile_number_login')
-                                        ->where('status', Config::get('common.status.actived'))
-                                        ->where('business_mobile_number_login', $entity['business_mobile_number_login'])->first();
-        if ($check['tmp']!=null){
-            $check['tmp'] = $check['tmp']->toArray();
-            foreach ($check['tmp'] AS $key => $value):
-                $check[$key] = Config::get('common.errors.exsist');
-            endforeach;
+        if (isset($entity['business_mobile_number_login'])){
+            $check['tmp'] = Company::select('business_mobile_number_login')
+                                            ->where('status', Config::get('common.status.actived'))
+                                            ->where('business_mobile_number_login', $entity['business_mobile_number_login'])->first();
+            if ($check['tmp']!=null){
+                $check['tmp'] = $check['tmp']->toArray();
+                foreach ($check['tmp'] AS $key => $value):
+                    $check[$key] = Config::get('common.errors.exsist');
+                endforeach;
+            }
+            unset($check['tmp']);
         }
-        unset($check['tmp']);
 
         // Website
-        $check['tmp'] = Company::select('website')
-                                ->where('status', Config::get('common.status.actived'))
-                                ->where('website', $entity['website'])->first();
-        if ($check['tmp']!=null){
-            $check['tmp'] = $check['tmp']->toArray();
-            foreach ($check['website_c'] AS $key => $value):
-                $check[$key] = Config::get('common.errors.exsist');
-            endforeach;
+        if (isset($entity['website'])){
+            $check['tmp'] = Company::select('website')
+                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('website', $entity['website'])->first();
+            if ($check['tmp']!=null){
+                $check['tmp'] = $check['tmp']->toArray();
+                foreach ($check['website_c'] AS $key => $value):
+                    $check[$key] = Config::get('common.errors.exsist');
+                endforeach;
+            }
+            unset($check['tmp']);
         }
-        unset($check['tmp']);
 
         // Db report number
-        $check['tmp'] = Company::select('db_report_number')
-                                ->where('status', Config::get('common.status.actived'))
-                                ->where('db_report_number', $entity['db_report_number'])->first();
-        if ($check['tmp']!=null){
-            $check['tmp'] = $check['tmp']->toArray();
-            foreach ($check['tmp'] AS $key => $value):
-                $check[$key] = Config::get('common.errors.exsist');
-            endforeach;
+        if (isset($entity['db_report_number'])){
+            $check['tmp'] = Company::select('db_report_number')
+                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('db_report_number', $entity['db_report_number'])->first();
+            if ($check['tmp']!=null){
+                $check['tmp'] = $check['tmp']->toArray();
+                foreach ($check['tmp'] AS $key => $value):
+                    $check[$key] = Config::get('common.errors.exsist');
+                endforeach;
+            }
+            unset($check['tmp']);
         }
-        unset($check['tmp']);
 
         return $check;
     }
@@ -196,108 +212,124 @@ class CompanyService {
     {
         $check = [];
 
-        $check['tmp'] = Company::select('legal_name')
-                                ->where('uuid', '!=', $ignore_uuid)
-                                ->where('status', Config::get('common.status.actived'))
-                                ->where('legal_name', $entity['legal_name'])->first();
-        if ($check['tmp']!=null){
-            $check['tmp'] = $check['tmp']->toArray();
-            foreach ($check['tmp'] AS $key => $value):
-                $check[$key] = Config::get('common.errors.exsist');
-            endforeach;
+        if (isset($entity['legal_name'])){
+            $check['tmp'] = Company::select('legal_name')
+                                    ->where('uuid', '!=', $ignore_uuid)
+                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('legal_name', $entity['legal_name'])->first();
+            if ($check['tmp']!=null){
+                $check['tmp'] = $check['tmp']->toArray();
+                foreach ($check['tmp'] AS $key => $value):
+                    $check[$key] = Config::get('common.errors.exsist');
+                endforeach;
+            }
+            unset($check['tmp']);
         }
-        unset($check['tmp']);
 
         // Director
-        $check['tmp'] = Company::select('director_uuid')
-                                ->where('uuid', '!=', $ignore_uuid)
-                                ->where('status', Config::get('common.status.actived'))
-                                ->where('director_uuid', $entity['director_uuid'])->first();
-        if ($check['tmp']!=null){
-            $check['tmp'] = $check['tmp']->toArray();
-            foreach ($check['tmp'] AS $key => $value):
-                $check[$key] = Config::get('common.errors.exsist');
-            endforeach;
+        if (isset($entity['director_uuid'])){
+            $check['tmp'] = Company::select('director_uuid')
+                                    ->where('uuid', '!=', $ignore_uuid)
+                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('director_uuid', $entity['director_uuid'])->first();
+            if ($check['tmp']!=null){
+                $check['tmp'] = $check['tmp']->toArray();
+                foreach ($check['tmp'] AS $key => $value):
+                    $check[$key] = Config::get('common.errors.exsist');
+                endforeach;
+            }
+            unset($check['tmp']);
         }
-        unset($check['tmp']);
 
         // EIN
-        $check['tmp'] = Company::select('ein')
-                                ->where('uuid', '!=', $ignore_uuid)
-                                ->where('status', Config::get('common.status.actived'))
-                                ->where('ein', $entity['ein'])->first();
-        if ($check['tmp']!=null){
-            $check['tmp'] = $check['tmp']->toArray();
-            foreach ($check['tmp'] AS $key => $value):
-                $check[$key] = Config::get('common.errors.exsist');
-            endforeach;
+        if (isset($entity['ein'])){
+            $check['tmp'] = Company::select('ein')
+                                    ->where('uuid', '!=', $ignore_uuid)
+                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('ein', $entity['ein'])->first();
+            if ($check['tmp']!=null){
+                $check['tmp'] = $check['tmp']->toArray();
+                foreach ($check['tmp'] AS $key => $value):
+                    $check[$key] = Config::get('common.errors.exsist');
+                endforeach;
+            }
+            unset($check['tmp']);
         }
-        unset($check['tmp']);
 
         // Business number
-        $check['tmp'] = Company::select('business_number')
-                                ->where('uuid', '!=', $ignore_uuid)
-                                ->where('status', Config::get('common.status.actived'))
-                                ->where('business_number', $entity['business_number'])->first();
-        if ($check['tmp']!=null){
-            $check['tmp'] = $check['tmp']->toArray();
-            foreach ($check['tmp'] AS $key => $value):
-                $check[$key] = Config::get('common.errors.exsist');
-            endforeach;
+        if (isset($entity['business_number'])){
+            $check['tmp'] = Company::select('business_number')
+                                    ->where('uuid', '!=', $ignore_uuid)
+                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('business_number', $entity['business_number'])->first();
+            if ($check['tmp']!=null){
+                $check['tmp'] = $check['tmp']->toArray();
+                foreach ($check['tmp'] AS $key => $value):
+                    $check[$key] = Config::get('common.errors.exsist');
+                endforeach;
+            }
+            unset($check['tmp']);
         }
-        unset($check['tmp']);
 
         // Voip Login
-        $check['tmp'] = Company::select('voip_login')
-                                ->where('uuid', '!=', $ignore_uuid)            
-                                ->where('status', Config::get('common.status.actived'))
-                                ->where('voip_login', $entity['voip_login'])->first();
-        if ($check['tmp']!=null){
-            $check['tmp'] = $check['tmp']->toArray();
-            foreach ($check['tmp'] AS $key => $value):
-                $check[$key] = Config::get('common.errors.exsist');
-            endforeach;
+        if (isset($entity['voip_login'])){
+            $check['tmp'] = Company::select('voip_login')
+                                    ->where('uuid', '!=', $ignore_uuid)            
+                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('voip_login', $entity['voip_login'])->first();
+            if ($check['tmp']!=null){
+                $check['tmp'] = $check['tmp']->toArray();
+                foreach ($check['tmp'] AS $key => $value):
+                    $check[$key] = Config::get('common.errors.exsist');
+                endforeach;
+            }
+            unset($check['tmp']);
         }
-        unset($check['tmp']);
 
         // Business mobile number login
-        $check['tmp'] = Company::select('business_mobile_number_login')
-                                ->where('uuid', '!=', $ignore_uuid)
-                                ->where('status', Config::get('common.status.actived'))
-                                ->where('business_mobile_number_login', $entity['business_mobile_number_login'])->first();
-        if ($check['tmp']!=null){
-            $check['tmp'] = $check['tmp']->toArray();
-            foreach ($check['tmp'] AS $key => $value):
-                $check[$key] = Config::get('common.errors.exsist');
-            endforeach;
+        if (isset($entity['business_mobile_number_login'])){
+            $check['tmp'] = Company::select('business_mobile_number_login')
+                                    ->where('uuid', '!=', $ignore_uuid)
+                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('business_mobile_number_login', $entity['business_mobile_number_login'])->first();
+            if ($check['tmp']!=null){
+                $check['tmp'] = $check['tmp']->toArray();
+                foreach ($check['tmp'] AS $key => $value):
+                    $check[$key] = Config::get('common.errors.exsist');
+                endforeach;
+            }
+            unset($check['tmp']);
         }
-        unset($check['tmp']);
 
         // Website
-        $check['tmp'] = Company::select('website')
-                                ->where('uuid', '!=', $ignore_uuid)
-                                ->where('status', Config::get('common.status.actived'))
-                                ->where('website', $entity['website'])->first();
-        if ($check['tmp']!=null){
-            $check['tmp'] = $check['tmp']->toArray();
-            foreach ($check['website_c'] AS $key => $value):
-                $check[$key] = Config::get('common.errors.exsist');
-            endforeach;
+        if (isset($entity['website'])){
+            $check['tmp'] = Company::select('website')
+                                    ->where('uuid', '!=', $ignore_uuid)
+                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('website', $entity['website'])->first();
+            if ($check['tmp']!=null){
+                $check['tmp'] = $check['tmp']->toArray();
+                foreach ($check['website_c'] AS $key => $value):
+                    $check[$key] = Config::get('common.errors.exsist');
+                endforeach;
+            }
+            unset($check['tmp']);
         }
-        unset($check['tmp']);
 
         // Db report number
-        $check['tmp'] = Company::select('db_report_number')
-                                ->where('uuid', '!=', $ignore_uuid)
-                                ->where('status', Config::get('common.status.actived'))
-                                ->where('db_report_number', $entity['db_report_number'])->first();
-        if ($check['tmp']!=null){
-            $check['tmp'] = $check['tmp']->toArray();
-            foreach ($check['tmp'] AS $key => $value):
-                $check[$key] = Config::get('common.errors.exsist');
-            endforeach;
+        if (isset($entity['db_report_number'])){
+            $check['tmp'] = Company::select('db_report_number')
+                                    ->where('uuid', '!=', $ignore_uuid)
+                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('db_report_number', $entity['db_report_number'])->first();
+            if ($check['tmp']!=null){
+                $check['tmp'] = $check['tmp']->toArray();
+                foreach ($check['tmp'] AS $key => $value):
+                    $check[$key] = Config::get('common.errors.exsist');
+                endforeach;
+            }
+            unset($check['tmp']);
         }
-        unset($check['tmp']);
 
         return $check;
     }

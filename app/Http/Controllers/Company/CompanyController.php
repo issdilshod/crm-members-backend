@@ -155,37 +155,32 @@ class CompanyController extends Controller
 
         $validated = $request->validate([
             'legal_name' => 'required',
-            'sic_code_uuid' => 'required',
+            'sic_code_uuid' => '',
             'director_uuid' => 'required',
             'incorporation_state_uuid' => 'required',
-            'incorporation_state_name' => 'required',
+            'incorporation_state_name' => '',
             'doing_business_in_state_uuid' => 'required',
-            'doing_business_in_state_name' => 'required',
+            'doing_business_in_state_name' => '',
             'ein' => 'required',
             
             // numbers
-            'business_number' => 'required',
-            'business_number_type' => 'required',
-            'voip_provider' => 'required',
-            'voip_login' => 'required',
-            'voip_password' => 'required',
-            'business_mobile_number_provider' => 'required',
-            'business_mobile_number_login' => 'required',
-            'business_mobile_number_password' => 'required',
+            'business_number' => '',
+            'business_number_type' => '',
+            'voip_provider' => '',
+            'voip_login' => '',
+            'voip_password' => '',
+            'business_mobile_number_provider' => '',
+            'business_mobile_number_login' => '',
+            'business_mobile_number_password' => '',
 
-            'website' => 'required',
+            'website' => '',
             'db_report_number' => 'required',
 
             // addresses
-            'address.street_address' => 'required',
-            'address.address_line_2' => 'required',
-            'address.city' => 'required',
-            'address.state' => 'required',
-            'address.postal' => 'required',
-            'address.country' => 'required',
+            'address' => 'array',
 
             // emails
-            'emails' => 'required|array',
+            'emails' => 'array',
 
             //future websites
             'future_web' => 'array',
@@ -201,11 +196,15 @@ class CompanyController extends Controller
 
         $check = [];
 
-        $tmpCheck = $this->emailService->check($validated['emails']);
-        $check = array_merge($check, $tmpCheck);
+        if (isset($validated['emails'])){
+            $tmpCheck = $this->emailService->check($validated['emails']);
+            $check = array_merge($check, $tmpCheck);
+        }
 
-        $tmpCheck = $this->addressService->check($validated['address']);
-        $check = array_merge($check, $tmpCheck);
+        if (isset($validated['address'])){
+            $tmpCheck = $this->addressService->check($validated['address']);
+            $check = array_merge($check, $tmpCheck);
+        }
 
         if (isset($validated['bank_account'])){
             $tmpCheck = $this->bankAccountService->check($validated['bank_account']);
@@ -229,17 +228,15 @@ class CompanyController extends Controller
         $this->emailService->create($validated['emails']);
 
         // bank account & account sercurity
-        if (isset($validated['bank_account'])){
-            $validated['bank_account']['entity_uuid'] = $company['uuid'];
-            $bank_account = $this->bankAccountService->create($validated['bank_account']);
+        $validated['bank_account']['entity_uuid'] = $company['uuid'];
+        $bank_account = $this->bankAccountService->save($validated['bank_account']);
 
-            // security
-            if (isset($validated['bank_account_security'])){
-                foreach ($validated['bank_account_security'] AS $key => $value):
-                    $value['entity_uuid'] = $bank_account['uuid'];
-                    BankAccountSecurity::create($value);
-                endforeach;
-            }
+        // security
+        if (isset($validated['bank_account_security'])){
+            foreach ($validated['bank_account_security'] AS $key => $value):
+                $value['entity_uuid'] = $bank_account['uuid'];
+                BankAccountSecurity::create($value);
+            endforeach;
         }
 
         // address
@@ -414,47 +411,41 @@ class CompanyController extends Controller
 
         $validated = $request->validate([
             'legal_name' => 'required',
-            'sic_code_uuid' => 'required',
+            'sic_code_uuid' => '',
             'director_uuid' => 'required',
             'incorporation_state_uuid' => 'required',
-            'incorporation_state_name' => 'required',
+            'incorporation_state_name' => '',
             'doing_business_in_state_uuid' => 'required',
-            'doing_business_in_state_name' => 'required',
+            'doing_business_in_state_name' => '',
             'ein' => 'required',
             
             // numbers
-            'business_number' => 'required',
-            'business_number_type' => 'required',
-            'voip_provider' => 'required',
-            'voip_login' => 'required',
-            'voip_password' => 'required',
-            'business_mobile_number_provider' => 'required',
-            'business_mobile_number_login' => 'required',
-            'business_mobile_number_password' => 'required',
+            'business_number' => '',
+            'business_number_type' => '',
+            'voip_provider' => '',
+            'voip_login' => '',
+            'voip_password' => '',
+            'business_mobile_number_provider' => '',
+            'business_mobile_number_login' => '',
+            'business_mobile_number_password' => '',
 
-            'website' => 'required',
+            'website' => '',
             'db_report_number' => 'required',
 
             // addresses
-            'address.street_address' => 'required',
-            'address.address_line_2' => 'required',
-            'address.city' => 'required',
-            'address.state' => 'required',
-            'address.postal' => 'required',
-            'address.country' => 'required',
+            'address' => 'array',
 
             // emails
-            'emails' => 'required|array',
+            'emails' => 'array',
 
             // bank account
             'bank_account' => 'array',
 
             // bank account security
             'bank_account_security' => 'array',
-
-            // bank account security to delete
             'bank_account_security_to_delete' => 'array',
 
+            // future websites
             'future_web' => 'array',
             'future_web_to_delete' => 'array',
 
@@ -466,11 +457,15 @@ class CompanyController extends Controller
 
         $check = [];
 
-        $tmpCheck = $this->emailService->check_ignore($validated['emails'], $company->uuid);
-        $check = array_merge($check, $tmpCheck);
+        if (isset($validated['emails'])){
+            $tmpCheck = $this->emailService->check_ignore($validated['emails'], $company->uuid);
+            $check = array_merge($check, $tmpCheck);
+        }
 
-        $tmpCheck = $this->addressService->check_ignore($validated['address'], $company->uuid);
-        $check = array_merge($check, $tmpCheck);
+        if (isset($validated['address'])){
+            $tmpCheck = $this->addressService->check_ignore($validated['address'], $company->uuid);
+            $check = array_merge($check, $tmpCheck);
+        }
 
         if (isset($validated['bank_account'])){
             $tmpCheck = $this->bankAccountService->check_ignore($validated['bank_account'], $company->uuid);
@@ -498,36 +493,28 @@ class CompanyController extends Controller
         $address->update($validated['address']);
 
         // bank account & security
-        if (isset($validated['bank_account'])){
-            $bank_account = BankAccount::where('entity_uuid', $company['uuid'])->first();
-            if ($bank_account!=null){
-                $bank_account->update($validated['bank_account']);
-            }else{
-                $validated['bank_account']['entity_uuid'] = $company['uuid'];
-                $bank_account = BankAccount::create($validated['bank_account']);
-            }
+        $validated['bank_account']['entity_uuid'] = $company['uuid'];
+        $bank_account = $this->bankAccountService->save($validated['bank_account']);
 
-            // security delete
-            if (isset($validated['bank_account_security_to_delete'])){
-                foreach($validated['bank_account_security_to_delete'] AS $key => $value):
-                    $bank_account_security = BankAccountSecurity::where('uuid', $value);
-                    $bank_account_security->update(['status' => Config::get('common.status.deleted')]);
-                endforeach;
-            }
+        // security delete
+        if (isset($validated['bank_account_security_to_delete'])){
+            foreach($validated['bank_account_security_to_delete'] AS $key => $value):
+                $bank_account_security = BankAccountSecurity::where('uuid', $value);
+                $bank_account_security->update(['status' => Config::get('common.status.deleted')]);
+            endforeach;
+        }
 
-            // security
-            if (isset($validated['bank_account_security'])){
-                foreach ($validated['bank_account_security'] AS $key => $value):
-                    $value['entity_uuid'] = $bank_account['uuid'];
-                    $bank_account_security = BankAccountSecurity::find($value);
-                    if (!$bank_account_security->count()){
-                        BankAccountSecurity::create($value);
-                    }else{
-                        $bank_account_security->update($value);
-                    }
-                endforeach;
-            }
-
+        // security
+        if (isset($validated['bank_account_security'])){
+            foreach ($validated['bank_account_security'] AS $key => $value):
+                $value['entity_uuid'] = $bank_account['uuid'];
+                $bank_account_security = BankAccountSecurity::find($value);
+                if (!$bank_account_security->count()){
+                    BankAccountSecurity::create($value);
+                }else{
+                    $bank_account_security->update($value);
+                }
+            endforeach;
         }
 
         // future websites
@@ -694,14 +681,14 @@ class CompanyController extends Controller
         }
 
         $validated = $request->validate([
-            'legal_name' => 'required|string',
+            'legal_name' => 'required',
             'sic_code_uuid' => '',
-            'director_uuid' => '',
-            'incorporation_state_uuid' => '',
+            'director_uuid' => 'required',
+            'incorporation_state_uuid' => 'required',
             'incorporation_state_name' => '',
-            'doing_business_in_state_uuid' => '',
+            'doing_business_in_state_uuid' => 'required',
             'doing_business_in_state_name' => '',
-            'ein' => '',
+            'ein' => 'required',
             
             // numbers
             'business_number' => '',
@@ -714,21 +701,13 @@ class CompanyController extends Controller
             'business_mobile_number_password' => '',
 
             'website' => '',
-            'db_report_number' => '',
+            'db_report_number' => 'required',
 
             // addresses
-            'address.street_address' => '',
-            'address.address_line_2' => '',
-            'address.city' => '',
-            'address.state' => '',
-            'address.postal' => '',
-            'address.country' => '',
+            'address' => 'array',
 
             // emails
-            'emails.hosting_uuid' => 'required',
-            'emails.email' => '',
-            'emails.password' => '',
-            'emails.phone' => '',
+            'emails' => 'array',
 
             // bank account
             'bank_account' => 'array',
@@ -753,18 +732,16 @@ class CompanyController extends Controller
         $validated['address']['entity_uuid'] = $company['uuid'];
         $this->addressService->create($validated['address']);
 
-        // bank account & security
-        if (isset($validated['bank_account'])){
-            $validated['bank_account']['entity_uuid'] = $company['uuid'];
-            $bank_account = $this->bankAccountService->create($validated['bank_account']);
+        // bank account
+        $validated['bank_account']['entity_uuid'] = $company['uuid'];
+        $bank_account = $this->bankAccountService->save($validated['bank_account']);
 
-            // security
-            if (isset($validated['bank_account_security'])){
-                foreach ($validated['bank_account_security'] AS $key => $value):
-                    $value['entity_uuid'] = $bank_account['uuid'];
-                    BankAccountSecurity::create($value);
-                endforeach;
-            }
+        // security
+        if (isset($validated['bank_account_security'])){
+            foreach ($validated['bank_account_security'] AS $key => $value):
+                $value['entity_uuid'] = $bank_account['uuid'];
+                BankAccountSecurity::create($value);
+            endforeach;
         }
 
         // future websites
@@ -852,14 +829,14 @@ class CompanyController extends Controller
         }
 
         $validated = $request->validate([
-            'legal_name' => 'required|string',
+            'legal_name' => 'required',
             'sic_code_uuid' => '',
-            'director_uuid' => '',
-            'incorporation_state_uuid' => '',
+            'director_uuid' => 'required',
+            'incorporation_state_uuid' => 'required',
             'incorporation_state_name' => '',
-            'doing_business_in_state_uuid' => '',
+            'doing_business_in_state_uuid' => 'required',
             'doing_business_in_state_name' => '',
-            'ein' => '',
+            'ein' => 'required',
             
             // numbers
             'business_number' => '',
@@ -872,30 +849,26 @@ class CompanyController extends Controller
             'business_mobile_number_password' => '',
 
             'website' => '',
-            'db_report_number' => '',
+            'db_report_number' => 'required',
 
             // addresses
-            'address.street_address' => '',
-            'address.address_line_2' => '',
-            'address.city' => '',
-            'address.state' => '',
-            'address.postal' => '',
-            'address.country' => '',
+            'address' => 'array',
 
             // emails
-            'emails.hosting_uuid' => 'required|string',
-            'emails.email' => '',
-            'emails.password' => '',
-            'emails.phone' => '',
+            'emails' => 'array',
 
             // bank account
             'bank_account' => 'array',
 
             // bank account security
             'bank_account_security' => 'array',
+            'bank_account_security_to_delete' => 'array',
 
+            // future websites
             'future_web' => 'array',
             'future_web_to_delete' => 'array',
+
+            'files_to_delete' => 'array',
 
             'user_uuid' => 'string'
         ]);
@@ -915,36 +888,28 @@ class CompanyController extends Controller
         }
 
         // bank account & security
-        if (isset($validated['bank_account'])){
-            $bank_account = BankAccount::where('entity_uuid', $company['uuid'])->first();
-            if ($bank_account!=null){
-                $bank_account->update($validated['bank_account']);
-            }else{
-                $validated['bank_account']['entity_uuid'] = $company['uuid'];
-                $bank_account = BankAccount::create($validated['bank_account']);
-            }
+        $validated['bank_account']['entity_uuid'] = $company['uuid'];
+        $bank_account = $this->bankAccountService->save($validated['bank_account']);
 
-            // security delete
-            if (isset($validated['bank_account_security_to_delete'])){
-                foreach($validated['bank_account_security_to_delete'] AS $key => $value):
-                    $bank_account_security = BankAccountSecurity::where('uuid', $value);
-                    $bank_account_security->update(['status' => Config::get('common.status.deleted')]);
-                endforeach;
-            }
+        // security delete
+        if (isset($validated['bank_account_security_to_delete'])){
+            foreach($validated['bank_account_security_to_delete'] AS $key => $value):
+                $bank_account_security = BankAccountSecurity::where('uuid', $value);
+                $bank_account_security->update(['status' => Config::get('common.status.deleted')]);
+            endforeach;
+        }
 
-            // security
-            if (isset($validated['bank_account_security'])){
-                foreach ($validated['bank_account_security'] AS $key => $value):
-                    $value['entity_uuid'] = $bank_account['uuid'];
-                    $bank_account_security = BankAccountSecurity::find($value);
-                    if (!$bank_account_security->count()){
-                        BankAccountSecurity::create($value);
-                    }else{
-                        $bank_account_security->update($value);
-                    }
-                endforeach;
-            }
-
+        // security
+        if (isset($validated['bank_account_security'])){
+            foreach ($validated['bank_account_security'] AS $key => $value):
+                $value['entity_uuid'] = $bank_account['uuid'];
+                $bank_account_security = BankAccountSecurity::find($value);
+                if (!$bank_account_security->count()){
+                    BankAccountSecurity::create($value);
+                }else{
+                    $bank_account_security->update($value);
+                }
+            endforeach;
         }
 
         // future websites
@@ -1051,48 +1016,42 @@ class CompanyController extends Controller
         }
     
         $validated = $request->validate([
-            'legal_name' => 'required|string',
-            'sic_code_uuid' => 'required|string',
-            'director_uuid' => 'required|string',
-            'incorporation_state_uuid' => 'required|string',
-            'incorporation_state_name' => 'required|string',
-            'doing_business_in_state_uuid' => 'required|string',
-            'doing_business_in_state_name' => 'required|string',
-            'ein' => 'required|string',
+            'legal_name' => 'required',
+            'sic_code_uuid' => '',
+            'director_uuid' => 'required',
+            'incorporation_state_uuid' => 'required',
+            'incorporation_state_name' => '',
+            'doing_business_in_state_uuid' => 'required',
+            'doing_business_in_state_name' => '',
+            'ein' => 'required',
             
             // numbers
-            'business_number' => 'required|string',
-            'business_number_type' => 'required|string',
-            'voip_provider' => 'required|string',
-            'voip_login' => 'required|string',
-            'voip_password' => 'required|string',
-            'business_mobile_number_provider' => 'required|string',
-            'business_mobile_number_login' => 'required|string',
-            'business_mobile_number_password' => 'required|string',
+            'business_number' => '',
+            'business_number_type' => '',
+            'voip_provider' => '',
+            'voip_login' => '',
+            'voip_password' => '',
+            'business_mobile_number_provider' => '',
+            'business_mobile_number_login' => '',
+            'business_mobile_number_password' => '',
 
-            'website' => 'required|string',
-            'db_report_number' => 'required|string',
+            'website' => '',
+            'db_report_number' => 'required',
 
             // addresses
-            'address.street_address' => 'required|string',
-            'address.address_line_2' => 'required|string',
-            'address.city' => 'required|string',
-            'address.state' => 'required|string',
-            'address.postal' => 'required|string',
-            'address.country' => 'required|string',
+            'address' => 'array',
 
             // emails
-            'emails' => 'required|array',
+            'emails' => 'array',
 
             // bank account
             'bank_account' => 'array',
 
             // bank account security
             'bank_account_security' => 'array',
-
-            // bank account security to delete
             'bank_account_security_to_delete' => 'array',
 
+            // future websites
             'future_web' => 'array',
             'future_web_to_delete' => 'array',
 
@@ -1104,11 +1063,15 @@ class CompanyController extends Controller
 
         $check = [];
 
-        $tmpCheck = $this->emailService->check_ignore($validated['emails'], $company->uuid);
-        $check = array_merge($check, $tmpCheck);
+        if (isset($validated['emails'])){
+            $tmpCheck = $this->emailService->check_ignore($validated['emails'], $company->uuid);
+            $check = array_merge($check, $tmpCheck);
+        }
 
-        $tmpCheck = $this->addressService->check_ignore($validated['address'], $company->uuid);
-        $check = array_merge($check, $tmpCheck);
+        if (isset($validated['address'])){
+            $tmpCheck = $this->addressService->check_ignore($validated['address'], $company->uuid);
+            $check = array_merge($check, $tmpCheck);
+        }
 
         $tmpCheck = $this->companyService->check_ignore($validated, $company->uuid);
         $check = array_merge($check, $tmpCheck);
@@ -1129,36 +1092,28 @@ class CompanyController extends Controller
         $address->update($validated['address']);
 
         // bank account & security
-        if (isset($validated['bank_account'])){
-            $bank_account = BankAccount::where('entity_uuid', $company['uuid'])->first();
-            if ($bank_account!=null){
-                $bank_account->update($validated['bank_account']);
-            }else{
-                $validated['bank_account']['entity_uuid'] = $company['uuid'];
-                $bank_account = BankAccount::create($validated['bank_account']);
-            }
+        $validated['bank_account']['entity_uuid'] = $company['uuid'];
+        $bank_account = $this->bankAccountService->save($validated['bank_account']);
 
-            // security delete
-            if (isset($validated['bank_account_security_to_delete'])){
-                foreach($validated['bank_account_security_to_delete'] AS $key => $value):
-                    $bank_account_security = BankAccountSecurity::where('uuid', $value);
-                    $bank_account_security->update(['status' => Config::get('common.status.deleted')]);
-                endforeach;
-            }
+        // security delete
+        if (isset($validated['bank_account_security_to_delete'])){
+            foreach($validated['bank_account_security_to_delete'] AS $key => $value):
+                $bank_account_security = BankAccountSecurity::where('uuid', $value);
+                $bank_account_security->update(['status' => Config::get('common.status.deleted')]);
+            endforeach;
+        }
 
-            // security
-            if (isset($validated['bank_account_security'])){
-                foreach ($validated['bank_account_security'] AS $key => $value):
-                    $value['entity_uuid'] = $bank_account['uuid'];
-                    $bank_account_security = BankAccountSecurity::find($value);
-                    if (!$bank_account_security->count()){
-                        BankAccountSecurity::create($value);
-                    }else{
-                        $bank_account_security->update($value);
-                    }
-                endforeach;
-            }
-
+        // security
+        if (isset($validated['bank_account_security'])){
+            foreach ($validated['bank_account_security'] AS $key => $value):
+                $value['entity_uuid'] = $bank_account['uuid'];
+                $bank_account_security = BankAccountSecurity::find($value);
+                if (!$bank_account_security->count()){
+                    BankAccountSecurity::create($value);
+                }else{
+                    $bank_account_security->update($value);
+                }
+            endforeach;
         }
 
         // future websites
