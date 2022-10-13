@@ -614,14 +614,17 @@ class DirectorController extends Controller
 
         // email
         $validated['emails']['entity_uuid'] = $director['uuid'];
+        $validated['emails']['status'] = Config::get('common.status.pending');
         $this->emailService->create($validated['emails']);
 
         //address
         $validated['address']['dl_address']['address_parent'] = 'dl_address';
         $validated['address']['dl_address']['entity_uuid'] = $director['uuid'];
+        $validated['address']['dl_address']['status'] = Config::get('common.status.pending');
         $this->addressService->create($validated['address']['dl_address']);
         $validated['address']['credit_home_address']['address_parent'] = 'credit_home_address';
         $validated['address']['credit_home_address']['entity_uuid'] = $director['uuid'];
+        $validated['address']['credit_home_address']['status'] = Config::get('common.status.pending');
         $this->addressService->create($validated['address']['credit_home_address']);
 
         #region Files upload (if exsist)
@@ -758,18 +761,21 @@ class DirectorController extends Controller
         $director = $this->directorService->pending_update($uuid, $validated);
 
         if (isset($validated['emails'])){
-            $email = Email::where('entity_uuid', $director['uuid']);   
+            $email = Email::where('entity_uuid', $director['uuid']);  
+            $validated['emails']['status'] = Config::get('common.status.pending');
             $email->update($validated['emails']);
         }
 
         if (isset($validated['address']['dl_address'])){
             $address = Address::where('entity_uuid', $director['uuid'])
                                         ->where('address_parent', 'dl_address');
+            $validated['address']['dl_address']['status'] = Config::get('common.status.pending');
             $address->update($validated['address']['dl_address']);
         }
         if (isset($validated['address']['credit_home_address'])){
             $address = Address::where('entity_uuid', $director['uuid'])
                                         ->where('address_parent', 'credit_home_address');
+            $validated['address']['credit_home_address']['status'] = Config::get('common.status.pending');
             $address->update($validated['address']['credit_home_address']);
         }
 
@@ -948,21 +954,20 @@ class DirectorController extends Controller
 
         $director = $this->directorService->accept($director, $validated, $request->user_uuid);
 
-        if (isset($validated['emails'])){
-            $email = Email::where('entity_uuid', $director['uuid']);
-            $email->update($validated['emails']);
-        }
+        $email = Email::where('entity_uuid', $director['uuid']);
+        $validated['emails']['status'] = Config::get('common.status.actived');
+        $email->update($validated['emails']);
         
-        if (isset($validated['address']['dl_address'])){
-            $address = Address::where('entity_uuid', $director['uuid'])
-                                    ->where('address_parent', 'dl_address');
-            $address->update($validated['address']['dl_address']);
-        }
-        if (isset($validated['address']['credit_home_address'])){
-            $address = Address::where('entity_uuid', $director['uuid'])
-                                        ->where('address_parent', 'credit_home_address');
-            $address->update($validated['address']['credit_home_address']);
-        }     
+        $address = Address::where('entity_uuid', $director['uuid'])
+                                ->where('address_parent', 'dl_address');
+        $validated['address']['dl_address']['status'] = Config::get('common.status.actived');
+        $address->update($validated['address']['dl_address']);
+        
+        $address = Address::where('entity_uuid', $director['uuid'])
+                                    ->where('address_parent', 'credit_home_address');
+        $validated['address']['credit_home_address']['status'] = Config::get('common.status.actived');
+        $address->update($validated['address']['credit_home_address']);
+           
 
         #region Files delete (if exsist)
 

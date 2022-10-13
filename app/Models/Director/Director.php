@@ -28,13 +28,11 @@ class Director extends Model
     }
 
     public function emails(){
-        return $this->hasMany(Email::class, 'entity_uuid', 'uuid')
-                        ->where('status', Config::get('common.status.actived'));
+        return $this->hasMany(Email::class, 'entity_uuid', 'uuid');
     }
 
     public function addresses(){
-        return $this->hasMany(Address::class, 'entity_uuid', 'uuid')
-                        ->where('status', Config::get('common.status.actived'));
+        return $this->hasMany(Address::class, 'entity_uuid', 'uuid');
     }
 
     public function company(): HasOne
