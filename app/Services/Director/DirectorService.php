@@ -86,6 +86,23 @@ class DirectorService {
         return DirectorResource::collection($directors);
     }
 
+    private function is_idefier($check)
+    {
+        $idenfier = ['first_name', 'middle_name', 'last_name'];
+        $is_idefier = false;
+        foreach ($idenfier AS $key => $value):
+            if ($value==$check){
+                $is_idefier = true;
+            }
+        endforeach;
+        return $is_idefier;
+    }
+
+    private function message_where_exists($entity)
+    {
+        return ' On director card *' . $entity['first_name'] . ' ' . $entity['middle_name'] . ' ' . $entity['last_name'] . '*';
+    }
+
     public function check($entity)
     {
 
@@ -108,14 +125,15 @@ class DirectorService {
 
         // Ssn
         if (isset($entity['ssn_cpn'])){
-            $check['tmp'] = Director::select('ssn_cpn')
+            $check['tmp'] = Director::select('ssn_cpn', 'first_name', 'middle_name', 'last_name')
                                         ->where('status', Config::get('common.status.actived'))
                                         ->where('ssn_cpn', $entity['ssn_cpn'])
                                         ->first();
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
                 foreach ($check['tmp'] AS $key => $value):
-                    $check[$key] = Config::get('common.errors.exsist');
+                    if ($this->is_idefier($key)){ continue; }
+                    $check[$key] = Config::get('common.errors.exsist') . $this->message_where_exists($check['tmp']);
                 endforeach;
             }
             unset($check['tmp']);
@@ -136,14 +154,15 @@ class DirectorService {
 
         // Phone
         if (isset($entity['phone_number'])){
-            $check['tmp'] = Director::select('phone_number')
+            $check['tmp'] = Director::select('phone_number', 'first_name', 'middle_name', 'last_name')
                                         ->where('status', Config::get('common.status.actived'))
                                         ->where('phone_number', $entity['phone_number'])
                                         ->first();
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
                 foreach ($check['tmp'] AS $key => $value):
-                    $check[$key] = Config::get('common.errors.exsist');
+                    if ($this->is_idefier($key)){ continue; }
+                    $check[$key] = Config::get('common.errors.exsist') . $this->message_where_exists($check['tmp']);
                 endforeach;
             }
             unset($check['tmp']);
@@ -175,7 +194,7 @@ class DirectorService {
 
         // Ssn
         if (isset($entity['ssn_cpn'])){
-            $check['tmp'] = Director::select('ssn_cpn')
+            $check['tmp'] = Director::select('ssn_cpn', 'first_name', 'middle_name', 'last_name')
                                     ->where('uuid', '!=', $ignore_uuid)
                                     ->where('status', Config::get('common.status.actived'))
                                     ->where('ssn_cpn', $entity['ssn_cpn'])
@@ -183,7 +202,8 @@ class DirectorService {
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
                 foreach ($check['tmp'] AS $key => $value):
-                    $check[$key] = Config::get('common.errors.exsist');
+                    if ($this->is_idefier($key)){ continue; }
+                    $check[$key] = Config::get('common.errors.exsist') . $this->message_where_exists($check['tmp']);
                 endforeach;
             }
             unset($check['tmp']);
@@ -205,7 +225,7 @@ class DirectorService {
 
         // Phone
         if (isset($entity['phone_number'])){
-            $check['tmp'] = Director::select('phone_number')
+            $check['tmp'] = Director::select('phone_number', 'first_name', 'middle_name', 'last_name')
                                     ->where('uuid', '!=', $ignore_uuid)
                                     ->where('status', Config::get('common.status.actived'))
                                     ->where('phone_number', $entity['phone_number'])
@@ -213,7 +233,8 @@ class DirectorService {
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
                 foreach ($check['tmp'] AS $key => $value):
-                    $check[$key] = Config::get('common.errors.exsist');
+                    if ($this->is_idefier($key)){ continue; }
+                    $check[$key] = Config::get('common.errors.exsist') . $this->message_where_exists($check['tmp']);
                 endforeach;
             }
             unset($check['tmp']);
