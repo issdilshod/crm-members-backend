@@ -25,6 +25,7 @@ class CompanyResource extends JsonResource
             'legal_name' => $this->legal_name,
             'sic_code_uuid' => $this->sic_code_uuid,
             'director_uuid' => $this->director_uuid,
+            'director' => $this->director,
             'incorporation_state_uuid' => $this->incorporation_state_uuid,
             'incorporation_state_name' => $this->incorporation_state_name,
             'doing_business_in_state_uuid' => $this->doing_business_in_state_uuid,
