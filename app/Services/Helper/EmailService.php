@@ -19,29 +19,33 @@ class EmailService {
     {
         $check = [];
 
-        $check['hosting_email'] = Email::select('hosting_uuid', 'email')
-                                        ->where('status', Config::get('common.status.actived'))
-                                        ->where('hosting_uuid', $entity['hosting_uuid'])
-                                        ->where('email', $entity['email'])->first();
-        if ($check['hosting_email']!=null){
-            $check['hosting_email'] = $check['hosting_email']->toArray();
-            foreach ($check['hosting_email'] AS $key => $value):
-                $check['emails.'.$key] = Config::get('common.errors.exsist');
-            endforeach;
+        if (isset($entity['hosting_uuid']) && isset($entity['email'])){
+            $check['tmp'] = Email::select('hosting_uuid', 'email')
+                                            ->where('status', Config::get('common.status.actived'))
+                                            ->where('hosting_uuid', $entity['hosting_uuid'])
+                                            ->where('email', $entity['email'])->first();
+            if ($check['tmp']!=null){
+                $check['tmp'] = $check['tmp']->toArray();
+                foreach ($check['tmp'] AS $key => $value):
+                    $check['emails.'.$key] = Config::get('common.errors.exsist');
+                endforeach;
+            }
+            unset($check['tmp']);
         }
-        unset($check['hosting_email']);
 
         // Phone
-        $check['phone'] = Email::select('phone')
-                                    ->where('status', Config::get('common.status.actived'))
-                                    ->where('phone', $entity['phone'])->first();
-        if ($check['phone']!=null){
-            $check['phone'] = $check['phone']->toArray();
-            foreach ($check['phone'] AS $key => $value):
-                $check['emails.'.$key] = Config::get('common.errors.exsist');
-            endforeach;
+        if (isset($entity['phone'])){
+            $check['tmp'] = Email::select('phone')
+                                        ->where('status', Config::get('common.status.actived'))
+                                        ->where('phone', $entity['phone'])->first();
+            if ($check['tmp']!=null){
+                $check['tmp'] = $check['tmp']->toArray();
+                foreach ($check['tmp'] AS $key => $value):
+                    $check['emails.'.$key] = Config::get('common.errors.exsist');
+                endforeach;
+            }
+            unset($check['tmp']);
         }
-        unset($check['phone']);
 
         return $check;
     }
@@ -50,31 +54,35 @@ class EmailService {
     {
         $check = [];
 
-        $check['hosting_email'] = Email::select('hosting_uuid', 'email')
-                                        ->where('entity_uuid', '!=', $ignore_uuid)
-                                        ->where('status', Config::get('common.status.actived'))
-                                        ->where('hosting_uuid', $entity['hosting_uuid'])
-                                        ->where('email', $entity['email'])->first();
-        if ($check['hosting_email']!=null){
-            $check['hosting_email'] = $check['hosting_email']->toArray();
-            foreach ($check['hosting_email'] AS $key => $value):
-                $check['emails.'.$key] = Config::get('common.errors.exsist');
-            endforeach;
+        if (isset($entity['hosting_uuid']) && isset($entity['email'])){
+            $check['tmp'] = Email::select('hosting_uuid', 'email')
+                                            ->where('entity_uuid', '!=', $ignore_uuid)
+                                            ->where('status', Config::get('common.status.actived'))
+                                            ->where('hosting_uuid', $entity['hosting_uuid'])
+                                            ->where('email', $entity['email'])->first();
+            if ($check['tmp']!=null){
+                $check['tmp'] = $check['tmp']->toArray();
+                foreach ($check['tmp'] AS $key => $value):
+                    $check['emails.'.$key] = Config::get('common.errors.exsist');
+                endforeach;
+            }
+            unset($check['tmp']);
         }
-        unset($check['hosting_email']);
 
         // Phone
-        $check['phone'] = Email::select('phone')
-                                ->where('entity_uuid', '!=', $ignore_uuid)
-                                ->where('status', Config::get('common.status.actived'))
-                                ->where('phone', $entity['phone'])->first();
-        if ($check['phone']!=null){
-            $check['phone'] = $check['phone']->toArray();
-            foreach ($check['phone'] AS $key => $value):
-                $check['emails.'.$key] = Config::get('common.errors.exsist');
-            endforeach;
+        if (isset($entity['phone'])){
+            $check['tmp'] = Email::select('phone')
+                                    ->where('entity_uuid', '!=', $ignore_uuid)
+                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('phone', $entity['phone'])->first();
+            if ($check['tmp']!=null){
+                $check['tmp'] = $check['tmp']->toArray();
+                foreach ($check['tmp'] AS $key => $value):
+                    $check['emails.'.$key] = Config::get('common.errors.exsist');
+                endforeach;
+            }
+            unset($check['tmp']);
         }
-        unset($check['phone']);
 
         return $check;
     }

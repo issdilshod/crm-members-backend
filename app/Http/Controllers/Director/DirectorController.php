@@ -127,47 +127,39 @@ class DirectorController extends Controller
         }
 
         $validated = $request->validate([
-            'first_name' => 'required|string',
+            'first_name' => 'required',
             'middle_name' => '',
-            'last_name' => 'required|string',
-            'date_of_birth' => 'required|date',
-            'ssn_cpn' => 'required|string',
-            'company_association' => 'required|string',
-            'phone_type' => 'required|string',
-            'phone_number' => 'required|string',
+            'last_name' => 'required',
+            'date_of_birth' => 'required',
+            'ssn_cpn' => 'required',
+            'company_association' => '',
+            'phone_type' => 'required',
+            'phone_number' => 'required',
             // addresses
-            'address.dl_address.street_address' => 'required|string',
-            'address.dl_address.address_line_2' => 'required|string',
-            'address.dl_address.city' => 'required|string',
-            'address.dl_address.state' => 'required|string',
-            'address.dl_address.postal' => 'required|string',
-            'address.dl_address.country' => 'required|string',
+            'address.dl_address' => 'array',
 
-            'address.credit_home_address.street_address' => 'required|string',
-            'address.credit_home_address.address_line_2' => 'required|string',
-            'address.credit_home_address.city' => 'required|string',
-            'address.credit_home_address.state' => 'required|string',
-            'address.credit_home_address.postal' => 'required|string',
-            'address.credit_home_address.country' => 'required|string',
+            'address.credit_home_address' => 'array',
             // emails
-            'emails.hosting_uuid' => 'required|string',
-            'emails.email' => 'required|string',
-            'emails.password' => 'required|string',
-            'emails.phone' => 'required|string',
+            'emails' => 'array',
 
-            'user_uuid' => 'string',
-            'role_alias' => 'string'
+            'user_uuid' => 'string'
         ]);
 
         $check = [];
 
-        $tmpCheck = $this->emailService->check($validated['emails']);
-        $check = array_merge($check, $tmpCheck);
+        if (isset($validated['emails'])){
+            $tmpCheck = $this->emailService->check($validated['emails']);
+            $check = array_merge($check, $tmpCheck);
+        }
 
-        $tmpCheck = $this->addressService->check($validated['address']['dl_address'], 'dl_address');
-        $check = array_merge($check, $tmpCheck);
-        $tmpCheck = $this->addressService->check($validated['address']['credit_home_address'], 'credit_home_address');
-        $check = array_merge($check, $tmpCheck);
+        if (isset($validated['address']['dl_address'])){
+            $tmpCheck = $this->addressService->check($validated['address']['dl_address'], 'dl_address');
+            $check = array_merge($check, $tmpCheck);
+        }
+        if (isset($validated['address']['credit_home_address'])){
+            $tmpCheck = $this->addressService->check($validated['address']['credit_home_address'], 'credit_home_address');
+            $check = array_merge($check, $tmpCheck);
+        }
 
         $tmpCheck = $this->directorService->check($validated);
         $check = array_merge($check, $tmpCheck);
@@ -339,49 +331,41 @@ class DirectorController extends Controller
         }
 
         $validated = $request->validate([
-            'first_name' => 'required|string',
+            'first_name' => 'required',
             'middle_name' => '',
-            'last_name' => 'required|string',
-            'date_of_birth' => 'required|date',
-            'ssn_cpn' => 'required|string',
-            'company_association' => 'required|string',
-            'phone_type' => 'required|string',
-            'phone_number' => 'required|string',
+            'last_name' => 'required',
+            'date_of_birth' => 'required',
+            'ssn_cpn' => 'required',
+            'company_association' => '',
+            'phone_type' => 'required',
+            'phone_number' => 'required',
             // addresses
-            'address.dl_address.street_address' => 'required|string',
-            'address.dl_address.address_line_2' => 'required|string',
-            'address.dl_address.city' => 'required|string',
-            'address.dl_address.state' => 'required|string',
-            'address.dl_address.postal' => 'required|string',
-            'address.dl_address.country' => 'required|string',
+            'address.dl_address' => 'array',
 
-            'address.credit_home_address.street_address' => 'required|string',
-            'address.credit_home_address.address_line_2' => 'required|string',
-            'address.credit_home_address.city' => 'required|string',
-            'address.credit_home_address.state' => 'required|string',
-            'address.credit_home_address.postal' => 'required|string',
-            'address.credit_home_address.country' => 'required|string',
+            'address.credit_home_address' => 'array',
             // emails
-            'emails.hosting_uuid' => 'required|string',
-            'emails.email' => 'required|string',
-            'emails.password' => 'required|string',
-            'emails.phone' => 'required|string',
+            'emails' => 'array',
             // files to delete by uuid
             'files_to_delete' => 'array',
 
-            'user_uuid' => 'string',
-            'role_alias' => 'string'
+            'user_uuid' => 'string'
         ]);
 
         $check = [];
 
-        $tmpCheck = $this->emailService->check_ignore($validated['emails'], $director->uuid);
-        $check = array_merge($check, $tmpCheck);
+        if (isset($validated['emails'])){
+            $tmpCheck = $this->emailService->check_ignore($validated['emails'], $director->uuid);
+            $check = array_merge($check, $tmpCheck);
+        }
 
-        $tmpCheck = $this->addressService->check_ignore($validated['address']['dl_address'], $director->uuid, 'dl_address');
-        $check = array_merge($check, $tmpCheck);
-        $tmpCheck = $this->addressService->check_ignore($validated['address']['credit_home_address'], $director->uuid, 'credit_home_address');
-        $check = array_merge($check, $tmpCheck);
+        if (isset($validated['address']['dl_address'])){
+            $tmpCheck = $this->addressService->check_ignore($validated['address']['dl_address'], $director->uuid, 'dl_address');
+            $check = array_merge($check, $tmpCheck);
+        }
+        if (isset($validated['address']['credit_home_address'])){
+            $tmpCheck = $this->addressService->check_ignore($validated['address']['credit_home_address'], $director->uuid, 'credit_home_address');
+            $check = array_merge($check, $tmpCheck);
+        }
 
         $tmpCheck = $this->directorService->check_ignore($validated, $director->uuid);
         $check = array_merge($check, $tmpCheck);
@@ -395,15 +379,21 @@ class DirectorController extends Controller
 
         $director = $this->directorService->update($director, $validated);
 
-        $email = Email::where('entity_uuid', $director['uuid']);
-        $email->update($validated['emails']);
+        if (isset($validated['emails'])){
+            $email = Email::where('entity_uuid', $director['uuid']);
+            $email->update($validated['emails']);
+        }
 
-        $address = Address::where('entity_uuid', $director['uuid'])
-                                    ->where('address_parent', 'dl_address');
-        $address->update($validated['address']['dl_address']);
-        $address = Address::where('entity_uuid', $director['uuid'])
-                                    ->where('address_parent', 'credit_home_address');
-        $address->update($validated['address']['credit_home_address']);
+        if (isset($validated['address']['dl_address'])){
+            $address = Address::where('entity_uuid', $director['uuid'])
+                                        ->where('address_parent', 'dl_address');
+            $address->update($validated['address']['dl_address']);
+        }
+        if (isset($validated['address']['credit_home_address'])){
+            $address = Address::where('entity_uuid', $director['uuid'])
+                                        ->where('address_parent', 'credit_home_address');
+            $address->update($validated['address']['credit_home_address']);
+        }
 
         #region Files delete (if exsist)
 
@@ -599,31 +589,18 @@ class DirectorController extends Controller
             'last_name' => 'required',
             'date_of_birth' => 'required',
             'ssn_cpn' => 'required',
-            'company_association' => 'required',
+            'company_association' => '',
             'phone_type' => 'required',
             'phone_number' => 'required',
             // addresses
-            'address.dl_address.street_address' => '',
-            'address.dl_address.address_line_2' => '',
-            'address.dl_address.city' => '',
-            'address.dl_address.state' => '',
-            'address.dl_address.postal' => '',
-            'address.dl_address.country' => '',
+            'address.dl_address' => 'array',
 
-            'address.credit_home_address.street_address' => '',
-            'address.credit_home_address.address_line_2' => '',
-            'address.credit_home_address.city' => '',
-            'address.credit_home_address.state' => '',
-            'address.credit_home_address.postal' => '',
-            'address.credit_home_address.country' => '',
+            'address.credit_home_address' => 'array',
+            
             // emails
-            'emails.hosting_uuid' => '',
-            'emails.email' => '',
-            'emails.password' => '',
-            'emails.phone' => '',
+            'emails' => 'array',
 
-            'user_uuid' => 'string',
-            'role_alias' => 'string'
+            'user_uuid' => 'string'
         ]);
 
         $director = $this->directorService->pending($validated);
@@ -755,33 +732,20 @@ class DirectorController extends Controller
             'first_name' => 'required',
             'middle_name' => '',
             'last_name' => 'required',
-            'date_of_birth' => '',
-            'ssn_cpn' => '',
+            'date_of_birth' => 'required',
+            'ssn_cpn' => 'required',
             'company_association' => '',
-            'phone_type' => '',
-            'phone_number' => '',
+            'phone_type' => 'required',
+            'phone_number' => 'required',
+
             // addresses
-            'address.dl_address.street_address' => '',
-            'address.dl_address.address_line_2' => '',
-            'address.dl_address.city' => '',
-            'address.dl_address.state' => '',
-            'address.dl_address.postal' => '',
-            'address.dl_address.country' => '',
+            'address.dl_address' => 'array',
 
-            'address.credit_home_address.street_address' => '',
-            'address.credit_home_address.address_line_2' => '',
-            'address.credit_home_address.city' => '',
-            'address.credit_home_address.state' => '',
-            'address.credit_home_address.postal' => '',
-            'address.credit_home_address.country' => '',
+            'address.credit_home_address' => 'array',
             // emails
-            'emails.hosting_uuid' => '',
-            'emails.email' => '',
-            'emails.password' => '',
-            'emails.phone' => '',
+            'emails' => 'array',
 
-            'user_uuid' => 'string',
-            'role_alias' => 'string'
+            'user_uuid' => 'string'
         ]);
 
         $director = $this->directorService->pending_update($uuid, $validated);
@@ -927,16 +891,18 @@ class DirectorController extends Controller
         }
     
         $validated = $request->validate([
-            'first_name' => 'required|string',
+            'first_name' => 'required',
             'middle_name' => '',
-            'last_name' => 'required|string',
-            'date_of_birth' => 'required|date',
-            'ssn_cpn' => 'required|string',
-            'company_association' => 'required|string',
-            'phone_type' => 'required|string',
-            'phone_number' => 'required|string',
+            'last_name' => 'required',
+            'date_of_birth' => 'required',
+            'ssn_cpn' => 'required',
+            'company_association' => '',
+            'phone_type' => 'required',
+            'phone_number' => 'required',
             // addresses
-            'address' => 'array',
+            'address.dl_address' => 'array',
+
+            'address.credit_home_address' => 'array',
 
             // emails
             'emails' => 'array',
@@ -949,13 +915,19 @@ class DirectorController extends Controller
 
         $check = [];
 
-        //$tmpCheck = $this->emailService->check_ignore($validated['emails'], $director->uuid);
-        //$check = array_merge($check, $tmpCheck);
+        if (isset($validated['emails'])){
+            $tmpCheck = $this->emailService->check_ignore($validated['emails'], $director->uuid);
+            $check = array_merge($check, $tmpCheck);
+        }
 
-        //$tmpCheck = $this->addressService->check_ignore($validated['address']['dl_address'], $director->uuid, 'dl_address');
-        //$check = array_merge($check, $tmpCheck);
-        //$tmpCheck = $this->addressService->check_ignore($validated['address']['credit_home_address'], $director->uuid, 'credit_home_address');
-        //$check = array_merge($check, $tmpCheck);
+        if (isset($validated['address']['dl_address'])){
+            $tmpCheck = $this->addressService->check_ignore($validated['address']['dl_address'], $director->uuid, 'dl_address');
+            $check = array_merge($check, $tmpCheck);
+        }
+        if (isset($validated['address']['credit_home_address'])){
+            $tmpCheck = $this->addressService->check_ignore($validated['address']['credit_home_address'], $director->uuid, 'credit_home_address');
+            $check = array_merge($check, $tmpCheck);
+        }
 
         $tmpCheck = $this->directorService->check_ignore($validated, $director->uuid);
         $check = array_merge($check, $tmpCheck);
@@ -974,10 +946,12 @@ class DirectorController extends Controller
             $email->update($validated['emails']);
         }
         
-        if (isset($validated['address'])){
+        if (isset($validated['address']['dl_address'])){
             $address = Address::where('entity_uuid', $director['uuid'])
                                     ->where('address_parent', 'dl_address');
             $address->update($validated['address']['dl_address']);
+        }
+        if (isset($validated['address']['credit_home_address'])){
             $address = Address::where('entity_uuid', $director['uuid'])
                                         ->where('address_parent', 'credit_home_address');
             $address->update($validated['address']['credit_home_address']);
