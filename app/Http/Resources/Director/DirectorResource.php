@@ -27,6 +27,7 @@ class DirectorResource extends JsonResource
             'date_of_birth' => $this->date_of_birth,
             'ssn_cpn' => $this->ssn_cpn,
             'company_association' => $this->company_association,
+            'company' => $this->company,
             'phone_type' => $this->phone_type,
             'phone_number' => $this->phone_number,
             'uploaded_files' => FileResource::collection($this->files),

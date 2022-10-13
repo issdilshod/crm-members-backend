@@ -3,6 +3,7 @@
 namespace App\Models\Director;
 
 use App\Models\Account\Activity;
+use App\Models\Company\Company;
 use App\Models\Helper\Address;
 use App\Models\Helper\Email;
 use App\Models\Helper\File;
@@ -34,5 +35,11 @@ class Director extends Model
     public function addresses(){
         return $this->hasMany(Address::class, 'entity_uuid', 'uuid')
                         ->where('status', Config::get('common.status.actived'));
+    }
+
+    public function company(): HasOne
+    {
+        return $this->hasOne(Company::class, 'director_uuid', 'uuid')
+                    ->where('status', Config::get('common.status.actived'));
     }
 }
