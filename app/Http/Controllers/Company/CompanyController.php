@@ -305,8 +305,15 @@ class CompanyController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function show(Company $company)
+    public function show(Request $request, Company $company)
     {
+        // permission
+        if (!PermissionPolicy::permission($request->user_uuid)){
+            if ($request->user_uuid!=$company->user_uuid){ // if creator not them
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
+        }
+
         $company = $this->companyService->one($company);
         return $company;
     }
