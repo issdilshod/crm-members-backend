@@ -1114,4 +1114,31 @@ class DirectorController extends Controller
         return $permissions;
     }
 
+    /**     @OA\GET(
+      *         path="/api/director-list/{search?}",
+      *         operationId="director_list_search",
+      *         tags={"Director"},
+      *         summary="Get director list and search",
+      *         description="Get director list and search",
+      *             @OA\Parameter(
+      *                 name="search",
+      *                 in="path",
+      *                 description="director full name",
+      *                 @OA\Schema(
+      *                     type="string",
+      *                     format="text"
+      *                 )
+      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
+    public function director_list($search = '')
+    {
+        $directors = $this->directorService->director_list($search);
+        return $directors;
+    }
+
 }

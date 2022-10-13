@@ -1327,6 +1327,12 @@
                                     "bank_account_security_to_delete[]": {
                                         "type": "text"
                                     },
+                                    "future_web[][domain]": {
+                                        "type": "text"
+                                    },
+                                    "future_web[][category]": {
+                                        "type": "text"
+                                    },
                                     "files[incorporation_state][]": {
                                         "type": "file",
                                         "format": "binary"
@@ -1533,6 +1539,12 @@
                                         "type": "text"
                                     },
                                     "bank_account_security[][answer]": {
+                                        "type": "text"
+                                    },
+                                    "future_web[][domain]": {
+                                        "type": "text"
+                                    },
+                                    "future_web[][category]": {
                                         "type": "text"
                                     },
                                     "files[incorporation_state][]": {
@@ -3007,6 +3019,41 @@
                 "summary": "Get director permission of user",
                 "description": "Get director permission of user",
                 "operationId": "director_permission",
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/director-list/{search?}": {
+            "get": {
+                "tags": [
+                    "Director"
+                ],
+                "summary": "Get director list and search",
+                "description": "Get director list and search",
+                "operationId": "director_list_search",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "path",
+                        "description": "director full name",
+                        "schema": {
+                            "type": "string",
+                            "format": "text"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successfully"

@@ -375,4 +375,14 @@ class DirectorService {
 
     }
 
+    public function director_list($value = '')
+    {
+        $directors = Director::orderBy('created_at', 'DESC')
+                                ->where('status', Config::get('common.status.actived'))
+                                ->whereRaw("concat(first_name, ' ', last_name) like '%".$value."%'")
+                                ->limit(10)
+                                ->get(['uuid', 'first_name', 'middle_name', 'last_name']);
+        return $directors;
+    }
+
 }
