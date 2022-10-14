@@ -24,13 +24,9 @@ class ActivityController extends Controller
       *         tags={"Account"},
       *         summary="List of activity",
       *         description="List of activity",
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
-      *             @OA\Response(response=401, description="Unauthenticated"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
@@ -62,13 +58,9 @@ class ActivityController extends Controller
       *                 ),
       *                 required=true
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
-      *             @OA\Response(response=401, description="Unauthenticated"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
@@ -94,18 +86,20 @@ class ActivityController extends Controller
       *                 ),
       *                 required=true
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
-      *             @OA\Response(response=401, description="Unauthenticated"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function destroy(Activity $activity)
+    public function destroy(Request $request, Activity $activity)
     {
+        // permission
+        if (!PermissionPolicy::permission($request->user_uuid)){
+            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        }
+
         $this->activityService->delete($activity);
     }
 
@@ -125,18 +119,20 @@ class ActivityController extends Controller
       *                 ),
       *                 required=true
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
-      *             @OA\Response(response=401, description="Unauthenticated"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function by_user($uuid)
+    public function by_user(Request $request, $uuid)
     {
+        // permission
+        if (!PermissionPolicy::permission($request->user_uuid)){
+            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        }
+
         $activities = $this->activityService->by_user($uuid);
         return $activities;
     }
@@ -157,13 +153,9 @@ class ActivityController extends Controller
       *                 ),
       *                 required=true
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
-      *             @OA\Response(response=401, description="Unauthenticated"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */

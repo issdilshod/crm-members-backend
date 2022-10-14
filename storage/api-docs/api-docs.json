@@ -15,18 +15,13 @@
                 "operationId": "list_activity",
                 "responses": {
                     "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
+                        "description": "Successfully"
                     },
                     "400": {
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Not Authenticated"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -56,18 +51,13 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
+                        "description": "Successfully"
                     },
                     "400": {
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Not Authenticated"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -95,18 +85,16 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
+                        "description": "Successfully"
                     },
                     "400": {
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -136,18 +124,16 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
+                        "description": "Successfully"
                     },
                     "400": {
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -177,18 +163,13 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
+                        "description": "Successfully"
                     },
                     "400": {
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Not Authenticated"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -226,18 +207,16 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
+                        "description": "Successfully"
                     },
                     "400": {
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -275,18 +254,16 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
+                        "description": "Successfully"
                     },
                     "400": {
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -324,18 +301,13 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
+                        "description": "Successfully"
                     },
                     "400": {
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Not Authenticated"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -568,18 +540,16 @@
                 "operationId": "list_user",
                 "responses": {
                     "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
+                        "description": "Successfully"
                     },
                     "400": {
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -639,21 +609,25 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
+                        "description": "Successfully"
                     },
                     "400": {
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
                     },
                     "404": {
                         "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
                     }
                 }
             }
@@ -680,18 +654,13 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
+                        "description": "Successfully"
                     },
                     "400": {
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Not Authenticated"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -755,21 +724,25 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
+                        "description": "Successfully"
                     },
                     "400": {
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
                     },
                     "404": {
                         "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
                     }
                 }
             },
@@ -794,21 +767,22 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
+                        "description": "Successfully"
                     },
                     "400": {
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
                     },
                     "404": {
                         "description": "Resource Not Found"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
                     }
                 }
             }
@@ -877,10 +851,19 @@
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
                     },
                     "404": {
                         "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
                     }
                 }
             }
@@ -958,18 +941,16 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
+                        "description": "Successfully"
                     },
                     "400": {
                         "description": "Bad request"
                     },
                     "404": {
                         "description": "Resource Not Found"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
                     }
                 }
             }
@@ -984,15 +965,13 @@
                 "operationId": "is_auth",
                 "responses": {
                     "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
+                        "description": "Successfully"
                     },
                     "400": {
                         "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -1030,18 +1009,16 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
+                        "description": "Successfully"
                     },
                     "400": {
                         "description": "Bad request"
                     },
-                    "404": {
-                        "description": "Resource Not Found"
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
                     }
                 }
             }
@@ -1084,18 +1061,22 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
+                        "description": "Successfully"
                     },
                     "400": {
                         "description": "Bad request"
                     },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
                     "404": {
                         "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
                     }
                 }
             }
@@ -1110,21 +1091,22 @@
                 "operationId": "get_pending_users",
                 "responses": {
                     "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
+                        "description": "Successfully"
                     },
                     "400": {
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Not Authenticated"
                     },
-                    "404": {
-                        "description": "Resource Not Found"
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
                     }
                 }
             }
@@ -1139,18 +1121,13 @@
                 "operationId": "get_me",
                 "responses": {
                     "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
+                        "description": "Successfully"
                     },
                     "400": {
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Not Authenticated"
                     },
                     "404": {
                         "description": "Resource Not Found"

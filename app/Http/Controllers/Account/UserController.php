@@ -2,27 +2,15 @@
 
 namespace App\Http\Controllers\Account;
 
-use App\Helpers\TelegramHelper;
-use App\Helpers\UserSystemInfoHelper;
-use App\Helpers\WebSocket;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Account\UserResource;
-use App\Models\Account\Activity;
-use App\Models\Account\InviteUser;
 use App\Models\Account\User;
-use App\Models\Account\UserAccessToken;
-use App\Notifications\TelegramNotification;
 use App\Policies\PermissionPolicy;
 use App\Services\Account\UserService;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
-
     private $userService;
 
     public function __construct()
@@ -36,13 +24,10 @@ class UserController extends Controller
       *         tags={"Account"},
       *         summary="List of user",
       *         description="List of user",
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
-      *             @OA\Response(response=401, description="Unauthenticated"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
@@ -80,14 +65,13 @@ class UserController extends Controller
       *                     ),
       *                 ),
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
-      *             @OA\Response(response=401, description="Unauthenticated"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
+      *             @OA\Response(response=409, description="Conflict"),
+      *             @OA\Response(response=422, description="Unprocessable Content"),
       *     )
       */
     public function store(Request $request)
@@ -139,13 +123,9 @@ class UserController extends Controller
       *                 ),
       *                 required=true
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
-      *             @OA\Response(response=401, description="Unauthenticated"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
@@ -188,14 +168,13 @@ class UserController extends Controller
       *                     ),
       *                 ),
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
-      *             @OA\Response(response=401, description="Unauthenticated"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
+      *             @OA\Response(response=409, description="Conflict"),
+      *             @OA\Response(response=422, description="Unprocessable Content"),
       *     )
       */
     public function update(Request $request, User $user)
@@ -247,14 +226,12 @@ class UserController extends Controller
       *                 ),
       *                 required=true
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
-      *             @OA\Response(response=401, description="Unauthenticated"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
+      *             @OA\Response(response=422, description="Unprocessable Content"),
       *     )
       */
     public function destroy(Request $request, User $user)
@@ -302,8 +279,11 @@ class UserController extends Controller
       *             ),
       *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
-      *             @OA\Response(response=401, description="Unauthenticated"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
+      *             @OA\Response(response=409, description="Conflict"),
+      *             @OA\Response(response=422, description="Unprocessable Content"),
       *     )
       */
     public function accept(Request $request, $uuid)
@@ -392,13 +372,10 @@ class UserController extends Controller
       *                     ),
       *                 ),
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=404, description="Resource Not Found"),
+      *             @OA\Response(response=422, description="Unprocessable Content"),
       *     )
       */
     public function login(Request $request)
@@ -419,12 +396,9 @@ class UserController extends Controller
       *         tags={"Account"},
       *         summary="Is Auth",
       *         description="Is Auth",
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
@@ -453,13 +427,10 @@ class UserController extends Controller
       *                     ),
       *                 ),
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
-      *             @OA\Response(response=404, description="Resource Not Found"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=422, description="Unprocessable Content"),
       *     )
       */
     public function logout(Request $request)
@@ -495,13 +466,12 @@ class UserController extends Controller
       *                     ),
       *                 ),
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
       *             @OA\Response(response=404, description="Resource Not Found"),
+      *             @OA\Response(response=409, description="Conflict"),
+      *             @OA\Response(response=422, description="Unprocessable Content"),
       *     )
       */
     public function register(Request $request)
@@ -526,18 +496,21 @@ class UserController extends Controller
       *         tags={"Account"},
       *         summary="Get pending users",
       *         description="Get pending users",
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
-      *             @OA\Response(response=401, description="Unauthenticated"),
-      *             @OA\Response(response=404, description="Resource Not Found"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=403, description="Not Autorized"),
+      *             @OA\Response(response=409, description="Conflict"),
+      *             @OA\Response(response=422, description="Unprocessable Content"),
       *     )
       */
-    public function pending_users()
+    public function pending_users(Request $request)
     {
+        // permission
+        if (!PermissionPolicy::permission($request->user_uuid)){
+            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        }
+
         $users = $this->userService->pendings();
         return $users;
     }
@@ -548,13 +521,9 @@ class UserController extends Controller
       *         tags={"Account"},
       *         summary="Get Me",
       *         description="Get Me",
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
-      *             @OA\Response(response=401, description="Unauthenticated"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
