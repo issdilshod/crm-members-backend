@@ -610,6 +610,32 @@ class DirectorController extends Controller
             'user_uuid' => 'string'
         ]);
 
+        $check = [];
+
+        if (isset($validated['emails'])){
+            $tmpCheck = $this->emailService->check($validated['emails']);
+            $check = array_merge($check, $tmpCheck);
+        }
+
+        if (isset($validated['address']['dl_address'])){
+            $tmpCheck = $this->addressService->check($validated['address']['dl_address'], 'dl_address');
+            $check = array_merge($check, $tmpCheck);
+        }
+        if (isset($validated['address']['credit_home_address'])){
+            $tmpCheck = $this->addressService->check($validated['address']['credit_home_address'], 'credit_home_address');
+            $check = array_merge($check, $tmpCheck);
+        }
+
+        $tmpCheck = $this->directorService->check($validated);
+        $check = array_merge($check, $tmpCheck);
+        
+        // exsist
+        if (count($check)>0){
+            return response()->json([
+                'data' => $check,
+            ], 409);
+        }
+
         $director = $this->directorService->pending($validated);
 
         // email
@@ -757,6 +783,34 @@ class DirectorController extends Controller
 
             'user_uuid' => 'string'
         ]);
+
+        $director = Director::where('uuid', $uuid)->first();
+
+        $check = [];
+
+        if (isset($validated['emails'])){
+            $tmpCheck = $this->emailService->check_ignore($validated['emails'], $director->uuid);
+            $check = array_merge($check, $tmpCheck);
+        }
+
+        if (isset($validated['address']['dl_address'])){
+            $tmpCheck = $this->addressService->check_ignore($validated['address']['dl_address'], $director->uuid, 'dl_address');
+            $check = array_merge($check, $tmpCheck);
+        }
+        if (isset($validated['address']['credit_home_address'])){
+            $tmpCheck = $this->addressService->check_ignore($validated['address']['credit_home_address'], $director->uuid, 'credit_home_address');
+            $check = array_merge($check, $tmpCheck);
+        }
+
+        $tmpCheck = $this->directorService->check_ignore($validated, $director->uuid);
+        $check = array_merge($check, $tmpCheck);
+        
+        // exsist
+        if (count($check)>0){
+            return response()->json([
+                'data' => $check,
+            ], 409);
+        }
 
         $director = $this->directorService->pending_update($uuid, $validated);
 
