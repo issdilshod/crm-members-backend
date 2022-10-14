@@ -617,14 +617,14 @@ class DirectorController extends Controller
             $check = array_merge($check, $tmpCheck);
         }
 
-        if (isset($validated['address']['dl_address'])){
+        /*if (isset($validated['address']['dl_address'])){
             $tmpCheck = $this->addressService->check($validated['address']['dl_address'], 'dl_address');
             $check = array_merge($check, $tmpCheck);
         }
         if (isset($validated['address']['credit_home_address'])){
             $tmpCheck = $this->addressService->check($validated['address']['credit_home_address'], 'credit_home_address');
             $check = array_merge($check, $tmpCheck);
-        }
+        }*/
 
         $tmpCheck = $this->directorService->check($validated);
         $check = array_merge($check, $tmpCheck);
@@ -793,14 +793,14 @@ class DirectorController extends Controller
             $check = array_merge($check, $tmpCheck);
         }
 
-        if (isset($validated['address']['dl_address'])){
+        /*if (isset($validated['address']['dl_address'])){
             $tmpCheck = $this->addressService->check_ignore($validated['address']['dl_address'], $director->uuid, 'dl_address');
             $check = array_merge($check, $tmpCheck);
         }
         if (isset($validated['address']['credit_home_address'])){
             $tmpCheck = $this->addressService->check_ignore($validated['address']['credit_home_address'], $director->uuid, 'credit_home_address');
             $check = array_merge($check, $tmpCheck);
-        }
+        }*/
 
         $tmpCheck = $this->directorService->check_ignore($validated, $director->uuid);
         $check = array_merge($check, $tmpCheck);
