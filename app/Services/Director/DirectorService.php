@@ -247,12 +247,15 @@ class DirectorService {
     {
         $director = Director::create($entity);
 
+        // director full name
+        $director_fn = "*" . $director['first_name'] . ' ' . ($director['middle_name']!=null?$director['middle_name'].' ':'') . $director['last_name'] . "*";
+
         Activity::create([
             'user_uuid' => $entity['user_uuid'],
             'entity_uuid' => $director['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
-            'description' => Config::get('common.activity.director.add'),
+            'description' => str_replace("{name}", $director_fn, Config::get('common.activity.director.add')),
             'changes' => json_encode($entity),
             'action_code' => Config::get('common.activity.codes.director_add'),
             'status' => Config::get('common.status.actived')
@@ -265,12 +268,15 @@ class DirectorService {
     {
         $director->update($entity);
 
+        // director full name
+        $director_fn = "*" . $director['first_name'] . ' ' . ($director['middle_name']!=null?$director['middle_name'].' ':'') . $director['last_name'] . "*";
+
         Activity::create([
             'user_uuid' => $entity['user_uuid'],
             'entity_uuid' => $director['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
-            'description' => Config::get('common.activity.director.update'),
+            'description' => str_replace("{name}", $director_fn, Config::get('common.activity.director.update')),
             'changes' => json_encode($entity),
             'action_code' => Config::get('common.activity.codes.director_update'),
             'status' => Config::get('common.status.actived')
@@ -284,13 +290,16 @@ class DirectorService {
         $entity['status'] = Config::get('common.status.pending');
         $director = Director::create($entity);
 
+        // director full name
+        $director_fn = "*" . $director['first_name'] . ' ' . ($director['middle_name']!=null?$director['middle_name'].' ':'') . $director['last_name'] . "*";
+
         // logs
         Activity::create([
             'user_uuid' => $entity['user_uuid'],
             'entity_uuid' => $director['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
-            'description' => Config::get('common.activity.director.pending'),
+            'description' => str_replace("{name}", $director_fn, Config::get('common.activity.director.pending')),
             'changes' => json_encode($entity),
             'action_code' => Config::get('common.activity.codes.director_pending'),
             'status' => Config::get('common.status.actived')
@@ -300,7 +309,7 @@ class DirectorService {
         $user = User::where('uuid', $entity['user_uuid'])->first();
 
         $msg = '*' . $user->first_name . ' ' . $user->last_name . "*\n" .
-                Config::get('common.activity.director.pending') . "\n" .
+                str_replace("{name}", $director_fn, Config::get('common.activity.director.pending')) . "\n" .
                 '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/directors/'.$director['uuid'].')';
         $this->notificationService->telegram_to_headqurters($msg);
 
@@ -316,13 +325,16 @@ class DirectorService {
         $entity['status'] = Config::get('common.status.pending');
         $director->update($entity);
 
+        // director full name
+        $director_fn = "*" . $director['first_name'] . ' ' . ($director['middle_name']!=null?$director['middle_name'].' ':'') . $director['last_name'] . "*";
+
         // logs
         Activity::create([
             'user_uuid' => $entity['user_uuid'],
             'entity_uuid' => $director['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
-            'description' => Config::get('common.activity.director.pending_update'),
+            'description' => str_replace("{name}", $director_fn, Config::get('common.activity.director.pending_update')),
             'changes' => json_encode($entity),
             'action_code' => Config::get('common.activity.codes.director_pending_update'),
             'status' => Config::get('common.status.actived')
@@ -332,7 +344,7 @@ class DirectorService {
         $user = User::where('uuid', $entity['user_uuid'])->first();
 
         $msg = '*' . $user->first_name . ' ' . $user->last_name . "*\n" .
-                Config::get('common.activity.director.pending_update') . "\n" .
+                str_replace("{name}", $director_fn, Config::get('common.activity.director.pending_update')) . "\n" .
                 '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/directors/'.$director['uuid'].')';
         $this->notificationService->telegram_to_headqurters($msg);
 
@@ -344,13 +356,16 @@ class DirectorService {
         $entity['status'] = Config::get('common.status.actived');
         $director->update($entity);
 
+        // director full name
+        $director_fn = "*" . $director['first_name'] . ' ' . ($director['middle_name']!=null?$director['middle_name'].' ':'') . $director['last_name'] . "*";
+        
         // log
         Activity::create([
             'user_uuid' => $user_uuid,
             'entity_uuid' => $director['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
-            'description' => Config::get('common.activity.director.accept'),
+            'description' => str_replace("{name}", $director_fn, Config::get('common.activity.director.accept')),
             'changes' => json_encode($entity),
             'action_code' => Config::get('common.activity.codes.director_accept'),
             'status' => Config::get('common.status.actived')
@@ -361,8 +376,8 @@ class DirectorService {
 
         $this->notificationService->telegram([
             'telegram' => $user['telegram'],
-            'msg' => Config::get('common.activity.director.accept') . "\n" .
-                        '[link to view](' .env('APP_FRONTEND_ENDPOINT').'/directors/'.$director['uuid']. ')'
+            'msg' => str_replace("{name}", $director_fn, Config::get('common.activity.director.accept')) . "\n" .
+            '[link to view]('.env('APP_FRONTEND_ENDPOINT').'/directors/'.$director['uuid'].')'
         ]);
 
         return $director;
@@ -373,13 +388,16 @@ class DirectorService {
         $director = Director::where('uuid', $uuid)->first();
         $director->update(['status' => Config::get('common.status.rejected')]);
 
+        // director full name
+        $director_fn = "*" . $director['first_name'] . ' ' . ($director['middle_name']!=null?$director['middle_name'].' ':'') . $director['last_name'] . "*";
+
         // logs
         Activity::create([
             'user_uuid' => $user_uuid,
             'entity_uuid' => $director['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
-            'description' => Config::get('common.activity.director.reject'),
+            'description' => str_replace("{name}", $director_fn, Config::get('common.activity.director.reject')),
             'changes' => '',
             'action_code' => Config::get('common.activity.codes.director_reject'),
             'status' => Config::get('common.status.actived')
@@ -390,8 +408,8 @@ class DirectorService {
 
         $this->notificationService->telegram([
             'telegram' => $user['telegram'],
-            'msg' => Config::get('common.activity.director.reject') . "\n" .
-                        '[link to change](' .env('APP_FRONTEND_ENDPOINT').'/directors/'.$director['uuid']. ')'
+            'msg' => str_replace("{name}", $director_fn, Config::get('common.activity.director.reject')) . "\n" .
+                        '[link to change]('.env('APP_FRONTEND_ENDPOINT').'/directors/'.$director['uuid'].')'
         ]);
 
     }

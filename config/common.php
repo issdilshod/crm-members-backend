@@ -57,20 +57,20 @@ return [
             'accept' => 'User register accepted'
         ],
         'director' => [
-            'add' => 'Director card added',
-            'update' => 'Director card updated',
-            'pending' => 'Director card approval request sent',
-            'pending_update' => 'Director card update approval request sent',
-            'reject' => 'Director card rejected',
-            'accept' => 'Director card accepted',
+            'add' => 'Director {name} card added',
+            'update' => 'Director {name} card updated',
+            'pending' => 'Director {name} card approval request sent',
+            'pending_update' => 'Director {name} card update approval request sent',
+            'reject' => 'Director {name} card rejected',
+            'accept' => 'Director {name} card accepted',
         ],
         'company' => [
-            'add' => 'Company card added',
-            'updated' => 'Company card updated',
-            'pending' => 'Company card approval request sent',
-            'pending_update' => 'Company card update approval request sent',
-            'reject' => 'Company card rejected',
-            'accept' => 'Company card accepted',
+            'add' => 'Company {name} card added',
+            'updated' => 'Company {name} card updated',
+            'pending' => 'Company {name} card approval request sent',
+            'pending_update' => 'Company {name} card update approval request sent',
+            'reject' => 'Company {name} card rejected',
+            'accept' => 'Company {name} card accepted',
         ],
 
         'codes' => [
