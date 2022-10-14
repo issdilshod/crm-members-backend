@@ -29,13 +29,12 @@ class PendingController extends Controller
       *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=401, description="Not Authenticated"),
-      *             @OA\Response(response=403, description="Not Authorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
     public function by_user(Request $request)
     {
-        // if headquarters then show all
+        // if now headquarters then show only belongs to them
         if (!PermissionPolicy::permission($request->user_uuid)){
             $directors = $this->directorService->by_user($request->user_uuid);
             $companies = $this->companyService->by_user($request->user_uuid);

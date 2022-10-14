@@ -15,14 +15,9 @@ class SicCodeController extends Controller
       *         tags={"Helper"},
       *         summary="List of sic code",
       *         description="List of sic code",
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
-      *             @OA\Response(response=401, description="Unauthenticated"),
-      *             @OA\Response(response=404, description="Resource Not Found"),
+      *             @OA\Response(response=401, description="Not Authenticated")
       *     )
       */
     public function index()

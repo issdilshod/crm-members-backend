@@ -3370,9 +3370,6 @@
                     "401": {
                         "description": "Not Authenticated"
                     },
-                    "403": {
-                        "description": "Not Authorized"
-                    },
                     "404": {
                         "description": "Resource Not Found"
                     }
@@ -3389,18 +3386,16 @@
                 "operationId": "list_role",
                 "responses": {
                     "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
+                        "description": "Successfully"
                     },
                     "400": {
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -3418,21 +3413,13 @@
                 "operationId": "list_sic_code",
                 "responses": {
                     "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
+                        "description": "Successfully"
                     },
                     "400": {
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
+                        "description": "Not Authenticated"
                     }
                 }
             }
@@ -3447,21 +3434,13 @@
                 "operationId": "list_state",
                 "responses": {
                     "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
+                        "description": "Successfully"
                     },
                     "400": {
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
+                        "description": "Not Authenticated"
                     }
                 }
             }

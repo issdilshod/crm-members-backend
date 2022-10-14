@@ -16,13 +16,10 @@ class RoleController extends Controller
       *         tags={"Helper"},
       *         summary="List of role",
       *         description="List of role",
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
-      *             @OA\Response(response=401, description="Unauthenticated"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */

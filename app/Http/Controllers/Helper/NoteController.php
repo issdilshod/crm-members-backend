@@ -153,17 +153,19 @@ class NoteController extends Controller
       */
     public function update(Request $request, Note $note)
     {
+        // permission
+        if (!PermissionPolicy::permission($request->user_uuid)){
+            if ($note['user_uuid']!=$request->user_uuid){
+                return response()->json([
+                    'data' => ['msg' => 'It\'s not your note, this why you can\'t update it!']
+                ], 403);
+            }
+        }
+
         $validated = $request->validate([
-            'text' => 'required|string',
+            'text' => 'required',
             'user_uuid' => 'string'
         ]);
-
-        // permission (can change his own note)
-        if ($validated['user_uuid']!=$note['user_uuid']){
-            return response()->json([
-                'data' => ['msg' => 'It\'s not your note, this why you can\'t update it!']
-            ], 403);
-        }
 
         $note->update($validated);
 
