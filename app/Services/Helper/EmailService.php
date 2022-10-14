@@ -30,7 +30,7 @@ class EmailService {
         if ($director!=null){
             $message = ' On director card *' . $director['first_name'] . ' ' . $director['middle_name'] . ' ' . $director['last_name'] . '*';
         }else if ($company!=null){
-            $message = ' On company card *' . $director['legal_name'] . '*';
+            $message = ' On company card *' . $company['legal_name'] . '*';
         }
         return $message;
     }

@@ -1,6 +1,7 @@
 <?php
 namespace App\Services\Helper;
 
+use App\Models\Company\Company;
 use App\Models\Helper\BankAccount;
 use Illuminate\Support\Facades\Config;
 
@@ -17,12 +18,25 @@ class BankAccountService {
         return $bankAccount;
     }
 
+    private function get_identifier_exists($uuid)
+    {
+        $company = Company::select('legal_name')
+                            ->where('status', Config::get('common.status.actived'))
+                            ->where('uuid', $uuid)
+                            ->first();
+        $message = '';
+        if ($company!=null){
+            $message = ' On company card *' . $company['legal_name'] . '*';
+        }
+        return $message;
+    }
+
     public function check($entity)
     {
         $check = [];
 
         if (isset($entity['name']) && isset($entity['username']) && isset($entity['account_number']) && isset($entity['routing_number'])){
-            $check['tmp'] = BankAccount::select('name', 'username', 'account_number', 'routing_number')
+            $check['tmp'] = BankAccount::select('entity_uuid', 'name', 'username', 'account_number', 'routing_number')
                                             ->where('status', Config::get('common.status.actived'))
                                             ->where('name', $entity['name'])
                                             ->where('username', $entity['username'])
@@ -32,7 +46,7 @@ class BankAccountService {
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
                 foreach ($check['tmp'] AS $key => $value):
-                    $check['bank_account.'.$key] = Config::get('common.errors.exsist');
+                    $check['bank_account.'.$key] = Config::get('common.errors.exsist') . $this->get_identifier_exists($check['tmp']['entity_uuid']);
                 endforeach;
             }
             unset($check['tmp']);
@@ -46,7 +60,7 @@ class BankAccountService {
         $check = [];
 
         if (isset($entity['name']) && isset($entity['username']) && isset($entity['account_number']) && isset($entity['routing_number'])){
-            $check['tmp'] = BankAccount::select('name', 'username', 'account_number', 'routing_number')
+            $check['tmp'] = BankAccount::select('entity_uuid', 'name', 'username', 'account_number', 'routing_number')
                                             ->where('status', Config::get('common.status.actived'))
                                             ->where('entity_uuid', '!=', $ingore_uuid)
                                             ->where('name', $entity['name'])
@@ -57,7 +71,7 @@ class BankAccountService {
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
                 foreach ($check['tmp'] AS $key => $value):
-                    $check['bank_account.'.$key] = Config::get('common.errors.exsist');
+                    $check['bank_account.'.$key] = Config::get('common.errors.exsist') . $this->get_identifier_exists($check['tmp']['entity_uuid']);
                 endforeach;
             }
             unset($check['tmp']);
