@@ -36,14 +36,10 @@ class DirectorController extends Controller
       *         tags={"Director"},
       *         summary="List of director",
       *         description="List of director",
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=401, description="Not Authenticated"),
-      *             @OA\Response(response=403, description="Not Authorized"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
@@ -70,7 +66,7 @@ class DirectorController extends Controller
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
       *                         type="object",
-      *                         required={"first_name", "middle_name", "last_name", "date_of_birth", "ssn_cpn", "company_association", "phone_type", "phone_number", "status", "address[dl_address][street_address]", "address[dl_address][address_line_2]", "address[dl_address][city]", "address[dl_address][state]", "address[dl_address][postal]", "address[dl_address][country]", "address[credit_home_address][street_address]", "address[credit_home_address][address_line_2]", "address[credit_home_address][city]", "address[credit_home_address][state]", "address[credit_home_address][postal]", "address[credit_home_address][country]", "emails[hosting_uuid]", "emails[email]", "emails[password]", "emails[phone]"},
+      *                         required={"first_name", "last_name", "date_of_birth", "ssn_cpn", "phone_type", "phone_number"},
       *                         @OA\Property(property="first_name", type="text"),
       *                         @OA\Property(property="middle_name", type="text"),
       *                         @OA\Property(property="last_name", type="text"),
@@ -99,24 +95,21 @@ class DirectorController extends Controller
       *                         @OA\Property(property="emails[password]", type="text"),
       *                         @OA\Property(property="emails[phone]", type="text"),
       *
-      *                         @OA\Property(property="files[dl_upload][front]", type="file", format="binary"),
-      *                         @OA\Property(property="files[dl_upload][back]", type="file", format="binary"),
-      *                         @OA\Property(property="files[ssn_upload][front]", type="file", format="binary"),
-      *                         @OA\Property(property="files[ssn_upload][back]", type="file", format="binary"),
-      *                         @OA\Property(property="files[cpn_docs_upload]", type="file", format="binary")
+      *                         @OA\Property(property="files[dl_upload][front][]", type="file", format="binary"),
+      *                         @OA\Property(property="files[dl_upload][back][]", type="file", format="binary"),
+      *                         @OA\Property(property="files[ssn_upload][front][]", type="file", format="binary"),
+      *                         @OA\Property(property="files[ssn_upload][back][]", type="file", format="binary"),
+      *                         @OA\Property(property="files[cpn_docs_upload][]", type="file", format="binary")
       *                     ),
       *                 ),
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=401, description="Not Authenticated"),
-      *             @OA\Response(response=403, description="Not Authorized"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *             @OA\Response(response=409, description="Conflict"),
+      *             @OA\Response(response=422, description="Unprocessable Content"),
       *     )
       */
     public function store(Request $request)
@@ -152,14 +145,14 @@ class DirectorController extends Controller
             $check = array_merge($check, $tmpCheck);
         }
 
-        if (isset($validated['address']['dl_address'])){
+        /*if (isset($validated['address']['dl_address'])){
             $tmpCheck = $this->addressService->check($validated['address']['dl_address'], 'dl_address');
             $check = array_merge($check, $tmpCheck);
         }
         if (isset($validated['address']['credit_home_address'])){
             $tmpCheck = $this->addressService->check($validated['address']['credit_home_address'], 'credit_home_address');
             $check = array_merge($check, $tmpCheck);
-        }
+        }*/
 
         $tmpCheck = $this->directorService->check($validated);
         $check = array_merge($check, $tmpCheck);
@@ -234,14 +227,10 @@ class DirectorController extends Controller
       *                 ),
       *                 required=true
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=401, description="Not Authenticated"),
-      *             @OA\Response(response=403, description="Not Authorized"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
@@ -279,7 +268,7 @@ class DirectorController extends Controller
       *                 @OA\MediaType(
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
-      *                         required={},
+      *                         required={"first_name", "last_name", "date_of_birth", "ssn_cpn", "phone_type", "phone_number"},
       *                         @OA\Property(property="first_name", type="text"),
       *                         @OA\Property(property="middle_name", type="text"),
       *                         @OA\Property(property="last_name", type="text"),
@@ -318,16 +307,13 @@ class DirectorController extends Controller
       *                     ),
       *                 ),
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=401, description="Not Authenticated"),
-      *             @OA\Response(response=403, description="Not Authorized"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *             @OA\Response(response=409, description="Conflict"),
+      *             @OA\Response(response=422, description="Unprocessable Content"),
       *     )
       */
     public function update(Request $request, Director $director)
@@ -365,14 +351,14 @@ class DirectorController extends Controller
             $check = array_merge($check, $tmpCheck);
         }
 
-        if (isset($validated['address']['dl_address'])){
+        /*if (isset($validated['address']['dl_address'])){
             $tmpCheck = $this->addressService->check_ignore($validated['address']['dl_address'], $director->uuid, 'dl_address');
             $check = array_merge($check, $tmpCheck);
         }
         if (isset($validated['address']['credit_home_address'])){
             $tmpCheck = $this->addressService->check_ignore($validated['address']['credit_home_address'], $director->uuid, 'credit_home_address');
             $check = array_merge($check, $tmpCheck);
-        }
+        }*/
 
         $tmpCheck = $this->directorService->check_ignore($validated, $director->uuid);
         $check = array_merge($check, $tmpCheck);
@@ -463,14 +449,10 @@ class DirectorController extends Controller
       *                 ),
       *                 required=true
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=401, description="Not Authenticated"),
-      *             @OA\Response(response=403, description="Not Authorized"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
@@ -500,14 +482,10 @@ class DirectorController extends Controller
       *                 ),
       *                 required=true
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=401, description="Not Authenticated"),
-      *             @OA\Response(response=403, description="Not Authorized"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
@@ -534,7 +512,7 @@ class DirectorController extends Controller
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
       *                         type="object",
-      *                         required={},
+      *                         required={"first_name", "last_name", "date_of_birth", "ssn_cpn", "phone_type", "phone_number"},
       *                         @OA\Property(property="first_name", type="text"),
       *                         @OA\Property(property="middle_name", type="text"),
       *                         @OA\Property(property="last_name", type="text"),
@@ -563,24 +541,21 @@ class DirectorController extends Controller
       *                         @OA\Property(property="emails[password]", type="text"),
       *                         @OA\Property(property="emails[phone]", type="text"),
       *
-      *                         @OA\Property(property="files[dl_upload][front]", type="file", format="binary"),
-      *                         @OA\Property(property="files[dl_upload][back]", type="file", format="binary"),
-      *                         @OA\Property(property="files[ssn_upload][front]", type="file", format="binary"),
-      *                         @OA\Property(property="files[ssn_upload][back]", type="file", format="binary"),
-      *                         @OA\Property(property="files[cpn_docs_upload]", type="file", format="binary")
+      *                         @OA\Property(property="files[dl_upload][front][]", type="file", format="binary"),
+      *                         @OA\Property(property="files[dl_upload][back][]", type="file", format="binary"),
+      *                         @OA\Property(property="files[ssn_upload][front][]", type="file", format="binary"),
+      *                         @OA\Property(property="files[ssn_upload][back][]", type="file", format="binary"),
+      *                         @OA\Property(property="files[cpn_docs_upload][]", type="file", format="binary")
       *                     ),
       *                 ),
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=401, description="Not Authenticated"),
-      *             @OA\Response(response=403, description="Not Authorized"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *             @OA\Response(response=409, description="Conflict"),
+      *             @OA\Response(response=422, description="Unprocessable Content"),
       *     )
       */
     public function pending(Request $request)
@@ -706,7 +681,7 @@ class DirectorController extends Controller
       *                 @OA\MediaType(
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
-      *                         required={},
+      *                         required={"first_name", "last_name", "date_of_birth", "ssn_cpn", "phone_type", "phone_number"},
       *                         @OA\Property(property="first_name", type="text"),
       *                         @OA\Property(property="middle_name", type="text"),
       *                         @OA\Property(property="last_name", type="text"),
@@ -745,16 +720,13 @@ class DirectorController extends Controller
       *                     ),
       *                 ),
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=401, description="Not Authenticated"),
-      *             @OA\Response(response=403, description="Not Authorized"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *             @OA\Response(response=409, description="Conflict"),
+      *             @OA\Response(response=422, description="Unprocessable Content"),
       *     )
       */
     public function pending_update(Request $request, $uuid)
@@ -899,7 +871,7 @@ class DirectorController extends Controller
       *                 @OA\MediaType(
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
-      *                         required={},
+      *                         required={"first_name", "last_name", "date_of_birth", "ssn_cpn", "phone_type", "phone_number"},
       *                         @OA\Property(property="first_name", type="text"),
       *                         @OA\Property(property="middle_name", type="text"),
       *                         @OA\Property(property="last_name", type="text"),
@@ -938,16 +910,13 @@ class DirectorController extends Controller
       *                     ),
       *                 ),
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=401, description="Not Authenticated"),
-      *             @OA\Response(response=403, description="Not Authorized"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *             @OA\Response(response=409, description="Conflict"),
+      *             @OA\Response(response=422, description="Unprocessable Content"),
       *     )
       */
     public function accept(Request $request, $uuid)
@@ -1084,16 +1053,11 @@ class DirectorController extends Controller
       *                 ),
       *                 required=true
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=401, description="Not Authenticated"),
-      *             @OA\Response(response=403, description="Not Authorized"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
-      *             @OA\Response(response=409, description="Conflict"),
       *     )
       */
     public function reject(Request $request, $uuid)
@@ -1115,7 +1079,7 @@ class DirectorController extends Controller
       *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=401, description="Not Authenticated"),
-      *             @OA\Response(response=403, description="Not Authorized"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
@@ -1134,6 +1098,7 @@ class DirectorController extends Controller
       *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
