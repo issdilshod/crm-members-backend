@@ -337,6 +337,9 @@ class CompanyService {
     public function create($entity)
     {
         $company = Company::create($entity);
+
+        // company name
+        $company_fn = "*" . $company['legal_name'] . "*";
         
         // Activity log
         Activity::create([
@@ -344,7 +347,7 @@ class CompanyService {
             'entity_uuid' => $company['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
-            'description' => Config::get('common.activity.company.add'),
+            'description' => str_replace("{name}", $company_fn, Config::get('common.activity.company.add')),
             'changes' => json_encode($entity),
             'action_code' => Config::get('common.activity.codes.company_add'),
             'status' => Config::get('common.status.actived')
@@ -357,12 +360,15 @@ class CompanyService {
     {
         $company->update($entity);
 
+        // company name
+        $company_fn = "*" . $company['legal_name'] . "*";
+
         Activity::create([
             'user_uuid' => $entity['user_uuid'],
             'entity_uuid' => $company['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
-            'description' => Config::get('common.activity.company.updated'),
+            'description' => str_replace("{name}", $company_fn, Config::get('common.activity.company.updated')),
             'changes' => json_encode($entity),
             'action_code' => Config::get('common.activity.codes.company_update'),
             'status' => Config::get('common.status.actived')
@@ -376,13 +382,16 @@ class CompanyService {
         $entity['status'] = Config::get('common.status.pending');
         $company = Company::create($entity);
 
+        // company name
+        $company_fn = "*" . $company['legal_name'] . "*";
+
         // logs
         Activity::create([
             'user_uuid' => $entity['user_uuid'],
             'entity_uuid' => $company['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
-            'description' => Config::get('common.activity.company.pending'),
+            'description' => str_replace("{name}", $company_fn, Config::get('common.activity.company.pending')),
             'changes' => json_encode($entity),
             'action_code' => Config::get('common.activity.codes.company_pending'),
             'status' => Config::get('common.status.actived')
@@ -392,7 +401,7 @@ class CompanyService {
         $user = User::where('uuid', $entity['user_uuid'])->first();
 
         $msg = '*' . $user->first_name . ' ' . $user->last_name . "*\n" .
-                Config::get('common.activity.company.pending') . "\n" .
+                str_replace("{name}", $company_fn, Config::get('common.activity.company.pending')) . "\n" .
                 '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/companies/'.$company['uuid'].')';
         $this->notificationService->telegram_to_headqurters($msg);
 
@@ -407,13 +416,16 @@ class CompanyService {
         $entity['status'] = Config::get('common.status.pending');
         $company->update($entity);
 
+        // company name
+        $company_fn = "*" . $company['legal_name'] . "*";
+
         // logs
         Activity::create([
             'user_uuid' => $entity['user_uuid'],
             'entity_uuid' => $company['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
-            'description' => Config::get('common.activity.company.pending_update'),
+            'description' => str_replace("{name}", $company_fn, Config::get('common.activity.company.pending_update')),
             'changes' => json_encode($entity),
             'action_code' => Config::get('common.activity.codes.company_pending_update'),
             'status' => Config::get('common.status.actived')
@@ -423,7 +435,7 @@ class CompanyService {
         $user = User::where('uuid', $entity['user_uuid'])->first();
 
         $msg = '*' . $user->first_name . ' ' . $user->last_name . "*\n" .
-                Config::get('common.activity.company.pending_update') . "\n" .
+                str_replace("{name}", $company_fn, Config::get('common.activity.company.pending_update')) . "\n" .
                 '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/companies/'.$company['uuid'].')';
         $this->notificationService->telegram_to_headqurters($msg);
 
@@ -435,13 +447,16 @@ class CompanyService {
         $entity['status'] = Config::get('common.status.actived');
         $company->update($entity);
 
+        // company name
+        $company_fn = "*" . $company['legal_name'] . "*";
+
         // log
         Activity::create([
             'user_uuid' => $user_uuid,
             'entity_uuid' => $company['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
-            'description' => Config::get('common.activity.company.accept'),
+            'description' => str_replace("{name}", $company_fn, Config::get('common.activity.company.accept')),
             'changes' => json_encode($entity),
             'action_code' => Config::get('common.activity.codes.company_accept'),
             'status' => Config::get('common.status.actived')
@@ -452,7 +467,7 @@ class CompanyService {
 
         $this->notificationService->telegram([
             'telegram' => $user['telegram'],
-            'msg' => Config::get('common.activity.company.accept') . "\n" .
+            'msg' => str_replace("{name}", $company_fn, Config::get('common.activity.company.accept')) . "\n" .
                         '[link to view](' .env('APP_FRONTEND_ENDPOINT').'/companies/'.$company['uuid']. ')'
         ]);
 
@@ -464,13 +479,16 @@ class CompanyService {
         $company = Company::where('uuid', $uuid)->first();
         $company->update(['status' => Config::get('common.status.rejected')]);
 
+        // company name
+        $company_fn = "*" . $company['legal_name'] . "*";
+
         // logs
         Activity::create([
             'user_uuid' => $user_uuid,
             'entity_uuid' => $company['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
-            'description' => Config::get('common.activity.company.reject'),
+            'description' => str_replace("{name}", $company_fn, Config::get('common.activity.company.reject')),
             'changes' => '',
             'action_code' => Config::get('common.activity.codes.company_reject'),
             'status' => Config::get('common.status.actived')
@@ -481,7 +499,7 @@ class CompanyService {
 
         $this->notificationService->telegram([
             'telegram' => $user['telegram'],
-            'msg' => Config::get('common.activity.company.reject') . "\n" .
+            'msg' => str_replace("{name}", $company_fn, Config::get('common.activity.company.reject')) . "\n" .
                         '[link to change](' .env('APP_FRONTEND_ENDPOINT').'/companies/'.$company['uuid']. ')'
         ]);
     }
