@@ -26,13 +26,10 @@ class DepartmentController extends Controller
       *         tags={"Helper"},
       *         summary="List of department",
       *         description="List of department",
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
-      *             @OA\Response(response=401, description="Unauthenticated"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
@@ -63,13 +60,10 @@ class DepartmentController extends Controller
       *                 ),
       *                 required=true
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
-      *             @OA\Response(response=401, description="Unauthenticated"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
@@ -82,8 +76,8 @@ class DepartmentController extends Controller
       *         path="/api/department/{uuid}",
       *         operationId="delete_department",
       *         tags={"Helper"},
-      *         summary="Delete department",
-      *         description="Delete department",
+      *         summary="Delete department (not working)",
+      *         description="Delete department (not working)",
       *             @OA\Parameter(
       *                 name="uuid",
       *                 in="path",
@@ -94,13 +88,10 @@ class DepartmentController extends Controller
       *                 ),
       *                 required=true
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
-      *             @OA\Response(response=401, description="Unauthenticated"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
@@ -111,6 +102,6 @@ class DepartmentController extends Controller
             return response()->json([ 'data' => 'Not Authorized' ], 403);
         }
 
-        $this->departmentService->deleteDepartment($department);
+        //$this->departmentService->deleteDepartment($department);
     }
 }

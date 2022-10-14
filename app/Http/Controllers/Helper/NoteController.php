@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Helper\NoteResource;
 use App\Models\Helper\Note;
+use App\Policies\PermissionPolicy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 
@@ -28,14 +29,12 @@ class NoteController extends Controller
       *                     ),
       *                 ),
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
-      *             @OA\Response(response=401, description="Unauthenticated"),
-      *             @OA\Response(response=404, description="Resource Not Found")
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *             @OA\Response(response=409, description="Conflict"),
+      *             @OA\Response(response=422, description="Unprocessable Content"),
       *     )
       */
     public function store(Request $request)
@@ -66,18 +65,22 @@ class NoteController extends Controller
       *                 ),
       *                 required=true
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
-      *             @OA\Response(response=401, description="Unauthenticated"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function show(Note $note)
+    public function show(Request $request, Note $note)
     {
+        // permission
+        if (!PermissionPolicy::permission($request->user_uuid)){
+            if ($note->user_uuid!=$request->user_uuid){ // note not belong to user
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
+        }
+
         return new NoteResource($note);
     }
 
@@ -93,7 +96,7 @@ class NoteController extends Controller
       *                 @OA\JsonContent()
       *             ),
       *             @OA\Response(response=400, description="Bad request"),
-      *             @OA\Response(response=401, description="Unauthenticated"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
@@ -140,15 +143,12 @@ class NoteController extends Controller
       *                     ),
       *                 ),
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
-      *             @OA\Response(response=401, description="Unauthenticated"),
-      *             @OA\Response(response=403, description="Permission"),
-      *             @OA\Response(response=404, description="Resource Not Found")
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=403, description="Not Autorized"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *             @OA\Response(response=422, description="Unprocessable Content"),
       *     )
       */
     public function update(Request $request, Note $note)
