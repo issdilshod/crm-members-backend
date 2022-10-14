@@ -24,8 +24,7 @@ class Company extends Model
     protected $attributes = ['status' => 1];
 
     public function bank_account(){
-        return $this->hasMany(BankAccount::class, 'entity_uuid', 'uuid')
-                    ->where('status', Config::get('common.status.actived'));
+        return $this->hasMany(BankAccount::class, 'entity_uuid', 'uuid');
     }
 
     public function files(){
@@ -34,13 +33,11 @@ class Company extends Model
     }
 
     public function emails(){
-        return $this->hasMany(Email::class, 'entity_uuid', 'uuid')
-                    ->where('status', Config::get('common.status.actived'));
+        return $this->hasMany(Email::class, 'entity_uuid', 'uuid');
     }
 
     public function addresses(){
-        return $this->hasMany(Address::class, 'entity_uuid', 'uuid')
-                    ->where('status', Config::get('common.status.actived'));
+        return $this->hasMany(Address::class, 'entity_uuid', 'uuid');
     }
 
     public function future_websites(): HasMany

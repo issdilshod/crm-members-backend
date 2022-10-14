@@ -732,15 +732,18 @@ class CompanyController extends Controller
 
         // email
         $validated['emails']['entity_uuid'] = $company['uuid'];
+        $validated['emails']['status'] = Config::get('common.status.pending');
         $this->emailService->create($validated['emails']);
 
         //address
         $validated['address']['address_parent'] = '';
         $validated['address']['entity_uuid'] = $company['uuid'];
+        $validated['address']['status'] = Config::get('common.status.pending');
         $this->addressService->create($validated['address']);
 
         // bank account
         $validated['bank_account']['entity_uuid'] = $company['uuid'];
+        $validated['bank_account']['status'] = Config::get('common.status.pending');
         $bank_account = $this->bankAccountService->save($validated['bank_account']);
 
         // security
@@ -883,19 +886,18 @@ class CompanyController extends Controller
         $company = $this->companyService->pending_update($uuid, $validated);
 
         // email
-        if (isset($validated['emails'])){
-            $email = Email::where('entity_uuid', $company['uuid']);   
-            $email->update($validated['emails']);
-        }
+        $email = Email::where('entity_uuid', $company['uuid']);   
+        $validated['emails']['status'] = Config::get('common.status.pending');
+        $email->update($validated['emails']);
 
         // address
-        if (isset($validated['address'])){
-            $address = Address::where('entity_uuid', $company['uuid']);
-            $address->update($validated['address']);
-        }
+        $address = Address::where('entity_uuid', $company['uuid']);
+        $validated['address']['status'] = Config::get('common.status.pending');
+        $address->update($validated['address']);
 
         // bank account & security
         $validated['bank_account']['entity_uuid'] = $company['uuid'];
+        $validated['bank_account']['status'] = Config::get('common.status.pending');
         $bank_account = $this->bankAccountService->save($validated['bank_account']);
 
         // security delete
@@ -1093,13 +1095,16 @@ class CompanyController extends Controller
         $company = $this->companyService->accept($company, $validated, $request->user_uuid);
 
         $email = Email::where('entity_uuid', $company['uuid']);
+        $validated['emails']['status'] = Config::get('common.status.actived');
         $email->update($validated['emails']);
 
         $address = Address::where('entity_uuid', $company['uuid']);
+        $validated['address']['status'] = Config::get('common.status.actived');
         $address->update($validated['address']);
 
         // bank account & security
         $validated['bank_account']['entity_uuid'] = $company['uuid'];
+        $validated['bank_account']['status'] = Config::get('common.status.actived');
         $bank_account = $this->bankAccountService->save($validated['bank_account']);
 
         // security delete
