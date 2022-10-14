@@ -6,11 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Company\CompanyResource;
 use App\Models\Company\Company;
 use App\Models\Helper\Address;
-use App\Models\Helper\BankAccount;
 use App\Models\Helper\BankAccountSecurity;
 use App\Models\Helper\Email;
 use App\Models\Helper\File;
-use App\Models\Helper\FutureWebsite;
 use App\Policies\PermissionPolicy;
 use App\Services\Company\CompanyService;
 use App\Services\Helper\AddressService;
@@ -45,14 +43,10 @@ class CompanyController extends Controller
       *         tags={"Company"},
       *         summary="List of company",
       *         description="List of company",
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=401, description="Not Authenticated"),
-      *             @OA\Response(response=403, description="Not Authorized"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
@@ -79,8 +73,8 @@ class CompanyController extends Controller
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
       *                         type="object",
-      *                         required={"user_uuid", "legal_name", "sic_code_uuid", "director_uuid", "incorporation_state_uuid", "incorporation_state_name", "doing_business_in_state_uuid", "doing_business_in_state_name", "ein", "business_number", "business_number_type", "voip_provider", "voip_login", "voip_password", "business_mobile_number_provider", "business_mobile_number_login", "business_mobile_number_password", "website", "db_report_number", "address[street_address]", "address[address_line_2]", "address[city]", "address[state]", "address[postal]", "address[country]", "emails[hosting_uuid]", "emails[email]", "emails[password]", "emails[phone]"},
-      *                         @OA\Property(property="user_uuid", type="text"),
+      *                         required={"legal_name", "director_uuid", "incorporation_state_uuid", "doing_business_in_state_uuid", "ein", "db_report_number"},
+      *                         
       *                         @OA\Property(property="legal_name", type="text"),
       *                         @OA\Property(property="sic_code_uuid", type="text"),
       *                         @OA\Property(property="director_uuid", type="text"),
@@ -134,16 +128,13 @@ class CompanyController extends Controller
       *                     ),
       *                 ),
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=401, description="Not Authenticated"),
-      *             @OA\Response(response=403, description="Not Authorized"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *             @OA\Response(response=409, description="Conflict"),
+      *             @OA\Response(response=422, description="Unprocessable Content"),
       *     )
       */
     public function store(Request $request)
@@ -294,14 +285,10 @@ class CompanyController extends Controller
       *                 ),
       *                 required=true
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=401, description="Not Authenticated"),
-      *             @OA\Response(response=403, description="Not Authorized"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
@@ -339,7 +326,8 @@ class CompanyController extends Controller
       *                 @OA\MediaType(
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
-      *                         @OA\Property(property="user_uuid", type="text"),
+      *                         type="object",
+      *                         required={"legal_name", "director_uuid", "incorporation_state_uuid", "doing_business_in_state_uuid", "ein", "db_report_number"},
       *                         @OA\Property(property="legal_name", type="text"),
       *                         @OA\Property(property="sic_code_uuid", type="text"),
       *                         @OA\Property(property="director_uuid", type="text"),
@@ -368,10 +356,10 @@ class CompanyController extends Controller
       *                         @OA\Property(property="address[postal]", type="text"),
       *                         @OA\Property(property="address[country]", type="text"),
       *
-      *                         @OA\Property(property="emails[0][hosting_uuid]", type="text"),
-      *                         @OA\Property(property="emails[0][email]", type="text"),
-      *                         @OA\Property(property="emails[0][password]", type="text"),
-      *                         @OA\Property(property="emails[0][phone]", type="text"),
+      *                         @OA\Property(property="emails[hosting_uuid]", type="text"),
+      *                         @OA\Property(property="emails[email]", type="text"),
+      *                         @OA\Property(property="emails[password]", type="text"),
+      *                         @OA\Property(property="emails[phone]", type="text"),
       *
       *                         @OA\Property(property="bank_account[name]", type="text"),
       *                         @OA\Property(property="bank_account[website]", type="text"),
@@ -397,16 +385,13 @@ class CompanyController extends Controller
       *                     ),
       *                 ),
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=401, description="Not Authenticated"),
-      *             @OA\Response(response=403, description="Not Authorized"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *             @OA\Response(response=409, description="Conflict"),
+      *             @OA\Response(response=422, description="Unprocessable Content"),
       *     )
       */
     public function update(Request $request, Company $company)
@@ -593,14 +578,10 @@ class CompanyController extends Controller
       *                 ),
       *                 required=true
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=401, description="Not Authenticated"),
-      *             @OA\Response(response=403, description="Not Authorized"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
@@ -630,14 +611,10 @@ class CompanyController extends Controller
       *                 ),
       *                 required=true
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=401, description="Not Authenticated"),
-      *             @OA\Response(response=403, description="Not Authorized"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
@@ -664,20 +641,67 @@ class CompanyController extends Controller
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
       *                         type="object",
-      *                         required={},
+      *                         required={"legal_name", "director_uuid", "incorporation_state_uuid", "doing_business_in_state_uuid", "ein", "db_report_number"},
+      *                         @OA\Property(property="legal_name", type="text"),
+      *                         @OA\Property(property="sic_code_uuid", type="text"),
+      *                         @OA\Property(property="director_uuid", type="text"),
+      *                         @OA\Property(property="incorporation_state_uuid", type="text"),
+      *                         @OA\Property(property="incorporation_state_name", type="text"),
+      *                         @OA\Property(property="doing_business_in_state_uuid", type="text"),
+      *                         @OA\Property(property="doing_business_in_state_name", type="text"),
+      *                         @OA\Property(property="ein", type="text"),
+      *                         
+      *                         @OA\Property(property="business_number", type="text"),
+      *                         @OA\Property(property="business_number_type", type="text"),
+      *                         @OA\Property(property="voip_provider", type="text"),
+      *                         @OA\Property(property="voip_login", type="text"),
+      *                         @OA\Property(property="voip_password", type="text"),
+      *                         @OA\Property(property="business_mobile_number_provider", type="text"),
+      *                         @OA\Property(property="business_mobile_number_login", type="text"),
+      *                         @OA\Property(property="business_mobile_number_password", type="text"),
+      *
+      *                         @OA\Property(property="website", type="text"),
+      *                         @OA\Property(property="db_report_number", type="text"),
+      *
+      *                         @OA\Property(property="address[street_address]", type="text"),
+      *                         @OA\Property(property="address[address_line_2]", type="text"),
+      *                         @OA\Property(property="address[city]", type="text"),
+      *                         @OA\Property(property="address[state]", type="text"),
+      *                         @OA\Property(property="address[postal]", type="text"),
+      *                         @OA\Property(property="address[country]", type="text"),
+      *
+      *                         @OA\Property(property="emails[hosting_uuid]", type="text"),
+      *                         @OA\Property(property="emails[email]", type="text"),
+      *                         @OA\Property(property="emails[password]", type="text"),
+      *                         @OA\Property(property="emails[phone]", type="text"),
+      *
+      *                         @OA\Property(property="bank_account[name]", type="text"),
+      *                         @OA\Property(property="bank_account[website]", type="text"),
+      *                         @OA\Property(property="bank_account[username]", type="text"),
+      *                         @OA\Property(property="bank_account[password]", type="text"),
+      *                         @OA\Property(property="bank_account[account_number]", type="text"),
+      *                         @OA\Property(property="bank_account[routing_number]", type="text"),
+      *
+      *                         @OA\Property(property="bank_account_security[][question]", type="text"),
+      *                         @OA\Property(property="bank_account_security[][answer]", type="text"),
+      *
+      *                         @OA\Property(property="future_web[][domain]", type="text"),
+      *                         @OA\Property(property="future_web[][category]", type="text"),
+      *
+      *                         @OA\Property(property="files[incorporation_state][]", type="file", format="binary"),
+      *                         @OA\Property(property="files[doing_business_in_state][]", type="file", format="binary"),
+      *                         @OA\Property(property="files[company_ein][]", type="file", format="binary"),
+      *                         @OA\Property(property="files[db_report][]", type="file", format="binary"),
       *                     ),
       *                 ),
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=401, description="Not Authenticated"),
-      *             @OA\Response(response=403, description="Not Authorized"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *             @OA\Response(response=409, description="Conflict"),
+      *             @OA\Response(response=422, description="Unprocessable Content"),
       *     )
       */
     public function pending(Request $request)
@@ -815,20 +839,73 @@ class CompanyController extends Controller
       *                 @OA\MediaType(
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
-      *                         required={},
+      *                         type="object",
+      *                         required={"legal_name", "director_uuid", "incorporation_state_uuid", "doing_business_in_state_uuid", "ein", "db_report_number"},
+      *                         @OA\Property(property="legal_name", type="text"),
+      *                         @OA\Property(property="sic_code_uuid", type="text"),
+      *                         @OA\Property(property="director_uuid", type="text"),
+      *                         @OA\Property(property="incorporation_state_uuid", type="text"),
+      *                         @OA\Property(property="incorporation_state_name", type="text"),
+      *                         @OA\Property(property="doing_business_in_state_uuid", type="text"),
+      *                         @OA\Property(property="doing_business_in_state_name", type="text"),
+      *                         @OA\Property(property="ein", type="text"),
+      *                         
+      *                         @OA\Property(property="business_number", type="text"),
+      *                         @OA\Property(property="business_number_type", type="text"),
+      *                         @OA\Property(property="voip_provider", type="text"),
+      *                         @OA\Property(property="voip_login", type="text"),
+      *                         @OA\Property(property="voip_password", type="text"),
+      *                         @OA\Property(property="business_mobile_number_provider", type="text"),
+      *                         @OA\Property(property="business_mobile_number_login", type="text"),
+      *                         @OA\Property(property="business_mobile_number_password", type="text"),
+      *
+      *                         @OA\Property(property="website", type="text"),
+      *                         @OA\Property(property="db_report_number", type="text"),
+      *
+      *                         @OA\Property(property="address[street_address]", type="text"),
+      *                         @OA\Property(property="address[address_line_2]", type="text"),
+      *                         @OA\Property(property="address[city]", type="text"),
+      *                         @OA\Property(property="address[state]", type="text"),
+      *                         @OA\Property(property="address[postal]", type="text"),
+      *                         @OA\Property(property="address[country]", type="text"),
+      *
+      *                         @OA\Property(property="emails[hosting_uuid]", type="text"),
+      *                         @OA\Property(property="emails[email]", type="text"),
+      *                         @OA\Property(property="emails[password]", type="text"),
+      *                         @OA\Property(property="emails[phone]", type="text"),
+      *
+      *                         @OA\Property(property="bank_account[name]", type="text"),
+      *                         @OA\Property(property="bank_account[website]", type="text"),
+      *                         @OA\Property(property="bank_account[username]", type="text"),
+      *                         @OA\Property(property="bank_account[password]", type="text"),
+      *                         @OA\Property(property="bank_account[account_number]", type="text"),
+      *                         @OA\Property(property="bank_account[routing_number]", type="text"),
+      *
+      *                         @OA\Property(property="bank_account_security[][question]", type="text"),
+      *                         @OA\Property(property="bank_account_security[][answer]", type="text"),
+      *
+      *                         @OA\Property(property="bank_account_security_to_delete[]", type="text"),
+      *
+      *                         @OA\Property(property="future_web[][domain]", type="text"),
+      *                         @OA\Property(property="future_web[][category]", type="text"),
+      *                         @OA\Property(property="future_web_to_delete[]", type="text"),
+      *
+      *                         @OA\Property(property="files[incorporation_state][]", type="file", format="binary"),
+      *                         @OA\Property(property="files[doing_business_in_state][]", type="file", format="binary"),
+      *                         @OA\Property(property="files[company_ein][]", type="file", format="binary"),
+      *                         @OA\Property(property="files[db_report][]", type="file", format="binary"),
+      *
+      *                         @OA\Property(property="files_to_delete[]", type="text")
       *                     ),
       *                 ),
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=401, description="Not Authenticated"),
-      *             @OA\Response(response=403, description="Not Authorized"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *             @OA\Response(response=409, description="Conflict"),
+      *             @OA\Response(response=422, description="Unprocessable Content"),
       *     )
       */
     public function pending_update(Request $request, $uuid)
@@ -1001,20 +1078,73 @@ class CompanyController extends Controller
       *                 @OA\MediaType(
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
-      *                         required={},
+      *                         type="object",
+      *                         required={"legal_name", "director_uuid", "incorporation_state_uuid", "doing_business_in_state_uuid", "ein", "db_report_number"},
+      *                         @OA\Property(property="legal_name", type="text"),
+      *                         @OA\Property(property="sic_code_uuid", type="text"),
+      *                         @OA\Property(property="director_uuid", type="text"),
+      *                         @OA\Property(property="incorporation_state_uuid", type="text"),
+      *                         @OA\Property(property="incorporation_state_name", type="text"),
+      *                         @OA\Property(property="doing_business_in_state_uuid", type="text"),
+      *                         @OA\Property(property="doing_business_in_state_name", type="text"),
+      *                         @OA\Property(property="ein", type="text"),
+      *                         
+      *                         @OA\Property(property="business_number", type="text"),
+      *                         @OA\Property(property="business_number_type", type="text"),
+      *                         @OA\Property(property="voip_provider", type="text"),
+      *                         @OA\Property(property="voip_login", type="text"),
+      *                         @OA\Property(property="voip_password", type="text"),
+      *                         @OA\Property(property="business_mobile_number_provider", type="text"),
+      *                         @OA\Property(property="business_mobile_number_login", type="text"),
+      *                         @OA\Property(property="business_mobile_number_password", type="text"),
+      *
+      *                         @OA\Property(property="website", type="text"),
+      *                         @OA\Property(property="db_report_number", type="text"),
+      *
+      *                         @OA\Property(property="address[street_address]", type="text"),
+      *                         @OA\Property(property="address[address_line_2]", type="text"),
+      *                         @OA\Property(property="address[city]", type="text"),
+      *                         @OA\Property(property="address[state]", type="text"),
+      *                         @OA\Property(property="address[postal]", type="text"),
+      *                         @OA\Property(property="address[country]", type="text"),
+      *
+      *                         @OA\Property(property="emails[hosting_uuid]", type="text"),
+      *                         @OA\Property(property="emails[email]", type="text"),
+      *                         @OA\Property(property="emails[password]", type="text"),
+      *                         @OA\Property(property="emails[phone]", type="text"),
+      *
+      *                         @OA\Property(property="bank_account[name]", type="text"),
+      *                         @OA\Property(property="bank_account[website]", type="text"),
+      *                         @OA\Property(property="bank_account[username]", type="text"),
+      *                         @OA\Property(property="bank_account[password]", type="text"),
+      *                         @OA\Property(property="bank_account[account_number]", type="text"),
+      *                         @OA\Property(property="bank_account[routing_number]", type="text"),
+      *
+      *                         @OA\Property(property="bank_account_security[][question]", type="text"),
+      *                         @OA\Property(property="bank_account_security[][answer]", type="text"),
+      *
+      *                         @OA\Property(property="bank_account_security_to_delete[]", type="text"),
+      *
+      *                         @OA\Property(property="future_web[][domain]", type="text"),
+      *                         @OA\Property(property="future_web[][category]", type="text"),
+      *                         @OA\Property(property="future_web_to_delete[]", type="text"),
+      *
+      *                         @OA\Property(property="files[incorporation_state][]", type="file", format="binary"),
+      *                         @OA\Property(property="files[doing_business_in_state][]", type="file", format="binary"),
+      *                         @OA\Property(property="files[company_ein][]", type="file", format="binary"),
+      *                         @OA\Property(property="files[db_report][]", type="file", format="binary"),
+      *
+      *                         @OA\Property(property="files_to_delete[]", type="text")
       *                     ),
       *                 ),
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=401, description="Not Authenticated"),
-      *             @OA\Response(response=403, description="Not Authorized"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *             @OA\Response(response=409, description="Conflict"),
+      *             @OA\Response(response=422, description="Unprocessable Content"),
       *     )
       */
     public function accept(Request $request, $uuid)
@@ -1203,16 +1333,11 @@ class CompanyController extends Controller
       *                 ),
       *                 required=true
       *             ),
-      *             @OA\Response(
-      *                 response=200,
-      *                 description="Successfully",
-      *                 @OA\JsonContent()
-      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=401, description="Not Authenticated"),
-      *             @OA\Response(response=403, description="Not Authorized"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
-      *             @OA\Response(response=409, description="Conflict"),
       *     )
       */
     public function reject(Request $request, $uuid)
@@ -1234,7 +1359,7 @@ class CompanyController extends Controller
       *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=401, description="Not Authenticated"),
-      *             @OA\Response(response=403, description="Not Authorized"),
+      *             @OA\Response(response=403, description="Not Autorized"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
@@ -1253,7 +1378,6 @@ class CompanyController extends Controller
       *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=401, description="Not Authenticated"),
-      *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
     public function permission(Request $request)
