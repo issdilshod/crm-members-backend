@@ -31,9 +31,12 @@ class DirectorService {
 
     public function all()
     {
-        $directors = Director::orderBy('created_at', 'DESC')
-                            ->where('status', Config::get('common.status.actived'))
-                            ->paginate(20);
+        $directors = Director::orderBy('first_name', 'ASC')
+                                ->orderBy('middle_name', 'ASC')
+                                ->orderBy('last_name', 'ASC')
+                                ->orderBy('updated_at', 'DESC')
+                                ->where('status', Config::get('common.status.actived'))
+                                ->paginate(20);
         return DirectorResource::collection($directors);
     }
 

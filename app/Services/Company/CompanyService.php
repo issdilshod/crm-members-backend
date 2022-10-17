@@ -34,7 +34,8 @@ class CompanyService {
 
     public function all()
     {
-        $companies = Company::orderBy('created_at', 'DESC')
+        $companies = Company::orderBy('legal_name', 'ASC')
+                                ->orderBy('created_at', 'DESC')
                                 ->where('status', Config::get('common.status.actived'))
                                 ->paginate(20);
         return CompanyResource::collection($companies);
