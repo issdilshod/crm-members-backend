@@ -42,7 +42,7 @@ class DirectorService {
         $directors = Director::orderBy('updated_at', 'DESC')
                                 ->where('status', '!=', Config::get('common.status.deleted'))
                                 ->where('user_uuid', $user_uuid)
-                                ->paginate(20);
+                                ->paginate(50);
 
         foreach($directors AS $key => $value):
             $directors[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
@@ -55,7 +55,7 @@ class DirectorService {
     {
         $directors = Director::orderBy('updated_at', 'DESC')
                                 ->where('status', '!=', Config::get('common.status.deleted'))
-                                ->paginate(20);
+                                ->paginate(50);
 
         foreach($directors AS $key => $value):
             $directors[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);

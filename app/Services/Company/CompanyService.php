@@ -45,7 +45,7 @@ class CompanyService {
         $companies = Company::orderBy('updated_at', 'DESC')
                                 ->where('status', '!=', Config::get('common.status.deleted'))
                                 ->where('user_uuid', $user_uuid)
-                                ->paginate(20);
+                                ->paginate(50);
 
         foreach($companies AS $key => $value):
             $companies[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
@@ -58,7 +58,7 @@ class CompanyService {
     {
         $companies = Company::orderBy('updated_at', 'DESC')
                                 ->where('status', '!=', Config::get('common.status.deleted'))
-                                ->paginate(20);
+                                ->paginate(50);
 
         foreach($companies AS $key => $value):
             $companies[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
