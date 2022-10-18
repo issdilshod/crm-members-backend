@@ -752,6 +752,33 @@ class CompanyController extends Controller
             'user_uuid' => 'string'
         ]);
 
+        $check = [];
+
+        if (isset($validated['emails'])){
+            $tmpCheck = $this->emailService->check($validated['emails']);
+            $check = array_merge($check, $tmpCheck);
+        }
+
+        if (isset($validated['address'])){
+            $tmpCheck = $this->addressService->check($validated['address']);
+            $check = array_merge($check, $tmpCheck);
+        }
+
+        if (isset($validated['bank_account'])){
+            $tmpCheck = $this->bankAccountService->check($validated['bank_account']);
+            $check = array_merge($check, $tmpCheck);
+        }
+        
+        $tmpCheck = $this->companyService->check($validated);
+        $check = array_merge($check, $tmpCheck);
+
+        // exists
+        if (count($check)>0){
+            return response()->json([
+                'data' => $check,
+            ], 409);
+        }
+
         $company = $this->companyService->pending($validated);
 
         // email
@@ -959,6 +986,35 @@ class CompanyController extends Controller
 
             'user_uuid' => 'string'
         ]);
+
+        $check = [];
+
+        $company = Company::where('uuid', $uuid);
+
+        if (isset($validated['emails'])){
+            $tmpCheck = $this->emailService->check_ignore($validated['emails'], $company->uuid);
+            $check = array_merge($check, $tmpCheck);
+        }
+
+        if (isset($validated['address'])){
+            $tmpCheck = $this->addressService->check_ignore($validated['address'], $company->uuid);
+            $check = array_merge($check, $tmpCheck);
+        }
+
+        if (isset($validated['bank_account'])){
+            $tmpCheck = $this->bankAccountService->check_ignore($validated['bank_account'], $company->uuid);
+            $check = array_merge($check, $tmpCheck);
+        }
+
+        $tmpCheck = $this->companyService->check_ignore($validated, $company->uuid);
+        $check = array_merge($check, $tmpCheck);
+        
+        // exsist
+        if (count($check)>0){
+            return response()->json([
+                'data' => $check,
+            ], 409);
+        }
 
         $company = $this->companyService->pending_update($uuid, $validated);
 
@@ -1209,6 +1265,11 @@ class CompanyController extends Controller
 
         if (isset($validated['address'])){
             $tmpCheck = $this->addressService->check_ignore($validated['address'], $company->uuid);
+            $check = array_merge($check, $tmpCheck);
+        }
+
+        if (isset($validated['bank_account'])){
+            $tmpCheck = $this->bankAccountService->check_ignore($validated['bank_account'], $company->uuid);
             $check = array_merge($check, $tmpCheck);
         }
 
