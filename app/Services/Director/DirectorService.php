@@ -419,7 +419,10 @@ class DirectorService {
 
     public function director_list($value = '')
     {
-        $directors = Director::orderBy('created_at', 'DESC')
+        $directors = Director::orderBy('first_name', 'ASC')
+                                ->orderBy('middle_name', 'ASC')
+                                ->orderBy('last_name', 'ASC')
+                                ->orderBy('updated_at', 'DESC')
                                 ->where('status', Config::get('common.status.actived'))
                                 ->whereRaw("concat(first_name, ' ', last_name) like '%".$value."%'")
                                 ->limit(20)
