@@ -48,7 +48,7 @@ class CompanyResource extends JsonResource
 
             'bank_account' => BankAccountResource::collection($this->bank_account),
             'address' => AddressResource::collection($this->addresses),
-            'emails' => EmailResource::collection($this->emails),
+            'emailsdb' => EmailResource::collection($this->emails),
             'uploaded_files' => FileResource::collection($this->files),
 
             'status' => $this->status

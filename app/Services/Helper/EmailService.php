@@ -16,6 +16,25 @@ class EmailService {
         return $email;
     }
 
+    public function save($entity)
+    {
+        $email = Email::where('entity_uuid', $entity['entity_uuid'])
+                        ->where('email', $entity['email'])
+                        ->first();
+        if ($email==null){
+            $email = Email::create($entity);
+        }else {
+            $email->update($entity);
+        }
+
+        return $email;
+    }
+
+    public function delete($uuid)
+    {
+        Email::where('uuid', $uuid)->update(['status' => Config::get('common.status.deleted')]);
+    }
+
     private function get_identifier_exists($uuid)
     {
         $director = Director::select('first_name', 'middle_name', 'last_name')

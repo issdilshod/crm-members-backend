@@ -187,10 +187,10 @@ class CompanyController extends Controller
 
         $check = [];
 
-        if (isset($validated['emails'])){
+        /*if (isset($validated['emails'])){
             $tmpCheck = $this->emailService->check($validated['emails']);
             $check = array_merge($check, $tmpCheck);
-        }
+        }*/
 
         if (isset($validated['address'])){
             $tmpCheck = $this->addressService->check($validated['address']);
@@ -215,8 +215,12 @@ class CompanyController extends Controller
         $company = $this->companyService->create($validated);
 
         // email
-        $validated['emails']['entity_uuid'] = $company['uuid'];
-        $this->emailService->create($validated['emails']);
+        if (isset($validated['emails'])){
+            foreach($validated['emails'] AS $key => $value):
+                $value['entity_uuid'] = $company['uuid'];
+                $this->emailService->save($value);
+            endforeach;
+        }
 
         // bank account & account sercurity
         $validated['bank_account']['entity_uuid'] = $company['uuid'];
@@ -429,6 +433,7 @@ class CompanyController extends Controller
 
             // emails
             'emails' => 'array',
+            'emails_to_delete' => 'array',
 
             // bank account
             'bank_account' => 'array',
@@ -449,10 +454,10 @@ class CompanyController extends Controller
 
         $check = [];
 
-        if (isset($validated['emails'])){
+        /*if (isset($validated['emails'])){
             $tmpCheck = $this->emailService->check_ignore($validated['emails'], $company->uuid);
             $check = array_merge($check, $tmpCheck);
-        }
+        }*/
 
         if (isset($validated['address'])){
             $tmpCheck = $this->addressService->check_ignore($validated['address'], $company->uuid);
@@ -477,8 +482,18 @@ class CompanyController extends Controller
         $company = $this->companyService->update($company, $validated);
 
         // email
-        $email = Email::where('entity_uuid', $company['uuid']);
-        $email->update($validated['emails']);
+        if (isset($validated['emails'])){
+            foreach($validated['emails'] AS $key => $value):
+                $value['entity_uuid'] = $company['uuid'];
+                $this->emailService->save($value);
+            endforeach;
+        }
+
+        if (isset($validated['emails_to_delete'])){
+            foreach($validated['emails_to_delete'] AS $key => $value):
+                $this->emailService->delete($value);
+            endforeach;
+        }
 
         // address
         $address = Address::where('entity_uuid', $company['uuid']);
@@ -754,10 +769,10 @@ class CompanyController extends Controller
 
         $check = [];
 
-        if (isset($validated['emails'])){
+        /*if (isset($validated['emails'])){
             $tmpCheck = $this->emailService->check($validated['emails']);
             $check = array_merge($check, $tmpCheck);
-        }
+        }*/
 
         if (isset($validated['address'])){
             $tmpCheck = $this->addressService->check($validated['address']);
@@ -782,9 +797,13 @@ class CompanyController extends Controller
         $company = $this->companyService->pending($validated);
 
         // email
-        $validated['emails']['entity_uuid'] = $company['uuid'];
-        $validated['emails']['status'] = Config::get('common.status.pending');
-        $this->emailService->create($validated['emails']);
+        if (isset($validated['emails'])){
+            foreach($validated['emails'] AS $key => $value):
+                $value['entity_uuid'] = $company['uuid'];
+                $value['status'] = Config::get('common.status.pending');
+                $this->emailService->save($value);
+            endforeach;
+        }
 
         //address
         $validated['address']['address_parent'] = '';
@@ -970,6 +989,7 @@ class CompanyController extends Controller
 
             // emails
             'emails' => 'array',
+            'emails_to_delete' => 'array',
 
             // bank account
             'bank_account' => 'array',
@@ -991,10 +1011,10 @@ class CompanyController extends Controller
 
         $company = Company::where('uuid', $uuid);
 
-        if (isset($validated['emails'])){
+        /*if (isset($validated['emails'])){
             $tmpCheck = $this->emailService->check_ignore($validated['emails'], $company->uuid);
             $check = array_merge($check, $tmpCheck);
-        }
+        }*/
 
         if (isset($validated['address'])){
             $tmpCheck = $this->addressService->check_ignore($validated['address'], $company->uuid);
@@ -1019,9 +1039,19 @@ class CompanyController extends Controller
         $company = $this->companyService->pending_update($uuid, $validated);
 
         // email
-        $email = Email::where('entity_uuid', $company['uuid']);   
-        $validated['emails']['status'] = Config::get('common.status.pending');
-        $email->update($validated['emails']);
+        if (isset($validated['emails'])){
+            foreach($validated['emails'] AS $key => $value):
+                $value['entity_uuid'] = $company['uuid'];
+                $value['status'] = Config::get('common.status.pending');
+                $this->emailService->save($value);
+            endforeach;
+        }
+
+        if (isset($validated['emails_to_delete'])){
+            foreach($validated['emails_to_delete'] AS $key => $value):
+                $this->emailService->delete($value);
+            endforeach;
+        }
 
         // address
         $address = Address::where('entity_uuid', $company['uuid']);
@@ -1238,6 +1268,7 @@ class CompanyController extends Controller
 
             // emails
             'emails' => 'array',
+            'emails_to_delete' => 'array',
 
             // bank account
             'bank_account' => 'array',
@@ -1258,10 +1289,10 @@ class CompanyController extends Controller
 
         $check = [];
 
-        if (isset($validated['emails'])){
+        /*if (isset($validated['emails'])){
             $tmpCheck = $this->emailService->check_ignore($validated['emails'], $company->uuid);
             $check = array_merge($check, $tmpCheck);
-        }
+        }*/
 
         if (isset($validated['address'])){
             $tmpCheck = $this->addressService->check_ignore($validated['address'], $company->uuid);
@@ -1285,9 +1316,20 @@ class CompanyController extends Controller
 
         $company = $this->companyService->accept($company, $validated, $request->user_uuid);
 
-        $email = Email::where('entity_uuid', $company['uuid']);
-        $validated['emails']['status'] = Config::get('common.status.actived');
-        $email->update($validated['emails']);
+        // email
+        if (isset($validated['emails'])){
+            foreach($validated['emails'] AS $key => $value):
+                $value['entity_uuid'] = $company['uuid'];
+                $value['status'] = Config::get('common.status.actived');
+                $this->emailService->save($value);
+            endforeach;
+        }
+
+        if (isset($validated['emails_to_delete'])){
+            foreach($validated['emails_to_delete'] AS $key => $value):
+                $this->emailService->delete($value);
+            endforeach;
+        }
 
         $address = Address::where('entity_uuid', $company['uuid']);
         $validated['address']['status'] = Config::get('common.status.actived');

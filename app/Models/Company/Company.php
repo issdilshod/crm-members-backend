@@ -33,7 +33,8 @@ class Company extends Model
     }
 
     public function emails(){
-        return $this->hasMany(Email::class, 'entity_uuid', 'uuid');
+        return $this->hasMany(Email::class, 'entity_uuid', 'uuid')
+                    ->where('status', '!=', Config::get('common.status.deleted'));
     }
 
     public function addresses(){
