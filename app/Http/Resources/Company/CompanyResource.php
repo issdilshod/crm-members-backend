@@ -37,6 +37,8 @@ class CompanyResource extends JsonResource
             'voip_provider' => $this->voip_provider,
             'voip_login' => $this->voip_login,
             'voip_password' => $this->voip_password,
+            'business_mobile_number' => $this->business_mobile_number,
+            'business_mobile_number_type' => $this->business_mobile_number_type,
             'business_mobile_number_provider' => $this->business_mobile_number_provider,
             'business_mobile_number_login' => $this->business_mobile_number_login,
             'business_mobile_number_password' => $this->business_mobile_number_password,

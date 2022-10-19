@@ -164,6 +164,20 @@ class CompanyService {
             unset($check['tmp']);
         }
 
+        // Business mobile number type
+        if (isset($entity['business_mobile_number'])){
+            $check['tmp'] = Company::select('business_mobile_number')
+                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('business_mobile_number', $entity['business_mobile_number'])->first();
+            if ($check['tmp']!=null){
+                $check['tmp'] = $check['tmp']->toArray();
+                foreach ($check['tmp'] AS $key => $value):
+                    $check[$key] = Config::get('common.errors.exsist');
+                endforeach;
+            }
+            unset($check['tmp']);
+        }
+
         // Business mobile number login
         if (isset($entity['business_mobile_number_login'])){
             $check['tmp'] = Company::select('business_mobile_number_login')
@@ -278,6 +292,21 @@ class CompanyService {
                                     ->where('uuid', '!=', $ignore_uuid)            
                                     ->where('status', Config::get('common.status.actived'))
                                     ->where('voip_login', $entity['voip_login'])->first();
+            if ($check['tmp']!=null){
+                $check['tmp'] = $check['tmp']->toArray();
+                foreach ($check['tmp'] AS $key => $value):
+                    $check[$key] = Config::get('common.errors.exsist');
+                endforeach;
+            }
+            unset($check['tmp']);
+        }
+
+        // Business mobile number type
+        if (isset($entity['business_mobile_number'])){
+            $check['tmp'] = Company::select('business_mobile_number')
+                                    ->where('uuid', '!=', $ignore_uuid) 
+                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('business_mobile_number', $entity['business_mobile_number'])->first();
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
                 foreach ($check['tmp'] AS $key => $value):

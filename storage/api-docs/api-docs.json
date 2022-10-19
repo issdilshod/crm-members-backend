@@ -1232,6 +1232,12 @@
                                     "voip_password": {
                                         "type": "text"
                                     },
+                                    "business_mobile_number": {
+                                        "type": "text"
+                                    },
+                                    "business_mobile_number_type": {
+                                        "type": "text"
+                                    },
                                     "business_mobile_number_provider": {
                                         "type": "text"
                                     },
@@ -1419,6 +1425,12 @@
                                         "type": "text"
                                     },
                                     "voip_password": {
+                                        "type": "text"
+                                    },
+                                    "business_mobile_number": {
+                                        "type": "text"
+                                    },
+                                    "business_mobile_number_type": {
                                         "type": "text"
                                     },
                                     "business_mobile_number_provider": {
@@ -1721,6 +1733,12 @@
                                     "voip_password": {
                                         "type": "text"
                                     },
+                                    "business_mobile_number": {
+                                        "type": "text"
+                                    },
+                                    "business_mobile_number_type": {
+                                        "type": "text"
+                                    },
                                     "business_mobile_number_provider": {
                                         "type": "text"
                                     },
@@ -1916,6 +1934,12 @@
                                         "type": "text"
                                     },
                                     "voip_password": {
+                                        "type": "text"
+                                    },
+                                    "business_mobile_number": {
+                                        "type": "text"
+                                    },
+                                    "business_mobile_number_type": {
                                         "type": "text"
                                     },
                                     "business_mobile_number_provider": {
@@ -2122,6 +2146,12 @@
                                         "type": "text"
                                     },
                                     "voip_password": {
+                                        "type": "text"
+                                    },
+                                    "business_mobile_number": {
+                                        "type": "text"
+                                    },
+                                    "business_mobile_number_type": {
                                         "type": "text"
                                     },
                                     "business_mobile_number_provider": {
