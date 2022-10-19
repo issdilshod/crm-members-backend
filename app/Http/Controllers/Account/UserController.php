@@ -529,7 +529,7 @@ class UserController extends Controller
       */
     public function get_me(Request $request)
     {
-        $user = $this->userService->me($request);
+        $user = $this->userService->me($request->user_uuid);
         return $user;
     }
 }
