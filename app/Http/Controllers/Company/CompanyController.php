@@ -299,10 +299,8 @@ class CompanyController extends Controller
     public function show(Request $request, Company $company)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid)){
-            if ($request->user_uuid!=$company->user_uuid){ // if creator not them
-                return response()->json([ 'data' => 'Not Authorized' ], 403);
-            }
+        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.view'))){
+            return response()->json([ 'data' => 'Not Authorized' ], 403);
         }
 
         $company = $this->companyService->one($company);

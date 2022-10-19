@@ -237,10 +237,8 @@ class DirectorController extends Controller
     public function show(Request $request, Director $director)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid)){
-            if ($request->user_uuid!=$director->user_uuid){ // if creator not them
-                return response()->json([ 'data' => 'Not Authorized' ], 403);
-            }
+        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.view'))){
+            return response()->json([ 'data' => 'Not Authorized' ], 403);
         }
 
         $director = $this->directorService->one($director);
