@@ -15,7 +15,7 @@ class User extends Model
 {
     use HasFactory, TraitUuid;
 
-    protected $fillable = ['department_uuid', 'role_uuid', 'first_name', 'last_name', 'username', 'password', 'telegram', 'status'];
+    protected $fillable = ['department_uuid', 'role_uuid', 'first_name', 'last_name', 'username', 'password', 'telegram', 'status', 'last_seen'];
 
     protected $attributes = ['status' => 1];
 

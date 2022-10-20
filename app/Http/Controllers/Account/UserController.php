@@ -532,4 +532,41 @@ class UserController extends Controller
         $user = $this->userService->me($request->user_uuid);
         return $user;
     }
+
+    /**     @OA\GET(
+      *         path="/api/user-online",
+      *         operationId="user_online",
+      *         tags={"Account"},
+      *         summary="Set user online",
+      *         description="Set user online",
+      *             @OA\Response(response=200, description="Successfully"),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
+    public function online(Request $request)
+    {
+        $user = $this->userService->online($request->user_uuid);
+        return $user;
+    }
+
+    /**     @OA\GET(
+      *         path="/api/user-offline",
+      *         operationId="user_offline",
+      *         tags={"Account"},
+      *         summary="Set user offline",
+      *         description="Set user offline",
+      *             @OA\Response(response=200, description="Successfully"),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
+    public function offline(Request $request)
+    {
+        $this->userService->offline($request->user_uuid);
+    }
+
+
 }
