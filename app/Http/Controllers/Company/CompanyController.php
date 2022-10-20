@@ -73,7 +73,7 @@ class CompanyController extends Controller
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
       *                         type="object",
-      *                         required={"legal_name", "director_uuid", "incorporation_state_uuid", "doing_business_in_state_uuid", "ein", "db_report_number"},
+      *                         required={"legal_name", "director_uuid", "ein", "db_report_number"},
       *                         
       *                         @OA\Property(property="legal_name", type="text"),
       *                         @OA\Property(property="sic_code_uuid", type="text"),
@@ -150,9 +150,9 @@ class CompanyController extends Controller
             'legal_name' => 'required',
             'sic_code_uuid' => '',
             'director_uuid' => 'required',
-            'incorporation_state_uuid' => 'required',
+            'incorporation_state_uuid' => '',
             'incorporation_state_name' => '',
-            'doing_business_in_state_uuid' => 'required',
+            'doing_business_in_state_uuid' => '',
             'doing_business_in_state_name' => '',
             'ein' => 'required',
             
@@ -333,7 +333,7 @@ class CompanyController extends Controller
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
       *                         type="object",
-      *                         required={"legal_name", "director_uuid", "incorporation_state_uuid", "doing_business_in_state_uuid", "ein", "db_report_number"},
+      *                         required={"legal_name", "director_uuid", "ein", "db_report_number"},
       *                         @OA\Property(property="legal_name", type="text"),
       *                         @OA\Property(property="sic_code_uuid", type="text"),
       *                         @OA\Property(property="director_uuid", type="text"),
@@ -413,9 +413,9 @@ class CompanyController extends Controller
             'legal_name' => 'required',
             'sic_code_uuid' => '',
             'director_uuid' => 'required',
-            'incorporation_state_uuid' => 'required',
+            'incorporation_state_uuid' => '',
             'incorporation_state_name' => '',
-            'doing_business_in_state_uuid' => 'required',
+            'doing_business_in_state_uuid' => '',
             'doing_business_in_state_name' => '',
             'ein' => 'required',
             
@@ -662,7 +662,7 @@ class CompanyController extends Controller
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
       *                         type="object",
-      *                         required={"legal_name", "director_uuid", "incorporation_state_uuid", "doing_business_in_state_uuid", "ein", "db_report_number"},
+      *                         required={"legal_name", "director_uuid", "ein", "db_report_number"},
       *                         @OA\Property(property="legal_name", type="text"),
       *                         @OA\Property(property="sic_code_uuid", type="text"),
       *                         @OA\Property(property="director_uuid", type="text"),
@@ -738,9 +738,9 @@ class CompanyController extends Controller
             'legal_name' => 'required',
             'sic_code_uuid' => '',
             'director_uuid' => 'required',
-            'incorporation_state_uuid' => 'required',
+            'incorporation_state_uuid' => '',
             'incorporation_state_name' => '',
-            'doing_business_in_state_uuid' => 'required',
+            'doing_business_in_state_uuid' => '',
             'doing_business_in_state_name' => '',
             'ein' => 'required',
             
@@ -896,7 +896,7 @@ class CompanyController extends Controller
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
       *                         type="object",
-      *                         required={"legal_name", "director_uuid", "incorporation_state_uuid", "doing_business_in_state_uuid", "ein", "db_report_number"},
+      *                         required={"legal_name", "director_uuid", "ein", "db_report_number"},
       *                         @OA\Property(property="legal_name", type="text"),
       *                         @OA\Property(property="sic_code_uuid", type="text"),
       *                         @OA\Property(property="director_uuid", type="text"),
@@ -977,9 +977,9 @@ class CompanyController extends Controller
             'legal_name' => 'required',
             'sic_code_uuid' => '',
             'director_uuid' => 'required',
-            'incorporation_state_uuid' => 'required',
+            'incorporation_state_uuid' => '',
             'incorporation_state_name' => '',
-            'doing_business_in_state_uuid' => 'required',
+            'doing_business_in_state_uuid' => '',
             'doing_business_in_state_name' => '',
             'ein' => 'required',
             
@@ -1179,7 +1179,7 @@ class CompanyController extends Controller
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
       *                         type="object",
-      *                         required={"legal_name", "director_uuid", "incorporation_state_uuid", "doing_business_in_state_uuid", "ein", "db_report_number"},
+      *                         required={"legal_name", "director_uuid", "ein", "db_report_number"},
       *                         @OA\Property(property="legal_name", type="text"),
       *                         @OA\Property(property="sic_code_uuid", type="text"),
       *                         @OA\Property(property="director_uuid", type="text"),
@@ -1260,9 +1260,9 @@ class CompanyController extends Controller
             'legal_name' => 'required',
             'sic_code_uuid' => '',
             'director_uuid' => 'required',
-            'incorporation_state_uuid' => 'required',
+            'incorporation_state_uuid' => '',
             'incorporation_state_name' => '',
-            'doing_business_in_state_uuid' => 'required',
+            'doing_business_in_state_uuid' => '',
             'doing_business_in_state_name' => '',
             'ein' => 'required',
             

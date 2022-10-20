@@ -1235,8 +1235,6 @@
                                 "required": [
                                     "legal_name",
                                     "director_uuid",
-                                    "incorporation_state_uuid",
-                                    "doing_business_in_state_uuid",
                                     "ein",
                                     "db_report_number"
                                 ],
@@ -1430,8 +1428,6 @@
                                 "required": [
                                     "legal_name",
                                     "director_uuid",
-                                    "incorporation_state_uuid",
-                                    "doing_business_in_state_uuid",
                                     "ein",
                                     "db_report_number"
                                 ],
@@ -1736,8 +1732,6 @@
                                 "required": [
                                     "legal_name",
                                     "director_uuid",
-                                    "incorporation_state_uuid",
-                                    "doing_business_in_state_uuid",
                                     "ein",
                                     "db_report_number"
                                 ],
@@ -1939,8 +1933,6 @@
                                 "required": [
                                     "legal_name",
                                     "director_uuid",
-                                    "incorporation_state_uuid",
-                                    "doing_business_in_state_uuid",
                                     "ein",
                                     "db_report_number"
                                 ],
@@ -2151,8 +2143,6 @@
                                 "required": [
                                     "legal_name",
                                     "director_uuid",
-                                    "incorporation_state_uuid",
-                                    "doing_business_in_state_uuid",
                                     "ein",
                                     "db_report_number"
                                 ],
