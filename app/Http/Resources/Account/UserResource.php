@@ -24,7 +24,8 @@ class UserResource extends JsonResource
             'role_uuid' => $this->role_uuid,
             'department_uuid' => $this->department_uuid,
             'access_tokens' => UserAccessTokenResource::collection($this->access_tokens),
-            'status' => $this->status
+            'status' => $this->status,
+            'last_seen' => $this->last_seen,
         ];
     }
 }
