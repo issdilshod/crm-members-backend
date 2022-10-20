@@ -229,6 +229,8 @@ class UserService {
 
         UserAccessToken::create($user['access_token']);
 
+        $this->online($user->uuid);
+
         // Activity log
         Activity::create([
             'user_uuid' => $user['uuid'],
@@ -245,6 +247,8 @@ class UserService {
     {
         UserAccessToken::where('token', $entity['token'])
                         ->update(['status' => Config::get('common.status.deleted')]);
+
+        $this->offline($entity['user_uuid']);
 
         // Activity log
         Activity::create([
@@ -306,6 +310,7 @@ class UserService {
             
             $entity['status'] = Config::get('common.status.pending');
             $user = User::create($entity);
+            $this->offline($user->uuid);
 
             $invite_user->update(['status'=> Config::get('common.status.deleted')]);
 
@@ -340,6 +345,18 @@ class UserService {
     public function delete(User $user)
     {
         $user->update(['status' => Config::get('common.status.deleted')]);
+    }
+
+    public function online($uuid)
+    {
+        User::where('uuid', $uuid)
+                ->update(['last_seen' => NULL]);
+    }
+
+    public function offline($uuid)
+    {
+        User::where('uuid', $uuid)
+                ->update(['last_seen' => Carbon::now()]);
     }
 
 }

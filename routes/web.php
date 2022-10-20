@@ -33,6 +33,8 @@ Route::get('api/user/{uuid}', [UserController::class, 'show'])->middleware('auth
 Route::put('api/user/{uuid}', [UserController::class, 'update'])->middleware('auth.custom');
 Route::delete('api/user/{uuid}', [UserController::class, 'destroy'])->middleware('auth.custom');
 Route::get('api/pending-users', [UserController::class, 'pending_users'])->middleware('auth.custom');
+Route::get('api/user-online', [UserController::class, 'online'])->middleware('auth.custom');
+Route::get('api/user-offline', [UserController::class, 'offline'])->middleware('auth.custom');
 //login
 Route::post('api/login', [UserController::class, 'login']);
 Route::post('api/logout', [UserController::class, 'logout'])->middleware('auth.custom');

@@ -1135,6 +1135,54 @@
                 }
             }
         },
+        "/api/user-online": {
+            "get": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Set user online",
+                "description": "Set user online",
+                "operationId": "user_online",
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/user-offline": {
+            "get": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Set user offline",
+                "description": "Set user offline",
+                "operationId": "user_offline",
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
         "/api/company": {
             "get": {
                 "tags": [
