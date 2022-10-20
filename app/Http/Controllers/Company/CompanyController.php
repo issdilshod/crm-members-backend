@@ -1023,7 +1023,7 @@ class CompanyController extends Controller
 
         $check = [];
 
-        $company = Company::where('uuid', $uuid);
+        $company = Company::where('uuid', $uuid)->first();
 
         /*if (isset($validated['emails'])){
             $tmpCheck = $this->emailService->check_ignore($validated['emails'], $company->uuid);
