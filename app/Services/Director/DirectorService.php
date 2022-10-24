@@ -113,7 +113,7 @@ class DirectorService {
     {
         $directors = Director::orderBy('created_at', 'DESC')
                                 ->where('status', '!=', Config::get('common.status.deleted'))
-                                ->whereRaw("concat(first_name, ' ', middle_name, ' ', last_name) like '%".$value."%'")
+                                ->whereRaw("concat(first_name, ' ', last_name) like '%".$value."%'")
                                 ->paginate(20);
         return DirectorResource::collection($directors);
     }

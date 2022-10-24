@@ -114,7 +114,7 @@ class CompanyService {
     public function search($value)
     {
         $companies = Company::orderBy('created_at', 'DESC')
-                                ->where('status', Config::get('common.status.actived'))
+                                ->where('status', '!=', Config::get('common.status.deleted'))
                                 ->where('legal_name', 'like', '%'.$value.'%')
                                 ->paginate(20);
         return CompanyResource::collection($companies);
