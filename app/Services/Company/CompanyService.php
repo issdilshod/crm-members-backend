@@ -46,7 +46,22 @@ class CompanyService {
         $companies = Company::orderBy('updated_at', 'DESC')
                                 ->where('status', '!=', Config::get('common.status.deleted'))
                                 ->where('user_uuid', $user_uuid)
-                                ->paginate(50);
+                                ->paginate(10);
+
+        foreach($companies AS $key => $value):
+            $companies[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
+        endforeach;
+
+        return CompanyPendingResource::collection($companies);
+    }
+
+    public function by_user_search($user_uuid, $search)
+    {
+        $companies = Company::orderBy('updated_at', 'DESC')
+                                ->where('status', '!=', Config::get('common.status.deleted'))
+                                ->where('user_uuid', $user_uuid)
+                                ->where('legal_name', 'like', '%'.$search.'%')
+                                ->paginate(10);
 
         foreach($companies AS $key => $value):
             $companies[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
@@ -59,7 +74,21 @@ class CompanyService {
     {
         $companies = Company::orderBy('updated_at', 'DESC')
                                 ->where('status', '!=', Config::get('common.status.deleted'))
-                                ->paginate(50);
+                                ->paginate(10);
+
+        foreach($companies AS $key => $value):
+            $companies[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
+        endforeach;
+
+        return CompanyPendingResource::collection($companies);
+    }
+
+    public function headquarters_search($search)
+    {
+        $companies = Company::orderBy('updated_at', 'DESC')
+                                ->where('status', '!=', Config::get('common.status.deleted'))
+                                ->where('legal_name', 'like', '%'.$search.'%')
+                                ->paginate(10);
 
         foreach($companies AS $key => $value):
             $companies[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);

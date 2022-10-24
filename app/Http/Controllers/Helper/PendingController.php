@@ -46,4 +46,30 @@ class PendingController extends Controller
         return ['directors' => $directors, 'companies' => $companies];
     }
 
+    /**     @OA\GET(
+      *         path="/api/pending/search/{search}",
+      *         operationId="list_pending_search",
+      *         tags={"Helper"},
+      *         summary="List of pending search",
+      *         description="List of pending search",
+      *             @OA\Response(response=200, description="Successfully"),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
+    public function search(Request $request, $search)
+    {
+        // if now headquarters then show only belongs to them
+        if (!PermissionPolicy::permission($request->user_uuid)){
+            $directors = $this->directorService->by_user_search($request->user_uuid, $search);
+            $companies = $this->companyService->by_user_search($request->user_uuid, $search);
+            return ['directors' => $directors, 'companies' => $companies];
+        }
+
+        $directors = $this->directorService->headquarters_search($search);
+        $companies = $this->companyService->headquarters_search($search);
+        return ['directors' => $directors, 'companies' => $companies];
+    }
+
 }

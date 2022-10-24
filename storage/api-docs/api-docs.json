@@ -3793,6 +3793,30 @@
                 }
             }
         },
+        "/api/pending/search/{search}": {
+            "get": {
+                "tags": [
+                    "Helper"
+                ],
+                "summary": "List of pending search",
+                "description": "List of pending search",
+                "operationId": "list_pending_search",
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
         "/api/role": {
             "get": {
                 "tags": [

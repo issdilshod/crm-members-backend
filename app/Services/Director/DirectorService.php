@@ -45,7 +45,22 @@ class DirectorService {
         $directors = Director::orderBy('updated_at', 'DESC')
                                 ->where('status', '!=', Config::get('common.status.deleted'))
                                 ->where('user_uuid', $user_uuid)
-                                ->paginate(50);
+                                ->paginate(10);
+
+        foreach($directors AS $key => $value):
+            $directors[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
+        endforeach;
+
+        return DirectorPendingResource::collection($directors);
+    }
+
+    public function by_user_search($user_uuid, $search)
+    {
+        $directors = Director::orderBy('updated_at', 'DESC')
+                                ->where('status', '!=', Config::get('common.status.deleted'))
+                                ->whereRaw("concat(first_name, ' ', middle_name, ' ', last_name) like '%".$search."%'")
+                                ->where('user_uuid', $user_uuid)
+                                ->paginate(10);
 
         foreach($directors AS $key => $value):
             $directors[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
@@ -58,7 +73,21 @@ class DirectorService {
     {
         $directors = Director::orderBy('updated_at', 'DESC')
                                 ->where('status', '!=', Config::get('common.status.deleted'))
-                                ->paginate(50);
+                                ->paginate(10);
+
+        foreach($directors AS $key => $value):
+            $directors[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
+        endforeach;
+
+        return DirectorPendingResource::collection($directors);
+    }
+
+    public function headquarters_search($search)
+    {
+        $directors = Director::orderBy('updated_at', 'DESC')
+                                ->where('status', '!=', Config::get('common.status.deleted'))
+                                ->whereRaw("concat(first_name, ' ', last_name) like '%".$search."%'")
+                                ->paginate(10);
 
         foreach($directors AS $key => $value):
             $directors[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
@@ -84,7 +113,7 @@ class DirectorService {
     {
         $directors = Director::orderBy('created_at', 'DESC')
                                 ->where('status', '!=', Config::get('common.status.deleted'))
-                                ->whereRaw("concat(first_name, ' ', last_name) like '%".$value."%'")
+                                ->whereRaw("concat(first_name, ' ', middle_name, ' ', last_name) like '%".$value."%'")
                                 ->paginate(20);
         return DirectorResource::collection($directors);
     }

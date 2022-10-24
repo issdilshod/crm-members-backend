@@ -24,6 +24,7 @@ Route::resource('api/hosting', HostingController::class)->middleware('auth.custo
 Route::resource('api/department', DepartmentController::class)->middleware('auth.custom');
 Route::resource('api/role', RoleController::class)->middleware('auth.custom');
 Route::get('api/pending', [PendingController::class, 'by_user'])->middleware('auth.custom');
+Route::get('api/pending/search/{search}', [PendingController::class, 'search'])->middleware('auth.custom');
 
 // account
 Route::resource('api/user', UserController::class)->middleware('auth.custom');
