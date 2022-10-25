@@ -24,7 +24,10 @@ class UserService {
 
     public function all()
     {
-        $users = User::where('status', Config::get('common.status.actived'))
+        $users = User::orderByRaw('last_seen is not null, last_seen DESC')
+                        ->orderBy('first_name', 'ASC')
+                        ->orderBy('last_name', 'ASC')
+                        ->where('status', Config::get('common.status.actived'))
                         ->paginate(100);
         return UserResource::collection($users);
     }
