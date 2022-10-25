@@ -751,6 +751,9 @@ class DirectorController extends Controller
             // emails
             'emails' => 'array',
 
+            // files
+            'files_to_delete' => 'array',
+
             'user_uuid' => 'string'
         ]);
 
