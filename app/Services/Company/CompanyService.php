@@ -415,7 +415,7 @@ class CompanyService {
         return $company;
     }
 
-    public function update(Company $company, $entity)
+    public function update(Company $company, $entity, $user_uuid)
     {
         $company->update($entity);
 
@@ -423,7 +423,7 @@ class CompanyService {
         $company_fn = $company['legal_name'];
 
         Activity::create([
-            'user_uuid' => $entity['user_uuid'],
+            'user_uuid' => $user_uuid,
             'entity_uuid' => $company['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),

@@ -337,9 +337,7 @@ class DirectorController extends Controller
             // emails
             'emails' => 'array',
             // files to delete by uuid
-            'files_to_delete' => 'array',
-
-            'user_uuid' => 'string'
+            'files_to_delete' => 'array'
         ]);
 
         $check = [];
@@ -368,7 +366,7 @@ class DirectorController extends Controller
             ], 409);
         }
 
-        $director = $this->directorService->update($director, $validated);
+        $director = $this->directorService->update($director, $validated, $request->user_uuid);
 
         if (isset($validated['emails'])){
             $email = Email::where('entity_uuid', $director['uuid']);

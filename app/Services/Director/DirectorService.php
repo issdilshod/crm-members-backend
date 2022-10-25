@@ -296,7 +296,7 @@ class DirectorService {
         return $director;
     }
 
-    public function update(Director $director, $entity)
+    public function update(Director $director, $entity, $user_uuid)
     {
         $director->update($entity);
 
@@ -304,7 +304,7 @@ class DirectorService {
         $director_fn = $director['first_name'] . ' ' . ($director['middle_name']!=null?$director['middle_name'].' ':'') . $director['last_name'];
 
         Activity::create([
-            'user_uuid' => $entity['user_uuid'],
+            'user_uuid' => $user_uuid,
             'entity_uuid' => $director['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),

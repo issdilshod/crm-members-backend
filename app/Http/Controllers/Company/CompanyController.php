@@ -453,9 +453,7 @@ class CompanyController extends Controller
             'future_web_to_delete' => 'array',
 
             // files to delete
-            'files_to_delete' => 'array',
-
-            'user_uuid' => 'string'
+            'files_to_delete' => 'array'
         ]);
 
         $check = [];
@@ -485,7 +483,7 @@ class CompanyController extends Controller
             ], 409);
         }
 
-        $company = $this->companyService->update($company, $validated);
+        $company = $this->companyService->update($company, $validated, $request->user_uuid);
 
         // email
         if (isset($validated['emails'])){
