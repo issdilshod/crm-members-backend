@@ -12,6 +12,7 @@ use App\Services\Account\ActivityService;
 use App\Services\Helper\AddressService;
 use App\Services\Helper\EmailService;
 use App\Services\Helper\NotificationService;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
 
 class DirectorService {
@@ -73,7 +74,7 @@ class DirectorService {
     {
         $directors = Director::orderBy('updated_at', 'DESC')
                                 ->where('status', '!=', Config::get('common.status.deleted'))
-                                ->paginate(10);
+                                ->paginate(10);       
 
         foreach($directors AS $key => $value):
             $directors[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
@@ -298,6 +299,7 @@ class DirectorService {
 
     public function update(Director $director, $entity, $user_uuid)
     {
+        $entity['updated_at'] = Carbon::now();
         $director->update($entity);
 
         // director full name
@@ -355,6 +357,7 @@ class DirectorService {
                                 ->first();
 
         $entity['status'] = Config::get('common.status.pending');
+        $entity['updated_at'] = Carbon::now();
         $director->update($entity);
 
         // director full name

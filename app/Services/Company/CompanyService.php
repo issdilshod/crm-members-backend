@@ -13,6 +13,7 @@ use App\Services\Helper\AddressService;
 use App\Services\Helper\BankAccountService;
 use App\Services\Helper\EmailService;
 use App\Services\Helper\NotificationService;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
 
 class CompanyService {
@@ -417,6 +418,7 @@ class CompanyService {
 
     public function update(Company $company, $entity, $user_uuid)
     {
+        $entity['updated_at'] = Carbon::now();
         $company->update($entity);
 
         // company name
@@ -469,6 +471,7 @@ class CompanyService {
 
     public function pending_update($uuid, $entity)
     {
+        $entity['updated_at'] = Carbon::now();
         $company = Company::where('uuid', $uuid)
                             ->first();
 
