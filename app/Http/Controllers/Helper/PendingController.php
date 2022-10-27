@@ -38,12 +38,17 @@ class PendingController extends Controller
         if (!PermissionPolicy::permission($request->user_uuid)){
             $directors = $this->directorService->by_user($request->user_uuid);
             $companies = $this->companyService->by_user($request->user_uuid);
-            return ['directors' => $directors, 'companies' => $companies];
+        }else{
+            $directors = $this->directorService->headquarters();
+            $companies = $this->companyService->headquarters();
         }
 
-        $directors = $this->directorService->headquarters();
-        $companies = $this->companyService->headquarters();
-        return ['directors' => $directors, 'companies' => $companies];
+        // meta datas
+        $current_page = $directors->currentPage();
+        $max_page = ($directors->lastPage()>$companies->lastPage()?$directors->lastPage():$companies->lastPage());
+        $meta = [ 'current_page' => $current_page, 'max_page' => $max_page ];
+
+        return ['directors' => $directors, 'companies' => $companies, 'meta' => $meta];
     }
 
     /**     @OA\GET(
