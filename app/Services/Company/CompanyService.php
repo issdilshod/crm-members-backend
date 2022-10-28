@@ -58,11 +58,34 @@ class CompanyService {
 
     public function by_user_search($user_uuid, $search)
     {
-        $companies = Company::orderBy('updated_at', 'DESC')
-                                ->where('status', '!=', Config::get('common.status.deleted'))
-                                ->where('user_uuid', $user_uuid)
-                                ->where('legal_name', 'like', '%'.$search.'%')
-                                ->paginate(10);
+        $companies = Company::select('companies.*')
+                                ->orderBy('companies.updated_at', 'DESC')
+                                ->groupBy('companies.uuid')
+                                ->join('addresses', 'addresses.entity_uuid', '=', 'companies.uuid')
+                                ->join('emails', 'emails.entity_uuid', '=', 'companies.uuid')
+                                ->join('bank_accounts', 'bank_accounts.entity_uuid', '=', 'companies.uuid')
+                                ->where('companies.status', '!=', Config::get('common.status.deleted'))
+                                ->where('companies.user_uuid', $user_uuid)
+                                ->where(function ($q) use($search) {
+                                    $q->where('companies.legal_name', 'like', '%'.$search.'%')
+                                        ->orWhere('companies.ein', 'like', $search.'%')
+                                        ->orWhere('companies.business_number', 'like', $search.'%')
+                                        ->orWhere('companies.voip_login', 'like', $search.'%')
+                                        ->orWhere('companies.business_mobile_number', 'like', $search.'%')
+                                        ->orWhere('companies.business_mobile_number_login', 'like', $search.'%')
+                                        ->orWhere('companies.website', 'like', $search.'%')
+                                        ->orWhere('companies.db_report_number', 'like', $search.'%')
+                                        ->orWhereRaw("concat(addresses.street_address, ' ', addresses.city, ' ', addresses.state) like '%".$search."%'")
+                                        ->orWhere('emails.email', 'like', $search.'%')
+                                        ->orWhere('emails.phone', 'like', $search.'%')
+                                        ->orWhere('bank_accounts.name', 'like', $search.'%')
+                                        ->orWhere('bank_accounts.website', 'like', $search.'%')
+                                        ->orWhere('bank_accounts.username', 'like', $search.'%')
+                                        ->orWhere('bank_accounts.account_number', 'like', $search.'%')
+                                        ->orWhere('bank_accounts.routing_number', 'like', $search.'%');
+                                })
+                                ->limit(10)
+                                ->get();
 
         foreach($companies AS $key => $value):
             $companies[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
@@ -86,10 +109,33 @@ class CompanyService {
 
     public function headquarters_search($search)
     {
-        $companies = Company::orderBy('updated_at', 'DESC')
-                                ->where('status', '!=', Config::get('common.status.deleted'))
-                                ->where('legal_name', 'like', '%'.$search.'%')
-                                ->paginate(10);
+        $companies = Company::select('companies.*')
+                                ->orderBy('companies.updated_at', 'DESC')
+                                ->groupBy('companies.uuid')
+                                ->join('addresses', 'addresses.entity_uuid', '=', 'companies.uuid')
+                                ->join('emails', 'emails.entity_uuid', '=', 'companies.uuid')
+                                ->join('bank_accounts', 'bank_accounts.entity_uuid', '=', 'companies.uuid')
+                                ->where('companies.status', '!=', Config::get('common.status.deleted'))
+                                ->where(function ($q) use($search) {
+                                    $q->where('companies.legal_name', 'like', '%'.$search.'%')
+                                        ->orWhere('companies.ein', 'like', $search.'%')
+                                        ->orWhere('companies.business_number', 'like', $search.'%')
+                                        ->orWhere('companies.voip_login', 'like', $search.'%')
+                                        ->orWhere('companies.business_mobile_number', 'like', $search.'%')
+                                        ->orWhere('companies.business_mobile_number_login', 'like', $search.'%')
+                                        ->orWhere('companies.website', 'like', $search.'%')
+                                        ->orWhere('companies.db_report_number', 'like', $search.'%')
+                                        ->orWhereRaw("concat(addresses.street_address, ' ', addresses.city, ' ', addresses.state) like '%".$search."%'")
+                                        ->orWhere('emails.email', 'like', $search.'%')
+                                        ->orWhere('emails.phone', 'like', $search.'%')
+                                        ->orWhere('bank_accounts.name', 'like', $search.'%')
+                                        ->orWhere('bank_accounts.website', 'like', $search.'%')
+                                        ->orWhere('bank_accounts.username', 'like', $search.'%')
+                                        ->orWhere('bank_accounts.account_number', 'like', $search.'%')
+                                        ->orWhere('bank_accounts.routing_number', 'like', $search.'%');
+                                })
+                                ->limit(10)
+                                ->get();
 
         foreach($companies AS $key => $value):
             $companies[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);

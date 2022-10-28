@@ -57,11 +57,25 @@ class DirectorService {
 
     public function by_user_search($user_uuid, $search)
     {
-        $directors = Director::orderBy('updated_at', 'DESC')
-                                ->where('status', '!=', Config::get('common.status.deleted'))
-                                ->whereRaw("concat(first_name, ' ', middle_name, ' ', last_name) like '%".$search."%'")
-                                ->where('user_uuid', $user_uuid)
-                                ->paginate(10);
+        $directors = Director::select('directors.*')
+                                ->orderBy('directors.updated_at', 'DESC')
+                                ->groupBy('directors.uuid')
+                                ->join('addresses', 'addresses.entity_uuid', '=', 'directors.uuid')
+                                ->join('emails', 'emails.entity_uuid', '=', 'directors.uuid')
+                                ->where('directors.status', '!=', Config::get('common.status.deleted'))
+                                ->where('directors.user_uuid', $user_uuid)
+                                ->where(function ($q) use($search) {
+                                    $q->whereRaw("concat(directors.first_name, ' ', directors.middle_name, ' ', directors.last_name) like '%".$search."%'")
+                                        ->orWhere('directors.date_of_birth', 'like', $search.'%')
+                                        ->orWhere('directors.ssn_cpn', 'like', $search.'%')
+                                        ->orWhere('directors.company_association', 'like', $search.'%')
+                                        ->orWhere('directors.phone_number', 'like', $search.'%')
+                                        ->orWhereRaw("concat(addresses.street_address, ' ', addresses.city, ' ', addresses.state) like '%".$search."%'")
+                                        ->orWhere('emails.email', 'like', $search.'%')
+                                        ->orWhere('emails.phone', 'like', $search.'%');
+                                })
+                                ->limit(10)
+                                ->get();
 
         foreach($directors AS $key => $value):
             $directors[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
@@ -85,10 +99,24 @@ class DirectorService {
 
     public function headquarters_search($search)
     {
-        $directors = Director::orderBy('updated_at', 'DESC')
-                                ->where('status', '!=', Config::get('common.status.deleted'))
-                                ->whereRaw("concat(first_name, ' ', last_name) like '%".$search."%'")
-                                ->paginate(10);
+        $directors = Director::select('directors.*')
+                                ->orderBy('directors.updated_at', 'DESC')
+                                ->groupBy('directors.uuid')
+                                ->join('addresses', 'addresses.entity_uuid', '=', 'directors.uuid')
+                                ->join('emails', 'emails.entity_uuid', '=', 'directors.uuid')
+                                ->where('directors.status', '!=', Config::get('common.status.deleted'))
+                                ->where(function ($q) use($search) {
+                                    $q->whereRaw("concat(directors.first_name, ' ', directors.middle_name, ' ', directors.last_name) like '%".$search."%'")
+                                        ->orWhere('directors.date_of_birth', 'like', $search.'%')
+                                        ->orWhere('directors.ssn_cpn', 'like', $search.'%')
+                                        ->orWhere('directors.company_association', 'like', $search.'%')
+                                        ->orWhere('directors.phone_number', 'like', $search.'%')
+                                        ->orWhereRaw("concat(addresses.street_address, ' ', addresses.city, ' ', addresses.state) like '%".$search."%'")
+                                        ->orWhere('emails.email', 'like', $search.'%')
+                                        ->orWhere('emails.phone', 'like', $search.'%');
+                                })
+                                ->limit(10)
+                                ->get();
 
         foreach($directors AS $key => $value):
             $directors[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
