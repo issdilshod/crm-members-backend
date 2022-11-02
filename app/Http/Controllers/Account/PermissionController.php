@@ -38,7 +38,9 @@ class PermissionController extends Controller
             return response()->json([ 'data' => 'Not Authorized' ], 403);
         }
 
-        $permissions = Permission::where('status', Config::get('common.status.actived'))->get();
+        $permissions = Permission::orderBy('permission_name')
+                                    ->where('status', Config::get('common.status.actived'))
+                                    ->get();
         return PermissionResource::collection($permissions);
     }
 
