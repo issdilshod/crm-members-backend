@@ -486,16 +486,16 @@ class CompanyController extends Controller
         $company = $this->companyService->update($company, $validated, $request->user_uuid);
 
         // email
+        if (isset($validated['emails_to_delete'])){
+            foreach($validated['emails_to_delete'] AS $key => $value):
+                $this->emailService->delete($value);
+            endforeach;
+        }
+
         if (isset($validated['emails'])){
             foreach($validated['emails'] AS $key => $value):
                 $value['entity_uuid'] = $company['uuid'];
                 $this->emailService->save($value);
-            endforeach;
-        }
-
-        if (isset($validated['emails_to_delete'])){
-            foreach($validated['emails_to_delete'] AS $key => $value):
-                $this->emailService->delete($value);
             endforeach;
         }
 
@@ -529,16 +529,16 @@ class CompanyController extends Controller
         }
 
         // future websites
+        if (isset($validated['future_web_to_delete'])){
+            foreach ($validated['future_web_to_delete'] as $key => $value):
+                $this->futureWebsiteService->delete($value);
+            endforeach;
+        }
+
         if (isset($validated['future_web'])){
             foreach ($validated['future_web'] as $key => $value):
                 $value['entity_uuid'] = $company['uuid'];
                 $this->futureWebsiteService->save($value);
-            endforeach;
-        }
-
-        if (isset($validated['future_web_to_delete'])){
-            foreach ($validated['future_web_to_delete'] as $key => $value):
-                $this->futureWebsiteService->delete($value);
             endforeach;
         }
 
@@ -1051,17 +1051,17 @@ class CompanyController extends Controller
         $company = $this->companyService->pending_update($uuid, $validated);
 
         // email
+        if (isset($validated['emails_to_delete'])){
+            foreach($validated['emails_to_delete'] AS $key => $value):
+                $this->emailService->delete($value);
+            endforeach;
+        }
+
         if (isset($validated['emails'])){
             foreach($validated['emails'] AS $key => $value):
                 $value['entity_uuid'] = $company['uuid'];
                 $value['status'] = Config::get('common.status.pending');
                 $this->emailService->save($value);
-            endforeach;
-        }
-
-        if (isset($validated['emails_to_delete'])){
-            foreach($validated['emails_to_delete'] AS $key => $value):
-                $this->emailService->delete($value);
             endforeach;
         }
 
@@ -1097,16 +1097,16 @@ class CompanyController extends Controller
         }
 
         // future websites
+        if (isset($validated['future_web_to_delete'])){
+            foreach ($validated['future_web_to_delete'] as $key => $value):
+                $this->futureWebsiteService->delete($value);
+            endforeach;
+        }
+
         if (isset($validated['future_web'])){
             foreach ($validated['future_web'] as $key => $value):
                 $value['entity_uuid'] = $company['uuid'];
                 $this->futureWebsiteService->save($value);
-            endforeach;
-        }
-
-        if (isset($validated['future_web_to_delete'])){
-            foreach ($validated['future_web_to_delete'] as $key => $value):
-                $this->futureWebsiteService->delete($value);
             endforeach;
         }
 
@@ -1333,17 +1333,17 @@ class CompanyController extends Controller
         $company = $this->companyService->accept($company, $validated, $request->user_uuid);
 
         // email
+        if (isset($validated['emails_to_delete'])){
+            foreach($validated['emails_to_delete'] AS $key => $value):
+                $this->emailService->delete($value);
+            endforeach;
+        }
+
         if (isset($validated['emails'])){
             foreach($validated['emails'] AS $key => $value):
                 $value['entity_uuid'] = $company['uuid'];
                 $value['status'] = Config::get('common.status.actived');
                 $this->emailService->save($value);
-            endforeach;
-        }
-
-        if (isset($validated['emails_to_delete'])){
-            foreach($validated['emails_to_delete'] AS $key => $value):
-                $this->emailService->delete($value);
             endforeach;
         }
 
@@ -1378,16 +1378,16 @@ class CompanyController extends Controller
         }
 
         // future websites
+        if (isset($validated['future_web_to_delete'])){
+            foreach ($validated['future_web_to_delete'] as $key => $value):
+                $this->futureWebsiteService->delete($value);
+            endforeach;
+        }
+
         if (isset($validated['future_web'])){
             foreach ($validated['future_web'] as $key => $value):
                 $value['entity_uuid'] = $company['uuid'];
                 $this->futureWebsiteService->save($value);
-            endforeach;
-        }
-
-        if (isset($validated['future_web_to_delete'])){
-            foreach ($validated['future_web_to_delete'] as $key => $value):
-                $this->futureWebsiteService->delete($value);
             endforeach;
         }
 
