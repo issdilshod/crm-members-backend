@@ -28,6 +28,15 @@ return [
             'reject' => 'company_reject',
             'view' => 'company_view'
         ],
+        'websites_future' => [
+            'store' => 'websites_future_store',
+            'update' => 'websites_future_update',
+            'delete' => 'websites_future_delete',
+            'save' => 'websites_future_save', // pending add/update
+            'accept' => 'websites_future_accept',
+            'reject' => 'websites_future_reject',
+            'view' => 'websites_future_view'
+        ],
     ],
 
     'session' => [
@@ -72,6 +81,14 @@ return [
             'reject' => 'Company {name} card rejected',
             'accept' => 'Company {name} card accepted',
         ],
+        'websites_future' => [
+            'add' => 'Future website {link} card added',
+            'updated' => 'Future website {link} card updated',
+            'pending' => 'Future website {link} card approval request sent',
+            'pending_update' => 'Future website {link} card update approval request sent',
+            'reject' => 'Future website {link} card rejected',
+            'accept' => 'Future website {link} card accepted',
+        ],
 
         'codes' => [
             'user_add' => 1,
@@ -93,6 +110,14 @@ return [
             'user_register' => 17,
             'user_reject' => 18,
             'user_accept' => 19,
+
+            'websites_future_add' => 20,
+            'websites_future_update' => 21,
+            'websites_future_pending' => 22,
+            'websites_future_pending_udpate' => 23,
+            'websites_future_accept' => 24,
+            'websites_future_reject' => 25,
+
         ],
 
         'codes_link' => [
@@ -115,6 +140,13 @@ return [
             17 => 'departments/user',
             18 => '',
             19 => 'departments/user',
+
+            20 => 'future_websites',
+            21 => 'future_websites',
+            22 => 'future_websites',
+            23 => 'future_websites',
+            24 => 'future_websites',
+            25 => 'future_websites',
         ],
     ],
 

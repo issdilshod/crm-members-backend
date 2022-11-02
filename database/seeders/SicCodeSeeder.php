@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\API\SicCode;
+use App\Models\Helper\SicCode;
 use Illuminate\Database\Seeder;
 
 class SicCodeSeeder extends Seeder

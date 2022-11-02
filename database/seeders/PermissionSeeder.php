@@ -74,6 +74,35 @@ class PermissionSeeder extends Seeder
                 'permission_name' => 'Company view',
                 'alias' => Config::get('common.permission.company.view')
             ],
+
+            [
+                'permission_name' => 'Future websites store',
+                'alias' => Config::get('common.permission.websites_future.store')
+            ],
+            [
+                'permission_name' => 'Future websites update',
+                'alias' => Config::get('common.permission.websites_future.update')
+            ],
+            [
+                'permission_name' => 'Future websites delete',
+                'alias' => Config::get('common.permission.websites_future.delete')
+            ],
+            [
+                'permission_name' => 'Future websites save',
+                'alias' => Config::get('common.permission.websites_future.save')
+            ],
+            [
+                'permission_name' => 'Future websites accept',
+                'alias' => Config::get('common.permission.websites_future.accept')
+            ],
+            [
+                'permission_name' => 'Future websites reject',
+                'alias' => Config::get('common.permission.websites_future.reject')
+            ],
+            [
+                'permission_name' => 'Future websites view',
+                'alias' => Config::get('common.permission.websites_future.view')
+            ],
         ];
         foreach($permission_list AS $key => $value):
             $permission = Permission::where('status', Config::get('common.status.actived'))

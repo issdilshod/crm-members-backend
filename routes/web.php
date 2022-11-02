@@ -15,6 +15,7 @@ use App\Http\Controllers\Helper\RoleController;
 use App\Http\Controllers\Helper\SicCodeController;
 use App\Http\Controllers\Helper\StateController;
 use App\Http\Controllers\Task\TaskController;
+use App\Http\Controllers\WebsitesFuture\WebsitesFutureController;
 use Illuminate\Support\Facades\Route;
 
 // helpers
@@ -92,6 +93,19 @@ Route::put('api/company-accept/{uuid}', [CompanyController::class, 'accept'])->m
 Route::put('api/company-reject/{uuid}', [CompanyController::class, 'reject'])->middleware('auth.custom');
 Route::get('api/company-user/', [CompanyController::class, 'by_user'])->middleware('auth.custom');
 Route::get('api/company-permission', [CompanyController::class, 'permission'])->middleware('auth.custom');
+
+// websites future
+Route::resource('api/future-websites', WebsitesFutureController::class)->middleware('auth.custom');
+Route::get('api/future-websites', [WebsitesFutureController::class, 'index'])->middleware('auth.custom');
+Route::get('api/future-websites/{uuid}', [WebsitesFutureController::class, 'show'])->middleware('auth.custom');
+Route::post('api/future-websites', [WebsitesFutureController::class, 'store'])->middleware('auth.custom');
+Route::put('api/future-websites/{uuid}', [WebsitesFutureController::class, 'update'])->middleware('auth.custom');
+Route::delete('api/future-websites/{uuid}', [WebsitesFutureController::class, 'destroy'])->middleware('auth.custom');
+Route::get('api/future-websites-search/{search}', [WebsitesFutureController::class, 'search'])->middleware('auth.custom');
+Route::post('api/future-websites-pending', [WebsitesFutureController::class, 'pending'])->middleware('auth.custom');
+Route::put('api/future-websites-pending-update/{uuid}', [WebsitesFutureController::class, 'pending_update'])->middleware('auth.custom');
+Route::put('api/future-websites-accept/{uuid}', [WebsitesFutureController::class, 'accept'])->middleware('auth.custom');
+Route::put('api/future-websites-reject/{uuid}', [WebsitesFutureController::class, 'reject'])->middleware('auth.custom');
 
 // tasks
 Route::resource('api/task', TaskController::class)->middleware('auth.custom');
