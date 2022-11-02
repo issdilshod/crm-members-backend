@@ -124,12 +124,14 @@ class WebsitesFutureController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function show(Request $request, WebsitesFuture $websitesFuture)
+    public function show(Request $request, $uuid)
     {
         // permission
         if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.view'))){
             return response()->json([ 'data' => 'Not Authorized' ], 403);
         }
+
+        $websitesFuture = WebsitesFuture::where('uuid', $uuid)->first();
 
         $websitesFuture = $this->websitesFutureService->one($websitesFuture);
 
@@ -174,7 +176,7 @@ class WebsitesFutureController extends Controller
       *             @OA\Response(response=422, description="Unprocessable Content"),
       *     )
       */
-    public function update(Request $request, WebsitesFuture $websitesFuture)
+    public function update(Request $request, $uuid)
     {
         // permission
         if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.update'))){
@@ -185,6 +187,8 @@ class WebsitesFutureController extends Controller
             'sic_code_uuid' => 'required',
             'link' => 'required'
         ]);
+
+        $websitesFuture = WebsitesFuture::where('uuid', $uuid)->first();
 
         $check = [];
 
@@ -273,7 +277,8 @@ class WebsitesFutureController extends Controller
 
         $validated = $request->validate([
             'sic_code_uuid' => 'required',
-            'link' => 'required'
+            'link' => 'required',
+            'user_uuid' => ''
         ]);
 
         $check = [];
@@ -497,6 +502,53 @@ class WebsitesFutureController extends Controller
         $websitesFuture = $this->websitesFutureService->search($search);
 
         return $websitesFuture;
+    }
+
+    /**     @OA\GET(
+      *         path="/api/future-websites-permission",
+      *         operationId="company_future_websites",
+      *         tags={"Future Websites"},
+      *         summary="Get future websites permission of user",
+      *         description="Get future websites permission of user",
+      *             @OA\Response(response=200, description="Successfully"),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *     )
+      */
+    public function permission(Request $request)
+    {
+        $permissions = [];
+
+        // permission
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.view'))){
+            $permissions[] = Config::get('common.permission.websites_future.view');
+        }
+
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.store'))){
+            $permissions[] = Config::get('common.permission.websites_future.store');
+        }
+
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.update'))){
+            $permissions[] = Config::get('common.permission.websites_future.update');
+        }
+
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.save'))){
+            $permissions[] = Config::get('common.permission.websites_future.save');
+        }
+
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.delete'))){
+            $permissions[] = Config::get('common.permission.websites_future.delete');
+        }
+
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.accept'))){
+            $permissions[] = Config::get('common.permission.websites_future.accept');
+        }
+
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.reject'))){
+            $permissions[] = Config::get('common.permission.websites_future.reject');
+        }
+
+        return $permissions;
     }
 
 }

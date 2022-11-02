@@ -114,7 +114,7 @@ return [
             'websites_future_add' => 20,
             'websites_future_update' => 21,
             'websites_future_pending' => 22,
-            'websites_future_pending_udpate' => 23,
+            'websites_future_pending_update' => 23,
             'websites_future_accept' => 24,
             'websites_future_reject' => 25,
 
@@ -141,12 +141,12 @@ return [
             18 => '',
             19 => 'departments/user',
 
-            20 => 'future_websites',
-            21 => 'future_websites',
-            22 => 'future_websites',
-            23 => 'future_websites',
-            24 => 'future_websites',
-            25 => 'future_websites',
+            20 => 'future-websites',
+            21 => 'future-websites',
+            22 => 'future-websites',
+            23 => 'future-websites',
+            24 => 'future-websites',
+            25 => 'future-websites',
         ],
     ],
 

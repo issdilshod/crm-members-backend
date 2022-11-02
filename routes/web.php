@@ -106,6 +106,7 @@ Route::post('api/future-websites-pending', [WebsitesFutureController::class, 'pe
 Route::put('api/future-websites-pending-update/{uuid}', [WebsitesFutureController::class, 'pending_update'])->middleware('auth.custom');
 Route::put('api/future-websites-accept/{uuid}', [WebsitesFutureController::class, 'accept'])->middleware('auth.custom');
 Route::put('api/future-websites-reject/{uuid}', [WebsitesFutureController::class, 'reject'])->middleware('auth.custom');
+Route::get('api/future-websites-permission', [WebsitesFutureController::class, 'permission'])->middleware('auth.custom');
 
 // tasks
 Route::resource('api/task', TaskController::class)->middleware('auth.custom');
