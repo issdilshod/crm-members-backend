@@ -15,6 +15,7 @@ use App\Http\Controllers\Helper\RoleController;
 use App\Http\Controllers\Helper\SicCodeController;
 use App\Http\Controllers\Helper\StateController;
 use App\Http\Controllers\Task\TaskController;
+use App\Http\Controllers\VirtualOffice\VirtualOfficeController;
 use App\Http\Controllers\WebsitesFuture\WebsitesFutureController;
 use Illuminate\Support\Facades\Route;
 
@@ -107,6 +108,20 @@ Route::put('api/future-websites-pending-update/{uuid}', [WebsitesFutureControlle
 Route::put('api/future-websites-accept/{uuid}', [WebsitesFutureController::class, 'accept'])->middleware('auth.custom');
 Route::put('api/future-websites-reject/{uuid}', [WebsitesFutureController::class, 'reject'])->middleware('auth.custom');
 Route::get('api/future-websites-permission', [WebsitesFutureController::class, 'permission'])->middleware('auth.custom');
+
+// virtual office
+Route::resource('api/virtual-office', VirtualOfficeController::class)->middleware('auth.custom');
+Route::get('api/virtual-office', [VirtualOfficeController::class, 'index'])->middleware('auth.custom');
+Route::get('api/virtual-office/{uuid}', [VirtualOfficeController::class, 'show'])->middleware('auth.custom');
+Route::post('api/virtual-office', [VirtualOfficeController::class, 'store'])->middleware('auth.custom');
+Route::put('api/virtual-office/{uuid}', [VirtualOfficeController::class, 'update'])->middleware('auth.custom');
+Route::delete('api/virtual-office/{uuid}', [VirtualOfficeController::class, 'destroy'])->middleware('auth.custom');
+Route::get('api/virtual-office-search/{search}', [VirtualOfficeController::class, 'search'])->middleware('auth.custom');
+Route::post('api/virtual-office-pending', [VirtualOfficeController::class, 'pending'])->middleware('auth.custom');
+Route::put('api/virtual-office-pending-update/{uuid}', [VirtualOfficeController::class, 'pending_update'])->middleware('auth.custom');
+Route::put('api/virtual-office-accept/{uuid}', [VirtualOfficeController::class, 'accept'])->middleware('auth.custom');
+Route::put('api/virtual-office-reject/{uuid}', [VirtualOfficeController::class, 'reject'])->middleware('auth.custom');
+Route::get('api/virtual-office-permission', [VirtualOfficeController::class, 'permission'])->middleware('auth.custom');
 
 // tasks
 Route::resource('api/task', TaskController::class)->middleware('auth.custom');

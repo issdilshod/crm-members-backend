@@ -506,7 +506,7 @@ class WebsitesFutureController extends Controller
 
     /**     @OA\GET(
       *         path="/api/future-websites-permission",
-      *         operationId="company_future_websites",
+      *         operationId="future_websites_permission",
       *         tags={"Future Websites"},
       *         summary="Get future websites permission of user",
       *         description="Get future websites permission of user",

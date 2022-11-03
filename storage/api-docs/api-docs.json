@@ -4159,6 +4159,680 @@
                 }
             }
         },
+        "/api/virtual-office": {
+            "get": {
+                "tags": [
+                    "Virtual Office"
+                ],
+                "summary": "List of virtual office",
+                "description": "List of virtual office",
+                "operationId": "list_virtual_office",
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Virtual Office"
+                ],
+                "summary": "Add virtual office",
+                "description": "Add virtual office",
+                "operationId": "post_virtual_office",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "vo_provider_name",
+                                    "vo_provider_domain",
+                                    "vo_provider_username",
+                                    "vo_provider_password",
+                                    "street_address",
+                                    "city",
+                                    "state",
+                                    "postal",
+                                    "country"
+                                ],
+                                "properties": {
+                                    "vo_provider_name": {
+                                        "type": "text"
+                                    },
+                                    "vo_provider_domain": {
+                                        "type": "text"
+                                    },
+                                    "vo_provider_username": {
+                                        "type": "text"
+                                    },
+                                    "vo_provider_password": {
+                                        "type": "text"
+                                    },
+                                    "street_address": {
+                                        "type": "text"
+                                    },
+                                    "address_line2": {
+                                        "type": "text"
+                                    },
+                                    "city": {
+                                        "type": "text"
+                                    },
+                                    "state": {
+                                        "type": "text"
+                                    },
+                                    "postal": {
+                                        "type": "text"
+                                    },
+                                    "country": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            }
+        },
+        "/api/virtual-office/{uuid}": {
+            "get": {
+                "tags": [
+                    "Virtual Office"
+                ],
+                "summary": "Get virtual office",
+                "description": "Get virtual office",
+                "operationId": "get_virtual_office",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "virtual office uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Virtual Office"
+                ],
+                "summary": "Update virtual office",
+                "description": "Update virtual office",
+                "operationId": "update_virtual_office",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "virtual office uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "vo_provider_name",
+                                    "vo_provider_domain",
+                                    "vo_provider_username",
+                                    "vo_provider_password",
+                                    "street_address",
+                                    "city",
+                                    "state",
+                                    "postal",
+                                    "country"
+                                ],
+                                "properties": {
+                                    "vo_provider_name": {
+                                        "type": "text"
+                                    },
+                                    "vo_provider_domain": {
+                                        "type": "text"
+                                    },
+                                    "vo_provider_username": {
+                                        "type": "text"
+                                    },
+                                    "vo_provider_password": {
+                                        "type": "text"
+                                    },
+                                    "street_address": {
+                                        "type": "text"
+                                    },
+                                    "address_line2": {
+                                        "type": "text"
+                                    },
+                                    "city": {
+                                        "type": "text"
+                                    },
+                                    "state": {
+                                        "type": "text"
+                                    },
+                                    "postal": {
+                                        "type": "text"
+                                    },
+                                    "country": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Virtual Office"
+                ],
+                "summary": "Delete virtual office",
+                "description": "Delete virtual office",
+                "operationId": "delete_virtual_office",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "virtual office uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/virtual-office-search/{search}": {
+            "get": {
+                "tags": [
+                    "Virtual Office"
+                ],
+                "summary": "Get virtual office search",
+                "description": "Get virtual office search",
+                "operationId": "get_virtual_office_search",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "path",
+                        "description": "virtual office search",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "text"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/virtual-office-pending": {
+            "post": {
+                "tags": [
+                    "Virtual Office"
+                ],
+                "summary": "Pending virtual office",
+                "description": "Pending virtual office",
+                "operationId": "pending_virtual_office",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "vo_provider_name",
+                                    "vo_provider_domain",
+                                    "vo_provider_username",
+                                    "vo_provider_password",
+                                    "street_address",
+                                    "city",
+                                    "state",
+                                    "postal",
+                                    "country"
+                                ],
+                                "properties": {
+                                    "vo_provider_name": {
+                                        "type": "text"
+                                    },
+                                    "vo_provider_domain": {
+                                        "type": "text"
+                                    },
+                                    "vo_provider_username": {
+                                        "type": "text"
+                                    },
+                                    "vo_provider_password": {
+                                        "type": "text"
+                                    },
+                                    "street_address": {
+                                        "type": "text"
+                                    },
+                                    "address_line2": {
+                                        "type": "text"
+                                    },
+                                    "city": {
+                                        "type": "text"
+                                    },
+                                    "state": {
+                                        "type": "text"
+                                    },
+                                    "postal": {
+                                        "type": "text"
+                                    },
+                                    "country": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            }
+        },
+        "/api/virtual-office-pending-update/{uuid}": {
+            "put": {
+                "tags": [
+                    "Virtual Office"
+                ],
+                "summary": "Pending update virtual office",
+                "description": "Pending update virtual office",
+                "operationId": "pending_update_virtual_office",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "virtual office uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "vo_provider_name",
+                                    "vo_provider_domain",
+                                    "vo_provider_username",
+                                    "vo_provider_password",
+                                    "street_address",
+                                    "city",
+                                    "state",
+                                    "postal",
+                                    "country"
+                                ],
+                                "properties": {
+                                    "vo_provider_name": {
+                                        "type": "text"
+                                    },
+                                    "vo_provider_domain": {
+                                        "type": "text"
+                                    },
+                                    "vo_provider_username": {
+                                        "type": "text"
+                                    },
+                                    "vo_provider_password": {
+                                        "type": "text"
+                                    },
+                                    "street_address": {
+                                        "type": "text"
+                                    },
+                                    "address_line2": {
+                                        "type": "text"
+                                    },
+                                    "city": {
+                                        "type": "text"
+                                    },
+                                    "state": {
+                                        "type": "text"
+                                    },
+                                    "postal": {
+                                        "type": "text"
+                                    },
+                                    "country": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            }
+        },
+        "/api/virtual-office-accept/{uuid}": {
+            "put": {
+                "tags": [
+                    "Virtual Office"
+                ],
+                "summary": "Accept virtual office",
+                "description": "Accept virtual office",
+                "operationId": "accept_virtual_office",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "virtual office uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "vo_provider_name",
+                                    "vo_provider_domain",
+                                    "vo_provider_username",
+                                    "vo_provider_password",
+                                    "street_address",
+                                    "city",
+                                    "state",
+                                    "postal",
+                                    "country"
+                                ],
+                                "properties": {
+                                    "vo_provider_name": {
+                                        "type": "text"
+                                    },
+                                    "vo_provider_domain": {
+                                        "type": "text"
+                                    },
+                                    "vo_provider_username": {
+                                        "type": "text"
+                                    },
+                                    "vo_provider_password": {
+                                        "type": "text"
+                                    },
+                                    "street_address": {
+                                        "type": "text"
+                                    },
+                                    "address_line2": {
+                                        "type": "text"
+                                    },
+                                    "city": {
+                                        "type": "text"
+                                    },
+                                    "state": {
+                                        "type": "text"
+                                    },
+                                    "postal": {
+                                        "type": "text"
+                                    },
+                                    "country": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            }
+        },
+        "/api/virtual-office-reject/{uuid}": {
+            "put": {
+                "tags": [
+                    "Virtual Office"
+                ],
+                "summary": "Reject virtual office",
+                "description": "Reject virtual office",
+                "operationId": "reject_virtual_office",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "virtual office uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/virtual-office-permission": {
+            "get": {
+                "tags": [
+                    "Virtual Office"
+                ],
+                "summary": "Get virtual office permission of user",
+                "description": "Get virtual office permission of user",
+                "operationId": "virtual_office_permission",
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    }
+                }
+            }
+        },
         "/api/future-websites": {
             "get": {
                 "tags": [
@@ -4655,6 +5329,27 @@
                     },
                     "404": {
                         "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/future-websites-permission": {
+            "get": {
+                "tags": [
+                    "Future Websites"
+                ],
+                "summary": "Get future websites permission of user",
+                "description": "Get future websites permission of user",
+                "operationId": "future_websites_permission",
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
                     }
                 }
             }

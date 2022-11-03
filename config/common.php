@@ -37,6 +37,15 @@ return [
             'reject' => 'websites_future_reject',
             'view' => 'websites_future_view'
         ],
+        'virtual_office' => [
+            'store' => 'virtual_office_store',
+            'update' => 'virtual_office_update',
+            'delete' => 'virtual_office_delete',
+            'save' => 'virtual_office_save', // pending add/update
+            'accept' => 'virtual_office_accept',
+            'reject' => 'virtual_office_reject',
+            'view' => 'virtual_office_view'
+        ],
     ],
 
     'session' => [
@@ -89,6 +98,14 @@ return [
             'reject' => 'Future website {link} card rejected',
             'accept' => 'Future website {link} card accepted',
         ],
+        'virtual_office' => [
+            'add' => 'Virtual Office {name} card added',
+            'updated' => 'Virtual Office {name} card updated',
+            'pending' => 'Virtual Office {name} card approval request sent',
+            'pending_update' => 'Virtual Office {name} card update approval request sent',
+            'reject' => 'Virtual Office {name} card rejected',
+            'accept' => 'Virtual Office {name} card accepted',
+        ],
 
         'codes' => [
             'user_add' => 1,
@@ -117,6 +134,13 @@ return [
             'websites_future_pending_update' => 23,
             'websites_future_accept' => 24,
             'websites_future_reject' => 25,
+
+            'virtual_office_add' => 26,
+            'virtual_office_update' => 27,
+            'virtual_office_pending' => 28,
+            'virtual_office_pending_update' => 29,
+            'virtual_office_accept' => 30,
+            'virtual_office_reject' => 31,
 
         ],
 
@@ -147,6 +171,13 @@ return [
             23 => 'future-websites',
             24 => 'future-websites',
             25 => 'future-websites',
+
+            26 => 'virtual-offices',
+            27 => 'virtual-offices',
+            28 => 'virtual-offices',
+            29 => 'virtual-offices',
+            30 => 'virtual-offices',
+            31 => 'virtual-offices',
         ],
     ],
 

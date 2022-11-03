@@ -99,7 +99,7 @@ class WebsitesFutureService{
 
         $msg = '*' . $user->first_name . ' ' . $user->last_name . "*\n" .
                 str_replace("{link}", "*" . $websitesFuture['link'] . "*", Config::get('common.activity.websites_future.pending')) . "\n" .
-                '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/future_websites/'.$websitesFuture['uuid'].')';
+                '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/future-websites/'.$websitesFuture['uuid'].')';
         $this->notificationService->telegram_to_headqurters($msg);
 
         return new WebsitesFutureResource($websitesFuture);
@@ -128,7 +128,7 @@ class WebsitesFutureService{
 
         $msg = '*' . $user->first_name . ' ' . $user->last_name . "*\n" .
                 str_replace("{link}", "*" . $websitesFuture['link'] . "*", Config::get('common.activity.websites_future.pending_update')) . "\n" .
-                '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/future_websites/'.$websitesFuture['uuid'].')';
+                '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/future-websites/'.$websitesFuture['uuid'].')';
         $this->notificationService->telegram_to_headqurters($msg);
 
         return new WebsitesFutureResource($websitesFuture);
@@ -158,7 +158,7 @@ class WebsitesFutureService{
         $this->notificationService->telegram([
             'telegram' => $user['telegram'],
             'msg' => str_replace("{link}", "*" . $websitesFuture['link'] . "*", Config::get('common.activity.websites_future.accept')) . "\n" .
-                        '[link to view](' .env('APP_FRONTEND_ENDPOINT').'/future_websites/'.$websitesFuture['uuid']. ')'
+                        '[link to view](' .env('APP_FRONTEND_ENDPOINT').'/future-websites/'.$websitesFuture['uuid']. ')'
         ]);
 
         return new WebsitesFutureResource($websitesFuture);
@@ -189,7 +189,7 @@ class WebsitesFutureService{
         $this->notificationService->telegram([
             'telegram' => $user['telegram'],
             'msg' => str_replace("{link}", "*" . $websitesFuture['link'] . "*", Config::get('common.activity.websites_future.reject')) . "\n" .
-                        '[link to view](' .env('APP_FRONTEND_ENDPOINT').'/future_websites/'.$websitesFuture['uuid']. ')'
+                        '[link to view](' .env('APP_FRONTEND_ENDPOINT').'/future-websites/'.$websitesFuture['uuid']. ')'
         ]);
 
         return new WebsitesFutureResource($websitesFuture);

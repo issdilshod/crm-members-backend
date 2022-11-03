@@ -17,6 +17,7 @@ class PermissionSeeder extends Seeder
     public function run()
     {
         $permission_list = [
+            // directors
             [
                 'permission_name' => 'Director store',
                 'alias' => Config::get('common.permission.director.store')
@@ -45,7 +46,7 @@ class PermissionSeeder extends Seeder
                 'permission_name' => 'Director view',
                 'alias' => Config::get('common.permission.director.view')
             ],
-
+            // company
             [
                 'permission_name' => 'Company store',
                 'alias' => Config::get('common.permission.company.store')
@@ -74,7 +75,7 @@ class PermissionSeeder extends Seeder
                 'permission_name' => 'Company view',
                 'alias' => Config::get('common.permission.company.view')
             ],
-
+            // future websites
             [
                 'permission_name' => 'Future websites store',
                 'alias' => Config::get('common.permission.websites_future.store')
@@ -102,6 +103,35 @@ class PermissionSeeder extends Seeder
             [
                 'permission_name' => 'Future websites view',
                 'alias' => Config::get('common.permission.websites_future.view')
+            ],
+            // virtual office
+            [
+                'permission_name' => 'Virtual Office store',
+                'alias' => Config::get('common.permission.virtual_office.store')
+            ],
+            [
+                'permission_name' => 'Virtual Office update',
+                'alias' => Config::get('common.permission.virtual_office.update')
+            ],
+            [
+                'permission_name' => 'Virtual Office delete',
+                'alias' => Config::get('common.permission.virtual_office.delete')
+            ],
+            [
+                'permission_name' => 'Virtual Office save',
+                'alias' => Config::get('common.permission.virtual_office.save')
+            ],
+            [
+                'permission_name' => 'Virtual Office accept',
+                'alias' => Config::get('common.permission.virtual_office.accept')
+            ],
+            [
+                'permission_name' => 'Virtual Office reject',
+                'alias' => Config::get('common.permission.virtual_office.reject')
+            ],
+            [
+                'permission_name' => 'Virtual Office view',
+                'alias' => Config::get('common.permission.virtual_office.view')
             ],
         ];
         foreach($permission_list AS $key => $value):
