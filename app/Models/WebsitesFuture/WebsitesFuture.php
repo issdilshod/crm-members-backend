@@ -10,7 +10,7 @@ class WebsitesFuture extends Model
 {
     use HasFactory, TraitUuid;
 
-    protected $fillable = ['user_uuid', 'sic_code_uuid', 'link', 'status'];
+    protected $fillable = ['user_uuid', 'sic_code_uuid', 'link', 'status', 'approved'];
 
-    protected $attributes = ['status' => 1];
+    protected $attributes = ['status' => 1, 'approved' => 0];
 }

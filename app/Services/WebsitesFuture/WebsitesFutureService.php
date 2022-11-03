@@ -137,6 +137,7 @@ class WebsitesFutureService{
     public function accept(WebsitesFuture $websitesFuture, $entity, $user_uuid)
     {
         $entity['status'] = Config::get('common.status.actived');
+        $entity['approved'] = Config::get('common.status.actived');
         $websitesFuture->update($entity);
 
         // log

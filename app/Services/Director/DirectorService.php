@@ -389,9 +389,6 @@ class DirectorService {
         $entity['updated_at'] = Carbon::now();
         $director->update($entity);
 
-        // remove director from company
-        Company::where('director_uuid', $director->uuid)->update(['director_uuid' => null]);
-
         // director full name
         $director_fn = $director['first_name'] . ' ' . ($director['middle_name']!=null?$director['middle_name'].' ':'') . $director['last_name'];
 
@@ -421,6 +418,7 @@ class DirectorService {
     public function accept(Director $director, $entity, $user_uuid)
     {
         $entity['status'] = Config::get('common.status.actived');
+        $entity['approved'] = Config::get('common.status.actived');
         $director->update($entity);
 
         // director full name
@@ -487,7 +485,8 @@ class DirectorService {
                                 ->orderBy('middle_name', 'ASC')
                                 ->orderBy('last_name', 'ASC')
                                 ->orderBy('updated_at', 'DESC')
-                                ->where('status', Config::get('common.status.actived'))
+                                ->where('status', '!=', Config::get('common.status.deleted'))
+                                ->where('approved', Config::get('common.status.actived'))
                                 ->whereRaw("concat(first_name, ' ', last_name) like '%".$value."%'")
                                 ->limit(20)
                                 ->get(['uuid', 'first_name', 'middle_name', 'last_name']);

@@ -553,6 +553,7 @@ class CompanyService {
     public function accept(Company $company, $entity, $user_uuid)
     {
         $entity['status'] = Config::get('common.status.actived');
+        $entity['approved'] = Config::get('common.status.actived');
         $company->update($entity);
 
         // company name
