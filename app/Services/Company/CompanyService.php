@@ -227,7 +227,7 @@ class CompanyService {
         }
 
         // Voip Login
-        /* if (isset($entity['voip_login'])){
+        if (isset($entity['voip_login'])){
             $check['tmp'] = Company::select('voip_login')
                                         ->where('status', Config::get('common.status.actived'))
                                         ->where('voip_login', $entity['voip_login'])->first();
@@ -238,7 +238,7 @@ class CompanyService {
                 endforeach;
             }
             unset($check['tmp']);
-        }*/
+        }
 
         // Business mobile number type
         if (isset($entity['business_mobile_number'])){
@@ -363,7 +363,7 @@ class CompanyService {
         }
 
         // Voip Login
-        /*if (isset($entity['voip_login'])){
+        if (isset($entity['voip_login'])){
             $check['tmp'] = Company::select('voip_login')
                                     ->where('uuid', '!=', $ignore_uuid)            
                                     ->where('status', Config::get('common.status.actived'))
@@ -375,7 +375,7 @@ class CompanyService {
                 endforeach;
             }
             unset($check['tmp']);
-        }*/
+        }
 
         // Business mobile number type
         if (isset($entity['business_mobile_number'])){
