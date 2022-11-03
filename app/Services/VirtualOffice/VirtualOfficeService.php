@@ -99,7 +99,7 @@ class VirtualOfficeService{
 
         $msg = '*' . $user->first_name . ' ' . $user->last_name . "*\n" .
                 str_replace("{name}", "*" . $virtualOffice['vo_provider_username'] . "*", Config::get('common.activity.virtual_office.pending')) . "\n" .
-                '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/virtual-office/'.$virtualOffice['uuid'].')';
+                '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/virtual-offices/'.$virtualOffice['uuid'].')';
         $this->notificationService->telegram_to_headqurters($msg);
 
         return new VirtualOfficeResource($virtualOffice);
@@ -128,7 +128,7 @@ class VirtualOfficeService{
 
         $msg = '*' . $user->first_name . ' ' . $user->last_name . "*\n" .
                 str_replace("{name}", "*" . $virtualOffice['vo_provider_username'] . "*", Config::get('common.activity.virtual_office.pending_update')) . "\n" .
-                '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/future-websites/'.$virtualOffice['uuid'].')';
+                '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/virtual-offices/'.$virtualOffice['uuid'].')';
         $this->notificationService->telegram_to_headqurters($msg);
 
         return new VirtualOfficeResource($virtualOffice);
@@ -158,7 +158,7 @@ class VirtualOfficeService{
         $this->notificationService->telegram([
             'telegram' => $user['telegram'],
             'msg' => str_replace("{name}", "*" . $virtualOffice['vo_provider_username'] . "*", Config::get('common.activity.virtual_office.accept')) . "\n" .
-                        '[link to view](' .env('APP_FRONTEND_ENDPOINT').'/future-websites/'.$virtualOffice['uuid']. ')'
+                        '[link to view](' .env('APP_FRONTEND_ENDPOINT').'/virtual-offices/'.$virtualOffice['uuid']. ')'
         ]);
 
         return new VirtualOfficeResource($virtualOffice);
@@ -189,7 +189,7 @@ class VirtualOfficeService{
         $this->notificationService->telegram([
             'telegram' => $user['telegram'],
             'msg' => str_replace("{name}", "*" . $virtualOffice['vo_provider_username'] . "*", Config::get('common.activity.virtual_office.reject')) . "\n" .
-                        '[link to view](' .env('APP_FRONTEND_ENDPOINT').'/future-websites/'.$virtualOffice['uuid']. ')'
+                        '[link to view](' .env('APP_FRONTEND_ENDPOINT').'/vitual-offices/'.$virtualOffice['uuid']. ')'
         ]);
 
         return new VirtualOfficeResource($virtualOffice);
