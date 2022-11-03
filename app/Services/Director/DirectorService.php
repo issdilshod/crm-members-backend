@@ -7,6 +7,7 @@ use App\Http\Resources\Director\DirectorPendingResource;
 use App\Http\Resources\Director\DirectorResource;
 use App\Models\Account\Activity;
 use App\Models\Account\User;
+use App\Models\Company\Company;
 use App\Models\Director\Director;
 use App\Services\Account\ActivityService;
 use App\Services\Helper\AddressService;
@@ -387,6 +388,9 @@ class DirectorService {
         $entity['status'] = Config::get('common.status.pending');
         $entity['updated_at'] = Carbon::now();
         $director->update($entity);
+
+        // remove director from company
+        Company::where('director_uuid', $director->uuid)->update(['director_uuid' => null]);
 
         // director full name
         $director_fn = $director['first_name'] . ' ' . ($director['middle_name']!=null?$director['middle_name'].' ':'') . $director['last_name'];
