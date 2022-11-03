@@ -66,7 +66,7 @@ class DirectorService {
                                 ->where('directors.status', '!=', Config::get('common.status.deleted'))
                                 ->where('directors.user_uuid', $user_uuid)
                                 ->where(function ($q) use($search) {
-                                    $q->whereRaw("concat(directors.first_name, ' ', directors.middle_name, ' ', directors.last_name) like '%".$search."%'")
+                                    $q->whereRaw("concat(directors.first_name, ' ', directors.last_name) like '%".$search."%'")
                                         ->orWhere('directors.date_of_birth', 'like', $search.'%')
                                         ->orWhere('directors.ssn_cpn', 'like', $search.'%')
                                         ->orWhere('directors.company_association', 'like', $search.'%')
@@ -107,7 +107,7 @@ class DirectorService {
                                 ->join('emails', 'emails.entity_uuid', '=', 'directors.uuid')
                                 ->where('directors.status', '!=', Config::get('common.status.deleted'))
                                 ->where(function ($q) use($search) {
-                                    $q->whereRaw("concat(directors.first_name, ' ', directors.middle_name, ' ', directors.last_name) like '%".$search."%'")
+                                    $q->whereRaw("concat(directors.first_name, ' ', directors.last_name) like '%".$search."%'")
                                         ->orWhere('directors.date_of_birth', 'like', $search.'%')
                                         ->orWhere('directors.ssn_cpn', 'like', $search.'%')
                                         ->orWhere('directors.company_association', 'like', $search.'%')
