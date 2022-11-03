@@ -201,7 +201,7 @@ class VirtualOfficeService{
                                             ->where('status', Config::get('common.status.actived'))
                                             ->where('vo_provider_username', $value)
                                             ->paginate(20);
-        return VirtualOffice::collection($virtualOffice);
+        return  VirtualOfficeResource::collection($virtualOffice);
     }
 
     public function check($entity)
