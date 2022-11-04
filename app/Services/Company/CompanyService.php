@@ -192,7 +192,8 @@ class CompanyService {
 
         if (isset($entity['legal_name'])){
             $check['tmp'] = Company::select('legal_name')
-                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('status', '!=', Config::get('common.status.deleted'))
+                                    ->where('approved', Config::get('common.status.actived'))
                                     ->where('legal_name', $entity['legal_name'])->first();
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
@@ -206,7 +207,8 @@ class CompanyService {
         // Director
         if (isset($entity['director_uuid'])){
             $check['tmp'] = Company::select('director_uuid')
-                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('status', '!=', Config::get('common.status.deleted'))
+                                    ->where('approved', Config::get('common.status.actived'))
                                     ->where('director_uuid', $entity['director_uuid'])->first();
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
@@ -220,7 +222,8 @@ class CompanyService {
         // EIN
         if (isset($entity['ein'])){
             $check['tmp'] = Company::select('ein')
-                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('status', '!=', Config::get('common.status.deleted'))
+                                    ->where('approved', Config::get('common.status.actived'))
                                     ->where('ein', $entity['ein'])->first();
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
@@ -234,7 +237,8 @@ class CompanyService {
         // Business number
         if (isset($entity['business_number'])){
             $check['tmp'] = Company::select('business_number')
-                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('status', '!=', Config::get('common.status.deleted'))
+                                    ->where('approved', Config::get('common.status.actived'))
                                     ->where('business_number', $entity['business_number'])->first();
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
@@ -262,7 +266,8 @@ class CompanyService {
         // Business mobile number type
         if (isset($entity['business_mobile_number'])){
             $check['tmp'] = Company::select('business_mobile_number')
-                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('status', '!=', Config::get('common.status.deleted'))
+                                    ->where('approved', Config::get('common.status.actived'))
                                     ->where('business_mobile_number', $entity['business_mobile_number'])->first();
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
@@ -276,8 +281,9 @@ class CompanyService {
         // Business mobile number login
         if (isset($entity['business_mobile_number_login'])){
             $check['tmp'] = Company::select('business_mobile_number_login')
-                                            ->where('status', Config::get('common.status.actived'))
-                                            ->where('business_mobile_number_login', $entity['business_mobile_number_login'])->first();
+                                    ->where('status', '!=', Config::get('common.status.deleted'))
+                                    ->where('approved', Config::get('common.status.actived'))
+                                    ->where('business_mobile_number_login', $entity['business_mobile_number_login'])->first();
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
                 foreach ($check['tmp'] AS $key => $value):
@@ -290,7 +296,8 @@ class CompanyService {
         // Website
         if (isset($entity['website'])){
             $check['tmp'] = Company::select('website')
-                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('status', '!=', Config::get('common.status.deleted'))
+                                    ->where('approved', Config::get('common.status.actived'))
                                     ->where('website', $entity['website'])->first();
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
@@ -304,7 +311,8 @@ class CompanyService {
         // Db report number
         if (isset($entity['db_report_number'])){
             $check['tmp'] = Company::select('db_report_number')
-                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('status', '!=', Config::get('common.status.deleted'))
+                                    ->where('approved', Config::get('common.status.actived'))
                                     ->where('db_report_number', $entity['db_report_number'])->first();
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
@@ -325,7 +333,8 @@ class CompanyService {
         if (isset($entity['legal_name'])){
             $check['tmp'] = Company::select('legal_name')
                                     ->where('uuid', '!=', $ignore_uuid)
-                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('status', '!=', Config::get('common.status.deleted'))
+                                    ->where('approved', Config::get('common.status.actived'))
                                     ->where('legal_name', $entity['legal_name'])->first();
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
@@ -340,7 +349,8 @@ class CompanyService {
         if (isset($entity['director_uuid'])){
             $check['tmp'] = Company::select('director_uuid')
                                     ->where('uuid', '!=', $ignore_uuid)
-                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('status', '!=', Config::get('common.status.deleted'))
+                                    ->where('approved', Config::get('common.status.actived'))
                                     ->where('director_uuid', $entity['director_uuid'])->first();
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
@@ -355,7 +365,8 @@ class CompanyService {
         if (isset($entity['ein'])){
             $check['tmp'] = Company::select('ein')
                                     ->where('uuid', '!=', $ignore_uuid)
-                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('status', '!=', Config::get('common.status.deleted'))
+                                    ->where('approved', Config::get('common.status.actived'))
                                     ->where('ein', $entity['ein'])->first();
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
@@ -370,7 +381,8 @@ class CompanyService {
         if (isset($entity['business_number'])){
             $check['tmp'] = Company::select('business_number')
                                     ->where('uuid', '!=', $ignore_uuid)
-                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('status', '!=', Config::get('common.status.deleted'))
+                                    ->where('approved', Config::get('common.status.actived'))
                                     ->where('business_number', $entity['business_number'])->first();
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
@@ -400,7 +412,8 @@ class CompanyService {
         if (isset($entity['business_mobile_number'])){
             $check['tmp'] = Company::select('business_mobile_number')
                                     ->where('uuid', '!=', $ignore_uuid) 
-                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('status', '!=', Config::get('common.status.deleted'))
+                                    ->where('approved', Config::get('common.status.actived'))
                                     ->where('business_mobile_number', $entity['business_mobile_number'])->first();
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
@@ -415,7 +428,8 @@ class CompanyService {
         if (isset($entity['business_mobile_number_login'])){
             $check['tmp'] = Company::select('business_mobile_number_login')
                                     ->where('uuid', '!=', $ignore_uuid)
-                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('status', '!=', Config::get('common.status.deleted'))
+                                    ->where('approved', Config::get('common.status.actived'))
                                     ->where('business_mobile_number_login', $entity['business_mobile_number_login'])->first();
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
@@ -430,7 +444,8 @@ class CompanyService {
         if (isset($entity['website'])){
             $check['tmp'] = Company::select('website')
                                     ->where('uuid', '!=', $ignore_uuid)
-                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('status', '!=', Config::get('common.status.deleted'))
+                                    ->where('approved', Config::get('common.status.actived'))
                                     ->where('website', $entity['website'])->first();
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
@@ -445,7 +460,8 @@ class CompanyService {
         if (isset($entity['db_report_number'])){
             $check['tmp'] = Company::select('db_report_number')
                                     ->where('uuid', '!=', $ignore_uuid)
-                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('status', '!=', Config::get('common.status.deleted'))
+                                    ->where('approved', Config::get('common.status.actived'))
                                     ->where('db_report_number', $entity['db_report_number'])->first();
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();

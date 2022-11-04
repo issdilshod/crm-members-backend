@@ -35,15 +35,15 @@ class DirectorService {
     {
         $entity = [
             'all' => Director::where('status', '!=', Config::get('common.status.deleted'))
-                                ->where('uuid', 'like', $uuid . '%')
+                                ->where('user_uuid', 'like', $uuid . '%')
                                 ->count(),
             'active' => Director::where('status', '!=', Config::get('common.status.deleted'))
                                     ->where('approved', Config::get('common.status.actived'))
-                                    ->where('uuid', 'like', $uuid . '%')
+                                    ->where('user_uuid', 'like', $uuid . '%')
                                     ->count(),
             'pending' => Director::where('status', '!=', Config::get('common.status.deleted'))
                                     ->where('approved', '!=', Config::get('common.status.actived'))
-                                    ->where('uuid', 'like', $uuid . '%')
+                                    ->where('user_uuid', 'like', $uuid . '%')
                                     ->count()
         ];
 
@@ -207,7 +207,8 @@ class DirectorService {
         // Ssn
         if (isset($entity['ssn_cpn'])){
             $check['tmp'] = Director::select('ssn_cpn', 'first_name', 'middle_name', 'last_name')
-                                        ->where('status', Config::get('common.status.actived'))
+                                        ->where('status', '!=', Config::get('common.status.deleted'))
+                                        ->where('approved', Config::get('common.status.actived'))
                                         ->where('ssn_cpn', $entity['ssn_cpn'])
                                         ->first();
             if ($check['tmp']!=null){
@@ -236,7 +237,8 @@ class DirectorService {
         // Phone
         if (isset($entity['phone_number'])){
             $check['tmp'] = Director::select('phone_number', 'first_name', 'middle_name', 'last_name')
-                                        ->where('status', Config::get('common.status.actived'))
+                                        ->where('status', '!=', Config::get('common.status.deleted'))
+                                        ->where('approved', Config::get('common.status.actived'))
                                         ->where('phone_number', $entity['phone_number'])
                                         ->first();
             if ($check['tmp']!=null){
@@ -277,7 +279,8 @@ class DirectorService {
         if (isset($entity['ssn_cpn'])){
             $check['tmp'] = Director::select('ssn_cpn', 'first_name', 'middle_name', 'last_name')
                                     ->where('uuid', '!=', $ignore_uuid)
-                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('status', '!=', Config::get('common.status.deleted'))
+                                    ->where('approved', Config::get('common.status.actived'))
                                     ->where('ssn_cpn', $entity['ssn_cpn'])
                                     ->first();
             if ($check['tmp']!=null){
@@ -308,7 +311,8 @@ class DirectorService {
         if (isset($entity['phone_number'])){
             $check['tmp'] = Director::select('phone_number', 'first_name', 'middle_name', 'last_name')
                                     ->where('uuid', '!=', $ignore_uuid)
-                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('status', '!=', Config::get('common.status.deleted'))
+                                    ->where('approved', Config::get('common.status.actived'))
                                     ->where('phone_number', $entity['phone_number'])
                                     ->first();
             if ($check['tmp']!=null){
