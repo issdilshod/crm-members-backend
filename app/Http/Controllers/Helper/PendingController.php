@@ -38,9 +38,13 @@ class PendingController extends Controller
         if (!PermissionPolicy::permission($request->user_uuid)){
             $directors = $this->directorService->by_user($request->user_uuid);
             $companies = $this->companyService->by_user($request->user_uuid);
+            $summary['directors'] = $this->directorService->summary($request->user_uuid);
+            $summary['companies'] = $this->companyService->summary($request->user_uuid);
         }else{
             $directors = $this->directorService->headquarters();
             $companies = $this->companyService->headquarters();
+            $summary['directors'] = $this->directorService->summary();
+            $summary['companies'] = $this->companyService->summary();
         }
 
         // meta datas
@@ -48,7 +52,7 @@ class PendingController extends Controller
         $max_page = ($directors->lastPage()>$companies->lastPage()?$directors->lastPage():$companies->lastPage());
         $meta = [ 'current_page' => $current_page, 'max_page' => $max_page ];
 
-        return ['directors' => $directors, 'companies' => $companies, 'meta' => $meta];
+        return ['directors' => $directors, 'companies' => $companies, 'meta' => $meta, 'summary' => $summary];
     }
 
     /**     @OA\GET(

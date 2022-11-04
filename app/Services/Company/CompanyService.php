@@ -33,6 +33,25 @@ class CompanyService {
         $this->activityService = new ActivityService();
     }
 
+    public function summary($user_uuid = '')
+    {
+        $entity = [
+            'all' => Company::where('status', '!=', Config::get('common.status.deleted'))
+                                ->where('user_uuid', 'like', $user_uuid . '%')
+                                ->count(),
+            'active' => Company::where('status', '!=', Config::get('common.status.deleted'))
+                                    ->where('approved', Config::get('common.status.actived'))
+                                    ->where('user_uuid', 'like', $user_uuid . '%')
+                                    ->count(),
+            'pending' => Company::where('status', '!=', Config::get('common.status.deleted'))
+                                    ->where('approved', '!=', Config::get('common.status.actived'))
+                                    ->where('user_uuid', 'like', $user_uuid . '%')
+                                    ->count()
+        ];
+
+        return $entity;
+    }
+
     public function all()
     {
         $companies = Company::orderBy('legal_name', 'ASC')
@@ -442,6 +461,7 @@ class CompanyService {
 
     public function create($entity)
     {
+        $entity['approved'] = Config::get('common.status.actived');
         $company = Company::create($entity);
 
         // company name
@@ -465,6 +485,7 @@ class CompanyService {
     public function update(Company $company, $entity, $user_uuid)
     {
         $entity['updated_at'] = Carbon::now();
+        $entity['approved'] = Config::get('common.status.actived');
         $company->update($entity);
 
         // company name

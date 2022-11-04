@@ -31,6 +31,25 @@ class DirectorService {
         $this->activityService = new ActivityService();
     }
 
+    public function summary($uuid = '')
+    {
+        $entity = [
+            'all' => Director::where('status', '!=', Config::get('common.status.deleted'))
+                                ->where('uuid', 'like', $uuid . '%')
+                                ->count(),
+            'active' => Director::where('status', '!=', Config::get('common.status.deleted'))
+                                    ->where('approved', Config::get('common.status.actived'))
+                                    ->where('uuid', 'like', $uuid . '%')
+                                    ->count(),
+            'pending' => Director::where('status', '!=', Config::get('common.status.deleted'))
+                                    ->where('approved', '!=', Config::get('common.status.actived'))
+                                    ->where('uuid', 'like', $uuid . '%')
+                                    ->count()
+        ];
+
+        return $entity;
+    }
+
     public function all()
     {
         $directors = Director::orderBy('first_name', 'ASC')
@@ -307,6 +326,7 @@ class DirectorService {
 
     public function create($entity)
     {
+        $entity['approved'] = Config::get('common.status.actived');
         $director = Director::create($entity);
 
         // director full name
@@ -329,6 +349,7 @@ class DirectorService {
     public function update(Director $director, $entity, $user_uuid)
     {
         $entity['updated_at'] = Carbon::now();
+        $entity['approved'] = Config::get('common.status.actived');
         $director->update($entity);
 
         // director full name
