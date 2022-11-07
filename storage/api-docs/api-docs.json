@@ -2413,6 +2413,629 @@
                 }
             }
         },
+        "/api/future-company": {
+            "get": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "List of future company",
+                "description": "List of future company",
+                "operationId": "list_future_company",
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Add future company",
+                "description": "Add future company",
+                "operationId": "post_future_company",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "sic_code_uuid",
+                                    "incorporation_state_uuid",
+                                    "doing_business_in_state_uuid",
+                                    "virtual_office_uuid",
+                                    "revival_date",
+                                    "revival_fee"
+                                ],
+                                "properties": {
+                                    "sic_code_uuid": {
+                                        "type": "text"
+                                    },
+                                    "incorporation_state_uuid": {
+                                        "type": "text"
+                                    },
+                                    "doing_business_in_state_uuid": {
+                                        "type": "text"
+                                    },
+                                    "virtual_office_uuid": {
+                                        "type": "text"
+                                    },
+                                    "revival_date": {
+                                        "type": "text"
+                                    },
+                                    "revival_fee": {
+                                        "type": "text"
+                                    },
+                                    "files[]": {
+                                        "type": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            }
+        },
+        "/api/future-company/{uuid}": {
+            "get": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Get future company",
+                "description": "Get future company",
+                "operationId": "get_future_company",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "future company uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Update future company",
+                "description": "Update future company",
+                "operationId": "update_future_company",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "future company uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "sic_code_uuid",
+                                    "incorporation_state_uuid",
+                                    "doing_business_in_state_uuid",
+                                    "virtual_office_uuid",
+                                    "revival_date",
+                                    "revival_fee"
+                                ],
+                                "properties": {
+                                    "sic_code_uuid": {
+                                        "type": "text"
+                                    },
+                                    "incorporation_state_uuid": {
+                                        "type": "text"
+                                    },
+                                    "doing_business_in_state_uuid": {
+                                        "type": "text"
+                                    },
+                                    "virtual_office_uuid": {
+                                        "type": "text"
+                                    },
+                                    "revival_date": {
+                                        "type": "text"
+                                    },
+                                    "revival_fee": {
+                                        "type": "text"
+                                    },
+                                    "files[]": {
+                                        "type": "binary"
+                                    },
+                                    "files_to_delete[]": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Delete future company",
+                "description": "Delete future company",
+                "operationId": "delete_future_company",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "future company uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/future-company-search/{search}": {
+            "get": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Get future company search",
+                "description": "Get future company search",
+                "operationId": "get_future_company_search",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "path",
+                        "description": "future company search",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "text"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/future-company-pending": {
+            "post": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Pending future company",
+                "description": "Pending future company",
+                "operationId": "pending_future_company",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "sic_code_uuid",
+                                    "incorporation_state_uuid",
+                                    "doing_business_in_state_uuid",
+                                    "virtual_office_uuid",
+                                    "revival_date",
+                                    "revival_fee"
+                                ],
+                                "properties": {
+                                    "sic_code_uuid": {
+                                        "type": "text"
+                                    },
+                                    "incorporation_state_uuid": {
+                                        "type": "text"
+                                    },
+                                    "doing_business_in_state_uuid": {
+                                        "type": "text"
+                                    },
+                                    "virtual_office_uuid": {
+                                        "type": "text"
+                                    },
+                                    "revival_date": {
+                                        "type": "text"
+                                    },
+                                    "revival_fee": {
+                                        "type": "text"
+                                    },
+                                    "files[]": {
+                                        "type": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            }
+        },
+        "/api/future-company-pending-update/{uuid}": {
+            "put": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Pending update future company",
+                "description": "Pending update future company",
+                "operationId": "pending_update_future_company",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "future company uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "sic_code_uuid",
+                                    "incorporation_state_uuid",
+                                    "doing_business_in_state_uuid",
+                                    "virtual_office_uuid",
+                                    "revival_date",
+                                    "revival_fee"
+                                ],
+                                "properties": {
+                                    "sic_code_uuid": {
+                                        "type": "text"
+                                    },
+                                    "incorporation_state_uuid": {
+                                        "type": "text"
+                                    },
+                                    "doing_business_in_state_uuid": {
+                                        "type": "text"
+                                    },
+                                    "virtual_office_uuid": {
+                                        "type": "text"
+                                    },
+                                    "revival_date": {
+                                        "type": "text"
+                                    },
+                                    "revival_fee": {
+                                        "type": "text"
+                                    },
+                                    "files[]": {
+                                        "type": "binary"
+                                    },
+                                    "files_to_delete[]": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            }
+        },
+        "/api/future-company-accept/{uuid}": {
+            "put": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Accept future company",
+                "description": "Accept future company",
+                "operationId": "accept_future_company",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "future company uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "sic_code_uuid",
+                                    "incorporation_state_uuid",
+                                    "doing_business_in_state_uuid",
+                                    "virtual_office_uuid",
+                                    "revival_date",
+                                    "revival_fee"
+                                ],
+                                "properties": {
+                                    "sic_code_uuid": {
+                                        "type": "text"
+                                    },
+                                    "incorporation_state_uuid": {
+                                        "type": "text"
+                                    },
+                                    "doing_business_in_state_uuid": {
+                                        "type": "text"
+                                    },
+                                    "virtual_office_uuid": {
+                                        "type": "text"
+                                    },
+                                    "revival_date": {
+                                        "type": "text"
+                                    },
+                                    "revival_fee": {
+                                        "type": "text"
+                                    },
+                                    "files[]": {
+                                        "type": "binary"
+                                    },
+                                    "files_to_delete[]": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            }
+        },
+        "/api/future-company-reject/{uuid}": {
+            "put": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Reject future company",
+                "description": "Reject future company",
+                "operationId": "reject_future_company",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "future company uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/future-company-permission": {
+            "get": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Get future company permission of user",
+                "description": "Get future company permission of user",
+                "operationId": "future_company_permission",
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    }
+                }
+            }
+        },
         "/api/director": {
             "get": {
                 "tags": [

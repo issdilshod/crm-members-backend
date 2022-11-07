@@ -133,6 +133,35 @@ class PermissionSeeder extends Seeder
                 'permission_name' => 'Virtual Office view',
                 'alias' => Config::get('common.permission.virtual_office.view')
             ],
+            // future company
+            [
+                'permission_name' => 'Future Company store',
+                'alias' => Config::get('common.permission.future_company.store')
+            ],
+            [
+                'permission_name' => 'Future Company update',
+                'alias' => Config::get('common.permission.future_company.update')
+            ],
+            [
+                'permission_name' => 'Future Company delete',
+                'alias' => Config::get('common.permission.future_company.delete')
+            ],
+            [
+                'permission_name' => 'Future Company save',
+                'alias' => Config::get('common.permission.future_company.save')
+            ],
+            [
+                'permission_name' => 'Future Company accept',
+                'alias' => Config::get('common.permission.future_company.accept')
+            ],
+            [
+                'permission_name' => 'Future Company reject',
+                'alias' => Config::get('common.permission.future_company.reject')
+            ],
+            [
+                'permission_name' => 'Future Company view',
+                'alias' => Config::get('common.permission.future_company.view')
+            ],
         ];
         foreach($permission_list AS $key => $value):
             $permission = Permission::where('status', Config::get('common.status.actived'))

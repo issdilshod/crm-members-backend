@@ -6,6 +6,7 @@ use App\Http\Controllers\Account\PermissionController;
 use App\Http\Controllers\Account\TelegramUserController;
 use App\Http\Controllers\Account\UserController;
 use App\Http\Controllers\Company\CompanyController;
+use App\Http\Controllers\Company\FutureCompanyController;
 use App\Http\Controllers\Director\DirectorController;
 use App\Http\Controllers\Helper\DepartmentController;
 use App\Http\Controllers\Helper\HostingController;
@@ -122,6 +123,20 @@ Route::put('api/virtual-office-pending-update/{uuid}', [VirtualOfficeController:
 Route::put('api/virtual-office-accept/{uuid}', [VirtualOfficeController::class, 'accept'])->middleware('auth.custom');
 Route::put('api/virtual-office-reject/{uuid}', [VirtualOfficeController::class, 'reject'])->middleware('auth.custom');
 Route::get('api/virtual-office-permission', [VirtualOfficeController::class, 'permission'])->middleware('auth.custom');
+
+// virtual office
+Route::resource('api/future-company', FutureCompanyController::class)->middleware('auth.custom');
+Route::get('api/future-company', [FutureCompanyController::class, 'index'])->middleware('auth.custom');
+Route::get('api/future-company/{uuid}', [FutureCompanyController::class, 'show'])->middleware('auth.custom');
+Route::post('api/future-company', [FutureCompanyController::class, 'store'])->middleware('auth.custom');
+Route::put('api/future-company/{uuid}', [FutureCompanyController::class, 'update'])->middleware('auth.custom');
+Route::delete('api/future-company/{uuid}', [FutureCompanyController::class, 'destroy'])->middleware('auth.custom');
+Route::get('api/future-company-search/{search}', [FutureCompanyController::class, 'search'])->middleware('auth.custom');
+Route::post('api/future-company-pending', [FutureCompanyController::class, 'pending'])->middleware('auth.custom');
+Route::put('api/future-company-pending-update/{uuid}', [FutureCompanyController::class, 'pending_update'])->middleware('auth.custom');
+Route::put('api/future-company-accept/{uuid}', [FutureCompanyController::class, 'accept'])->middleware('auth.custom');
+Route::put('api/future-company-reject/{uuid}', [FutureCompanyController::class, 'reject'])->middleware('auth.custom');
+Route::get('api/future-company-permission', [FutureCompanyController::class, 'permission'])->middleware('auth.custom');
 
 // tasks
 Route::resource('api/task', TaskController::class)->middleware('auth.custom');

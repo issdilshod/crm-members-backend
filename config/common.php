@@ -46,6 +46,15 @@ return [
             'reject' => 'virtual_office_reject',
             'view' => 'virtual_office_view'
         ],
+        'future_company' => [
+            'store' => 'future_company_store',
+            'update' => 'future_company_update',
+            'delete' => 'future_company_delete',
+            'save' => 'future_company_save', // pending add/update
+            'accept' => 'future_company_accept',
+            'reject' => 'future_company_reject',
+            'view' => 'future_company_view'
+        ],
     ],
 
     'session' => [
@@ -106,6 +115,14 @@ return [
             'reject' => 'Virtual Office {name} card rejected',
             'accept' => 'Virtual Office {name} card accepted',
         ],
+        'future_company' => [
+            'add' => 'Future company {name} card added',
+            'updated' => 'Future company {name} card updated',
+            'pending' => 'Future company {name} card approval request sent',
+            'pending_update' => 'Future company {name} card update approval request sent',
+            'reject' => 'Future company {name} card rejected',
+            'accept' => 'Future company {name} card accepted',
+        ],
 
         'codes' => [
             'user_add' => 1,
@@ -142,6 +159,12 @@ return [
             'virtual_office_accept' => 30,
             'virtual_office_reject' => 31,
 
+            'future_company_add' => 32,
+            'future_company_update' => 33,
+            'future_company_pending' => 34,
+            'future_company_pending_update' => 35,
+            'future_company_accept' => 36,
+            'future_company_reject' => 37,
         ],
 
         'codes_link' => [
@@ -178,6 +201,13 @@ return [
             29 => 'virtual-offices',
             30 => 'virtual-offices',
             31 => 'virtual-offices',
+
+            32 => 'future-companies',
+            33 => 'future-companies',
+            34 => 'future-companies',
+            35 => 'future-companies',
+            36 => 'future-companies',
+            37 => 'future-companies',
         ],
     ],
 
