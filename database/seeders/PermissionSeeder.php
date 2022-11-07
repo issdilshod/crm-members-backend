@@ -162,6 +162,11 @@ class PermissionSeeder extends Seeder
                 'permission_name' => 'Future Company view',
                 'alias' => Config::get('common.permission.future_company.view')
             ],
+            // chat
+            [
+                'permission_name' => 'Chat store',
+                'alias' => Config::get('common.permission.chat.store')
+            ],
         ];
         foreach($permission_list AS $key => $value):
             $permission = Permission::where('status', Config::get('common.status.actived'))

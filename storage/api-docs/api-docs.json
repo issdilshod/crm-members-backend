@@ -1183,6 +1183,232 @@
                 }
             }
         },
+        "/api/chat": {
+            "get": {
+                "tags": [
+                    "Chat"
+                ],
+                "summary": "List of chat",
+                "description": "List of chat",
+                "operationId": "list_chat",
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Chat"
+                ],
+                "summary": "Add chat",
+                "description": "Add chat",
+                "operationId": "post_chat",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "text"
+                                    },
+                                    "members[]": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            }
+        },
+        "/api/chat/{uuid}": {
+            "get": {
+                "tags": [
+                    "Chat"
+                ],
+                "summary": "Get chat",
+                "description": "Get chat",
+                "operationId": "get_chat",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "chat uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Chat"
+                ],
+                "summary": "Update chat",
+                "description": "Update chat",
+                "operationId": "update_chat",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "chat uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "text"
+                                    },
+                                    "members[]": {
+                                        "type": "text"
+                                    },
+                                    "members_to_delete[]": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Chat"
+                ],
+                "summary": "Delete chat",
+                "description": "Delete chat",
+                "operationId": "delete_chat",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "chat uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
         "/api/company": {
             "get": {
                 "tags": [
@@ -5481,9 +5707,7 @@
                         "description": "Resource Not Found"
                     }
                 }
-            }
-        },
-        "/api/futture-websites": {
+            },
             "post": {
                 "tags": [
                     "Future Websites"

@@ -44,7 +44,7 @@ class WebsitesFutureController extends Controller
     }
 
     /**     @OA\POST(
-      *         path="/api/futture-websites",
+      *         path="/api/future-websites",
       *         operationId="post_future_websites",
       *         tags={"Future Websites"},
       *         summary="Add future websites",

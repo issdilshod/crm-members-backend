@@ -55,6 +55,9 @@ return [
             'reject' => 'future_company_reject',
             'view' => 'future_company_view'
         ],
+        'chat' => [
+            'store' => 'chat_store'
+        ]
     ],
 
     'session' => [
@@ -123,6 +126,10 @@ return [
             'reject' => 'Future company {name} card rejected',
             'accept' => 'Future company {name} card accepted',
         ],
+        'chat' => [
+            'add' => 'Chat {name} created',
+            'updated' => 'Chat {name} updated'
+        ],
 
         'codes' => [
             'user_add' => 1,
@@ -165,6 +172,9 @@ return [
             'future_company_pending_update' => 35,
             'future_company_accept' => 36,
             'future_company_reject' => 37,
+
+            'chat_add' => 38,
+            'chat_update' => 39,
         ],
 
         'codes_link' => [
@@ -208,6 +218,9 @@ return [
             35 => 'future-companies',
             36 => 'future-companies',
             37 => 'future-companies',
+
+            38 => 'chats',
+            39 => 'chats',
         ],
     ],
 
