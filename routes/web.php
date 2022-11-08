@@ -6,6 +6,7 @@ use App\Http\Controllers\Account\PermissionController;
 use App\Http\Controllers\Account\TelegramUserController;
 use App\Http\Controllers\Account\UserController;
 use App\Http\Controllers\Chat\ChatController;
+use App\Http\Controllers\Chat\MessageController;
 use App\Http\Controllers\Company\CompanyController;
 use App\Http\Controllers\Company\FutureCompanyController;
 use App\Http\Controllers\Director\DirectorController;
@@ -145,6 +146,12 @@ Route::middleware('auth.custom')->group(function() {
     Route::post('api/chat', [ChatController::class, 'store']);
     Route::put('api/chat/{uuid}', [ChatController::class, 'update']);
     Route::delete('api/chat/{uuid}', [ChatController::class, 'destroy']);
+    Route::resource('api/message', MessageController::class);
+    Route::get('api/chat-messages/{chat_uuid}', [MessageController::class, 'by_chat']);
+    Route::post('api/message', [MessageController::class, 'store']);
+    Route::get('api/message/{uuid}', [MessageController::class, 'show']);
+    Route::put('api/message/{uuid}', [MessageController::class, 'update']);
+    Route::delete('api/message/{uuid}', [MessageController::class, 'destroy']);
 
     // tasks
     Route::resource('api/task', TaskController::class);

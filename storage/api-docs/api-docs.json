@@ -1409,6 +1409,232 @@
                 }
             }
         },
+        "/api/chat-messages/{chat_uuid}": {
+            "get": {
+                "tags": [
+                    "Chat"
+                ],
+                "summary": "Get chat messages",
+                "description": "Get chat messages",
+                "operationId": "get_chat_messages",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "chat uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/message": {
+            "post": {
+                "tags": [
+                    "Chat"
+                ],
+                "summary": "Add message",
+                "description": "Add message",
+                "operationId": "post_message",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "chat_uuid"
+                                ],
+                                "properties": {
+                                    "chat_uuid": {
+                                        "type": "text"
+                                    },
+                                    "message": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            }
+        },
+        "/api/message/{uuid}": {
+            "get": {
+                "tags": [
+                    "Chat"
+                ],
+                "summary": "Get message",
+                "description": "Get message",
+                "operationId": "get_message",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "message uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Chat"
+                ],
+                "summary": "Update message",
+                "description": "Update message",
+                "operationId": "update_message",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "message uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [],
+                                "properties": {
+                                    "message": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Chat"
+                ],
+                "summary": "Delete message",
+                "description": "Delete message",
+                "operationId": "delete_message",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "message uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
         "/api/company": {
             "get": {
                 "tags": [
