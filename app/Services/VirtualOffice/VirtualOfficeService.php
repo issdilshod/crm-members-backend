@@ -208,10 +208,16 @@ class VirtualOfficeService{
     {
         $check = [];
 
-        if (isset($entity['vo_provider_username'])){
-            $check['tmp'] = VirtualOffice::select('vo_provider_username')
-                                        ->where('status', Config::get('common.status.actived'))
-                                        ->where('vo_provider_username', $entity['vo_provider_username'])->first();
+        if (isset($entity['address_line2'])){
+            $check['tmp'] = VirtualOffice::select('address_line1', 'address_line2', 'city', 'state', 'postal')
+                                        ->where('status', '!=', Config::get('common.status.deleted'))
+                                        ->where('approved', Config::get('common.status.actived'))
+                                        ->where('address_line1', $entity['address_line1'])
+                                        ->where('address_line2', $entity['address_line2'])
+                                        ->where('city', $entity['city'])
+                                        ->where('state', $entity['state'])
+                                        ->where('postal', $entity['postal'])
+                                        ->first();
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
                 foreach ($check['tmp'] AS $key => $value):
@@ -229,10 +235,16 @@ class VirtualOfficeService{
         $check = [];
 
         if (isset($entity['vo_provider_username'])){
-            $check['tmp'] = VirtualOffice::select('vo_provider_username')
-                                        ->where('status', Config::get('common.status.actived'))
+            $check['tmp'] = VirtualOffice::select('address_line1', 'address_line2', 'city', 'state', 'postal')
+                                        ->where('status', '!=', Config::get('common.status.deleted'))
+                                        ->where('approved', Config::get('common.status.actived'))
                                         ->where('uuid', '!=', $ignore_uuid)
-                                        ->where('vo_provider_username', $entity['vo_provider_username'])->first();
+                                        ->where('address_line1', $entity['address_line1'])
+                                        ->where('address_line2', $entity['address_line2'])
+                                        ->where('city', $entity['city'])
+                                        ->where('state', $entity['state'])
+                                        ->where('postal', $entity['postal'])
+                                        ->first();
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
                 foreach ($check['tmp'] AS $key => $value):
