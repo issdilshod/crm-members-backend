@@ -38,6 +38,6 @@ class Director extends Model
     public function company(): HasOne
     {
         return $this->hasOne(Company::class, 'director_uuid', 'uuid')
-                    ->where('status', Config::get('common.status.actived'));
+                    ->where('approved', Config::get('common.status.actived'));
     }
 }
