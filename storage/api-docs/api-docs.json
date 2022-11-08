@@ -2902,14 +2902,7 @@
                     "content": {
                         "multipart/form-data": {
                             "schema": {
-                                "required": [
-                                    "sic_code_uuid",
-                                    "incorporation_state_uuid",
-                                    "doing_business_in_state_uuid",
-                                    "virtual_office_uuid",
-                                    "revival_date",
-                                    "revival_fee"
-                                ],
+                                "required": [],
                                 "properties": {
                                     "sic_code_uuid": {
                                         "type": "text"
@@ -2927,6 +2920,21 @@
                                         "type": "text"
                                     },
                                     "revival_fee": {
+                                        "type": "text"
+                                    },
+                                    "future_website_link": {
+                                        "type": "text"
+                                    },
+                                    "recommended_director_uuid": {
+                                        "type": "text"
+                                    },
+                                    "revived": {
+                                        "type": "text"
+                                    },
+                                    "db_report_number": {
+                                        "type": "text"
+                                    },
+                                    "comment": {
                                         "type": "text"
                                     },
                                     "files[]": {
@@ -3027,14 +3035,7 @@
                     "content": {
                         "multipart/form-data": {
                             "schema": {
-                                "required": [
-                                    "sic_code_uuid",
-                                    "incorporation_state_uuid",
-                                    "doing_business_in_state_uuid",
-                                    "virtual_office_uuid",
-                                    "revival_date",
-                                    "revival_fee"
-                                ],
+                                "required": [],
                                 "properties": {
                                     "sic_code_uuid": {
                                         "type": "text"
@@ -3052,6 +3053,21 @@
                                         "type": "text"
                                     },
                                     "revival_fee": {
+                                        "type": "text"
+                                    },
+                                    "future_website_link": {
+                                        "type": "text"
+                                    },
+                                    "recommended_director_uuid": {
+                                        "type": "text"
+                                    },
+                                    "revived": {
+                                        "type": "text"
+                                    },
+                                    "db_report_number": {
+                                        "type": "text"
+                                    },
+                                    "comment": {
                                         "type": "text"
                                     },
                                     "files[]": {
@@ -3182,14 +3198,7 @@
                     "content": {
                         "multipart/form-data": {
                             "schema": {
-                                "required": [
-                                    "sic_code_uuid",
-                                    "incorporation_state_uuid",
-                                    "doing_business_in_state_uuid",
-                                    "virtual_office_uuid",
-                                    "revival_date",
-                                    "revival_fee"
-                                ],
+                                "required": [],
                                 "properties": {
                                     "sic_code_uuid": {
                                         "type": "text"
@@ -3207,6 +3216,21 @@
                                         "type": "text"
                                     },
                                     "revival_fee": {
+                                        "type": "text"
+                                    },
+                                    "future_website_link": {
+                                        "type": "text"
+                                    },
+                                    "recommended_director_uuid": {
+                                        "type": "text"
+                                    },
+                                    "revived": {
+                                        "type": "text"
+                                    },
+                                    "db_report_number": {
+                                        "type": "text"
+                                    },
+                                    "comment": {
                                         "type": "text"
                                     },
                                     "files[]": {
@@ -3270,14 +3294,7 @@
                     "content": {
                         "multipart/form-data": {
                             "schema": {
-                                "required": [
-                                    "sic_code_uuid",
-                                    "incorporation_state_uuid",
-                                    "doing_business_in_state_uuid",
-                                    "virtual_office_uuid",
-                                    "revival_date",
-                                    "revival_fee"
-                                ],
+                                "required": [],
                                 "properties": {
                                     "sic_code_uuid": {
                                         "type": "text"
@@ -3295,6 +3312,21 @@
                                         "type": "text"
                                     },
                                     "revival_fee": {
+                                        "type": "text"
+                                    },
+                                    "future_website_link": {
+                                        "type": "text"
+                                    },
+                                    "recommended_director_uuid": {
+                                        "type": "text"
+                                    },
+                                    "revived": {
+                                        "type": "text"
+                                    },
+                                    "db_report_number": {
+                                        "type": "text"
+                                    },
+                                    "comment": {
                                         "type": "text"
                                     },
                                     "files[]": {
@@ -3361,14 +3393,7 @@
                     "content": {
                         "multipart/form-data": {
                             "schema": {
-                                "required": [
-                                    "sic_code_uuid",
-                                    "incorporation_state_uuid",
-                                    "doing_business_in_state_uuid",
-                                    "virtual_office_uuid",
-                                    "revival_date",
-                                    "revival_fee"
-                                ],
+                                "required": [],
                                 "properties": {
                                     "sic_code_uuid": {
                                         "type": "text"
@@ -3386,6 +3411,21 @@
                                         "type": "text"
                                     },
                                     "revival_fee": {
+                                        "type": "text"
+                                    },
+                                    "future_website_link": {
+                                        "type": "text"
+                                    },
+                                    "recommended_director_uuid": {
+                                        "type": "text"
+                                    },
+                                    "revived": {
+                                        "type": "text"
+                                    },
+                                    "db_report_number": {
+                                        "type": "text"
+                                    },
+                                    "comment": {
                                         "type": "text"
                                     },
                                     "files[]": {
@@ -5271,17 +5311,7 @@
                     "content": {
                         "multipart/form-data": {
                             "schema": {
-                                "required": [
-                                    "vo_provider_name",
-                                    "vo_provider_domain",
-                                    "vo_provider_username",
-                                    "vo_provider_password",
-                                    "street_address",
-                                    "city",
-                                    "state",
-                                    "postal",
-                                    "country"
-                                ],
+                                "required": [],
                                 "properties": {
                                     "vo_provider_name": {
                                         "type": "text"
@@ -5408,17 +5438,7 @@
                     "content": {
                         "multipart/form-data": {
                             "schema": {
-                                "required": [
-                                    "vo_provider_name",
-                                    "vo_provider_domain",
-                                    "vo_provider_username",
-                                    "vo_provider_password",
-                                    "street_address",
-                                    "city",
-                                    "state",
-                                    "postal",
-                                    "country"
-                                ],
+                                "required": [],
                                 "properties": {
                                     "vo_provider_name": {
                                         "type": "text"
@@ -5572,17 +5592,7 @@
                     "content": {
                         "multipart/form-data": {
                             "schema": {
-                                "required": [
-                                    "vo_provider_name",
-                                    "vo_provider_domain",
-                                    "vo_provider_username",
-                                    "vo_provider_password",
-                                    "street_address",
-                                    "city",
-                                    "state",
-                                    "postal",
-                                    "country"
-                                ],
+                                "required": [],
                                 "properties": {
                                     "vo_provider_name": {
                                         "type": "text"
@@ -5672,17 +5682,7 @@
                     "content": {
                         "multipart/form-data": {
                             "schema": {
-                                "required": [
-                                    "vo_provider_name",
-                                    "vo_provider_domain",
-                                    "vo_provider_username",
-                                    "vo_provider_password",
-                                    "street_address",
-                                    "city",
-                                    "state",
-                                    "postal",
-                                    "country"
-                                ],
+                                "required": [],
                                 "properties": {
                                     "vo_provider_name": {
                                         "type": "text"
@@ -5772,17 +5772,7 @@
                     "content": {
                         "multipart/form-data": {
                             "schema": {
-                                "required": [
-                                    "vo_provider_name",
-                                    "vo_provider_domain",
-                                    "vo_provider_username",
-                                    "vo_provider_password",
-                                    "street_address",
-                                    "city",
-                                    "state",
-                                    "postal",
-                                    "country"
-                                ],
+                                "required": [],
                                 "properties": {
                                     "vo_provider_name": {
                                         "type": "text"

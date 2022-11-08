@@ -56,7 +56,7 @@ class VirtualOfficeController extends Controller
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
       *                         type="object",
-      *                         required={"vo_provider_name", "vo_provider_domain", "vo_provider_username", "vo_provider_password", "street_address", "city", "state", "postal", "country"},
+      *                         required={},
       *                         
       *                         @OA\Property(property="vo_provider_name", type="text"),
       *                         @OA\Property(property="vo_provider_domain", type="text"),
@@ -88,7 +88,7 @@ class VirtualOfficeController extends Controller
         }
 
         $validated = $request->validate([
-            'vo_provider_name' => 'required',
+            'vo_provider_name' => '',
             'vo_provider_domain' => '',
             'vo_provider_username' => '',
             'vo_provider_password' => '',
@@ -176,7 +176,7 @@ class VirtualOfficeController extends Controller
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
       *                         type="object",
-      *                         required={"vo_provider_name", "vo_provider_domain", "vo_provider_username", "vo_provider_password", "street_address", "city", "state", "postal", "country"},
+      *                         required={},
       *                         
       *                         @OA\Property(property="vo_provider_name", type="text"),
       *                         @OA\Property(property="vo_provider_domain", type="text"),
@@ -208,7 +208,7 @@ class VirtualOfficeController extends Controller
         }
 
         $validated = $request->validate([
-            'vo_provider_name' => 'required',
+            'vo_provider_name' => '',
             'vo_provider_domain' => '',
             'vo_provider_username' => '',
             'vo_provider_password' => '',
@@ -317,7 +317,7 @@ class VirtualOfficeController extends Controller
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
       *                         type="object",
-      *                         required={"vo_provider_name", "vo_provider_domain", "vo_provider_username", "vo_provider_password", "street_address", "city", "state", "postal", "country"},
+      *                         required={},
       *                         
       *                         @OA\Property(property="vo_provider_name", type="text"),
       *                         @OA\Property(property="vo_provider_domain", type="text"),
@@ -349,7 +349,7 @@ class VirtualOfficeController extends Controller
         }
 
         $validated = $request->validate([
-            'vo_provider_name' => 'required',
+            'vo_provider_name' => '',
             'vo_provider_domain' => '',
             'vo_provider_username' => '',
             'vo_provider_password' => '',
@@ -402,7 +402,7 @@ class VirtualOfficeController extends Controller
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
       *                         type="object",
-      *                         required={"vo_provider_name", "vo_provider_domain", "vo_provider_username", "vo_provider_password", "street_address", "city", "state", "postal", "country"},
+      *                         required={},
       *                         
       *                         @OA\Property(property="vo_provider_name", type="text"),
       *                         @OA\Property(property="vo_provider_domain", type="text"),
@@ -434,7 +434,7 @@ class VirtualOfficeController extends Controller
         }
 
         $validated = $request->validate([
-            'vo_provider_name' => 'required',
+            'vo_provider_name' => '',
             'vo_provider_domain' => '',
             'vo_provider_username' => '',
             'vo_provider_password' => '',
@@ -487,7 +487,7 @@ class VirtualOfficeController extends Controller
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
       *                         type="object",
-      *                         required={"vo_provider_name", "vo_provider_domain", "vo_provider_username", "vo_provider_password", "street_address", "city", "state", "postal", "country"},
+      *                         required={},
       *                         
       *                         @OA\Property(property="vo_provider_name", type="text"),
       *                         @OA\Property(property="vo_provider_domain", type="text"),
@@ -519,7 +519,7 @@ class VirtualOfficeController extends Controller
         }
 
         $validated = $request->validate([
-            'vo_provider_name' => 'required',
+            'vo_provider_name' => '',
             'vo_provider_domain' => '',
             'vo_provider_username' => '',
             'vo_provider_password' => '',

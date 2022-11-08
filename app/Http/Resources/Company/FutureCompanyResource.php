@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Company;
 
+use App\Http\Resources\Director\DirectorResource;
 use App\Http\Resources\Helper\FileResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -24,6 +25,12 @@ class FutureCompanyResource extends JsonResource
             'virtual_office_uuid' => $this->virtual_office_uuid,
             'revival_date' => $this->revival_date,
             'revival_fee' => $this->revival_fee,
+            'recommended_director_uuid' => $this->recommended_director_uuid,
+            'director' => new DirectorResource($this->director),
+            'revived' => $this->revived,
+            'db_report_number' => $this->db_report_number,
+            'comment' => $this->comment,
+
             'uploaded_files' => FileResource::collection($this->files),
             'status' => $this->status
         ];

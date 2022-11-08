@@ -56,7 +56,7 @@ class FutureCompanyController extends Controller
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
       *                         type="object",
-      *                         required={"sic_code_uuid", "incorporation_state_uuid", "doing_business_in_state_uuid", "virtual_office_uuid", "revival_date", "revival_fee"},
+      *                         required={},
       *                         
       *                         @OA\Property(property="sic_code_uuid", type="text"),
       *                         @OA\Property(property="incorporation_state_uuid", type="text"),
@@ -64,6 +64,11 @@ class FutureCompanyController extends Controller
       *                         @OA\Property(property="virtual_office_uuid", type="text"),
       *                         @OA\Property(property="revival_date", type="text"),
       *                         @OA\Property(property="revival_fee", type="text"),
+      *                         @OA\Property(property="future_website_link", type="text"),
+      *                         @OA\Property(property="recommended_director_uuid", type="text"),
+      *                         @OA\Property(property="revived", type="text"),
+      *                         @OA\Property(property="db_report_number", type="text"),
+      *                         @OA\Property(property="comment", type="text"),
       *                         @OA\Property(property="files[]", type="binary"),
       *                     ),
       *                 ),
@@ -85,17 +90,22 @@ class FutureCompanyController extends Controller
         }
 
         $validated = $request->validate([
-            'sic_code_uuid' => 'required',
-            'incorporation_state_uuid' => 'required',
-            'doing_business_in_state_uuid' => 'required',
-            'virtual_office_uuid' => 'required',
-            'revival_date' => 'required',
-            'revival_fee' => 'required',
+            'sic_code_uuid' => '',
+            'incorporation_state_uuid' => '',
+            'doing_business_in_state_uuid' => '',
+            'virtual_office_uuid' => '',
+            'revival_date' => '',
+            'revival_fee' => '',
+            'future_website_link' => '',
+            'recommended_director_uuid' => '',
+            'revived' => '',
+            'db_report_number' => '',
+            'comment' => '',
 
             'user_uuid' => ''
         ]);
 
-        $check = [];
+        /*$check = [];
 
         $tmpCheck = $this->futureCompanyService->check($validated);
         $check = array_merge($check, $tmpCheck);
@@ -105,7 +115,7 @@ class FutureCompanyController extends Controller
             return response()->json([
                 'data' => $check,
             ], 409);
-        }
+        }*/
 
         $futureCompany = $this->futureCompanyService->create($validated);
 
@@ -171,7 +181,7 @@ class FutureCompanyController extends Controller
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
       *                         type="object",
-      *                         required={"sic_code_uuid", "incorporation_state_uuid", "doing_business_in_state_uuid", "virtual_office_uuid", "revival_date", "revival_fee"},
+      *                         required={},
       *                         
       *                         @OA\Property(property="sic_code_uuid", type="text"),
       *                         @OA\Property(property="incorporation_state_uuid", type="text"),
@@ -179,6 +189,11 @@ class FutureCompanyController extends Controller
       *                         @OA\Property(property="virtual_office_uuid", type="text"),
       *                         @OA\Property(property="revival_date", type="text"),
       *                         @OA\Property(property="revival_fee", type="text"),
+      *                         @OA\Property(property="future_website_link", type="text"),
+      *                         @OA\Property(property="recommended_director_uuid", type="text"),
+      *                         @OA\Property(property="revived", type="text"),
+      *                         @OA\Property(property="db_report_number", type="text"),
+      *                         @OA\Property(property="comment", type="text"),
       *                         @OA\Property(property="files[]", type="binary"),
       *                         @OA\Property(property="files_to_delete[]", type="text")
       *                     ),
@@ -201,16 +216,22 @@ class FutureCompanyController extends Controller
         }
 
         $validated = $request->validate([
-            'sic_code_uuid' => 'required',
-            'incorporation_state_uuid' => 'required',
-            'doing_business_in_state_uuid' => 'required',
-            'virtual_office_uuid' => 'required',
-            'revival_date' => 'required',
-            'revival_fee' => 'required',
+            'sic_code_uuid' => '',
+            'incorporation_state_uuid' => '',
+            'doing_business_in_state_uuid' => '',
+            'virtual_office_uuid' => '',
+            'revival_date' => '',
+            'revival_fee' => '',
+            'future_website_link' => '',
+            'recommended_director_uuid' => '',
+            'revived' => '',
+            'db_report_number' => '',
+            'comment' => '',
+
             'files_to_delete' => 'array'
         ]);
 
-        $check = [];
+        /*$check = [];
 
         $tmpCheck = $this->futureCompanyService->check_ignore($validated, $futureCompany->uuid);
         $check = array_merge($check, $tmpCheck);
@@ -220,7 +241,7 @@ class FutureCompanyController extends Controller
             return response()->json([
                 'data' => $check,
             ], 409);
-        }
+        }*/
 
         $futureCompany = $this->futureCompanyService->update($futureCompany, $validated, $request->user_uuid);
 
@@ -309,7 +330,7 @@ class FutureCompanyController extends Controller
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
       *                         type="object",
-      *                         required={"sic_code_uuid", "incorporation_state_uuid", "doing_business_in_state_uuid", "virtual_office_uuid", "revival_date", "revival_fee"},
+      *                         required={},
       *                         
       *                         @OA\Property(property="sic_code_uuid", type="text"),
       *                         @OA\Property(property="incorporation_state_uuid", type="text"),
@@ -317,6 +338,11 @@ class FutureCompanyController extends Controller
       *                         @OA\Property(property="virtual_office_uuid", type="text"),
       *                         @OA\Property(property="revival_date", type="text"),
       *                         @OA\Property(property="revival_fee", type="text"),
+      *                         @OA\Property(property="future_website_link", type="text"),
+      *                         @OA\Property(property="recommended_director_uuid", type="text"),
+      *                         @OA\Property(property="revived", type="text"),
+      *                         @OA\Property(property="db_report_number", type="text"),
+      *                         @OA\Property(property="comment", type="text"),
       *                         @OA\Property(property="files[]", type="binary"),
       *                     ),
       *                 ),
@@ -338,17 +364,22 @@ class FutureCompanyController extends Controller
         }
 
         $validated = $request->validate([
-            'sic_code_uuid' => 'required',
-            'incorporation_state_uuid' => 'required',
-            'doing_business_in_state_uuid' => 'required',
-            'virtual_office_uuid' => 'required',
-            'revival_date' => 'required',
-            'revival_fee' => 'required',
+            'sic_code_uuid' => '',
+            'incorporation_state_uuid' => '',
+            'doing_business_in_state_uuid' => '',
+            'virtual_office_uuid' => '',
+            'revival_date' => '',
+            'revival_fee' => '',
+            'future_website_link' => '',
+            'recommended_director_uuid' => '',
+            'revived' => '',
+            'db_report_number' => '',
+            'comment' => '',
 
             'user_uuid' => ''
         ]);
 
-        $check = [];
+        /*$check = [];
 
         $tmpCheck = $this->futureCompanyService->check($validated);
         $check = array_merge($check, $tmpCheck);
@@ -358,7 +389,7 @@ class FutureCompanyController extends Controller
             return response()->json([
                 'data' => $check,
             ], 409);
-        }
+        }*/
 
         $futureCompany = $this->futureCompanyService->pending($validated);
 
@@ -389,7 +420,7 @@ class FutureCompanyController extends Controller
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
       *                         type="object",
-      *                         required={"sic_code_uuid", "incorporation_state_uuid", "doing_business_in_state_uuid", "virtual_office_uuid", "revival_date", "revival_fee"},
+      *                         required={},
       *                         
       *                         @OA\Property(property="sic_code_uuid", type="text"),
       *                         @OA\Property(property="incorporation_state_uuid", type="text"),
@@ -397,6 +428,11 @@ class FutureCompanyController extends Controller
       *                         @OA\Property(property="virtual_office_uuid", type="text"),
       *                         @OA\Property(property="revival_date", type="text"),
       *                         @OA\Property(property="revival_fee", type="text"),
+      *                         @OA\Property(property="future_website_link", type="text"),
+      *                         @OA\Property(property="recommended_director_uuid", type="text"),
+      *                         @OA\Property(property="revived", type="text"),
+      *                         @OA\Property(property="db_report_number", type="text"),
+      *                         @OA\Property(property="comment", type="text"),
       *                         @OA\Property(property="files[]", type="binary"),
       *                         @OA\Property(property="files_to_delete[]", type="text")
       *                     ),
@@ -419,18 +455,24 @@ class FutureCompanyController extends Controller
         }
 
         $validated = $request->validate([
-            'sic_code_uuid' => 'required',
-            'incorporation_state_uuid' => 'required',
-            'doing_business_in_state_uuid' => 'required',
-            'virtual_office_uuid' => 'required',
-            'revival_date' => 'required',
-            'revival_fee' => 'required',
+            'sic_code_uuid' => '',
+            'incorporation_state_uuid' => '',
+            'doing_business_in_state_uuid' => '',
+            'virtual_office_uuid' => '',
+            'revival_date' => '',
+            'revival_fee' => '',
+            'future_website_link' => '',
+            'recommended_director_uuid' => '',
+            'revived' => '',
+            'db_report_number' => '',
+            'comment' => '',
+
             'files_to_delete' => 'array'
         ]);
 
         $futureCompany = FutureCompany::where('uuid', $uuid)->first();
 
-        $check = [];
+        /*$check = [];
 
         $tmpCheck = $this->futureCompanyService->check_ignore($validated, $futureCompany->uuid);
         $check = array_merge($check, $tmpCheck);
@@ -440,7 +482,7 @@ class FutureCompanyController extends Controller
             return response()->json([
                 'data' => $check,
             ], 409);
-        }
+        }*/
 
         $futureCompany = $this->futureCompanyService->pending_update($futureCompany, $validated, $request->user_uuid);
 
@@ -471,7 +513,7 @@ class FutureCompanyController extends Controller
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
       *                         type="object",
-      *                         required={"sic_code_uuid", "incorporation_state_uuid", "doing_business_in_state_uuid", "virtual_office_uuid", "revival_date", "revival_fee"},
+      *                         required={},
       *                         
       *                         @OA\Property(property="sic_code_uuid", type="text"),
       *                         @OA\Property(property="incorporation_state_uuid", type="text"),
@@ -479,6 +521,11 @@ class FutureCompanyController extends Controller
       *                         @OA\Property(property="virtual_office_uuid", type="text"),
       *                         @OA\Property(property="revival_date", type="text"),
       *                         @OA\Property(property="revival_fee", type="text"),
+      *                         @OA\Property(property="future_website_link", type="text"),
+      *                         @OA\Property(property="recommended_director_uuid", type="text"),
+      *                         @OA\Property(property="revived", type="text"),
+      *                         @OA\Property(property="db_report_number", type="text"),
+      *                         @OA\Property(property="comment", type="text"),
       *                         @OA\Property(property="files[]", type="binary"),
       *                         @OA\Property(property="files_to_delete[]", type="text")
       *                     ),
@@ -501,18 +548,24 @@ class FutureCompanyController extends Controller
         }
 
         $validated = $request->validate([
-            'sic_code_uuid' => 'required',
-            'incorporation_state_uuid' => 'required',
-            'doing_business_in_state_uuid' => 'required',
-            'virtual_office_uuid' => 'required',
-            'revival_date' => 'required',
-            'revival_fee' => 'required',
+            'sic_code_uuid' => '',
+            'incorporation_state_uuid' => '',
+            'doing_business_in_state_uuid' => '',
+            'virtual_office_uuid' => '',
+            'revival_date' => '',
+            'revival_fee' => '',
+            'future_website_link' => '',
+            'recommended_director_uuid' => '',
+            'revived' => '',
+            'db_report_number' => '',
+            'comment' => '',
+
             'files_to_delete' => 'array'
         ]);
 
         $futureCompany = FutureCompany::where('uuid', $uuid)->first();
 
-        $check = [];
+        /*$check = [];
 
         $tmpCheck = $this->futureCompanyService->check_ignore($validated, $futureCompany->uuid);
         $check = array_merge($check, $tmpCheck);
@@ -522,7 +575,7 @@ class FutureCompanyController extends Controller
             return response()->json([
                 'data' => $check,
             ], 409);
-        }
+        }*/
 
         $futureCompany = $this->futureCompanyService->accept($futureCompany, $validated, $request->user_uuid);
 
