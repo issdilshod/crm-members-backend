@@ -50,7 +50,7 @@ class VirtualOfficeService{
             'status' => Config::get('common.status.actived')
         ]);
 
-        return new VirtualOffice($virtualOffice);
+        return new VirtualOfficeResource($virtualOffice);
     }
 
     public function update(VirtualOffice $virtualOffice, $entity, $user_uuid)

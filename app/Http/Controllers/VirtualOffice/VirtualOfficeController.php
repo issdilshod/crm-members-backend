@@ -89,20 +89,20 @@ class VirtualOfficeController extends Controller
 
         $validated = $request->validate([
             'vo_provider_name' => 'required',
-            'vo_provider_domain' => 'required',
-            'vo_provider_username' => 'required',
-            'vo_provider_password' => 'required',
-            'street_address' => 'required',
+            'vo_provider_domain' => '',
+            'vo_provider_username' => '',
+            'vo_provider_password' => '',
+            'street_address' => '',
             'address_line2' => '',
-            'city' => 'required',
-            'state' => 'required',
-            'postal' => 'required',
-            'country' => 'required',
+            'city' => '',
+            'state' => '',
+            'postal' => '',
+            'country' => '',
 
             'user_uuid' => ''
         ]);
 
-        $check = [];
+        /*$check = [];
 
         $tmpCheck = $this->virtualOfficeService->check($validated);
         $check = array_merge($check, $tmpCheck);
@@ -112,7 +112,7 @@ class VirtualOfficeController extends Controller
             return response()->json([
                 'data' => $check,
             ], 409);
-        }
+        }*/
 
         $virtualOffice = $this->virtualOfficeService->create($validated);
 
@@ -209,18 +209,18 @@ class VirtualOfficeController extends Controller
 
         $validated = $request->validate([
             'vo_provider_name' => 'required',
-            'vo_provider_domain' => 'required',
-            'vo_provider_username' => 'required',
-            'vo_provider_password' => 'required',
-            'street_address' => 'required',
+            'vo_provider_domain' => '',
+            'vo_provider_username' => '',
+            'vo_provider_password' => '',
+            'street_address' => '',
             'address_line2' => '',
-            'city' => 'required',
-            'state' => 'required',
-            'postal' => 'required',
-            'country' => 'required'
+            'city' => '',
+            'state' => '',
+            'postal' => '',
+            'country' => ''
         ]);
 
-        $check = [];
+        /*$check = [];
 
         $tmpCheck = $this->virtualOfficeService->check_ignore($validated, $virtualOffice->uuid);
         $check = array_merge($check, $tmpCheck);
@@ -230,7 +230,7 @@ class VirtualOfficeController extends Controller
             return response()->json([
                 'data' => $check,
             ], 409);
-        }
+        }*/
 
         $virtualOffice = $this->virtualOfficeService->update($virtualOffice, $validated, $request->user_uuid);
 
@@ -350,20 +350,20 @@ class VirtualOfficeController extends Controller
 
         $validated = $request->validate([
             'vo_provider_name' => 'required',
-            'vo_provider_domain' => 'required',
-            'vo_provider_username' => 'required',
-            'vo_provider_password' => 'required',
-            'street_address' => 'required',
+            'vo_provider_domain' => '',
+            'vo_provider_username' => '',
+            'vo_provider_password' => '',
+            'street_address' => '',
             'address_line2' => '',
-            'city' => 'required',
-            'state' => 'required',
-            'postal' => 'required',
-            'country' => 'required',
+            'city' => '',
+            'state' => '',
+            'postal' => '',
+            'country' => '',
 
             'user_uuid' => ''
         ]);
 
-        $check = [];
+        /*$check = [];
 
         $tmpCheck = $this->virtualOfficeService->check($validated);
         $check = array_merge($check, $tmpCheck);
@@ -373,7 +373,7 @@ class VirtualOfficeController extends Controller
             return response()->json([
                 'data' => $check,
             ], 409);
-        }
+        }*/
 
         $virtualOffice = $this->virtualOfficeService->pending($validated);
 
@@ -435,20 +435,20 @@ class VirtualOfficeController extends Controller
 
         $validated = $request->validate([
             'vo_provider_name' => 'required',
-            'vo_provider_domain' => 'required',
-            'vo_provider_username' => 'required',
-            'vo_provider_password' => 'required',
-            'street_address' => 'required',
+            'vo_provider_domain' => '',
+            'vo_provider_username' => '',
+            'vo_provider_password' => '',
+            'street_address' => '',
             'address_line2' => '',
-            'city' => 'required',
-            'state' => 'required',
-            'postal' => 'required',
-            'country' => 'required'
+            'city' => '',
+            'state' => '',
+            'postal' => '',
+            'country' => ''
         ]);
 
         $virtualOffice = VirtualOffice::where('uuid', $uuid)->first();
 
-        $check = [];
+        /*$check = [];
 
         $tmpCheck = $this->virtualOfficeService->check_ignore($validated, $virtualOffice->uuid);
         $check = array_merge($check, $tmpCheck);
@@ -458,7 +458,7 @@ class VirtualOfficeController extends Controller
             return response()->json([
                 'data' => $check,
             ], 409);
-        }
+        }*/
 
         $virtualOffice = $this->virtualOfficeService->pending_update($virtualOffice, $validated, $request->user_uuid);
 
@@ -520,20 +520,20 @@ class VirtualOfficeController extends Controller
 
         $validated = $request->validate([
             'vo_provider_name' => 'required',
-            'vo_provider_domain' => 'required',
-            'vo_provider_username' => 'required',
-            'vo_provider_password' => 'required',
-            'street_address' => 'required',
+            'vo_provider_domain' => '',
+            'vo_provider_username' => '',
+            'vo_provider_password' => '',
+            'street_address' => '',
             'address_line2' => '',
-            'city' => 'required',
-            'state' => 'required',
-            'postal' => 'required',
-            'country' => 'required'
+            'city' => '',
+            'state' => '',
+            'postal' => '',
+            'country' => ''
         ]);
 
         $virtualOffice = VirtualOffice::where('uuid', $uuid)->first();
 
-        $check = [];
+        /*$check = [];
 
         $tmpCheck = $this->virtualOfficeService->check_ignore($validated, $virtualOffice->uuid);
         $check = array_merge($check, $tmpCheck);
@@ -543,7 +543,7 @@ class VirtualOfficeController extends Controller
             return response()->json([
                 'data' => $check,
             ], 409);
-        }
+        }*/
 
         $virtualOffice = $this->virtualOfficeService->accept($virtualOffice, $validated, $request->user_uuid);
 
