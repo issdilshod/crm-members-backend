@@ -35,8 +35,10 @@ class VirtualOfficeController extends Controller
     public function index(Request $request)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.view'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.view'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $virtualOffices = $this->virtualOfficeService->all();
@@ -83,8 +85,10 @@ class VirtualOfficeController extends Controller
     public function store(Request $request)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.store'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.store'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $validated = $request->validate([
@@ -145,8 +149,10 @@ class VirtualOfficeController extends Controller
     public function show(Request $request, VirtualOffice $virtualOffice)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.view'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.view'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $virtualOffice = $this->virtualOfficeService->one($virtualOffice);
@@ -203,8 +209,10 @@ class VirtualOfficeController extends Controller
     public function update(Request $request, VirtualOffice $virtualOffice)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.update'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.update'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $validated = $request->validate([
@@ -263,8 +271,10 @@ class VirtualOfficeController extends Controller
     public function destroy(Request $request, VirtualOffice $virtualOffice)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.delete'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.delete'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $this->virtualOfficeService->delete($virtualOffice);
@@ -296,8 +306,10 @@ class VirtualOfficeController extends Controller
     public function search(Request $request, $search)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.view'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.view'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $virtualOffice = $this->virtualOfficeService->search($search);
@@ -344,8 +356,10 @@ class VirtualOfficeController extends Controller
     public function pending(Request $request)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.save'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.save'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $validated = $request->validate([
@@ -429,8 +443,10 @@ class VirtualOfficeController extends Controller
     public function pending_update(Request $request, $uuid)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.save'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.save'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $validated = $request->validate([
@@ -514,8 +530,10 @@ class VirtualOfficeController extends Controller
     public function accept(Request $request, $uuid)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.accept'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.accept'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $validated = $request->validate([
@@ -576,8 +594,10 @@ class VirtualOfficeController extends Controller
     public function reject(Request $request, $uuid)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.reject'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.reject'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $this->virtualOfficeService->reject($uuid, $request->user_uuid);

@@ -35,6 +35,10 @@ class PermissionSeeder extends Seeder
                 'alias' => Config::get('common.permission.director.save')
             ],
             [
+                'permission_name' => 'Director save (cards not belong to user)',
+                'alias' => Config::get('common.permission.director.pre_save')
+            ],
+            [
                 'permission_name' => 'Director accept',
                 'alias' => Config::get('common.permission.director.accept')
             ],
@@ -62,6 +66,10 @@ class PermissionSeeder extends Seeder
             [
                 'permission_name' => 'Company save',
                 'alias' => Config::get('common.permission.company.save')
+            ],
+            [
+                'permission_name' => 'Company save (cards not belong to user)',
+                'alias' => Config::get('common.permission.company.pre_save')
             ],
             [
                 'permission_name' => 'Company accept',

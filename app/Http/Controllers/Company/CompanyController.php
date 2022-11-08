@@ -53,8 +53,10 @@ class CompanyController extends Controller
     public function index(Request $request)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.view'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.view'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $companies = $this->companyService->all();
@@ -142,8 +144,10 @@ class CompanyController extends Controller
     public function store(Request $request)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.store'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.store'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $validated = $request->validate([
@@ -303,8 +307,10 @@ class CompanyController extends Controller
     public function show(Request $request, Company $company)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.view'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.view'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $company = $this->companyService->one($company);
@@ -405,8 +411,10 @@ class CompanyController extends Controller
     public function update(Request $request, Company $company)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.update'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.update'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $validated = $request->validate([
@@ -607,8 +615,10 @@ class CompanyController extends Controller
     public function destroy(Request $request, Company $company)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.delete'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.delete'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $this->companyService->delete($company);
@@ -640,8 +650,10 @@ class CompanyController extends Controller
     public function search(Request $request, $search)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.view'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.view'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $companies = $this->companyService->search($search);
@@ -728,8 +740,10 @@ class CompanyController extends Controller
     public function pending(Request $request)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.save'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.save'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $validated = $request->validate([
@@ -966,9 +980,19 @@ class CompanyController extends Controller
       */
     public function pending_update(Request $request, $uuid)
     {
+        $company = Company::where('uuid', $uuid)->first();
+
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.save'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.save'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            } else{
+                if ($company->user_uuid!=$request->user_uuid){
+                    if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.pre_save'))){
+                        return response()->json([ 'data' => 'Not Authorized' ], 403);
+                    }
+                }
+            }
         }
 
         $validated = $request->validate([
@@ -1020,8 +1044,6 @@ class CompanyController extends Controller
         ]);
 
         $check = [];
-
-        $company = Company::where('uuid', $uuid)->first();
 
         /*if (isset($validated['emails'])){
             $tmpCheck = $this->emailService->check_ignore($validated['emails'], $company->uuid);
@@ -1250,8 +1272,10 @@ class CompanyController extends Controller
     public function accept(Request $request, $uuid)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.accept'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.accept'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
     
         $validated = $request->validate([
@@ -1462,8 +1486,10 @@ class CompanyController extends Controller
     public function reject(Request $request, $uuid)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.reject'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.reject'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $this->companyService->reject($uuid, $request->user_uuid);
@@ -1518,6 +1544,10 @@ class CompanyController extends Controller
 
         if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.save'))){
             $permissions[] = Config::get('common.permission.company.save');
+        }
+
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.pre_save'))){
+            $permissions[] = Config::get('common.permission.company.pre_save');
         }
 
         if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.delete'))){

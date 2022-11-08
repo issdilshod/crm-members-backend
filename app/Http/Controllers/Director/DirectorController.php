@@ -46,8 +46,10 @@ class DirectorController extends Controller
     public function index(Request $request)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.view'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.view'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $directors = $this->directorService->all();
@@ -115,8 +117,10 @@ class DirectorController extends Controller
     public function store(Request $request)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.store'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.store'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $validated = $request->validate([
@@ -237,8 +241,10 @@ class DirectorController extends Controller
     public function show(Request $request, Director $director)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.view'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.view'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $director = $this->directorService->one($director);
@@ -317,8 +323,10 @@ class DirectorController extends Controller
     public function update(Request $request, Director $director)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.update'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.update'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $validated = $request->validate([
@@ -455,8 +463,10 @@ class DirectorController extends Controller
     public function destroy(Request $request, Director $director)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.delete'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.delete'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $this->directorService->delete($director);
@@ -488,8 +498,10 @@ class DirectorController extends Controller
     public function search(Request $request, $search)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.view'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.view'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $directors = $this->directorService->search($search);
@@ -557,8 +569,10 @@ class DirectorController extends Controller
     public function pending(Request $request)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.save'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.save'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $validated = $request->validate([
@@ -727,9 +741,19 @@ class DirectorController extends Controller
       */
     public function pending_update(Request $request, $uuid)
     {
+        $director = Director::where('uuid', $uuid)->first();
+
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.save'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.save'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            } else{
+                if ($director->user_uuid!=$request->user_uuid){
+                    if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.pre_save'))){
+                        return response()->json([ 'data' => 'Not Authorized' ], 403);
+                    }
+                }
+            }
         }
 
         $validated = $request->validate([
@@ -754,8 +778,6 @@ class DirectorController extends Controller
 
             'user_uuid' => 'string'
         ]);
-
-        $director = Director::where('uuid', $uuid)->first();
 
         $check = [];
 
@@ -921,8 +943,10 @@ class DirectorController extends Controller
     public function accept(Request $request, $uuid)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.accept'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.accept'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
     
         $validated = $request->validate([
@@ -1062,8 +1086,10 @@ class DirectorController extends Controller
     public function reject(Request $request, $uuid)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.reject'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.reject'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $this->directorService->reject($uuid, $request->user_uuid);
@@ -1120,6 +1146,10 @@ class DirectorController extends Controller
 
         if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.save'))){
             $permissions[] = Config::get('common.permission.director.save');
+        }
+
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.pre_save'))){
+            $permissions[] = Config::get('common.permission.director.pre_save');
         }
 
         if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.delete'))){

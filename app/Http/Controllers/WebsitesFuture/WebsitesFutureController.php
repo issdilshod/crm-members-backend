@@ -34,8 +34,10 @@ class WebsitesFutureController extends Controller
     public function index(Request $request)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.view'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.view'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $websitesFuture = $this->websitesFutureService->all();
@@ -74,8 +76,10 @@ class WebsitesFutureController extends Controller
     public function store(Request $request)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.store'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.store'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $validated = $request->validate([
@@ -127,8 +131,10 @@ class WebsitesFutureController extends Controller
     public function show(Request $request, $uuid)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.view'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.view'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $websitesFuture = WebsitesFuture::where('uuid', $uuid)->first();
@@ -179,8 +185,10 @@ class WebsitesFutureController extends Controller
     public function update(Request $request, $uuid)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.update'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.update'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $validated = $request->validate([
@@ -233,8 +241,10 @@ class WebsitesFutureController extends Controller
     public function destroy(Request $request, WebsitesFuture $websitesFuture)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.delete'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.delete'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $this->websitesFutureService->delete($websitesFuture);
@@ -271,8 +281,10 @@ class WebsitesFutureController extends Controller
     public function pending(Request $request)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.save'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.save'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $validated = $request->validate([
@@ -339,8 +351,10 @@ class WebsitesFutureController extends Controller
     public function pending_update(Request $request, $uuid)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.save'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.save'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $validated = $request->validate([
@@ -408,8 +422,10 @@ class WebsitesFutureController extends Controller
     public function accept(Request $request, $uuid)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.accept'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.accept'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $validated = $request->validate([
@@ -462,8 +478,10 @@ class WebsitesFutureController extends Controller
     public function reject(Request $request, $uuid)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.reject'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.reject'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $this->websitesFutureService->reject($uuid, $request->user_uuid);
@@ -495,8 +513,10 @@ class WebsitesFutureController extends Controller
     public function search(Request $request, $search)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.view'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.view'))){
+                return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }
         }
 
         $websitesFuture = $this->websitesFutureService->search($search);

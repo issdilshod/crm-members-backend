@@ -159,11 +159,13 @@ class ChatController extends Controller
     public function update(Request $request, Chat $chat)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.chat.store'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
-        } else {
-            if ($chat->user_uuid!=$request->user_uuid){ // chat not created by user
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.chat.store'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
+            } else {
+                if ($chat->user_uuid!=$request->user_uuid){ // chat not created by user
+                    return response()->json([ 'data' => 'Not Authorized' ], 403);
+                }
             }
         }
 
@@ -203,11 +205,13 @@ class ChatController extends Controller
     public function destroy(Request $request, Chat $chat)
     {
         // permission
-        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.chat.store'))){
-            return response()->json([ 'data' => 'Not Authorized' ], 403);
-        } else {
-            if ($chat->user_uuid!=$request->user_uuid){ // chat not created by user
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.chat.store'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
+            } else {
+                if ($chat->user_uuid!=$request->user_uuid){ // chat not created by user
+                    return response()->json([ 'data' => 'Not Authorized' ], 403);
+                }
             }
         }
 

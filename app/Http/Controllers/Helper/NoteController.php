@@ -40,8 +40,8 @@ class NoteController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'text' => 'required|string',
-            'user_uuid' => 'string'
+            'text' => '',
+            'user_uuid' => ''
         ]);
 
         $note = Note::create($validated);
@@ -163,8 +163,8 @@ class NoteController extends Controller
         }
 
         $validated = $request->validate([
-            'text' => 'required',
-            'user_uuid' => 'string'
+            'text' => '',
+            'user_uuid' => ''
         ]);
 
         $note->update($validated);

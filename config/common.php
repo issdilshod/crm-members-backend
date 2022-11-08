@@ -15,6 +15,7 @@ return [
             'update' => 'director_update',
             'delete' => 'director_delete',
             'save' => 'director_save', // pending add/update
+            'pre_save' => 'director_pre_save',
             'accept' => 'director_accept',
             'reject' => 'director_reject',
             'view' => 'director_view'
@@ -24,6 +25,7 @@ return [
             'update' => 'company_update',
             'delete' => 'company_delete',
             'save' => 'company_save', // pending add/update
+            'pre_save' => 'company_pre_save',
             'accept' => 'company_accept',
             'reject' => 'company_reject',
             'view' => 'company_view'
