@@ -95,6 +95,7 @@ return [
             'pending_update' => 'Director {name} card update approval request sent',
             'reject' => 'Director {name} card rejected',
             'accept' => 'Director {name} card accepted',
+            'override' => 'Director {name} card override',
         ],
         'company' => [
             'add' => 'Company {name} card added',
@@ -103,6 +104,7 @@ return [
             'pending_update' => 'Company {name} card update approval request sent',
             'reject' => 'Company {name} card rejected',
             'accept' => 'Company {name} card accepted',
+            'override' => 'Company {name} card override',
         ],
         'websites_future' => [
             'add' => 'Future website {link} card added',

@@ -2865,6 +2865,205 @@
                 }
             }
         },
+        "/api/company-override/{uuid}": {
+            "put": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Override company (not working on swagger)",
+                "description": "Override company",
+                "operationId": "override_company",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "company uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [],
+                                "properties": {
+                                    "legal_name": {
+                                        "type": "text"
+                                    },
+                                    "sic_code_uuid": {
+                                        "type": "text"
+                                    },
+                                    "director_uuid": {
+                                        "type": "text"
+                                    },
+                                    "incorporation_state_uuid": {
+                                        "type": "text"
+                                    },
+                                    "incorporation_state_name": {
+                                        "type": "text"
+                                    },
+                                    "doing_business_in_state_uuid": {
+                                        "type": "text"
+                                    },
+                                    "doing_business_in_state_name": {
+                                        "type": "text"
+                                    },
+                                    "ein": {
+                                        "type": "text"
+                                    },
+                                    "business_number": {
+                                        "type": "text"
+                                    },
+                                    "business_number_type": {
+                                        "type": "text"
+                                    },
+                                    "voip_provider": {
+                                        "type": "text"
+                                    },
+                                    "voip_login": {
+                                        "type": "text"
+                                    },
+                                    "voip_password": {
+                                        "type": "text"
+                                    },
+                                    "business_mobile_number": {
+                                        "type": "text"
+                                    },
+                                    "business_mobile_number_type": {
+                                        "type": "text"
+                                    },
+                                    "business_mobile_number_provider": {
+                                        "type": "text"
+                                    },
+                                    "business_mobile_number_login": {
+                                        "type": "text"
+                                    },
+                                    "business_mobile_number_password": {
+                                        "type": "text"
+                                    },
+                                    "website": {
+                                        "type": "text"
+                                    },
+                                    "db_report_number": {
+                                        "type": "text"
+                                    },
+                                    "address[street_address]": {
+                                        "type": "text"
+                                    },
+                                    "address[address_line_2]": {
+                                        "type": "text"
+                                    },
+                                    "address[city]": {
+                                        "type": "text"
+                                    },
+                                    "address[state]": {
+                                        "type": "text"
+                                    },
+                                    "address[postal]": {
+                                        "type": "text"
+                                    },
+                                    "address[country]": {
+                                        "type": "text"
+                                    },
+                                    "emails[hosting_uuid]": {
+                                        "type": "text"
+                                    },
+                                    "emails[email]": {
+                                        "type": "text"
+                                    },
+                                    "emails[password]": {
+                                        "type": "text"
+                                    },
+                                    "emails[phone]": {
+                                        "type": "text"
+                                    },
+                                    "bank_account[name]": {
+                                        "type": "text"
+                                    },
+                                    "bank_account[website]": {
+                                        "type": "text"
+                                    },
+                                    "bank_account[username]": {
+                                        "type": "text"
+                                    },
+                                    "bank_account[password]": {
+                                        "type": "text"
+                                    },
+                                    "bank_account[account_number]": {
+                                        "type": "text"
+                                    },
+                                    "bank_account[routing_number]": {
+                                        "type": "text"
+                                    },
+                                    "bank_account_security[][question]": {
+                                        "type": "text"
+                                    },
+                                    "bank_account_security[][answer]": {
+                                        "type": "text"
+                                    },
+                                    "bank_account_security_to_delete[]": {
+                                        "type": "text"
+                                    },
+                                    "future_web[][domain]": {
+                                        "type": "text"
+                                    },
+                                    "future_web[][category]": {
+                                        "type": "text"
+                                    },
+                                    "future_web_to_delete[]": {
+                                        "type": "text"
+                                    },
+                                    "files[incorporation_state][]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "files[doing_business_in_state][]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "files[company_ein][]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "files[db_report][]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "files_to_delete[]": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
         "/api/future-company": {
             "get": {
                 "tags": [
@@ -4572,6 +4771,156 @@
                     },
                     "401": {
                         "description": "Not Authenticated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/director-override/{uuid}": {
+            "put": {
+                "tags": [
+                    "Director"
+                ],
+                "summary": "Override director (not working on swagger)",
+                "description": "Override director",
+                "operationId": "override_director",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "director uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [],
+                                "properties": {
+                                    "first_name": {
+                                        "type": "text"
+                                    },
+                                    "middle_name": {
+                                        "type": "text"
+                                    },
+                                    "last_name": {
+                                        "type": "text"
+                                    },
+                                    "date_of_birth": {
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "ssn_cpn": {
+                                        "type": "text"
+                                    },
+                                    "company_association": {
+                                        "type": "text"
+                                    },
+                                    "phone_type": {
+                                        "type": "text"
+                                    },
+                                    "phone_number": {
+                                        "type": "text"
+                                    },
+                                    "address[dl_address][street_address]": {
+                                        "type": "text"
+                                    },
+                                    "address[dl_address][address_line_2]": {
+                                        "type": "text"
+                                    },
+                                    "address[dl_address][city]": {
+                                        "type": "text"
+                                    },
+                                    "address[dl_address][state]": {
+                                        "type": "text"
+                                    },
+                                    "address[dl_address][postal]": {
+                                        "type": "text"
+                                    },
+                                    "address[dl_address][country]": {
+                                        "type": "text"
+                                    },
+                                    "address[credit_home_address][street_address]": {
+                                        "type": "text"
+                                    },
+                                    "address[credit_home_address][address_line_2]": {
+                                        "type": "text"
+                                    },
+                                    "address[credit_home_address][city]": {
+                                        "type": "text"
+                                    },
+                                    "address[credit_home_address][state]": {
+                                        "type": "text"
+                                    },
+                                    "address[credit_home_address][postal]": {
+                                        "type": "text"
+                                    },
+                                    "address[credit_home_address][country]": {
+                                        "type": "text"
+                                    },
+                                    "emails[hosting_uuid]": {
+                                        "type": "text"
+                                    },
+                                    "emails[email]": {
+                                        "type": "text"
+                                    },
+                                    "emails[password]": {
+                                        "type": "text"
+                                    },
+                                    "emails[phone]": {
+                                        "type": "text"
+                                    },
+                                    "files[dl_upload][front][]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "files[dl_upload][back][]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "files[ssn_upload][front][]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "files[ssn_upload][back][]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "files[cpn_docs_upload][]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    },
+                                    "files_to_delete[]": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
                     },
                     "404": {
                         "description": "Resource Not Found"

@@ -81,6 +81,7 @@ Route::middleware('auth.custom')->group(function() {
     Route::get('api/director-user', [DirectorController::class, 'by_user']);
     Route::get('api/director-permission', [DirectorController::class, 'permission']);
     Route::get('api/director-list/{search?}', [DirectorController::class, 'director_list']);
+    Route::put('api/director-override/{uuid}', [DirectorController::class, 'override']);
 
     // companies
     Route::resource('api/company', CompanyController::class);
@@ -96,6 +97,7 @@ Route::middleware('auth.custom')->group(function() {
     Route::put('api/company-reject/{uuid}', [CompanyController::class, 'reject']);
     Route::get('api/company-user/', [CompanyController::class, 'by_user']);
     Route::get('api/company-permission', [CompanyController::class, 'permission']);
+    Route::put('api/company-override/{uuid}', [CompanyController::class, 'override']);
 
     // websites future
     Route::resource('api/future-websites', WebsitesFutureController::class);

@@ -440,7 +440,7 @@ class DirectorService {
         return $director;
     }
 
-    public function accept(Director $director, $entity, $user_uuid)
+    public function accept(Director $director, $entity, $user_uuid, $override = false)
     {
         $entity['status'] = Config::get('common.status.actived');
         $entity['approved'] = Config::get('common.status.actived');
@@ -455,7 +455,7 @@ class DirectorService {
             'entity_uuid' => $director['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
-            'description' => str_replace("{name}", $director_fn, Config::get('common.activity.director.accept')),
+            'description' => str_replace("{name}", $director_fn, ($override?Config::get('common.activity.director.override'):Config::get('common.activity.director.accept'))),
             'changes' => json_encode($entity),
             'action_code' => Config::get('common.activity.codes.director_accept'),
             'status' => Config::get('common.status.actived')

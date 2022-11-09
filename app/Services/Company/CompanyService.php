@@ -602,7 +602,7 @@ class CompanyService {
         return $company;
     }
 
-    public function accept(Company $company, $entity, $user_uuid)
+    public function accept(Company $company, $entity, $user_uuid, $override = false)
     {
         $entity['status'] = Config::get('common.status.actived');
         $entity['approved'] = Config::get('common.status.actived');
@@ -617,7 +617,7 @@ class CompanyService {
             'entity_uuid' => $company['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
-            'description' => str_replace("{name}", $company_fn, Config::get('common.activity.company.accept')),
+            'description' => str_replace("{name}", $company_fn, ($override?Config::get('common.activity.company.override'):Config::get('common.activity.company.accept'))),
             'changes' => json_encode($entity),
             'action_code' => Config::get('common.activity.codes.company_accept'),
             'status' => Config::get('common.status.actived')
