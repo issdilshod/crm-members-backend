@@ -190,7 +190,7 @@ class CompanyService {
     {
         $check = [];
 
-        if (isset($entity['legal_name'])){
+        /*if (isset($entity['legal_name'])){
             $check['tmp'] = Company::select('legal_name')
                                     ->where('status', '!=', Config::get('common.status.deleted'))
                                     ->where('approved', Config::get('common.status.actived'))
@@ -202,18 +202,19 @@ class CompanyService {
                 endforeach;
             }
             unset($check['tmp']);
-        }
+        }*/
 
         // Director
         if (isset($entity['director_uuid'])){
-            $check['tmp'] = Company::select('director_uuid')
+            $check['tmp'] = Company::select('director_uuid', 'legal_name')
                                     ->where('status', '!=', Config::get('common.status.deleted'))
                                     ->where('approved', Config::get('common.status.actived'))
                                     ->where('director_uuid', $entity['director_uuid'])->first();
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
                 foreach ($check['tmp'] AS $key => $value):
-                    $check[$key] = Config::get('common.errors.exsist');
+                    if ($this->is_idefier($key)){ continue; }
+                    $check[$key] = Config::get('common.errors.exsist') . $this->message_where_exists($check['tmp']);
                 endforeach;
             }
             unset($check['tmp']);
@@ -221,14 +222,15 @@ class CompanyService {
 
         // EIN
         if (isset($entity['ein'])){
-            $check['tmp'] = Company::select('ein')
+            $check['tmp'] = Company::select('ein', 'legal_name')
                                     ->where('status', '!=', Config::get('common.status.deleted'))
                                     ->where('approved', Config::get('common.status.actived'))
                                     ->where('ein', $entity['ein'])->first();
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
                 foreach ($check['tmp'] AS $key => $value):
-                    $check[$key] = Config::get('common.errors.exsist');
+                    if ($this->is_idefier($key)){ continue; }
+                    $check[$key] = Config::get('common.errors.exsist') . $this->message_where_exists($check['tmp']);
                 endforeach;
             }
             unset($check['tmp']);
@@ -236,14 +238,15 @@ class CompanyService {
 
         // Business number
         if (isset($entity['business_number'])){
-            $check['tmp'] = Company::select('business_number')
+            $check['tmp'] = Company::select('business_number', 'legal_name')
                                     ->where('status', '!=', Config::get('common.status.deleted'))
                                     ->where('approved', Config::get('common.status.actived'))
                                     ->where('business_number', $entity['business_number'])->first();
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
                 foreach ($check['tmp'] AS $key => $value):
-                    $check[$key] = Config::get('common.errors.exsist');
+                    if ($this->is_idefier($key)){ continue; }
+                    $check[$key] = Config::get('common.errors.exsist') . $this->message_where_exists($check['tmp']);
                 endforeach;
             }
             unset($check['tmp']);
@@ -265,14 +268,15 @@ class CompanyService {
 
         // Business mobile number type
         if (isset($entity['business_mobile_number'])){
-            $check['tmp'] = Company::select('business_mobile_number')
+            $check['tmp'] = Company::select('business_mobile_number', 'legal_name')
                                     ->where('status', '!=', Config::get('common.status.deleted'))
                                     ->where('approved', Config::get('common.status.actived'))
                                     ->where('business_mobile_number', $entity['business_mobile_number'])->first();
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
                 foreach ($check['tmp'] AS $key => $value):
-                    $check[$key] = Config::get('common.errors.exsist');
+                    if ($this->is_idefier($key)){ continue; }
+                    $check[$key] = Config::get('common.errors.exsist') . $this->message_where_exists($check['tmp']);
                 endforeach;
             }
             unset($check['tmp']);
@@ -280,14 +284,15 @@ class CompanyService {
 
         // Business mobile number login
         if (isset($entity['business_mobile_number_login'])){
-            $check['tmp'] = Company::select('business_mobile_number_login')
+            $check['tmp'] = Company::select('business_mobile_number_login', 'legal_name')
                                     ->where('status', '!=', Config::get('common.status.deleted'))
                                     ->where('approved', Config::get('common.status.actived'))
                                     ->where('business_mobile_number_login', $entity['business_mobile_number_login'])->first();
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
                 foreach ($check['tmp'] AS $key => $value):
-                    $check[$key] = Config::get('common.errors.exsist');
+                    if ($this->is_idefier($key)){ continue; }
+                    $check[$key] = Config::get('common.errors.exsist') . $this->message_where_exists($check['tmp']);
                 endforeach;
             }
             unset($check['tmp']);
@@ -295,14 +300,15 @@ class CompanyService {
 
         // Website
         if (isset($entity['website'])){
-            $check['tmp'] = Company::select('website')
+            $check['tmp'] = Company::select('website', 'legal_name')
                                     ->where('status', '!=', Config::get('common.status.deleted'))
                                     ->where('approved', Config::get('common.status.actived'))
                                     ->where('website', $entity['website'])->first();
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
                 foreach ($check['website_c'] AS $key => $value):
-                    $check[$key] = Config::get('common.errors.exsist');
+                    if ($this->is_idefier($key)){ continue; }
+                    $check[$key] = Config::get('common.errors.exsist') . $this->message_where_exists($check['tmp']);
                 endforeach;
             }
             unset($check['tmp']);
@@ -310,14 +316,15 @@ class CompanyService {
 
         // Db report number
         if (isset($entity['db_report_number'])){
-            $check['tmp'] = Company::select('db_report_number')
+            $check['tmp'] = Company::select('db_report_number', 'legal_name')
                                     ->where('status', '!=', Config::get('common.status.deleted'))
                                     ->where('approved', Config::get('common.status.actived'))
                                     ->where('db_report_number', $entity['db_report_number'])->first();
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
                 foreach ($check['tmp'] AS $key => $value):
-                    $check[$key] = Config::get('common.errors.exsist');
+                    if ($this->is_idefier($key)){ continue; }
+                    $check[$key] = Config::get('common.errors.exsist') . $this->message_where_exists($check['tmp']);
                 endforeach;
             }
             unset($check['tmp']);
@@ -330,7 +337,7 @@ class CompanyService {
     {
         $check = [];
 
-        if (isset($entity['legal_name'])){
+        /*if (isset($entity['legal_name'])){
             $check['tmp'] = Company::select('legal_name')
                                     ->where('uuid', '!=', $ignore_uuid)
                                     ->where('status', '!=', Config::get('common.status.deleted'))
@@ -343,19 +350,21 @@ class CompanyService {
                 endforeach;
             }
             unset($check['tmp']);
-        }
+        }*/
 
         // Director
         if (isset($entity['director_uuid'])){
-            $check['tmp'] = Company::select('director_uuid')
+            $check['tmp'] = Company::select('director_uuid', 'legal_name')
                                     ->where('uuid', '!=', $ignore_uuid)
                                     ->where('status', '!=', Config::get('common.status.deleted'))
                                     ->where('approved', Config::get('common.status.actived'))
-                                    ->where('director_uuid', $entity['director_uuid'])->first();
+                                    ->where('director_uuid', $entity['director_uuid'])
+                                    ->first();
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
                 foreach ($check['tmp'] AS $key => $value):
-                    $check[$key] = Config::get('common.errors.exsist');
+                    if ($this->is_idefier($key)){ continue; }
+                    $check[$key] = Config::get('common.errors.exsist') . $this->message_where_exists($check['tmp']);
                 endforeach;
             }
             unset($check['tmp']);
@@ -363,7 +372,7 @@ class CompanyService {
 
         // EIN
         if (isset($entity['ein'])){
-            $check['tmp'] = Company::select('ein')
+            $check['tmp'] = Company::select('ein', 'legal_name')
                                     ->where('uuid', '!=', $ignore_uuid)
                                     ->where('status', '!=', Config::get('common.status.deleted'))
                                     ->where('approved', Config::get('common.status.actived'))
@@ -371,7 +380,8 @@ class CompanyService {
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
                 foreach ($check['tmp'] AS $key => $value):
-                    $check[$key] = Config::get('common.errors.exsist');
+                    if ($this->is_idefier($key)){ continue; }
+                    $check[$key] = Config::get('common.errors.exsist') . $this->message_where_exists($check['tmp']);
                 endforeach;
             }
             unset($check['tmp']);
@@ -379,7 +389,7 @@ class CompanyService {
 
         // Business number
         if (isset($entity['business_number'])){
-            $check['tmp'] = Company::select('business_number')
+            $check['tmp'] = Company::select('business_number', 'legal_name')
                                     ->where('uuid', '!=', $ignore_uuid)
                                     ->where('status', '!=', Config::get('common.status.deleted'))
                                     ->where('approved', Config::get('common.status.actived'))
@@ -387,7 +397,8 @@ class CompanyService {
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
                 foreach ($check['tmp'] AS $key => $value):
-                    $check[$key] = Config::get('common.errors.exsist');
+                    if ($this->is_idefier($key)){ continue; }
+                    $check[$key] = Config::get('common.errors.exsist') . $this->message_where_exists($check['tmp']);
                 endforeach;
             }
             unset($check['tmp']);
@@ -410,7 +421,7 @@ class CompanyService {
 
         // Business mobile number type
         if (isset($entity['business_mobile_number'])){
-            $check['tmp'] = Company::select('business_mobile_number')
+            $check['tmp'] = Company::select('business_mobile_number', 'legal_name')
                                     ->where('uuid', '!=', $ignore_uuid) 
                                     ->where('status', '!=', Config::get('common.status.deleted'))
                                     ->where('approved', Config::get('common.status.actived'))
@@ -418,7 +429,8 @@ class CompanyService {
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
                 foreach ($check['tmp'] AS $key => $value):
-                    $check[$key] = Config::get('common.errors.exsist');
+                    if ($this->is_idefier($key)){ continue; }
+                    $check[$key] = Config::get('common.errors.exsist') . $this->message_where_exists($check['tmp']);
                 endforeach;
             }
             unset($check['tmp']);
@@ -426,7 +438,7 @@ class CompanyService {
 
         // Business mobile number login
         if (isset($entity['business_mobile_number_login'])){
-            $check['tmp'] = Company::select('business_mobile_number_login')
+            $check['tmp'] = Company::select('business_mobile_number_login', 'legal_name')
                                     ->where('uuid', '!=', $ignore_uuid)
                                     ->where('status', '!=', Config::get('common.status.deleted'))
                                     ->where('approved', Config::get('common.status.actived'))
@@ -434,7 +446,8 @@ class CompanyService {
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
                 foreach ($check['tmp'] AS $key => $value):
-                    $check[$key] = Config::get('common.errors.exsist');
+                    if ($this->is_idefier($key)){ continue; }
+                    $check[$key] = Config::get('common.errors.exsist') . $this->message_where_exists($check['tmp']);
                 endforeach;
             }
             unset($check['tmp']);
@@ -442,7 +455,7 @@ class CompanyService {
 
         // Website
         if (isset($entity['website'])){
-            $check['tmp'] = Company::select('website')
+            $check['tmp'] = Company::select('website', 'legal_name')
                                     ->where('uuid', '!=', $ignore_uuid)
                                     ->where('status', '!=', Config::get('common.status.deleted'))
                                     ->where('approved', Config::get('common.status.actived'))
@@ -450,7 +463,8 @@ class CompanyService {
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
                 foreach ($check['website_c'] AS $key => $value):
-                    $check[$key] = Config::get('common.errors.exsist');
+                    if ($this->is_idefier($key)){ continue; }
+                    $check[$key] = Config::get('common.errors.exsist') . $this->message_where_exists($check['tmp']);
                 endforeach;
             }
             unset($check['tmp']);
@@ -458,7 +472,7 @@ class CompanyService {
 
         // Db report number
         if (isset($entity['db_report_number'])){
-            $check['tmp'] = Company::select('db_report_number')
+            $check['tmp'] = Company::select('db_report_number', 'legal_name')
                                     ->where('uuid', '!=', $ignore_uuid)
                                     ->where('status', '!=', Config::get('common.status.deleted'))
                                     ->where('approved', Config::get('common.status.actived'))
@@ -466,7 +480,8 @@ class CompanyService {
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
                 foreach ($check['tmp'] AS $key => $value):
-                    $check[$key] = Config::get('common.errors.exsist');
+                    if ($this->is_idefier($key)){ continue; }
+                    $check[$key] = Config::get('common.errors.exsist') . $this->message_where_exists($check['tmp']);
                 endforeach;
             }
             unset($check['tmp']);
@@ -648,6 +663,23 @@ class CompanyService {
             'msg' => str_replace("{name}", "*" . $company_fn . "*", Config::get('common.activity.company.reject')) . "\n" .
                         '[link to change](' .env('APP_FRONTEND_ENDPOINT').'/companies/'.$company['uuid']. ')'
         ]);
+    }
+
+    private function is_idefier($check)
+    {
+        $idenfier = ['legal_name'];
+        $is_idefier = false;
+        foreach ($idenfier AS $key => $value):
+            if ($value==$check){
+                $is_idefier = true;
+            }
+        endforeach;
+        return $is_idefier;
+    }
+
+    private function message_where_exists($entity)
+    {
+        return ' On company card *' . $entity['legal_name'] . '*';
     }
 
 }
