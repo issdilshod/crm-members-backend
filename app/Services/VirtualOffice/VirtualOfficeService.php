@@ -36,6 +36,7 @@ class VirtualOfficeService{
 
     public function create($entity)
     {
+        $entity['approved'] = Config::get('common.status.actived');
         $virtualOffice = VirtualOffice::create($entity);
 
         // Activity log
@@ -56,6 +57,7 @@ class VirtualOfficeService{
     public function update(VirtualOffice $virtualOffice, $entity, $user_uuid)
     {
         $entity['updated_at'] = Carbon::now();
+        $entity['approved'] = Config::get('common.status.actived');
         $virtualOffice->update($entity);
 
         Activity::create([

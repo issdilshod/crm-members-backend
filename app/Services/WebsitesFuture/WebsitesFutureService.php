@@ -36,6 +36,7 @@ class WebsitesFutureService{
 
     public function create($entity)
     {
+        $entity['approved'] = Config::get('common.status.actived');
         $futureWebsites = WebsitesFuture::create($entity);
 
         // Activity log
@@ -56,6 +57,7 @@ class WebsitesFutureService{
     public function update(WebsitesFuture $websitesFuture, $entity, $user_uuid)
     {
         $entity['updated_at'] = Carbon::now();
+        $entity['approved'] = Config::get('common.status.actived');
         $websitesFuture->update($entity);
 
         Activity::create([
