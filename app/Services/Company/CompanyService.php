@@ -409,7 +409,7 @@ class CompanyService {
         }*/
 
         // Business mobile number type
-        /*if (isset($entity['business_mobile_number'])){
+        if (isset($entity['business_mobile_number'])){
             $check['tmp'] = Company::select('business_mobile_number')
                                     ->where('uuid', '!=', $ignore_uuid) 
                                     ->where('status', '!=', Config::get('common.status.deleted'))
@@ -422,10 +422,10 @@ class CompanyService {
                 endforeach;
             }
             unset($check['tmp']);
-        }*/
+        }
 
         // Business mobile number login
-        /*if (isset($entity['business_mobile_number_login'])){
+        if (isset($entity['business_mobile_number_login'])){
             $check['tmp'] = Company::select('business_mobile_number_login')
                                     ->where('uuid', '!=', $ignore_uuid)
                                     ->where('status', '!=', Config::get('common.status.deleted'))
@@ -438,7 +438,7 @@ class CompanyService {
                 endforeach;
             }
             unset($check['tmp']);
-        }*/
+        }
 
         // Website
         if (isset($entity['website'])){
