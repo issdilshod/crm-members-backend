@@ -210,7 +210,7 @@ class VirtualOfficeController extends Controller
     {
         // permission
         if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
-            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.update'))){
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.store'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
             }
         }
@@ -595,7 +595,7 @@ class VirtualOfficeController extends Controller
     {
         // permission
         if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
-            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.reject'))){
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.accept'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
             }
         }
@@ -627,10 +627,6 @@ class VirtualOfficeController extends Controller
             $permissions[] = Config::get('common.permission.virtual_office.store');
         }
 
-        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.update'))){
-            $permissions[] = Config::get('common.permission.virtual_office.update');
-        }
-
         if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.save'))){
             $permissions[] = Config::get('common.permission.virtual_office.save');
         }
@@ -641,10 +637,6 @@ class VirtualOfficeController extends Controller
 
         if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.accept'))){
             $permissions[] = Config::get('common.permission.virtual_office.accept');
-        }
-
-        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.reject'))){
-            $permissions[] = Config::get('common.permission.virtual_office.reject');
         }
 
         return $permissions;

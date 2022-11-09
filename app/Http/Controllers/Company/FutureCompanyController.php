@@ -218,7 +218,7 @@ class FutureCompanyController extends Controller
     {
         // permission
         if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
-            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.future_company.update'))){
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.future_company.store'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
             }
         }
@@ -629,7 +629,7 @@ class FutureCompanyController extends Controller
     {
         // permission
         if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
-            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.future_company.reject'))){
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.future_company.accept'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
             }
         }
@@ -661,10 +661,6 @@ class FutureCompanyController extends Controller
             $permissions[] = Config::get('common.permission.future_company.store');
         }
 
-        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.future_company.update'))){
-            $permissions[] = Config::get('common.permission.future_company.update');
-        }
-
         if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.future_company.save'))){
             $permissions[] = Config::get('common.permission.future_company.save');
         }
@@ -675,10 +671,6 @@ class FutureCompanyController extends Controller
 
         if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.future_company.accept'))){
             $permissions[] = Config::get('common.permission.future_company.accept');
-        }
-
-        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.future_company.reject'))){
-            $permissions[] = Config::get('common.permission.future_company.reject');
         }
 
         return $permissions;

@@ -11,54 +11,54 @@ return [
 
     'permission' => [
         'director' => [
-            'store' => 'director_store',
-            'update' => 'director_update',
+            'store' => 'director_store', // add/update
+            //'update' => 'director_update',
             'delete' => 'director_delete',
             'save' => 'director_save', // pending add/update
             'pre_save' => 'director_pre_save',
-            'accept' => 'director_accept',
-            'reject' => 'director_reject',
+            'accept' => 'director_accept', // accept/reject
+            //'reject' => 'director_reject',
             'view' => 'director_view'
         ],
         'company' => [
-            'store' => 'company_store',
-            'update' => 'company_update',
+            'store' => 'company_store', // add/update
+            //'update' => 'company_update',
             'delete' => 'company_delete',
             'save' => 'company_save', // pending add/update
             'pre_save' => 'company_pre_save',
-            'accept' => 'company_accept',
-            'reject' => 'company_reject',
+            'accept' => 'company_accept', // accept/reject
+            //'reject' => 'company_reject',
             'view' => 'company_view'
         ],
         'websites_future' => [
-            'store' => 'websites_future_store',
-            'update' => 'websites_future_update',
+            'store' => 'websites_future_store', // add/update
+            //'update' => 'websites_future_update',
             'delete' => 'websites_future_delete',
             'save' => 'websites_future_save', // pending add/update
-            'accept' => 'websites_future_accept',
-            'reject' => 'websites_future_reject',
+            'accept' => 'websites_future_accept', // accept/reject
+            //'reject' => 'websites_future_reject',
             'view' => 'websites_future_view'
         ],
         'virtual_office' => [
-            'store' => 'virtual_office_store',
-            'update' => 'virtual_office_update',
+            'store' => 'virtual_office_store', // add/update
+            //'update' => 'virtual_office_update',
             'delete' => 'virtual_office_delete',
             'save' => 'virtual_office_save', // pending add/update
-            'accept' => 'virtual_office_accept',
-            'reject' => 'virtual_office_reject',
+            'accept' => 'virtual_office_accept', // accept/reject
+            //'reject' => 'virtual_office_reject',
             'view' => 'virtual_office_view'
         ],
         'future_company' => [
-            'store' => 'future_company_store',
-            'update' => 'future_company_update',
+            'store' => 'future_company_store', // add/update
+            //'update' => 'future_company_update',
             'delete' => 'future_company_delete',
             'save' => 'future_company_save', // pending add/update
-            'accept' => 'future_company_accept',
-            'reject' => 'future_company_reject',
+            'accept' => 'future_company_accept', // accept/reject
+            //'reject' => 'future_company_reject',
             'view' => 'future_company_view'
         ],
         'chat' => [
-            'store' => 'chat_store'
+            'store' => 'chat_store' // add/update
         ]
     ],
 

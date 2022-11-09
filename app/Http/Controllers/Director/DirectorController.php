@@ -324,7 +324,7 @@ class DirectorController extends Controller
     {
         // permission
         if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
-            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.update'))){
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.store'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
             }
         }
@@ -1087,7 +1087,7 @@ class DirectorController extends Controller
     {
         // permission
         if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
-            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.reject'))){
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.acccept'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
             }
         }
@@ -1140,10 +1140,6 @@ class DirectorController extends Controller
             $permissions[] = Config::get('common.permission.director.store');
         }
 
-        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.update'))){
-            $permissions[] = Config::get('common.permission.director.update');
-        }
-
         if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.save'))){
             $permissions[] = Config::get('common.permission.director.save');
         }
@@ -1158,10 +1154,6 @@ class DirectorController extends Controller
 
         if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.accept'))){
             $permissions[] = Config::get('common.permission.director.accept');
-        }
-
-        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.reject'))){
-            $permissions[] = Config::get('common.permission.director.reject');
         }
 
         return $permissions;

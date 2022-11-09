@@ -412,7 +412,7 @@ class CompanyController extends Controller
     {
         // permission
         if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
-            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.update'))){
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.store'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
             }
         }
@@ -1487,7 +1487,7 @@ class CompanyController extends Controller
     {
         // permission
         if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
-            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.reject'))){
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.accept'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
             }
         }
@@ -1538,10 +1538,6 @@ class CompanyController extends Controller
             $permissions[] = Config::get('common.permission.company.store');
         }
 
-        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.update'))){
-            $permissions[] = Config::get('common.permission.company.update');
-        }
-
         if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.save'))){
             $permissions[] = Config::get('common.permission.company.save');
         }
@@ -1556,10 +1552,6 @@ class CompanyController extends Controller
 
         if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.accept'))){
             $permissions[] = Config::get('common.permission.company.accept');
-        }
-
-        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.reject'))){
-            $permissions[] = Config::get('common.permission.company.reject');
         }
 
         return $permissions;

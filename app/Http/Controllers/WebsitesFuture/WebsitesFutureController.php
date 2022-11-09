@@ -186,7 +186,7 @@ class WebsitesFutureController extends Controller
     {
         // permission
         if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
-            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.update'))){
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.store'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
             }
         }
@@ -479,7 +479,7 @@ class WebsitesFutureController extends Controller
     {
         // permission
         if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
-            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.reject'))){
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.accept'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
             }
         }
@@ -548,10 +548,6 @@ class WebsitesFutureController extends Controller
             $permissions[] = Config::get('common.permission.websites_future.store');
         }
 
-        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.update'))){
-            $permissions[] = Config::get('common.permission.websites_future.update');
-        }
-
         if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.save'))){
             $permissions[] = Config::get('common.permission.websites_future.save');
         }
@@ -562,10 +558,6 @@ class WebsitesFutureController extends Controller
 
         if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.accept'))){
             $permissions[] = Config::get('common.permission.websites_future.accept');
-        }
-
-        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.reject'))){
-            $permissions[] = Config::get('common.permission.websites_future.reject');
         }
 
         return $permissions;
