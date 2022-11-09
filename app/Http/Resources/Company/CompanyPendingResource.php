@@ -15,6 +15,7 @@ class CompanyPendingResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'uuid' => $this->uuid,
             'name' => $this->legal_name,
             'last_activity' => $this->last_activity,
             'updated_at' => $this->updated_at,

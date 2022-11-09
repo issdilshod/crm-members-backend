@@ -15,6 +15,7 @@ class DirectorPendingResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'uuid' => $this->uuid,
             'name' => $this->first_name . ' ' . $this->middle_name . ' ' . $this->last_name,
             'last_activity' => $this->last_activity,
             'updated_at' => $this->updated_at,

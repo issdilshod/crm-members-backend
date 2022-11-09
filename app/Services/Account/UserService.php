@@ -47,9 +47,11 @@ class UserService {
 
     public function me($user_uuid)
     {
-        $user = User::where('uuid', $user_uuid)
-                        ->first();
-        return new UserResource($user);
+        $user = User::select('users.uuid', 'roles.alias as role_alias')
+                    ->join('roles', 'roles.uuid', '=', 'users.role_uuid')
+                    ->where('users.uuid', $user_uuid)
+                    ->first();
+        return $user;
     }
 
     public function check($entity)
