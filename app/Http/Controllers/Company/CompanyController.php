@@ -1301,7 +1301,7 @@ class CompanyController extends Controller
             'business_mobile_number_password' => '',
 
             'website' => '',
-            'db_report_number' => '', // required
+            'db_report_number' => 'required',
 
             // addresses
             'address' => 'array',
