@@ -1039,8 +1039,6 @@ class CompanyController extends Controller
             'future_web_to_delete' => 'array',
 
             'files_to_delete' => 'array',
-
-            'user_uuid' => 'string'
         ]);
 
         $check = [];
@@ -1070,7 +1068,7 @@ class CompanyController extends Controller
             ], 409);
         }
 
-        $company = $this->companyService->pending_update($uuid, $validated);
+        $company = $this->companyService->pending_update($uuid, $validated, $request->user_uuid);
 
         // email
         if (isset($validated['emails_to_delete'])){

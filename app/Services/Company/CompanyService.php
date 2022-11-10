@@ -567,7 +567,7 @@ class CompanyService {
         return $company;
     }
 
-    public function pending_update($uuid, $entity)
+    public function pending_update($uuid, $entity, $user_uuid)
     {
         $entity['updated_at'] = Carbon::now();
         $company = Company::where('uuid', $uuid)
@@ -581,7 +581,7 @@ class CompanyService {
 
         // logs
         Activity::create([
-            'user_uuid' => $entity['user_uuid'],
+            'user_uuid' => $user_uuid,
             'entity_uuid' => $company['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
@@ -592,7 +592,7 @@ class CompanyService {
         ]);
 
         // notification
-        $user = User::where('uuid', $entity['user_uuid'])->first();
+        $user = User::where('uuid', $user_uuid)->first();
 
         $msg = '*' . $user->first_name . ' ' . $user->last_name . "*\n" .
                 str_replace("{name}", "*" . $company_fn . "*", Config::get('common.activity.company.pending_update')) . "\n" .

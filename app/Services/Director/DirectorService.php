@@ -404,7 +404,7 @@ class DirectorService {
         return $director;
     }
 
-    public function pending_update($uuid, $entity)
+    public function pending_update($uuid, $entity, $user_uuid)
     {
         $director = Director::where('uuid', $uuid)
                                 ->where('status', '!=', Config::get('common.status.deleted'))
@@ -419,7 +419,7 @@ class DirectorService {
 
         // logs
         Activity::create([
-            'user_uuid' => $entity['user_uuid'],
+            'user_uuid' => $user_uuid,
             'entity_uuid' => $director['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
@@ -430,7 +430,7 @@ class DirectorService {
         ]);
 
         // notification
-        $user = User::where('uuid', $entity['user_uuid'])->first();
+        $user = User::where('uuid', $user_uuid)->first();
 
         $msg = '*' . $user->first_name . ' ' . $user->last_name . "*\n" .
                 str_replace("{name}", "*" . $director_fn . "*", Config::get('common.activity.director.pending_update')) . "\n" .
