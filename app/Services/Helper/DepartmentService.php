@@ -2,6 +2,7 @@
 
 namespace App\Services\Helper;
 
+use App\Http\Resources\Helper\DepartmentResource;
 use App\Models\Helper\Department;
 use Illuminate\Support\Facades\Config;
 
@@ -17,7 +18,7 @@ class DepartmentService {
         $departments = Department::orderBy('sort', 'ASC')
                                     ->where('status', Config::get('common.status.actived'))
                                     ->get();
-        return $departments;
+        return DepartmentResource::collection($departments);
     }
 
     /**

@@ -1264,6 +1264,33 @@
                 }
             }
         },
+        "/api/chat-department": {
+            "get": {
+                "tags": [
+                    "Chat"
+                ],
+                "summary": "List of departments to create the chat",
+                "description": "List of departments to create the chat",
+                "operationId": "list_of_depatment_on_chat",
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
         "/api/chat/{uuid}": {
             "get": {
                 "tags": [

@@ -26,6 +26,18 @@ class ChatService{
         return ChatResource::collection($chats);
     }
 
+    public function by_user($user_uuid)
+    {
+        // order by last message
+        $chats = Chat::select('chats.*')
+                    ->join('chat_users', 'chat_users.chat_uuid', '=', 'chats.uuid')
+                    ->where('chat_users.user_uuid', $user_uuid)
+                    ->where('chats.status', Config::get('common.status.actived'))
+                    ->paginate(20);
+        $chats = $this->setChatsMembers($chats);
+        return ChatResource::collection($chats);
+    }
+
     public function one($chat)
     {
         $chat = $this->setChatMembers($chat);

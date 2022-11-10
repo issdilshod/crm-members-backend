@@ -41,7 +41,7 @@ class DepartmentController extends Controller
         }
 
         $departments = $this->departmentService->getDepartments();
-        return DepartmentResource::collection($departments);
+        return $departments;
     }
 
     /**     @OA\GET(

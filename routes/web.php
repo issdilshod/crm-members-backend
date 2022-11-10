@@ -156,6 +156,7 @@ Route::middleware('auth.custom')->group(function() {
     Route::get('api/message/{uuid}', [MessageController::class, 'show']);
     Route::put('api/message/{uuid}', [MessageController::class, 'update']);
     Route::delete('api/message/{uuid}', [MessageController::class, 'destroy']);
+    Route::get('api/chat-department', [ChatController::class, 'departments']);
 
     // tasks
     Route::resource('api/task', TaskController::class);

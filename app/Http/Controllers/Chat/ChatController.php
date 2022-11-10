@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Chat\Chat;
 use App\Policies\PermissionPolicy;
 use App\Services\Chat\ChatService;
+use App\Services\Helper\DepartmentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 
@@ -13,10 +14,12 @@ class ChatController extends Controller
 {
 
     private $chatService;
+    private $departmentService;
 
     public function __construct()
     {
         $this->chatService = new ChatService();
+        $this->departmentService = new DepartmentService();
     }
     
     /**     @OA\GET(
@@ -32,13 +35,40 @@ class ChatController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function index()
+    public function index(Request $request)
     {
         // permission
+        if (!PermissionPolicy::permission($request->user_uuid)){
+            $chats = $this->chatService->by_user($request->user_uuid);
+            return $chats;
+        }
 
         $chats = $this->chatService->all();
-
         return $chats;
+    }
+
+    /**     @OA\GET(
+      *         path="/api/chat-department",
+      *         operationId="list_of_depatment_on_chat",
+      *         tags={"Chat"},
+      *         summary="List of departments to create the chat",
+      *         description="List of departments to create the chat",
+      *             @OA\Response(response=200, description="Successfully"),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=403, description="Not Autorized"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
+    public function departments(Request $request)
+    {
+        // permission
+        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.chat.store'))){
+            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        }
+
+        $departments = $this->departmentService->getDepartments();
+        return $departments;
     }
 
     /**     @OA\POST(
@@ -217,4 +247,6 @@ class ChatController extends Controller
 
         $this->chatService->delete($chat);
     }
+
+
 }
