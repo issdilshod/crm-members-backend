@@ -350,6 +350,8 @@ class UserService {
     public function delete(User $user)
     {
         $user->update(['status' => Config::get('common.status.deleted')]);
+
+        UserAccessToken::where('user_uuid', $user->uuid)->update(['status' => Config::get('common.status.deleted')]);
     }
 
     public function online($uuid)
