@@ -37,12 +37,15 @@ class PermissionPolicy
                                     ->first(['uuid']);
 
         // check permission of user
-        $has_permission = UserPermission::where('status', Config::get('common.status.actived'))
-                                            ->where('permission_uuid', $permission->uuid)
+        $has_permission = UserPermission::where('permission_uuid', $permission->uuid)
                                             ->where('user_uuid', $user_uuid)
                                             ->first();
         if ($has_permission!=null){
-            return true;
+            if ($has_permission->status==Config::get('common.status.actived')){
+                return true;
+            }else{
+                return false;
+            }
         }
 
         // check permission of role
