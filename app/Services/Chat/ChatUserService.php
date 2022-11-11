@@ -22,7 +22,7 @@ class ChatUserService{
         $chatUser = ChatUser::where('chat_uuid', $chat_uuid)
                                 ->where('user_uuid', $user_uuid)
                                 ->first();
-        if ($chat_uuid!=null){
+        if ($chatUser!=null){
             $chatUser->update(['status' => Config::get('common.status.actived')]);
         }else{
             $chatUser = ChatUser::create([

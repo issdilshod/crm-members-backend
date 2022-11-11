@@ -1221,13 +1221,14 @@
                         "multipart/form-data": {
                             "schema": {
                                 "required": [
-                                    "name"
+                                    "name",
+                                    "entity_uuid"
                                 ],
                                 "properties": {
                                     "name": {
                                         "type": "text"
                                     },
-                                    "members[]": {
+                                    "entity_uuid": {
                                         "type": "text"
                                     }
                                 },

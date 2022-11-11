@@ -5,6 +5,7 @@ namespace App\Services\Chat;
 use App\Helpers\UserSystemInfoHelper;
 use App\Http\Resources\Chat\ChatResource;
 use App\Models\Account\Activity;
+use App\Models\Account\User;
 use App\Models\Chat\Chat;
 use Illuminate\Support\Facades\Config;
 
@@ -47,6 +48,11 @@ class ChatService{
 
     public function create($entity)
     {
+        // get members 
+        $entity['members'] = $this->getMembers($entity['entity_uuid']);
+        $entity['partner_uuid'] = $entity['entity_uuid'];
+        unset($entity['entity_uuid']);
+
         $chat = Chat::create($entity);
 
         // add members
@@ -103,6 +109,48 @@ class ChatService{
     public function delete(Chat $chat)
     {
         $chat->update(['status' => Config::get('common.status.deleted')]);
+    }
+
+    public function check_exists($user_uuid, $entity_uuid)
+    {
+        $chat = Chat::select('chats.*')
+                        ->join('chat_users', 'chat_users.chat_uuid', '=', 'chats.uuid')
+                        ->where(function ($q) use($user_uuid, $entity_uuid) {
+                            $q->where('chats.user_uuid', $user_uuid)
+                                ->where('chats.partner_uuid', $entity_uuid);
+                        })
+                        ->orWhere(function ($q) use($user_uuid, $entity_uuid) {
+                            $q->where('chats.partner_uuid', $user_uuid)
+                                ->where('chats.user_uuid', $entity_uuid);
+                        })
+                        
+                        ->first();
+        if ($chat!=null){
+            $chat = $this->setChatMembers($chat);
+            return new ChatResource($chat);
+        }
+        return null;
+    }
+
+    private function getMembers($entity_uuid)
+    {
+        $members = [];
+        $user = User::where('uuid', $entity_uuid)->first();
+        $users = User::select('users.*')
+                        ->join('departments', 'departments.uuid', '=', 'users.department_uuid')
+                        ->where('departments.uuid', $entity_uuid)
+                        ->get();
+        if ($user!=null) {
+            $members[] = $user['uuid'];
+        }
+
+        if ($users!=null){
+            foreach($users AS $key => $value):
+                $members[] = $value['uuid'];
+            endforeach;
+        }
+
+        return $members;
     }
 
     private function setChatMembers($chat)

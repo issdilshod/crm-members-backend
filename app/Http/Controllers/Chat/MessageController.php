@@ -80,8 +80,8 @@ class MessageController extends Controller
     {
         $validated = $request->validate([
             'chat_uuid' => 'required',
-            'user_uuid' => 'required',
-            'message' => ''
+            'message' => '',
+            'user_uuid' => '',
         ]);
 
         // check permission

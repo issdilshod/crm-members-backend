@@ -83,10 +83,10 @@ class ChatController extends Controller
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
       *                         type="object",
-      *                         required={"name"},
-      *                         
+      *                         required={"name", "entity_uuid"},
+      *
       *                         @OA\Property(property="name", type="text"),
-      *                         @OA\Property(property="members[]", type="text")
+      *                         @OA\Property(property="entity_uuid", type="text"),
       *                     ),
       *                 ),
       *             ),
@@ -108,11 +108,17 @@ class ChatController extends Controller
 
         $validated = $request->validate([
             'name' => 'required',
-            'members' => 'array',
+            'entity_uuid' => 'required',
             'user_uuid' => ''
         ]);
 
-        $chat = $this->chatService->create($validated);
+        // check for exists
+        $chat = $this->chatService->check_exists($request->user_uuid, $validated['entity_uuid']);
+
+        if ($chat==null) { // then create
+            $chat = $this->chatService->create($validated);
+        }
+        
         return $chat;
     }
 
