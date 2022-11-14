@@ -61,10 +61,15 @@ class CompanyService {
         return CompanyResource::collection($companies);
     }
 
-    public function by_user($user_uuid)
+    public function by_user($user_uuid, $pending_only)
     {
         $companies = Company::orderBy('updated_at', 'DESC')
-                                ->where('status', '!=', Config::get('common.status.deleted'))
+                                ->when(!$pending_only, function ($q) {
+                                    return $q->where('status', '!=', Config::get('common.status.deleted'));
+                                })
+                                ->when($pending_only, function ($q) {
+                                    return $q->where('status', Config::get('common.status.pending'));
+                                })
                                 ->where('user_uuid', $user_uuid)
                                 ->paginate(10);
 
@@ -113,10 +118,15 @@ class CompanyService {
         return CompanyPendingResource::collection($companies);
     }
 
-    public function headquarters()
+    public function headquarters($pending_only)
     {
         $companies = Company::orderBy('updated_at', 'DESC')
-                                ->where('status', '!=', Config::get('common.status.deleted'))
+                                ->when(!$pending_only, function ($q) {
+                                    return $q->where('status', '!=', Config::get('common.status.deleted'));
+                                })
+                                ->when($pending_only, function ($q) {
+                                    return $q->where('status', Config::get('common.status.pending'));
+                                })
                                 ->paginate(10);
 
         foreach($companies AS $key => $value):

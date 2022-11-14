@@ -61,10 +61,15 @@ class DirectorService {
         return DirectorResource::collection($directors);
     }
 
-    public function by_user($user_uuid)
+    public function by_user($user_uuid, $pending_only)
     {
         $directors = Director::orderBy('updated_at', 'DESC')
-                                ->where('status', '!=', Config::get('common.status.deleted'))
+                                ->when(!$pending_only, function ($q) {
+                                    return $q->where('status', '!=', Config::get('common.status.deleted'));
+                                })
+                                ->when($pending_only, function ($q) {
+                                    return $q->where('status', Config::get('common.status.pending'));
+                                })
                                 ->where('user_uuid', $user_uuid)
                                 ->paginate(10);
 
@@ -104,10 +109,15 @@ class DirectorService {
         return DirectorPendingResource::collection($directors);
     }
 
-    public function headquarters()
+    public function headquarters($pending_only)
     {
         $directors = Director::orderBy('updated_at', 'DESC')
-                                ->where('status', '!=', Config::get('common.status.deleted'))
+                                ->when(!$pending_only, function ($q) {
+                                    return $q->where('status', '!=', Config::get('common.status.deleted'));
+                                })
+                                ->when($pending_only, function ($q) {
+                                    return $q->where('status', Config::get('common.status.pending'));
+                                })
                                 ->paginate(10);       
 
         foreach($directors AS $key => $value):
