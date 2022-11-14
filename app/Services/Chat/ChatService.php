@@ -12,10 +12,12 @@ use Illuminate\Support\Facades\Config;
 class ChatService{
 
     private $chatUserService;
+    private $messageService;
 
     public function __construct()
     {
         $this->chatUserService = new ChatUserService();
+        $this->messageService = new MessageService();
     }
 
     public function all()
@@ -24,6 +26,7 @@ class ChatService{
         $chats = Chat::where('status', Config::get('common.status.actived'))
                         ->paginate(20);
         $chats = $this->setChatsMembers($chats);
+        $chats = $this->setChatsLastMessage($chats);
         return ChatResource::collection($chats);
     }
 
@@ -36,12 +39,14 @@ class ChatService{
                     ->where('chats.status', Config::get('common.status.actived'))
                     ->paginate(20);
         $chats = $this->setChatsMembers($chats);
+        $chats = $this->setChatLastMessage($chats);
         return ChatResource::collection($chats);
     }
 
     public function one($chat)
     {
         $chat = $this->setChatMembers($chat);
+        $chat = $this->setChatLastMessage($chat);
         $chat = new ChatResource($chat);
         return $chat;
     }
@@ -73,6 +78,7 @@ class ChatService{
         ]);
 
         $chat = $this->setChatMembers($chat);
+        $chat = $this->setChatLastMessage($chat);
         return new ChatResource($chat);
     }
 
@@ -103,6 +109,7 @@ class ChatService{
         ]);
 
         $chat = $this->setChatMembers($chat);
+        $chat = $this->setChatLastMessage($chat);
         return new ChatResource($chat);
     }
 
@@ -114,7 +121,7 @@ class ChatService{
     public function check_exists($user_uuid, $entity_uuid)
     {
         $chat = Chat::select('chats.*')
-                        ->join('chat_users', 'chat_users.chat_uuid', '=', 'chats.uuid')
+                        ->leftJoin('chat_users', 'chat_users.chat_uuid', '=', 'chats.uuid')
                         ->where(function ($q) use($user_uuid, $entity_uuid) {
                             $q->where('chats.user_uuid', $user_uuid)
                                 ->where('chats.partner_uuid', $entity_uuid);
@@ -163,6 +170,20 @@ class ChatService{
     {
         foreach($chats AS $key => $value):
             $chats[$key]['members'] = $this->chatUserService->chat_members($value['uuid']);
+        endforeach;
+        return $chats;
+    }
+
+    private function setChatLastMessage($chat)
+    {
+        $chat['last_message'] = $this->messageService->last_message($chat['uuid']);
+        return $chat;
+    }
+
+    private function setChatsLastMessage($chats)
+    {
+        foreach($chats AS $key => $value):
+            $chats[$key]['last_message'] = $this->messageService->last_message($value['uuid']);
         endforeach;
         return $chats;
     }

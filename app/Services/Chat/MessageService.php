@@ -40,4 +40,19 @@ class MessageService {
         $message->update(['status' => Config::get('common.status.deleted')]);
     }
 
+    public function last_message($chat_uuid)
+    {
+        $message = Message::select('users.first_name', 'users.last_name', 'messages.message', 'messages.created_at')
+                            ->leftJoin('users', 'users.uuid', '=', 'messages.user_uuid')
+                            ->where('messages.status', Config::get('common.status.actived'))
+                            ->where('messages.chat_uuid', $chat_uuid)
+                            ->limit(1)
+                            ->get();
+        if ($message!=null){
+            return $message->toArray();
+        }
+        return ['message' => '', 'created_at' => '', 'first_name' => '', 'last_name' => ''];
+                            
+    }
+
 }
