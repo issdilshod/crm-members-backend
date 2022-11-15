@@ -1450,7 +1450,7 @@ class CompanyController extends Controller
                     }
                     foreach ($tmp_file AS $key2 => $value2):
                         $file = new File();
-                        $file->user_uuid = $validated['user_uuid'];
+                        $file->user_uuid = $request->user_uuid;
                         $file->entity_uuid = $company['uuid'];
                         $file->file_name = Str::uuid()->toString() . '.' . $value2->getClientOriginalExtension();
                         $file->file_path = $file->file_name;
@@ -1803,7 +1803,7 @@ class CompanyController extends Controller
                     }
                     foreach ($tmp_file AS $key2 => $value2):
                         $file = new File();
-                        $file->user_uuid = $validated['user_uuid'];
+                        $file->user_uuid = $request->user_uuid;
                         $file->entity_uuid = $company['uuid'];
                         $file->file_name = Str::uuid()->toString() . '.' . $value2->getClientOriginalExtension();
                         $file->file_path = $file->file_name;
