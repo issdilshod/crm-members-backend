@@ -242,7 +242,7 @@ class DirectorController extends Controller
     {
         // permission
         if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
-            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.view'))){
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.access'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
             }
         }
@@ -1132,6 +1132,10 @@ class DirectorController extends Controller
         // permission
         if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.view'))){
             $permissions[] = Config::get('common.permission.director.view');
+        }
+
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.access'))){
+            $permissions[] = Config::get('common.permission.director.access');
         }
 
         if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.store'))){

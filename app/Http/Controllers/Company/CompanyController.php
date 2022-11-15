@@ -310,7 +310,7 @@ class CompanyController extends Controller
     {
         // permission
         if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
-            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.view'))){
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.access'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
             }
         }
@@ -1540,6 +1540,10 @@ class CompanyController extends Controller
         // permission
         if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.view'))){
             $permissions[] = Config::get('common.permission.company.view');
+        }
+
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.access'))){
+            $permissions[] = Config::get('common.permission.company.access');
         }
 
         if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.store'))){

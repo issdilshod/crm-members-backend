@@ -47,8 +47,12 @@ class PermissionSeeder extends Seeder
                 'alias' => Config::get('common.permission.director.reject')
             ],*/
             [
-                'permission_name' => 'Director card view',
+                'permission_name' => 'Director cards view',
                 'alias' => Config::get('common.permission.director.view')
+            ],
+            [
+                'permission_name' => 'Director card access',
+                'alias' => Config::get('common.permission.director.access')
             ],
             // company
             [
@@ -80,8 +84,12 @@ class PermissionSeeder extends Seeder
                 'alias' => Config::get('common.permission.company.reject')
             ],*/
             [
-                'permission_name' => 'Company card view',
+                'permission_name' => 'Company cards view',
                 'alias' => Config::get('common.permission.company.view')
+            ],
+            [
+                'permission_name' => 'Company card access',
+                'alias' => Config::get('common.permission.company.access')
             ],
             // future websites
             [

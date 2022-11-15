@@ -18,7 +18,8 @@ return [
             'pre_save' => 'director_pre_save',
             'accept' => 'director_accept', // accept/reject
             //'reject' => 'director_reject',
-            'view' => 'director_view'
+            'view' => 'director_view',
+            'access' => 'director_access'
         ],
         'company' => [
             'store' => 'company_store', // add/update
@@ -28,7 +29,8 @@ return [
             'pre_save' => 'company_pre_save',
             'accept' => 'company_accept', // accept/reject
             //'reject' => 'company_reject',
-            'view' => 'company_view'
+            'view' => 'company_view',
+            'access' => 'company_access'
         ],
         'websites_future' => [
             'store' => 'websites_future_store', // add/update
