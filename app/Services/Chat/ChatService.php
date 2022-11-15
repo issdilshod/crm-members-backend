@@ -130,7 +130,6 @@ class ChatService{
                             $q->where('chats.partner_uuid', $user_uuid)
                                 ->where('chats.user_uuid', $entity_uuid);
                         })
-                        
                         ->first();
         if ($chat!=null){
             $chat = $this->setChatMembers($chat);
