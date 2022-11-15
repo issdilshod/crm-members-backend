@@ -54,6 +54,10 @@ class PermissionSeeder extends Seeder
                 'permission_name' => 'Director card access',
                 'alias' => Config::get('common.permission.director.access')
             ],
+            [
+                'permission_name' => 'Director card files download',
+                'alias' => Config::get('common.permission.director.download')
+            ],
             // company
             [
                 'permission_name' => 'Company card save (without approve)',
@@ -90,6 +94,10 @@ class PermissionSeeder extends Seeder
             [
                 'permission_name' => 'Company card access',
                 'alias' => Config::get('common.permission.company.access')
+            ],
+            [
+                'permission_name' => 'Company card files download',
+                'alias' => Config::get('common.permission.company.download')
             ],
             // future websites
             [

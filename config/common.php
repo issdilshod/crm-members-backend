@@ -19,7 +19,8 @@ return [
             'accept' => 'director_accept', // accept/reject
             //'reject' => 'director_reject',
             'view' => 'director_view',
-            'access' => 'director_access'
+            'access' => 'director_access',
+            'download' => 'director_download'
         ],
         'company' => [
             'store' => 'company_store', // add/update
@@ -30,7 +31,8 @@ return [
             'accept' => 'company_accept', // accept/reject
             //'reject' => 'company_reject',
             'view' => 'company_view',
-            'access' => 'company_access'
+            'access' => 'company_access',
+            'download' => 'company_download'
         ],
         'websites_future' => [
             'store' => 'websites_future_store', // add/update

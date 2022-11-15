@@ -1158,6 +1158,10 @@ class DirectorController extends Controller
             $permissions[] = Config::get('common.permission.director.accept');
         }
 
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.download'))){
+            $permissions[] = Config::get('common.permission.director.download');
+        }
+
         return $permissions;
     }
 

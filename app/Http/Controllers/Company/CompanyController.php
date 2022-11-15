@@ -1566,6 +1566,10 @@ class CompanyController extends Controller
             $permissions[] = Config::get('common.permission.company.accept');
         }
 
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.download'))){
+            $permissions[] = Config::get('common.permission.company.download');
+        }
+
         return $permissions;
     }
 
