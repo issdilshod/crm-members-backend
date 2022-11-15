@@ -755,6 +755,7 @@ class CompanyController extends Controller
             'legal_name' => 'required',
             'sic_code_uuid' => '',
             'director_uuid' => 'required',
+            'incorporation_date' => '',
             'incorporation_state_uuid' => '',
             'incorporation_state_name' => '',
             'doing_business_in_state_uuid' => '',
