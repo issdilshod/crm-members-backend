@@ -1728,6 +1728,9 @@
                                     "director_uuid": {
                                         "type": "text"
                                     },
+                                    "incorporation_date": {
+                                        "type": "text"
+                                    },
                                     "incorporation_state_uuid": {
                                         "type": "text"
                                     },
@@ -1919,6 +1922,9 @@
                                         "type": "text"
                                     },
                                     "director_uuid": {
+                                        "type": "text"
+                                    },
+                                    "incorporation_date": {
                                         "type": "text"
                                     },
                                     "incorporation_state_uuid": {
@@ -2225,6 +2231,9 @@
                                     "director_uuid": {
                                         "type": "text"
                                     },
+                                    "incorporation_date": {
+                                        "type": "text"
+                                    },
                                     "incorporation_state_uuid": {
                                         "type": "text"
                                     },
@@ -2424,6 +2433,9 @@
                                         "type": "text"
                                     },
                                     "director_uuid": {
+                                        "type": "text"
+                                    },
+                                    "incorporation_date": {
                                         "type": "text"
                                     },
                                     "incorporation_state_uuid": {
@@ -2634,6 +2646,9 @@
                                         "type": "text"
                                     },
                                     "director_uuid": {
+                                        "type": "text"
+                                    },
+                                    "incorporation_date": {
                                         "type": "text"
                                     },
                                     "incorporation_state_uuid": {
@@ -2926,6 +2941,9 @@
                                         "type": "text"
                                     },
                                     "director_uuid": {
+                                        "type": "text"
+                                    },
+                                    "incorporation_date": {
                                         "type": "text"
                                     },
                                     "incorporation_state_uuid": {

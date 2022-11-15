@@ -80,6 +80,7 @@ class CompanyController extends Controller
       *                         @OA\Property(property="legal_name", type="text"),
       *                         @OA\Property(property="sic_code_uuid", type="text"),
       *                         @OA\Property(property="director_uuid", type="text"),
+      *                         @OA\Property(property="incorporation_date", type="text"),
       *                         @OA\Property(property="incorporation_state_uuid", type="text"),
       *                         @OA\Property(property="incorporation_state_name", type="text"),
       *                         @OA\Property(property="doing_business_in_state_uuid", type="text"),
@@ -154,6 +155,7 @@ class CompanyController extends Controller
             'legal_name' => 'required',
             'sic_code_uuid' => '',
             'director_uuid' => 'required',
+            'incorporation_date' => '',
             'incorporation_state_uuid' => '',
             'incorporation_state_name' => '',
             'doing_business_in_state_uuid' => '',
@@ -343,6 +345,7 @@ class CompanyController extends Controller
       *                         @OA\Property(property="legal_name", type="text"),
       *                         @OA\Property(property="sic_code_uuid", type="text"),
       *                         @OA\Property(property="director_uuid", type="text"),
+      *                         @OA\Property(property="incorporation_date", type="text"),
       *                         @OA\Property(property="incorporation_state_uuid", type="text"),
       *                         @OA\Property(property="incorporation_state_name", type="text"),
       *                         @OA\Property(property="doing_business_in_state_uuid", type="text"),
@@ -421,6 +424,7 @@ class CompanyController extends Controller
             'legal_name' => 'required',
             'sic_code_uuid' => '',
             'director_uuid' => 'required',
+            'incorporation_date' => '',
             'incorporation_state_uuid' => '',
             'incorporation_state_name' => '',
             'doing_business_in_state_uuid' => '',
@@ -676,6 +680,7 @@ class CompanyController extends Controller
       *                         @OA\Property(property="legal_name", type="text"),
       *                         @OA\Property(property="sic_code_uuid", type="text"),
       *                         @OA\Property(property="director_uuid", type="text"),
+      *                         @OA\Property(property="incorporation_date", type="text"),
       *                         @OA\Property(property="incorporation_state_uuid", type="text"),
       *                         @OA\Property(property="incorporation_state_name", type="text"),
       *                         @OA\Property(property="doing_business_in_state_uuid", type="text"),
@@ -912,6 +917,7 @@ class CompanyController extends Controller
       *                         @OA\Property(property="legal_name", type="text"),
       *                         @OA\Property(property="sic_code_uuid", type="text"),
       *                         @OA\Property(property="director_uuid", type="text"),
+      *                         @OA\Property(property="incorporation_date", type="text"),
       *                         @OA\Property(property="incorporation_state_uuid", type="text"),
       *                         @OA\Property(property="incorporation_state_name", type="text"),
       *                         @OA\Property(property="doing_business_in_state_uuid", type="text"),
@@ -999,6 +1005,7 @@ class CompanyController extends Controller
             'legal_name' => 'required',
             'sic_code_uuid' => '',
             'director_uuid' => 'required',
+            'incorporation_date' => '',
             'incorporation_state_uuid' => '',
             'incorporation_state_name' => '',
             'doing_business_in_state_uuid' => '',
@@ -1201,6 +1208,7 @@ class CompanyController extends Controller
       *                         @OA\Property(property="legal_name", type="text"),
       *                         @OA\Property(property="sic_code_uuid", type="text"),
       *                         @OA\Property(property="director_uuid", type="text"),
+      *                         @OA\Property(property="incorporation_date", type="text"),
       *                         @OA\Property(property="incorporation_state_uuid", type="text"),
       *                         @OA\Property(property="incorporation_state_name", type="text"),
       *                         @OA\Property(property="doing_business_in_state_uuid", type="text"),
@@ -1280,6 +1288,7 @@ class CompanyController extends Controller
             'legal_name' => 'required',
             'sic_code_uuid' => '',
             'director_uuid' => 'required',
+            'incorporation_date' => '',
             'incorporation_state_uuid' => '',
             'incorporation_state_name' => '',
             'doing_business_in_state_uuid' => '',
@@ -1508,7 +1517,7 @@ class CompanyController extends Controller
       */
     public function by_user(Request $request)
     {
-        $companies = $this->companyService->by_user($request->user_uuid);
+        $companies = $this->companyService->by_user($request->user_uuid, '');
         return $companies;
     }
 
@@ -1581,6 +1590,7 @@ class CompanyController extends Controller
       *                         @OA\Property(property="legal_name", type="text"),
       *                         @OA\Property(property="sic_code_uuid", type="text"),
       *                         @OA\Property(property="director_uuid", type="text"),
+      *                         @OA\Property(property="incorporation_date", type="text"),
       *                         @OA\Property(property="incorporation_state_uuid", type="text"),
       *                         @OA\Property(property="incorporation_state_name", type="text"),
       *                         @OA\Property(property="doing_business_in_state_uuid", type="text"),
@@ -1658,6 +1668,7 @@ class CompanyController extends Controller
             'legal_name' => '',
             'sic_code_uuid' => '',
             'director_uuid' => '',
+            'incorporation_date' => '',
             'incorporation_state_uuid' => '',
             'incorporation_state_name' => '',
             'doing_business_in_state_uuid' => '',
