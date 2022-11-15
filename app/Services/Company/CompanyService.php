@@ -61,14 +61,20 @@ class CompanyService {
         return CompanyResource::collection($companies);
     }
 
-    public function by_user($user_uuid, $pending_only)
+    public function by_user($user_uuid, $filter)
     {
         $companies = Company::orderBy('updated_at', 'DESC')
-                                ->when(!$pending_only, function ($q) {
+                                ->when(($filter!='' || $filter=='0') , function ($q) { // normal view
                                     return $q->where('status', '!=', Config::get('common.status.deleted'));
                                 })
-                                ->when($pending_only, function ($q) {
+                                ->when($filter=='1', function ($q) { // unapproved
                                     return $q->where('status', Config::get('common.status.pending'));
+                                })
+                                ->when($filter=='2', function ($q) { // approved
+                                    return $q->where('status', Config::get('common.status.actived'));
+                                })
+                                ->when($filter=='3', function ($q) { // rejected
+                                    return $q->where('status', Config::get('common.status.rejected'));
                                 })
                                 ->where('user_uuid', $user_uuid)
                                 ->paginate(10);
@@ -118,14 +124,20 @@ class CompanyService {
         return CompanyPendingResource::collection($companies);
     }
 
-    public function headquarters($pending_only)
+    public function headquarters($filter)
     {
         $companies = Company::orderBy('updated_at', 'DESC')
-                                ->when(!$pending_only, function ($q) {
+                                ->when(($filter!='' || $filter=='0') , function ($q) { // normal view
                                     return $q->where('status', '!=', Config::get('common.status.deleted'));
                                 })
-                                ->when($pending_only, function ($q) {
+                                ->when($filter=='1', function ($q) { // unapproved
                                     return $q->where('status', Config::get('common.status.pending'));
+                                })
+                                ->when($filter=='2', function ($q) { // approved
+                                    return $q->where('status', Config::get('common.status.actived'));
+                                })
+                                ->when($filter=='3', function ($q) { // rejected
+                                    return $q->where('status', Config::get('common.status.rejected'));
                                 })
                                 ->paginate(10);
 

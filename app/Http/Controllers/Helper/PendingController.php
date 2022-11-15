@@ -40,17 +40,18 @@ class PendingController extends Controller
       */
     public function by_user(Request $request)
     {
-        $pendingOnly = isset($request->pending_only);
+        $filter = '';
+        if (isset($request->filter)){ $filter = $request->filter; }
 
         // if now headquarters then show only belongs to them
         if (!PermissionPolicy::permission($request->user_uuid)){
-            $directors = $this->directorService->by_user($request->user_uuid, $pendingOnly);
-            $companies = $this->companyService->by_user($request->user_uuid, $pendingOnly);
+            $directors = $this->directorService->by_user($request->user_uuid, $filter);
+            $companies = $this->companyService->by_user($request->user_uuid, $filter);
             $summary['directors'] = $this->directorService->summary($request->user_uuid);
             $summary['companies'] = $this->companyService->summary($request->user_uuid);
         }else{
-            $directors = $this->directorService->headquarters($pendingOnly);
-            $companies = $this->companyService->headquarters($pendingOnly);
+            $directors = $this->directorService->headquarters($filter);
+            $companies = $this->companyService->headquarters($filter);
             $summary['directors'] = $this->directorService->summary();
             $summary['companies'] = $this->companyService->summary();
         }
