@@ -43,6 +43,7 @@ class MessageService {
     public function last_message($chat_uuid)
     {
         $message = Message::select('users.first_name', 'users.last_name', 'messages.message', 'messages.created_at')
+                            ->orderBy('messages.created_at', 'DESC')
                             ->leftJoin('users', 'users.uuid', '=', 'messages.user_uuid')
                             ->where('messages.status', Config::get('common.status.actived'))
                             ->where('messages.chat_uuid', $chat_uuid)
