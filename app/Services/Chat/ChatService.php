@@ -23,8 +23,11 @@ class ChatService{
     public function all()
     {
         // order by last message
-        $chats = Chat::where('status', Config::get('common.status.actived'))
-                        ->paginate(20);
+        $chats = Chat::select('chats.*')
+                        ->with('last_message')
+                        ->where('chats.status', Config::get('common.status.actived'))
+                        ->paginate(20)
+                        ->sortByDesc('last_message.created_at');
         $chats = $this->setChatsMembers($chats);
         $chats = $this->setChatsLastMessage($chats);
         return ChatResource::collection($chats);
@@ -34,10 +37,11 @@ class ChatService{
     {
         // order by last message
         $chats = Chat::select('chats.*')
-                    ->join('chat_users', 'chat_users.chat_uuid', '=', 'chats.uuid')
-                    ->where('chat_users.user_uuid', $user_uuid)
-                    ->where('chats.status', Config::get('common.status.actived'))
-                    ->paginate(20);
+                        ->with('last_message')
+                        ->where('chats.status', Config::get('common.status.actived'))
+                        ->where('chat_users.user_uuid', $user_uuid)
+                        ->paginate(20)
+                        ->sortByDesc('last_message.created_at');
         $chats = $this->setChatsMembers($chats);
         $chats = $this->setChatLastMessage($chats);
         return ChatResource::collection($chats);
