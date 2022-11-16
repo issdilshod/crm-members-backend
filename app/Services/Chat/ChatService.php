@@ -38,12 +38,13 @@ class ChatService{
         // order by last message
         $chats = Chat::select('chats.*')
                         ->with('last_message')
-                        ->where('chats.status', Config::get('common.status.actived'))
+                        ->join('chat_users', 'chat_users.chat_uuid', '=', 'chats.uuid')
                         ->where('chat_users.user_uuid', $user_uuid)
+                        ->where('chats.status', Config::get('common.status.actived'))
                         ->paginate(20)
                         ->sortByDesc('last_message.created_at');
         $chats = $this->setChatsMembers($chats);
-        $chats = $this->setChatLastMessage($chats);
+        $chats = $this->setChatsLastMessage($chats);
         return ChatResource::collection($chats);
     }
 
