@@ -507,6 +507,7 @@ class CompanyController extends Controller
         if (isset($validated['emails'])){
             foreach($validated['emails'] AS $key => $value):
                 $value['entity_uuid'] = $company['uuid'];
+                $value['status'] = Config::get('common.status.actived');
                 $this->emailService->save($value);
             endforeach;
         }
