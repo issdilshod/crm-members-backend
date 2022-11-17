@@ -1839,12 +1839,6 @@
                                     "bank_account_security_to_delete[]": {
                                         "type": "text"
                                     },
-                                    "future_web[][domain]": {
-                                        "type": "text"
-                                    },
-                                    "future_web[][category]": {
-                                        "type": "text"
-                                    },
                                     "files[incorporation_state][]": {
                                         "type": "file",
                                         "format": "binary"
@@ -2030,12 +2024,6 @@
                                         "type": "text"
                                     },
                                     "bank_account_security[][answer]": {
-                                        "type": "text"
-                                    },
-                                    "future_web[][domain]": {
-                                        "type": "text"
-                                    },
-                                    "future_web[][category]": {
                                         "type": "text"
                                     },
                                     "files[incorporation_state][]": {
@@ -2339,12 +2327,6 @@
                                     "bank_account_security[][answer]": {
                                         "type": "text"
                                     },
-                                    "future_web[][domain]": {
-                                        "type": "text"
-                                    },
-                                    "future_web[][category]": {
-                                        "type": "text"
-                                    },
                                     "files[incorporation_state][]": {
                                         "type": "file",
                                         "format": "binary"
@@ -2544,15 +2526,6 @@
                                         "type": "text"
                                     },
                                     "bank_account_security_to_delete[]": {
-                                        "type": "text"
-                                    },
-                                    "future_web[][domain]": {
-                                        "type": "text"
-                                    },
-                                    "future_web[][category]": {
-                                        "type": "text"
-                                    },
-                                    "future_web_to_delete[]": {
                                         "type": "text"
                                     },
                                     "files[incorporation_state][]": {
@@ -2757,15 +2730,6 @@
                                         "type": "text"
                                     },
                                     "bank_account_security_to_delete[]": {
-                                        "type": "text"
-                                    },
-                                    "future_web[][domain]": {
-                                        "type": "text"
-                                    },
-                                    "future_web[][category]": {
-                                        "type": "text"
-                                    },
-                                    "future_web_to_delete[]": {
                                         "type": "text"
                                     },
                                     "files[incorporation_state][]": {
@@ -3052,15 +3016,6 @@
                                         "type": "text"
                                     },
                                     "bank_account_security_to_delete[]": {
-                                        "type": "text"
-                                    },
-                                    "future_web[][domain]": {
-                                        "type": "text"
-                                    },
-                                    "future_web[][category]": {
-                                        "type": "text"
-                                    },
-                                    "future_web_to_delete[]": {
                                         "type": "text"
                                     },
                                     "files[incorporation_state][]": {

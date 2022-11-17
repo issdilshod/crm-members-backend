@@ -47,8 +47,6 @@ class CompanyResource extends JsonResource
             'website' => $this->website,
             'db_report_number' => $this->db_report_number,
 
-            'future_websites' => FutureWebsiteResource::collection($this->future_websites),
-
             'bank_account' => BankAccountResource::collection($this->bank_account),
             'address' => AddressResource::collection($this->addresses),
             'emailsdb' => EmailResource::collection($this->emails),

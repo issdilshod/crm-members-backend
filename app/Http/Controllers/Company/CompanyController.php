@@ -14,7 +14,6 @@ use App\Services\Company\CompanyService;
 use App\Services\Helper\AddressService;
 use App\Services\Helper\BankAccountService;
 use App\Services\Helper\EmailService;
-use App\Services\Helper\FutureWebsiteService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
@@ -26,7 +25,6 @@ class CompanyController extends Controller
     private $emailService;
     private $addressService;
     private $bankAccountService;
-    private $futureWebsiteService;
 
     public function __construct()
     {
@@ -34,7 +32,6 @@ class CompanyController extends Controller
         $this->emailService = new EmailService();
         $this->addressService = new AddressService();
         $this->bankAccountService = new BankAccountService();
-        $this->futureWebsiteService = new FutureWebsiteService();
     }
 
     /**     @OA\GET(
@@ -123,9 +120,6 @@ class CompanyController extends Controller
       *                         @OA\Property(property="bank_account_security[][question]", type="text"),
       *                         @OA\Property(property="bank_account_security[][answer]", type="text"),
       *
-      *                         @OA\Property(property="future_web[][domain]", type="text"),
-      *                         @OA\Property(property="future_web[][category]", type="text"),
-      *
       *                         @OA\Property(property="files[incorporation_state][]", type="file", format="binary"),
       *                         @OA\Property(property="files[doing_business_in_state][]", type="file", format="binary"),
       *                         @OA\Property(property="files[company_ein][]", type="file", format="binary"),
@@ -182,9 +176,6 @@ class CompanyController extends Controller
 
             // emails
             'emails' => 'array',
-
-            //future websites
-            'future_web' => 'array',
 
             // bank account
             'bank_account' => 'array',
@@ -249,16 +240,6 @@ class CompanyController extends Controller
         $validated['address']['entity_uuid'] = $company['uuid'];
         $this->addressService->create($validated['address']);
 
-        // future websites
-        if (isset($validated['future_web'])){
-            foreach ($validated['future_web'] as $key => $value):
-                $value['entity_uuid'] = $company['uuid'];
-                $this->futureWebsiteService->save($value);
-            endforeach;
-        }
-
-        #region Files upload (if exsist)
-
         if ($request->has('files')){
             $files = $request->file('files');
             foreach ($files AS $key => $value):
@@ -277,8 +258,6 @@ class CompanyController extends Controller
                 endforeach;
             endforeach;
         }
-
-        #endregion
 
         return new CompanyResource($company);
     }
@@ -390,9 +369,6 @@ class CompanyController extends Controller
       *
       *                         @OA\Property(property="bank_account_security_to_delete[]", type="text"),
       *
-      *                         @OA\Property(property="future_web[][domain]", type="text"),
-      *                         @OA\Property(property="future_web[][category]", type="text"),
-      *
       *                         @OA\Property(property="files[incorporation_state][]", type="file", format="binary"),
       *                         @OA\Property(property="files[doing_business_in_state][]", type="file", format="binary"),
       *                         @OA\Property(property="files[company_ein][]", type="file", format="binary"),
@@ -459,10 +435,6 @@ class CompanyController extends Controller
             // bank account security
             'bank_account_security' => 'array',
             'bank_account_security_to_delete' => 'array',
-
-            // future websites
-            'future_web' => 'array',
-            'future_web_to_delete' => 'array',
 
             // files to delete
             'files_to_delete' => 'array'
@@ -541,23 +513,7 @@ class CompanyController extends Controller
             endforeach;
         }
 
-        // future websites
-        if (isset($validated['future_web_to_delete'])){
-            foreach ($validated['future_web_to_delete'] as $key => $value):
-                $this->futureWebsiteService->delete($value);
-            endforeach;
-        }
-
-        if (isset($validated['future_web'])){
-            foreach ($validated['future_web'] as $key => $value):
-                $value['entity_uuid'] = $company['uuid'];
-                $this->futureWebsiteService->save($value);
-            endforeach;
-        }
-
-        #region Files delete (if exsist)
-
-        if (isset($validated['files_to_delete'])){
+        if (isset($validated['files_to_delete'])){ // files to delete
             foreach ($validated['files_to_delete'] AS $key => $value):
                 if ($value!=null){
                     $file = File::find($value);
@@ -566,11 +522,7 @@ class CompanyController extends Controller
             endforeach;
         }
 
-        #endregion
-
-        #region Files upload (if exsist)
-
-        if ($request->has('files')){
+        if ($request->has('files')){ // files to upload
             $files = $request->file('files');
             foreach ($files AS $key => $value):
                 $tmp_file = $value;
@@ -588,8 +540,6 @@ class CompanyController extends Controller
                 endforeach;
             endforeach;
         }
-
-        #endregion
 
         return new CompanyResource($company);
     }
@@ -724,9 +674,6 @@ class CompanyController extends Controller
       *                         @OA\Property(property="bank_account_security[][question]", type="text"),
       *                         @OA\Property(property="bank_account_security[][answer]", type="text"),
       *
-      *                         @OA\Property(property="future_web[][domain]", type="text"),
-      *                         @OA\Property(property="future_web[][category]", type="text"),
-      *
       *                         @OA\Property(property="files[incorporation_state][]", type="file", format="binary"),
       *                         @OA\Property(property="files[doing_business_in_state][]", type="file", format="binary"),
       *                         @OA\Property(property="files[company_ein][]", type="file", format="binary"),
@@ -790,9 +737,6 @@ class CompanyController extends Controller
             // bank account security
             'bank_account_security' => 'array',
 
-            // future web
-            'future_web' => 'array',
-
             'user_uuid' => 'string'
         ]);
 
@@ -853,17 +797,7 @@ class CompanyController extends Controller
             endforeach;
         }
 
-        // future websites
-        if (isset($validated['future_web'])){
-            foreach ($validated['future_web'] as $key => $value):
-                $value['entity_uuid'] = $company['uuid'];
-                $this->futureWebsiteService->save($value);
-            endforeach;
-        }
-
-        #region Files upload (if exsist)
-
-        if ($request->has('files')){
+        if ($request->has('files')){ // file upload
             $files = $request->file('files');
             foreach ($files AS $key => $value):
                 foreach ($value AS $key1 => $value1):
@@ -887,8 +821,6 @@ class CompanyController extends Controller
                 endforeach;
             endforeach;
         }
-
-        #endregion
 
         return new CompanyResource($company);
     }
@@ -964,10 +896,6 @@ class CompanyController extends Controller
       *
       *                         @OA\Property(property="bank_account_security_to_delete[]", type="text"),
       *
-      *                         @OA\Property(property="future_web[][domain]", type="text"),
-      *                         @OA\Property(property="future_web[][category]", type="text"),
-      *                         @OA\Property(property="future_web_to_delete[]", type="text"),
-      *
       *                         @OA\Property(property="files[incorporation_state][]", type="file", format="binary"),
       *                         @OA\Property(property="files[doing_business_in_state][]", type="file", format="binary"),
       *                         @OA\Property(property="files[company_ein][]", type="file", format="binary"),
@@ -1042,10 +970,6 @@ class CompanyController extends Controller
             // bank account security
             'bank_account_security' => 'array',
             'bank_account_security_to_delete' => 'array',
-
-            // future websites
-            'future_web' => 'array',
-            'future_web_to_delete' => 'array',
 
             'files_to_delete' => 'array',
         ]);
@@ -1125,23 +1049,7 @@ class CompanyController extends Controller
             endforeach;
         }
 
-        // future websites
-        if (isset($validated['future_web_to_delete'])){
-            foreach ($validated['future_web_to_delete'] as $key => $value):
-                $this->futureWebsiteService->delete($value);
-            endforeach;
-        }
-
-        if (isset($validated['future_web'])){
-            foreach ($validated['future_web'] as $key => $value):
-                $value['entity_uuid'] = $company['uuid'];
-                $this->futureWebsiteService->save($value);
-            endforeach;
-        }
-
-        #region Files delete (if exsist)
-
-        if (isset($validated['files_to_delete'])){
+        if (isset($validated['files_to_delete'])){  // file to delete
             foreach ($validated['files_to_delete'] AS $key => $value):
                 if ($value!=null){
                     $file = File::find($value);
@@ -1150,11 +1058,7 @@ class CompanyController extends Controller
             endforeach;
         }
 
-        #endregion
-
-        #region Files upload (if exsist)
-
-        if ($request->has('files')){
+        if ($request->has('files')){ // file to upload
             $files = $request->file('files');
             foreach ($files AS $key => $value):
                 foreach ($value AS $key1 => $value1):
@@ -1178,8 +1082,6 @@ class CompanyController extends Controller
                 endforeach;
             endforeach;
         }
-
-        #endregion
 
         return new CompanyResource($company);
     }
@@ -1255,10 +1157,6 @@ class CompanyController extends Controller
       *
       *                         @OA\Property(property="bank_account_security_to_delete[]", type="text"),
       *
-      *                         @OA\Property(property="future_web[][domain]", type="text"),
-      *                         @OA\Property(property="future_web[][category]", type="text"),
-      *                         @OA\Property(property="future_web_to_delete[]", type="text"),
-      *
       *                         @OA\Property(property="files[incorporation_state][]", type="file", format="binary"),
       *                         @OA\Property(property="files[doing_business_in_state][]", type="file", format="binary"),
       *                         @OA\Property(property="files[company_ein][]", type="file", format="binary"),
@@ -1325,10 +1223,6 @@ class CompanyController extends Controller
             // bank account security
             'bank_account_security' => 'array',
             'bank_account_security_to_delete' => 'array',
-
-            // future websites
-            'future_web' => 'array',
-            'future_web_to_delete' => 'array',
 
             // files to delete
             'files_to_delete' => 'array'
@@ -1410,23 +1304,7 @@ class CompanyController extends Controller
             endforeach;
         }
 
-        // future websites
-        if (isset($validated['future_web_to_delete'])){
-            foreach ($validated['future_web_to_delete'] as $key => $value):
-                $this->futureWebsiteService->delete($value);
-            endforeach;
-        }
-
-        if (isset($validated['future_web'])){
-            foreach ($validated['future_web'] as $key => $value):
-                $value['entity_uuid'] = $company['uuid'];
-                $this->futureWebsiteService->save($value);
-            endforeach;
-        }
-
-        #region Files delete (if exsist)
-
-        if (isset($validated['files_to_delete'])){
+        if (isset($validated['files_to_delete'])){ // files to delete
             foreach ($validated['files_to_delete'] AS $key => $value):
                 if ($value!=null){
                     $file = File::find($value);
@@ -1435,11 +1313,7 @@ class CompanyController extends Controller
             endforeach;
         }
 
-        #endregion
-
-        #region Files upload (if exsist)
-
-        if ($request->has('files')){
+        if ($request->has('files')){ // files to upload
             $files = $request->file('files');
             foreach ($files AS $key => $value):
                 foreach ($value AS $key1 => $value1):
@@ -1463,8 +1337,6 @@ class CompanyController extends Controller
                 endforeach;
             endforeach;
         }
-
-        #endregion
 
         return new CompanyResource($company);
     }
@@ -1645,10 +1517,6 @@ class CompanyController extends Controller
       *
       *                         @OA\Property(property="bank_account_security_to_delete[]", type="text"),
       *
-      *                         @OA\Property(property="future_web[][domain]", type="text"),
-      *                         @OA\Property(property="future_web[][category]", type="text"),
-      *                         @OA\Property(property="future_web_to_delete[]", type="text"),
-      *
       *                         @OA\Property(property="files[incorporation_state][]", type="file", format="binary"),
       *                         @OA\Property(property="files[doing_business_in_state][]", type="file", format="binary"),
       *                         @OA\Property(property="files[company_ein][]", type="file", format="binary"),
@@ -1714,10 +1582,6 @@ class CompanyController extends Controller
             'bank_account_security' => 'array',
             'bank_account_security_to_delete' => 'array',
 
-            // future websites
-            'future_web' => 'array',
-            'future_web_to_delete' => 'array',
-
             // files to delete
             'files_to_delete' => 'array'
         ]);
@@ -1771,23 +1635,7 @@ class CompanyController extends Controller
             endforeach;
         }
 
-        // future websites
-        if (isset($validated['future_web_to_delete'])){
-            foreach ($validated['future_web_to_delete'] as $key => $value):
-                $this->futureWebsiteService->delete($value);
-            endforeach;
-        }
-
-        if (isset($validated['future_web'])){
-            foreach ($validated['future_web'] as $key => $value):
-                $value['entity_uuid'] = $company['uuid'];
-                $this->futureWebsiteService->save($value);
-            endforeach;
-        }
-
-        #region Files delete (if exsist)
-
-        if (isset($validated['files_to_delete'])){
+        if (isset($validated['files_to_delete'])){ // files to delete
             foreach ($validated['files_to_delete'] AS $key => $value):
                 if ($value!=null){
                     $file = File::find($value);
@@ -1796,11 +1644,7 @@ class CompanyController extends Controller
             endforeach;
         }
 
-        #endregion
-
-        #region Files upload (if exsist)
-
-        if ($request->has('files')){
+        if ($request->has('files')){ // files to upload
             $files = $request->file('files');
             foreach ($files AS $key => $value):
                 foreach ($value AS $key1 => $value1):
@@ -1824,8 +1668,6 @@ class CompanyController extends Controller
                 endforeach;
             endforeach;
         }
-
-        #endregion
 
         return new CompanyResource($company);
     }

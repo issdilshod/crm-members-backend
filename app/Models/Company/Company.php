@@ -7,12 +7,10 @@ use App\Models\Helper\Address;
 use App\Models\Helper\BankAccount;
 use App\Models\Helper\Email;
 use App\Models\Helper\File;
-use App\Models\Helper\FutureWebsite;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\TraitUuid;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Config;
 
 class Company extends Model
@@ -39,12 +37,6 @@ class Company extends Model
 
     public function addresses(){
         return $this->hasMany(Address::class, 'entity_uuid', 'uuid');
-    }
-
-    public function future_websites(): HasMany
-    {
-        return $this->hasMany(FutureWebsite::class, 'entity_uuid', 'uuid')
-                    ->where('status', Config::get('common.status.actived'));
     }
 
     public function director(): BelongsTo
