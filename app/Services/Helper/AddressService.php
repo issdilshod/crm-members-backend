@@ -15,6 +15,23 @@ class AddressService {
         return $address;
     }
 
+    public function save($entity)
+    {
+        $address = Address::where('entity_uuid', $entity['entity_uuid'])
+                            ->where(function ($q) use($entity) {
+                                $q->where('address_parent', $entity['address_parent'])
+                                    ->orWhere('address_parent', null);
+                            })
+                            ->first();
+        if ($address!=null){
+            $address->update($entity);
+        }else{
+            $address = Address::create($entity);
+        }
+
+        return $address;
+    }
+
     private function get_identifier_exists($uuid)
     {
         $director = Director::select('first_name', 'middle_name', 'last_name')
@@ -34,7 +51,7 @@ class AddressService {
         return $message;
     }
 
-    public function check($entity, $key_parent = '')
+    public function check($entity, $key_parent = '', $extra = 'address')
     {
         $check = [];
 
@@ -50,7 +67,7 @@ class AddressService {
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
                 foreach ($check['tmp'] AS $key => $value):
-                    $check['address.'.($key_parent!=''?$key_parent.'.':'').$key] = Config::get('common.errors.exsist') . $this->get_identifier_exists($check['tmp']['entity_uuid']);
+                    $check[$extra.'.'.($key_parent!=''?$key_parent.'.':'').$key] = Config::get('common.errors.exsist') . $this->get_identifier_exists($check['tmp']['entity_uuid']);
                 endforeach;
             }
             unset($check['tmp']);
@@ -59,7 +76,7 @@ class AddressService {
         return $check;
     }
 
-    public function check_ignore($entity, $ingore_uuid, $key_parent = '')
+    public function check_ignore($entity, $ingore_uuid, $key_parent = '', $extra = 'address')
     {
         $check = [];
 
@@ -76,7 +93,7 @@ class AddressService {
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
                 foreach ($check['tmp'] AS $key => $value):
-                    $check['address.'.($key_parent!=''?$key_parent.'.':'').$key] = Config::get('common.errors.exsist') . $this->get_identifier_exists($check['tmp']['entity_uuid']);
+                    $check[$extra.'.'.($key_parent!=''?$key_parent.'.':'').$key] = Config::get('common.errors.exsist') . $this->get_identifier_exists($check['tmp']['entity_uuid']);
                 endforeach;
             }
             unset($check['tmp']);

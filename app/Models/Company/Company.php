@@ -27,7 +27,7 @@ class Company extends Model
 
     public function files(){
         return $this->hasMany(File::class, 'entity_uuid', 'uuid')
-                    ->where('status', Config::get('common.status.actived'));
+                    ->where('status', '!=', Config::get('common.status.deleted'));
     }
 
     public function emails(){
@@ -36,7 +36,8 @@ class Company extends Model
     }
 
     public function addresses(){
-        return $this->hasMany(Address::class, 'entity_uuid', 'uuid');
+        return $this->hasMany(Address::class, 'entity_uuid', 'uuid')->orderBy('address_parent')
+                    ->where('status', '!=', Config::get('common.status.deleted'));
     }
 
     public function director(): BelongsTo

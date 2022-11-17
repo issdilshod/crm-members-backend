@@ -173,6 +173,7 @@ class CompanyController extends Controller
 
             // addresses
             'address' => 'array',
+            'extra_address' => 'array',
 
             // emails
             'emails' => 'array',
@@ -195,6 +196,11 @@ class CompanyController extends Controller
 
         if (isset($validated['address'])){
             $tmpCheck = $this->addressService->check($validated['address']);
+            $check = array_merge($check, $tmpCheck);
+        }
+
+        if (isset($validated['extra_address'])){
+            $tmpCheck = $this->addressService->check($validated['extra_address'], '', 'extra_address');
             $check = array_merge($check, $tmpCheck);
         }
 
@@ -239,6 +245,10 @@ class CompanyController extends Controller
         $validated['address']['address_parent'] = '';
         $validated['address']['entity_uuid'] = $company['uuid'];
         $this->addressService->create($validated['address']);
+
+        $validated['extra_address']['address_parent'] = 'extra_address';
+        $validated['extra_address']['entity_uuid'] = $company['uuid'];
+        $this->addressService->create($validated['extra_address']);
 
         if ($request->has('files')){
             $files = $request->file('files');
@@ -424,6 +434,8 @@ class CompanyController extends Controller
 
             // addresses
             'address' => 'array',
+            'extra_address' => 'array',
+            'extra_address_remove' => '',
 
             // emails
             'emails' => 'array',
@@ -449,6 +461,11 @@ class CompanyController extends Controller
 
         if (isset($validated['address'])){
             $tmpCheck = $this->addressService->check_ignore($validated['address'], $company->uuid);
+            $check = array_merge($check, $tmpCheck);
+        }
+
+        if (isset($validated['extra_address'])){
+            $tmpCheck = $this->addressService->check_ignore($validated['extra_address'], $company->uuid, '', 'extra_address');
             $check = array_merge($check, $tmpCheck);
         }
 
@@ -485,8 +502,21 @@ class CompanyController extends Controller
         }
 
         // address
-        $address = Address::where('entity_uuid', $company['uuid']);
-        $address->update($validated['address']);
+        $validated['address']['entity_uuid'] = $company['uuid'];
+        $validated['address']['address_parent'] = '';
+        $this->addressService->save($validated['address']);
+
+        if (isset($validated['extra_address_remove']) && filter_var($validated['extra_address_remove'], FILTER_VALIDATE_BOOLEAN)){ // remove extra address
+            $validated['extra_address']['entity_uuid'] = $company['uuid'];
+            $validated['extra_address']['address_parent'] = 'extra_address';
+            $validated['extra_address']['status'] = Config::get('common.status.deleted');
+            $this->addressService->save($validated['extra_address']);
+        }else{
+            $validated['extra_address']['entity_uuid'] = $company['uuid'];
+            $validated['extra_address']['address_parent'] = 'extra_address';
+            $validated['extra_address']['status'] = Config::get('common.status.actived');
+            $this->addressService->save($validated['extra_address']);
+        }
 
         // bank account & security
         $validated['bank_account']['entity_uuid'] = $company['uuid'];
@@ -727,6 +757,7 @@ class CompanyController extends Controller
 
             // addresses
             'address' => 'array',
+            'extra_address' => 'array',
 
             // emails
             'emails' => 'array',
@@ -749,6 +780,11 @@ class CompanyController extends Controller
 
         if (isset($validated['address'])){
             $tmpCheck = $this->addressService->check($validated['address']);
+            $check = array_merge($check, $tmpCheck);
+        }
+
+        if (isset($validated['extra_address'])){
+            $tmpCheck = $this->addressService->check($validated['extra_address'], '', 'extra_address');
             $check = array_merge($check, $tmpCheck);
         }
 
@@ -779,10 +815,15 @@ class CompanyController extends Controller
         }
 
         //address
-        $validated['address']['address_parent'] = '';
         $validated['address']['entity_uuid'] = $company['uuid'];
+        $validated['address']['address_parent'] = '';
         $validated['address']['status'] = Config::get('common.status.pending');
         $this->addressService->create($validated['address']);
+
+        $validated['extra_address']['address_parent'] = 'extra_address';
+        $validated['extra_address']['entity_uuid'] = $company['uuid'];
+        $validated['extra_address']['status'] = Config::get('common.status.pending');
+        $this->addressService->create($validated['extra_address']);
 
         // bank account
         $validated['bank_account']['entity_uuid'] = $company['uuid'];
@@ -959,6 +1000,8 @@ class CompanyController extends Controller
 
             // addresses
             'address' => 'array',
+            'extra_address' => 'array',
+            'extra_address_remove' => '',
 
             // emails
             'emails' => 'array',
@@ -983,6 +1026,11 @@ class CompanyController extends Controller
 
         if (isset($validated['address'])){
             $tmpCheck = $this->addressService->check_ignore($validated['address'], $company->uuid);
+            $check = array_merge($check, $tmpCheck);
+        }
+
+        if (isset($validated['extra_address'])){
+            $tmpCheck = $this->addressService->check_ignore($validated['extra_address'], $company->uuid, '', 'extra_address');
             $check = array_merge($check, $tmpCheck);
         }
 
@@ -1019,9 +1067,23 @@ class CompanyController extends Controller
         }
 
         // address
-        $address = Address::where('entity_uuid', $company['uuid']);
+        $validated['address']['entity_uuid'] = $company['uuid'];
+        $validated['address']['address_parent'] = '';
         $validated['address']['status'] = Config::get('common.status.pending');
-        $address->update($validated['address']);
+        $this->addressService->save($validated['address']);
+
+        if (isset($validated['extra_address_remove']) && filter_var($validated['extra_address_remove'], FILTER_VALIDATE_BOOLEAN)){ // remove extra address
+            $validated['extra_address']['entity_uuid'] = $company['uuid'];
+            $validated['extra_address']['address_parent'] = 'extra_address';
+            $validated['extra_address']['status'] = Config::get('common.status.deleted');
+            $this->addressService->save($validated['extra_address']);
+        }else{
+            $validated['extra_address']['entity_uuid'] = $company['uuid'];
+            $validated['extra_address']['address_parent'] = 'extra_address';
+            $validated['extra_address']['status'] = Config::get('common.status.pending');
+            $this->addressService->save($validated['extra_address']);
+        }
+        
 
         // bank account & security
         $validated['bank_account']['entity_uuid'] = $company['uuid'];
@@ -1212,6 +1274,8 @@ class CompanyController extends Controller
 
             // addresses
             'address' => 'array',
+            'extra_address' => 'array',
+            'extra_address_remove' => '',
 
             // emails
             'emails' => 'array',
@@ -1239,6 +1303,11 @@ class CompanyController extends Controller
 
         if (isset($validated['address'])){
             $tmpCheck = $this->addressService->check_ignore($validated['address'], $company->uuid);
+            $check = array_merge($check, $tmpCheck);
+        }
+
+        if (isset($validated['extra_address'])){
+            $tmpCheck = $this->addressService->check_ignore($validated['extra_address'], $company->uuid, '', 'extra_address');
             $check = array_merge($check, $tmpCheck);
         }
 
@@ -1274,9 +1343,23 @@ class CompanyController extends Controller
             endforeach;
         }
 
-        $address = Address::where('entity_uuid', $company['uuid']);
+        //address
+        $validated['address']['entity_uuid'] = $company['uuid'];
+        $validated['address']['address_parent'] = '';
         $validated['address']['status'] = Config::get('common.status.actived');
-        $address->update($validated['address']);
+        $this->addressService->save($validated['address']);
+
+        if (isset($validated['extra_address_remove']) && filter_var($validated['extra_address_remove'], FILTER_VALIDATE_BOOLEAN)){ // remove extra address
+            $validated['extra_address']['entity_uuid'] = $company['uuid'];
+            $validated['extra_address']['address_parent'] = 'extra_address';
+            $validated['extra_address']['status'] = Config::get('common.status.deleted');
+            $this->addressService->save($validated['extra_address']);
+        }else{
+            $validated['extra_address']['entity_uuid'] = $company['uuid'];
+            $validated['extra_address']['address_parent'] = 'extra_address';
+            $validated['extra_address']['status'] = Config::get('common.status.actived');
+            $this->addressService->save($validated['extra_address']);
+        }
 
         // bank account & security
         $validated['bank_account']['entity_uuid'] = $company['uuid'];
@@ -1570,6 +1653,8 @@ class CompanyController extends Controller
 
             // addresses
             'address' => 'array',
+            'extra_address' => 'array',
+            'extra_address_remove' => '',
 
             // emails
             'emails' => 'array',
@@ -1605,9 +1690,23 @@ class CompanyController extends Controller
             endforeach;
         }
 
-        $address = Address::where('entity_uuid', $company['uuid']);
+        //address
+        $validated['address']['entity_uuid'] = $company['uuid'];
+        $validated['address']['address_parent'] = '';
         $validated['address']['status'] = Config::get('common.status.actived');
-        $address->update($validated['address']);
+        $this->addressService->save($validated['address']);
+
+        if (isset($validated['extra_address_remove']) && filter_var($validated['extra_address_remove'], FILTER_VALIDATE_BOOLEAN)){ // remove extra address
+            $validated['extra_address']['entity_uuid'] = $company['uuid'];
+            $validated['extra_address']['address_parent'] = 'extra_address';
+            $validated['extra_address']['status'] = Config::get('common.status.deleted');
+            $this->addressService->save($validated['extra_address']);
+        }else{
+            $validated['extra_address']['entity_uuid'] = $company['uuid'];
+            $validated['extra_address']['address_parent'] = 'extra_address';
+            $validated['extra_address']['status'] = Config::get('common.status.actived');
+            $this->addressService->save($validated['extra_address']);
+        }
 
         // bank account & security
         $validated['bank_account']['entity_uuid'] = $company['uuid'];
