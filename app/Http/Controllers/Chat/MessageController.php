@@ -87,6 +87,10 @@ class MessageController extends Controller
         // check permission
 
         $message = $this->messageService->create($validated);
+
+        // send push
+        $this->messageService->send_push($validated['user_uuid'], $validated['chat_uuid'], $message);
+
         return $message;
     }
 

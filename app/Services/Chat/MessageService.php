@@ -3,10 +3,20 @@
 namespace App\Services\Chat;
 
 use App\Http\Resources\Chat\MessageResource;
+use App\Models\Account\User;
+use App\Models\Chat\ChatUser;
 use App\Models\Chat\Message;
+use App\Services\Helper\NotificationService;
 use Illuminate\Support\Facades\Config;
 
 class MessageService {
+
+    private $notifiactionService;
+
+    public function __construct()
+    {
+        $this->notifiactionService = new NotificationService();
+    }
 
     public function chat_messages($chat_uuid)
     {
@@ -54,6 +64,32 @@ class MessageService {
         }
         return ['message' => '', 'created_at' => '', 'first_name' => '', 'last_name' => ''];
                             
+    }
+
+    public function send_push($user_uuid, $chat_uuid, $message)
+    {
+        $chatUsers = ChatUser::where('chat_uuid', $chat_uuid)
+                            ->where('user_uuid', '!=', $user_uuid)
+                            ->where('status', Config::get('common.status.actived'))
+                            ->get();
+
+        $author = User::where('uuid', $user_uuid)->first();
+
+        foreach ($chatUsers as $key => $value):
+            $user = User::where('uuid', $value['user_uuid'])->first();
+
+            // if online to platform else to telegram
+            if ($user->last_seen==null){ // online
+
+                $this->notifiactionService->push('chat', $user, ['link'=>'', 'msg' => '', 'data' => $message]);
+
+            }else { // offline
+                $this->notifiactionService->telegram([
+                    'telegram'=> $user->telegram, 
+                    'msg' => '*' . $author->first_name . ' ' . $author->last_name . "*\n" . "Sent a message: \n" . '_' . $message->message . '_'
+                ]);
+            }
+        endforeach;
     }
 
 }

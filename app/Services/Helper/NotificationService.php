@@ -15,19 +15,21 @@ class NotificationService {
     /**
      * Send notification via websocket
      * 
-     * @param   Array user, msg, link
+     * @param   string user, msg, link
      * @return  void
      */
-    public function push($entity)
+    public function push($section, $user, $entity)
     {
         event(new WebSocket([
-                    'user' => $entity['user'], 
-                    'data' => [
-                        'msg' => $entity['msg'],
-                        'link' => $entity['link'],
-                        'push' => true
-                    ]
-                ])
+                'section' => $section,
+                'user' => $user, 
+                'data' => [
+                    'msg' => $entity['msg'],
+                    'link' => $entity['link'],
+                    'ex_data' => $entity['data'],
+                    'push' => true
+                ]
+            ])
         );
     }
 
