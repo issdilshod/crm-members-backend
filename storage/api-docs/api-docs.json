@@ -1800,6 +1800,12 @@
                                     "address[country]": {
                                         "type": "text"
                                     },
+                                    "extra_address": {
+                                        "type": "text"
+                                    },
+                                    "extra_address_remove": {
+                                        "type": "text"
+                                    },
                                     "emails[hosting_uuid]": {
                                         "type": "text"
                                     },
@@ -1988,6 +1994,9 @@
                                         "type": "text"
                                     },
                                     "address[country]": {
+                                        "type": "text"
+                                    },
+                                    "extra_address": {
                                         "type": "text"
                                     },
                                     "emails[hosting_uuid]": {
@@ -2291,6 +2300,9 @@
                                     "address[country]": {
                                         "type": "text"
                                     },
+                                    "extra_address": {
+                                        "type": "text"
+                                    },
                                     "emails[hosting_uuid]": {
                                         "type": "text"
                                     },
@@ -2487,6 +2499,12 @@
                                         "type": "text"
                                     },
                                     "address[country]": {
+                                        "type": "text"
+                                    },
+                                    "extra_address": {
+                                        "type": "text"
+                                    },
+                                    "extra_address_remove": {
                                         "type": "text"
                                     },
                                     "emails[hosting_uuid]": {
@@ -2691,6 +2709,12 @@
                                         "type": "text"
                                     },
                                     "address[country]": {
+                                        "type": "text"
+                                    },
+                                    "extra_address": {
+                                        "type": "text"
+                                    },
+                                    "extra_address_remove": {
                                         "type": "text"
                                     },
                                     "emails[hosting_uuid]": {
@@ -2977,6 +3001,12 @@
                                         "type": "text"
                                     },
                                     "address[country]": {
+                                        "type": "text"
+                                    },
+                                    "extra_address": {
+                                        "type": "text"
+                                    },
+                                    "extra_address_remove": {
                                         "type": "text"
                                     },
                                     "emails[hosting_uuid]": {

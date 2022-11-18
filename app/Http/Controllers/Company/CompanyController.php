@@ -105,6 +105,8 @@ class CompanyController extends Controller
       *                         @OA\Property(property="address[postal]", type="text"),
       *                         @OA\Property(property="address[country]", type="text"),
       *
+      *                         @OA\Property(property="extra_address", type="text"),
+      *
       *                         @OA\Property(property="emails[hosting_uuid]", type="text"),
       *                         @OA\Property(property="emails[email]", type="text"),
       *                         @OA\Property(property="emails[password]", type="text"),
@@ -246,9 +248,11 @@ class CompanyController extends Controller
         $validated['address']['entity_uuid'] = $company['uuid'];
         $this->addressService->create($validated['address']);
 
-        $validated['extra_address']['address_parent'] = 'extra_address';
-        $validated['extra_address']['entity_uuid'] = $company['uuid'];
-        $this->addressService->create($validated['extra_address']);
+        if (isset($validated['extra_address'])){
+            $validated['extra_address']['address_parent'] = 'extra_address';
+            $validated['extra_address']['entity_uuid'] = $company['uuid'];
+            $this->addressService->create($validated['extra_address']);
+        }
 
         if ($request->has('files')){
             $files = $request->file('files');
@@ -361,6 +365,9 @@ class CompanyController extends Controller
       *                         @OA\Property(property="address[state]", type="text"),
       *                         @OA\Property(property="address[postal]", type="text"),
       *                         @OA\Property(property="address[country]", type="text"),
+      *
+      *                         @OA\Property(property="extra_address", type="text"),
+      *                         @OA\Property(property="extra_address_remove", type="text"),
       *
       *                         @OA\Property(property="emails[hosting_uuid]", type="text"),
       *                         @OA\Property(property="emails[email]", type="text"),
@@ -506,15 +513,18 @@ class CompanyController extends Controller
         $validated['address']['address_parent'] = '';
         $this->addressService->save($validated['address']);
 
-        if (isset($validated['extra_address_remove']) && filter_var($validated['extra_address_remove'], FILTER_VALIDATE_BOOLEAN)){ // remove extra address
-            $validated['extra_address']['entity_uuid'] = $company['uuid'];
-            $validated['extra_address']['address_parent'] = 'extra_address';
-            $validated['extra_address']['status'] = Config::get('common.status.deleted');
-            $this->addressService->save($validated['extra_address']);
-        }else{
+        if (isset($validated['extra_address'])){
             $validated['extra_address']['entity_uuid'] = $company['uuid'];
             $validated['extra_address']['address_parent'] = 'extra_address';
             $validated['extra_address']['status'] = Config::get('common.status.actived');
+            $this->addressService->save($validated['extra_address']);
+        }
+
+        // extra address remove
+        if (isset($validated['extra_address_remove']) && filter_var($validated['extra_address_remove'], FILTER_VALIDATE_BOOLEAN)){
+            $validated['extra_address']['entity_uuid'] = $company['uuid'];
+            $validated['extra_address']['address_parent'] = 'extra_address';
+            $validated['extra_address']['status'] = Config::get('common.status.deleted');
             $this->addressService->save($validated['extra_address']);
         }
 
@@ -689,6 +699,8 @@ class CompanyController extends Controller
       *                         @OA\Property(property="address[postal]", type="text"),
       *                         @OA\Property(property="address[country]", type="text"),
       *
+      *                         @OA\Property(property="extra_address", type="text"),
+      *
       *                         @OA\Property(property="emails[hosting_uuid]", type="text"),
       *                         @OA\Property(property="emails[email]", type="text"),
       *                         @OA\Property(property="emails[password]", type="text"),
@@ -820,10 +832,12 @@ class CompanyController extends Controller
         $validated['address']['status'] = Config::get('common.status.pending');
         $this->addressService->create($validated['address']);
 
-        $validated['extra_address']['address_parent'] = 'extra_address';
-        $validated['extra_address']['entity_uuid'] = $company['uuid'];
-        $validated['extra_address']['status'] = Config::get('common.status.pending');
-        $this->addressService->create($validated['extra_address']);
+        if (isset($validated['extra_address'])){
+            $validated['extra_address']['address_parent'] = 'extra_address';
+            $validated['extra_address']['entity_uuid'] = $company['uuid'];
+            $validated['extra_address']['status'] = Config::get('common.status.pending');
+            $this->addressService->create($validated['extra_address']);
+        }
 
         // bank account
         $validated['bank_account']['entity_uuid'] = $company['uuid'];
@@ -919,6 +933,9 @@ class CompanyController extends Controller
       *                         @OA\Property(property="address[state]", type="text"),
       *                         @OA\Property(property="address[postal]", type="text"),
       *                         @OA\Property(property="address[country]", type="text"),
+      *
+      *                         @OA\Property(property="extra_address", type="text"),
+      *                         @OA\Property(property="extra_address_remove", type="text"),
       *
       *                         @OA\Property(property="emails[hosting_uuid]", type="text"),
       *                         @OA\Property(property="emails[email]", type="text"),
@@ -1072,15 +1089,18 @@ class CompanyController extends Controller
         $validated['address']['status'] = Config::get('common.status.pending');
         $this->addressService->save($validated['address']);
 
-        if (isset($validated['extra_address_remove']) && filter_var($validated['extra_address_remove'], FILTER_VALIDATE_BOOLEAN)){ // remove extra address
-            $validated['extra_address']['entity_uuid'] = $company['uuid'];
-            $validated['extra_address']['address_parent'] = 'extra_address';
-            $validated['extra_address']['status'] = Config::get('common.status.deleted');
-            $this->addressService->save($validated['extra_address']);
-        }else{
+        if (isset($validated['extra_address'])){
             $validated['extra_address']['entity_uuid'] = $company['uuid'];
             $validated['extra_address']['address_parent'] = 'extra_address';
             $validated['extra_address']['status'] = Config::get('common.status.pending');
+            $this->addressService->save($validated['extra_address']);
+        }
+
+        // remove extra address
+        if (isset($validated['extra_address_remove']) && filter_var($validated['extra_address_remove'], FILTER_VALIDATE_BOOLEAN)){ 
+            $validated['extra_address']['entity_uuid'] = $company['uuid'];
+            $validated['extra_address']['address_parent'] = 'extra_address';
+            $validated['extra_address']['status'] = Config::get('common.status.deleted');
             $this->addressService->save($validated['extra_address']);
         }
         
@@ -1201,6 +1221,9 @@ class CompanyController extends Controller
       *                         @OA\Property(property="address[state]", type="text"),
       *                         @OA\Property(property="address[postal]", type="text"),
       *                         @OA\Property(property="address[country]", type="text"),
+      *
+      *                         @OA\Property(property="extra_address", type="text"),
+      *                         @OA\Property(property="extra_address_remove", type="text"),
       *
       *                         @OA\Property(property="emails[hosting_uuid]", type="text"),
       *                         @OA\Property(property="emails[email]", type="text"),
@@ -1349,15 +1372,18 @@ class CompanyController extends Controller
         $validated['address']['status'] = Config::get('common.status.actived');
         $this->addressService->save($validated['address']);
 
-        if (isset($validated['extra_address_remove']) && filter_var($validated['extra_address_remove'], FILTER_VALIDATE_BOOLEAN)){ // remove extra address
-            $validated['extra_address']['entity_uuid'] = $company['uuid'];
-            $validated['extra_address']['address_parent'] = 'extra_address';
-            $validated['extra_address']['status'] = Config::get('common.status.deleted');
-            $this->addressService->save($validated['extra_address']);
-        }else{
+        if (isset($validated['extra_address'])){
             $validated['extra_address']['entity_uuid'] = $company['uuid'];
             $validated['extra_address']['address_parent'] = 'extra_address';
             $validated['extra_address']['status'] = Config::get('common.status.actived');
+            $this->addressService->save($validated['extra_address']);
+        }
+
+        // extra address remove
+        if (isset($validated['extra_address_remove']) && filter_var($validated['extra_address_remove'], FILTER_VALIDATE_BOOLEAN)){
+            $validated['extra_address']['entity_uuid'] = $company['uuid'];
+            $validated['extra_address']['address_parent'] = 'extra_address';
+            $validated['extra_address']['status'] = Config::get('common.status.deleted');
             $this->addressService->save($validated['extra_address']);
         }
 
@@ -1583,6 +1609,9 @@ class CompanyController extends Controller
       *                         @OA\Property(property="address[postal]", type="text"),
       *                         @OA\Property(property="address[country]", type="text"),
       *
+      *                         @OA\Property(property="extra_address", type="text"),
+      *                         @OA\Property(property="extra_address_remove", type="text"),
+      *
       *                         @OA\Property(property="emails[hosting_uuid]", type="text"),
       *                         @OA\Property(property="emails[email]", type="text"),
       *                         @OA\Property(property="emails[password]", type="text"),
@@ -1696,15 +1725,18 @@ class CompanyController extends Controller
         $validated['address']['status'] = Config::get('common.status.actived');
         $this->addressService->save($validated['address']);
 
-        if (isset($validated['extra_address_remove']) && filter_var($validated['extra_address_remove'], FILTER_VALIDATE_BOOLEAN)){ // remove extra address
-            $validated['extra_address']['entity_uuid'] = $company['uuid'];
-            $validated['extra_address']['address_parent'] = 'extra_address';
-            $validated['extra_address']['status'] = Config::get('common.status.deleted');
-            $this->addressService->save($validated['extra_address']);
-        }else{
+        if (isset($validated['extra_address'])){
             $validated['extra_address']['entity_uuid'] = $company['uuid'];
             $validated['extra_address']['address_parent'] = 'extra_address';
             $validated['extra_address']['status'] = Config::get('common.status.actived');
+            $this->addressService->save($validated['extra_address']);
+        }
+
+        // extra address remove
+        if (isset($validated['extra_address_remove']) && filter_var($validated['extra_address_remove'], FILTER_VALIDATE_BOOLEAN)){
+            $validated['extra_address']['entity_uuid'] = $company['uuid'];
+            $validated['extra_address']['address_parent'] = 'extra_address';
+            $validated['extra_address']['status'] = Config::get('common.status.deleted');
             $this->addressService->save($validated['extra_address']);
         }
 
