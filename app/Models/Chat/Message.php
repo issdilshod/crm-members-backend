@@ -20,4 +20,8 @@ class Message extends Model
         return $this->belongsTo(User::class, 'user_uuid', 'uuid');
     }
 
+    public function chat():BelongsTo {
+        return $this->belongsTo(Chat::class, 'chat_uuid', 'uuid');
+    }
+
 }
