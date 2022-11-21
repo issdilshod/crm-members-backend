@@ -37,12 +37,10 @@ class DirectorService {
             'all' => Director::where('status', '!=', Config::get('common.status.deleted'))
                                 ->where('user_uuid', 'like', $uuid . '%')
                                 ->count(),
-            'active' => Director::where('status', '!=', Config::get('common.status.deleted'))
-                                    ->where('approved', Config::get('common.status.actived'))
+            'active' => Director::where('status', Config::get('common.status.actived'))
                                     ->where('user_uuid', 'like', $uuid . '%')
                                     ->count(),
-            'pending' => Director::where('status', '!=', Config::get('common.status.deleted'))
-                                    ->where('approved', '!=', Config::get('common.status.actived'))
+            'pending' => Director::where('status', Config::get('common.status.pending'))
                                     ->where('user_uuid', 'like', $uuid . '%')
                                     ->count()
         ];

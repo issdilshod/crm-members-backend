@@ -39,12 +39,10 @@ class CompanyService {
             'all' => Company::where('status', '!=', Config::get('common.status.deleted'))
                                 ->where('user_uuid', 'like', $user_uuid . '%')
                                 ->count(),
-            'active' => Company::where('status', '!=', Config::get('common.status.deleted'))
-                                    ->where('approved', Config::get('common.status.actived'))
+            'active' => Company::where('status', Config::get('common.status.actived'))
                                     ->where('user_uuid', 'like', $user_uuid . '%')
                                     ->count(),
-            'pending' => Company::where('status', '!=', Config::get('common.status.deleted'))
-                                    ->where('approved', '!=', Config::get('common.status.actived'))
+            'pending' => Company::where('status', Config::get('common.status.pending'))
                                     ->where('user_uuid', 'like', $user_uuid . '%')
                                     ->count()
         ];
