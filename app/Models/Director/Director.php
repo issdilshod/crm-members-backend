@@ -7,7 +7,6 @@ use App\Models\Company\Company;
 use App\Models\Helper\Address;
 use App\Models\Helper\Email;
 use App\Models\Helper\File;
-use App\Services\Account\ActivityService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\TraitUuid;
@@ -39,5 +38,19 @@ class Director extends Model
     {
         return $this->hasOne(Company::class, 'director_uuid', 'uuid')
                     ->where('approved', Config::get('common.status.actived'));
+    }
+
+    public function last_accepted(): HasOne
+    {
+        return $this->hasOne(Activity::class, 'entity_uuid', 'uuid')
+                    ->orderBy('created_at', 'DESC')
+                    ->where('action_code', Config::get('common.activity.codes.director_accept'));
+    }
+
+    public function last_rejected(): HasOne
+    {
+        return $this->hasOne(Activity::class, 'entity_uuid', 'uuid')
+                    ->orderBy('created_at', 'DESC')
+                    ->where('action_code', Config::get('common.activity.codes.director_reject'));
     }
 }

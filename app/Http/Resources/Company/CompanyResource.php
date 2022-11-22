@@ -52,7 +52,10 @@ class CompanyResource extends JsonResource
             'emailsdb' => EmailResource::collection($this->emails),
             'uploaded_files' => FileResource::collection($this->files),
 
-            'status' => $this->status
+            'status' => $this->status,
+
+            'last_accepted' => $this->last_accepted,
+            'last_rejected' => $this->last_rejected,
         ];
     }
 }

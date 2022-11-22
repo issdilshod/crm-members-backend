@@ -34,7 +34,10 @@ class DirectorResource extends JsonResource
             'emails' => EmailResource::collection($this->emails),
             'address' => AddressResource::collection($this->addresses),
             'last_activity' => new ActivityResource($this->last_activity),
-            'status' => $this->status
+            'status' => $this->status,
+
+            'last_accepted' => $this->last_accepted,
+            'last_rejected' => $this->last_rejected,
         ];
     }
 }
