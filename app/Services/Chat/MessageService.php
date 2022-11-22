@@ -4,6 +4,7 @@ namespace App\Services\Chat;
 
 use App\Http\Resources\Chat\MessageResource;
 use App\Models\Account\User;
+use App\Models\Chat\Chat;
 use App\Models\Chat\ChatUser;
 use App\Models\Chat\Message;
 use App\Services\Helper\NotificationService;
@@ -71,11 +72,19 @@ class MessageService {
         $chatUsers = ChatUser::where('chat_uuid', $chat_uuid)
                             ->where('user_uuid', '!=', $user_uuid)
                             ->where('status', Config::get('common.status.actived'))
-                            ->get();
+                            ->get(['user_uuid']);
+
+        $chatAuthor = Chat::where('uuid', $chat_uuid)
+                            ->first(['user_uuid']);
+
+        $chatUsers = array_merge($chatUsers->toArray(), [$chatAuthor->toArray()]);
 
         $author = User::where('uuid', $user_uuid)->first();
 
         foreach ($chatUsers as $key => $value):
+
+            if ($user_uuid==$value['user_uuid']){continue;}
+
             $user = User::where('uuid', $value['user_uuid'])->first();
 
             // if online to platform else to telegram
