@@ -380,7 +380,7 @@ class DirectorService {
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
             'description' => str_replace("{name}", $director_fn, Config::get('common.activity.director.add')),
-            'changes' => json_encode($entity),
+            'changes' => json_encode(new DirectorResource($director)),
             'action_code' => Config::get('common.activity.codes.director_add'),
             'status' => Config::get('common.status.actived')
         ]);
@@ -403,7 +403,7 @@ class DirectorService {
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
             'description' => str_replace("{name}", $director_fn, Config::get('common.activity.director.update')),
-            'changes' => json_encode($entity),
+            'changes' => json_encode(new DirectorResource($director)),
             'action_code' => Config::get('common.activity.codes.director_update'),
             'status' => Config::get('common.status.actived')
         ]);
@@ -426,7 +426,7 @@ class DirectorService {
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
             'description' => str_replace("{name}", $director_fn, Config::get('common.activity.director.pending')),
-            'changes' => json_encode($entity),
+            'changes' => json_encode(new DirectorResource($director)),
             'action_code' => Config::get('common.activity.codes.director_pending'),
             'status' => Config::get('common.status.actived')
         ]);
@@ -462,7 +462,7 @@ class DirectorService {
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
             'description' => str_replace("{name}", $director_fn, Config::get('common.activity.director.pending_update')),
-            'changes' => json_encode($entity),
+            'changes' => json_encode(new DirectorResource($director)) ,
             'action_code' => Config::get('common.activity.codes.director_pending_update'),
             'status' => Config::get('common.status.actived')
         ]);
@@ -494,7 +494,7 @@ class DirectorService {
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
             'description' => str_replace("{name}", $director_fn, ($override?Config::get('common.activity.director.override'):Config::get('common.activity.director.accept'))),
-            'changes' => json_encode($entity),
+            'changes' => json_encode(new DirectorResource($director)),
             'action_code' => Config::get('common.activity.codes.director_accept'),
             'status' => Config::get('common.status.actived')
         ]);
@@ -526,7 +526,7 @@ class DirectorService {
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
             'description' => str_replace("{name}", $director_fn, Config::get('common.activity.director.reject')),
-            'changes' => '',
+            'changes' => json_encode(new DirectorResource($director)),
             'action_code' => Config::get('common.activity.codes.director_reject'),
             'status' => Config::get('common.status.actived')
         ]);

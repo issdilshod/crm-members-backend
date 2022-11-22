@@ -537,7 +537,7 @@ class CompanyService {
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
             'description' => str_replace("{name}", $company_fn, Config::get('common.activity.company.add')),
-            'changes' => json_encode($entity),
+            'changes' => json_encode(new CompanyResource($company)),
             'action_code' => Config::get('common.activity.codes.company_add'),
             'status' => Config::get('common.status.actived')
         ]);
@@ -560,7 +560,7 @@ class CompanyService {
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
             'description' => str_replace("{name}", $company_fn, Config::get('common.activity.company.updated')),
-            'changes' => json_encode($entity),
+            'changes' => json_encode(new CompanyResource($company)),
             'action_code' => Config::get('common.activity.codes.company_update'),
             'status' => Config::get('common.status.actived')
         ]);
@@ -583,7 +583,7 @@ class CompanyService {
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
             'description' => str_replace("{name}", $company_fn, Config::get('common.activity.company.pending')),
-            'changes' => json_encode($entity),
+            'changes' => json_encode(new CompanyResource($company)),
             'action_code' => Config::get('common.activity.codes.company_pending'),
             'status' => Config::get('common.status.actived')
         ]);
@@ -618,7 +618,7 @@ class CompanyService {
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
             'description' => str_replace("{name}", $company_fn, Config::get('common.activity.company.pending_update')),
-            'changes' => json_encode($entity),
+            'changes' => json_encode(new CompanyResource($company)),
             'action_code' => Config::get('common.activity.codes.company_pending_update'),
             'status' => Config::get('common.status.actived')
         ]);
@@ -650,7 +650,7 @@ class CompanyService {
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
             'description' => str_replace("{name}", $company_fn, ($override?Config::get('common.activity.company.override'):Config::get('common.activity.company.accept'))),
-            'changes' => json_encode($entity),
+            'changes' => json_encode(new CompanyResource($company)),
             'action_code' => Config::get('common.activity.codes.company_accept'),
             'status' => Config::get('common.status.actived')
         ]);
@@ -682,7 +682,7 @@ class CompanyService {
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
             'description' => str_replace("{name}", $company_fn, Config::get('common.activity.company.reject')),
-            'changes' => '',
+            'changes' => json_encode(new CompanyResource($company)),
             'action_code' => Config::get('common.activity.codes.company_reject'),
             'status' => Config::get('common.status.actived')
         ]);
