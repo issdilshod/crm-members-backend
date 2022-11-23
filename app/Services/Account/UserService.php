@@ -383,7 +383,7 @@ class UserService {
         $user = User::where('uuid', $uuid)->first();
 
         if ($user!=null) {
-            $this->notificationService->push_to_headquarters('users', ['data' => $user, 'link' => '', 'msg' => '']);
+            $this->notificationService->push_to_headquarters('users', ['data' => $user->toArray(), 'link' => '', 'msg' => '']);
         }
     }
 
@@ -395,7 +395,7 @@ class UserService {
         $user = User::where('uuid', $uuid)->first();
 
         if ($user!=null){
-            $this->notificationService->push_to_headquarters('users', ['data' => $user, 'link' => '', 'msg' => '']);
+            $this->notificationService->push_to_headquarters('users', ['data' => $user->toArray(), 'link' => '', 'msg' => '']);
         }
     }
 
