@@ -591,16 +591,12 @@ class UserController extends Controller
         foreach($payload['events'] as &$event) {
             if (isset($actions[$event['name']])){
                 $user_uuid = explode('_', $event['channel']);
-
-                $log = new TelegramLog();
-                $log->to_file($user_uuid);header("Status: 200 OK");
-
                 $user_uuid = $user_uuid[1];
 
-                if ($actions['name']=='offline'){
+                if ($actions[$event['name']]=='offline'){
                     $this->userService->offline($user_uuid);
                 }
-                if ($actions['name']=='online'){
+                if ($actions[$event['name']]=='online'){
                     $this->userService->online($user_uuid);
                 }
             }
