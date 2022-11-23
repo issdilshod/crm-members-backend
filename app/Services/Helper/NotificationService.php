@@ -4,6 +4,7 @@ namespace App\Services\Helper;
 
 use App\Helpers\TelegramHelper;
 use App\Helpers\WebSocket;
+use App\Logs\TelegramLog;
 use App\Notifications\TelegramNotification;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
@@ -34,6 +35,8 @@ class NotificationService {
                                     ->where('roles.alias', Config::get('common.role.headquarters'));
                         })
                         ->get(['users.*']);
+                        $log  = new TelegramLog();
+                        $log->to_file($entity);
         // each users (headquarters)
         foreach($users AS $key => $value):
             $this->push($section, json_decode(json_encode($value), true), $entity);
