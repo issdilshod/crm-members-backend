@@ -87,17 +87,17 @@ class MessageService {
 
             $user = User::where('uuid', $value['user_uuid'])->first();
 
-            // if online to platform else to telegram
-            if ($user->last_seen==null){ // online
-
-                $this->notifiactionService->push('chat', $user, ['link'=>'', 'msg' => '', 'data' => $message]);
-
-            }else { // offline
+            // if offline to telegram
+            if ($user->last_seen!=null){ // online
                 $this->notifiactionService->telegram([
                     'telegram'=> $user->telegram, 
                     'msg' => '*' . $author->first_name . ' ' . $author->last_name . "*\n" . "Sent a message: \n" . '_' . $message->message . '_'
                 ]);
             }
+
+            // push
+            $this->notifiactionService->push('chat', $user, ['link'=>'', 'msg' => '', 'data' => $message]);
+
         endforeach;
     }
 
