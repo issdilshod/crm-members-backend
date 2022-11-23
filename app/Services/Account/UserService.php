@@ -5,6 +5,7 @@ namespace App\Services\Account;
 use App\Helpers\UserSystemInfoHelper;
 use App\Http\Resources\Account\ActivityResource;
 use App\Http\Resources\Account\UserResource;
+use App\Logs\TelegramLog;
 use App\Models\Account\Activity;
 use App\Models\Account\InviteUser;
 use App\Models\Account\User;
@@ -392,6 +393,9 @@ class UserService {
                 ->update(['last_seen' => Carbon::now()]);
 
         $user = User::where('uuid', $uuid)->first();
+
+        $log = new TelegramLog();
+        $log->to_file($user);
 
         if ($user!=null){
             $this->notificationService->push_to_headquarters('users', $user);
