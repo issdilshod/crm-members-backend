@@ -571,6 +571,11 @@ class UserController extends Controller
 
     public function websocket_hook(Request $request)
     {
+        $actions = [
+            'channel_vacated' => 'offline',
+            'channel_occupied' => 'online'
+        ];
+
         //$app_secret = env('PUSHER_APP_SECRET');
 
         //$app_key = $_SERVER['HTTP_X_PUSHER_KEY'];
@@ -580,14 +585,15 @@ class UserController extends Controller
 
         //$expected_signature = hash_hmac('sha256', $body, $app_secret, false );
 
-        $log = new TelegramLog();
-        $log->to_file($body);
-
         //if($webhook_signature == $expected_signature) {
         // decode as associative array
         $payload = json_decode($body, true);
         foreach($payload['events'] as &$event) {
             
+            $log = new TelegramLog();
+            $log->to_file($event);
+
+            break;
         }
         header("Status: 200 OK");
         //}
