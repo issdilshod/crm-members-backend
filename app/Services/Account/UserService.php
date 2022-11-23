@@ -381,7 +381,9 @@ class UserService {
 
         $user = User::where('uuid', $uuid)->first();
 
-        $this->notificationService->push_to_headquarters('users', $user);
+        if ($user!=null) {
+            $this->notificationService->push_to_headquarters('users', $user);
+        }
     }
 
     public function offline($uuid)
@@ -391,7 +393,9 @@ class UserService {
 
         $user = User::where('uuid', $uuid)->first();
 
-        $this->notificationService->push_to_headquarters('users', $user);
+        if ($user!=null){
+            $this->notificationService->push_to_headquarters('users', $user);
+        }
     }
 
 }
