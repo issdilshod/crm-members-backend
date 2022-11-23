@@ -38,9 +38,9 @@ class NotificationService {
                         
         // each users (headquarters)
         foreach($users AS $key => $value):
+            $this->push($section, json_decode(json_encode($value), true), $entity);
             $log  = new TelegramLog();
                         $log->to_file($entity);
-            $this->push($section, json_decode(json_encode($value), true), $entity);
         endforeach;
     }
 
