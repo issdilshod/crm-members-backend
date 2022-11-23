@@ -173,3 +173,6 @@ Route::post('api/register', [UserController::class, 'register']);
 
 // Telegram hook
 Route::post('api/telegram-hook', [TelegramUserController::class, 'index']);
+
+// Websocket hook
+Route::post('api/websocket-hook', [UserController::class, 'websocket_hook']);
