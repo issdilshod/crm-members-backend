@@ -591,13 +591,15 @@ class UserController extends Controller
         foreach($payload['events'] as &$event) {
             if (isset($actions[$event['name']])){
                 $user_uuid = explode('_', $event['channel']);
-                $user_uuid = $user_uuid[1];
+                if (isset($user_uuid[1])){
+                    $user_uuid = $user_uuid[1];
 
-                if ($actions[$event['name']]=='offline'){
-                    $this->userService->offline($user_uuid);
-                }
-                if ($actions[$event['name']]=='online'){
-                    $this->userService->online($user_uuid);
+                    if ($actions[$event['name']]=='offline'){
+                        $this->userService->offline($user_uuid);
+                    }
+                    if ($actions[$event['name']]=='online'){
+                        $this->userService->online($user_uuid);
+                    }
                 }
             }
             break;
