@@ -14,6 +14,8 @@ class NotificationService {
 
     public function push($section, $user, $entity)
     {
+        $log  = new TelegramLog();
+                        $log->to_file($user);
         event(new WebSocket([
                 'section' => $section,
                 'user' => $user, 
@@ -39,8 +41,6 @@ class NotificationService {
         // each users (headquarters)
         foreach($users AS $key => $value):
             $this->push($section, json_decode(json_encode($value), true), $entity);
-            $log  = new TelegramLog();
-                        $log->to_file($entity);
         endforeach;
     }
 
