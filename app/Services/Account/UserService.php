@@ -377,13 +377,21 @@ class UserService {
     public function online($uuid)
     {
         User::where('uuid', $uuid)
-                ->update(['last_seen' => NULL]);
+                    ->update(['last_seen' => NULL]);
+
+        $user = User::where('uuid', $uuid)->first();
+
+        $this->notificationService->push_to_headquarters('users', $user);
     }
 
     public function offline($uuid)
     {
         User::where('uuid', $uuid)
                 ->update(['last_seen' => Carbon::now()]);
+
+        $user = User::where('uuid', $uuid)->first();
+
+        $this->notificationService->push_to_headquarters('users', $user);
     }
 
 }
