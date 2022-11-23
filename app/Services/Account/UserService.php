@@ -384,6 +384,8 @@ class UserService {
 
         if ($user!=null) {
             $this->notificationService->push_to_headquarters('users', ['data' => $user->toArray(), 'link' => '', 'msg' => '']);
+            $log = new TelegramLog();
+            $log->to_file($user);
         }
     }
 
@@ -395,8 +397,6 @@ class UserService {
         $user = User::where('uuid', $uuid)->first();
 
         if ($user!=null){
-            $log = new TelegramLog();
-            $log->to_file($user);
             $this->notificationService->push_to_headquarters('users', ['data' => $user->toArray(), 'link' => '', 'msg' => '']);
         }
     }
