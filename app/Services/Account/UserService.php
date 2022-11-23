@@ -284,7 +284,7 @@ class UserService {
 
         // push
         $activity = $this->activityService->setLink($activity);
-        $this->notificationService->push_to_headquarters('users', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
+        $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
     }
 
     public function register($entity)
