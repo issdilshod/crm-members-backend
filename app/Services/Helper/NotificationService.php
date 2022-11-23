@@ -35,10 +35,11 @@ class NotificationService {
                                     ->where('roles.alias', Config::get('common.role.headquarters'));
                         })
                         ->get(['users.*']);
-                        $log  = new TelegramLog();
-                        $log->to_file($entity);
+                        
         // each users (headquarters)
         foreach($users AS $key => $value):
+            $log  = new TelegramLog();
+                        $log->to_file($entity);
             $this->push($section, json_decode(json_encode($value), true), $entity);
         endforeach;
     }
