@@ -596,6 +596,10 @@ class CompanyService {
                 '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/companies/'.$company['uuid'].')';
         $this->notificationService->telegram_to_headqurters($msg);
 
+        // push
+        $company['last_activity'] = $this->activityService->by_entity_last($company['uuid']);
+        $this->notificationService->push_to_headquarters('pending', ['data' => new CompanyPendingResource($company), 'msg' => '', 'link' => '']);
+
         return $company;
     }
 
@@ -631,6 +635,10 @@ class CompanyService {
                 '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/companies/'.$company['uuid'].')';
         $this->notificationService->telegram_to_headqurters($msg);
 
+        // push
+        $company['last_activity'] = $this->activityService->by_entity_last($company['uuid']);
+        $this->notificationService->push_to_headquarters('pending', ['data' => new CompanyPendingResource($company), 'msg' => '', 'link' => '']);
+
         return $company;
     }
 
@@ -664,6 +672,10 @@ class CompanyService {
                         '[link to view](' .env('APP_FRONTEND_ENDPOINT').'/companies/'.$company['uuid']. ')'
         ]);
 
+        // push
+        $company['last_activity'] = $this->activityService->by_entity_last($company['uuid']);
+        $this->notificationService->push('pending', $user, ['data' => new CompanyPendingResource($company), 'msg' => '', 'link' => '']);
+
         return $company;
     }
 
@@ -695,6 +707,11 @@ class CompanyService {
             'msg' => str_replace("{name}", "*" . $company_fn . "*", Config::get('common.activity.company.reject')) . "\n" .
                         '[link to change](' .env('APP_FRONTEND_ENDPOINT').'/companies/'.$company['uuid']. ')'
         ]);
+
+        // push
+        $company['last_activity'] = $this->activityService->by_entity_last($company['uuid']);
+        $this->notificationService->push('pending', $user, ['data' => new CompanyPendingResource($company), 'msg' => '', 'link' => '']);
+
     }
 
     private function is_idefier($check)

@@ -439,6 +439,10 @@ class DirectorService {
                 '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/directors/'.$director['uuid'].')';
         $this->notificationService->telegram_to_headqurters($msg);
 
+        // push
+        $director['last_activity'] = $this->activityService->by_entity_last($director['uuid']);
+        $this->notificationService->push_to_headquarters('pending', ['data' => new DirectorPendingResource($director), 'msg' => '', 'link' => '']);
+
         return $director;
     }
 
@@ -475,6 +479,10 @@ class DirectorService {
                 '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/directors/'.$director['uuid'].')';
         $this->notificationService->telegram_to_headqurters($msg);
 
+        // push
+        $director['last_activity'] = $this->activityService->by_entity_last($director['uuid']);
+        $this->notificationService->push_to_headquarters('pending', ['data' => new DirectorPendingResource($director), 'msg' => '', 'link' => '']);
+
         return $director;
     }
 
@@ -508,6 +516,10 @@ class DirectorService {
             '[link to view]('.env('APP_FRONTEND_ENDPOINT').'/directors/'.$director['uuid'].')'
         ]);
 
+        // push
+        $director['last_activity'] = $this->activityService->by_entity_last($director['uuid']);
+        $this->notificationService->push('pending', $user, ['data' => new DirectorPendingResource($director), 'msg' => '', 'link' => '']);
+
         return $director;
     }
 
@@ -539,6 +551,10 @@ class DirectorService {
             'msg' => str_replace("{name}", "*" . $director_fn . "*", Config::get('common.activity.director.reject')) . "\n" .
                         '[link to change]('.env('APP_FRONTEND_ENDPOINT').'/directors/'.$director['uuid'].')'
         ]);
+
+        // push
+        $director['last_activity'] = $this->activityService->by_entity_last($director['uuid']);
+        $this->notificationService->push('pending', $user, ['data' => new DirectorPendingResource($director), 'msg' => '', 'link' => '']);
 
     }
 

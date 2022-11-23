@@ -26,11 +26,26 @@ class NotificationService {
                 'data' => [
                     'msg' => $entity['msg'],
                     'link' => $entity['link'],
-                    'ex_data' => $entity['data'],
-                    'push' => true
+                    'data' => $entity['data']
                 ]
             ])
         );
+    }
+
+    public function push_to_headquarters($section, $entity)
+    {
+        // get headquarters uuid
+        $users = DB::table('users')
+                        ->join('roles', function ($join){
+                            $join->on('users.role_uuid', '=', 'roles.uuid')
+                                    ->where('roles.alias', Config::get('common.role.headquarters'));
+                        })
+                        ->select('users.*')
+                        ->get();
+        // each users (headquarters)
+        foreach($users AS $key => $value):
+            $this->push($section, $value->toArray(), $entity);
+        endforeach;
     }
 
     /**
