@@ -8,6 +8,8 @@ use App\Traits\TraitUuid;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Config;
+use App\Models\Account\User;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Chat extends Model
 {
@@ -16,6 +18,10 @@ class Chat extends Model
     protected $fillable = ['user_uuid', 'partner_uuid', 'name', 'status'];
 
     protected $attributes = ['status' => 1];
+
+    public function user(): BelongsTo {
+        return $this->belongsTo(User::class, 'user_uuid', 'uuid');
+    }
 
     public function messages(): HasMany {
         return $this->hasMany(Message::class, 'chat_uuid', 'uuid')->where('status', Config::get('common.status.actived'));
