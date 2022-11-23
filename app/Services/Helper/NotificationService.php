@@ -15,7 +15,7 @@ class NotificationService {
     public function push($section, $user, $entity)
     {
         $log  = new TelegramLog();
-                        $log->to_file($user);
+                        $log->to_file($entity);
         event(new WebSocket([
                 'section' => $section,
                 'user' => $user, 
