@@ -8,18 +8,15 @@ use App\Logs\TelegramLog;
 use App\Models\Account\User;
 use App\Policies\PermissionPolicy;
 use App\Services\Account\UserService;
-use App\Services\Helper\NotificationService;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
     private $userService;
-    private $notificationService;
 
     public function __construct()
     {
         $this->userService = new UserService();
-        $this->notificationService = new NotificationService();
     }
 
     /**     @OA\GET(
@@ -609,11 +606,6 @@ class UserController extends Controller
         }
         header("Status: 200 OK");
 
-        $user = User::where('uuid', $user_uuid)->first();
-        if ($user!=null) {
-            $this->notificationService->push_to_headquarters('users', ['data' => $user->toArray(), 'link' => '', 'msg' => '']);
-        }
-        
         //}
         //else {
         //    header("Status: 401 Not authenticated");
