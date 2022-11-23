@@ -589,10 +589,17 @@ class UserController extends Controller
         // decode as associative array
         $payload = json_decode($body, true);
         foreach($payload['events'] as &$event) {
-            
-            $log = new TelegramLog();
-            $log->to_file($event);
+            if (isset($actions[$event['name']])){
+                $user_uuid = explode('_', $event['channel']);
+                $user_uuid = $user_uuid[1];
 
+                if ($actions['name']=='offline'){
+                    $this->userService->offline($user_uuid);
+                }
+                if ($actions['name']=='online'){
+                    $this->userService->online($user_uuid);
+                }
+            }
             break;
         }
         header("Status: 200 OK");
