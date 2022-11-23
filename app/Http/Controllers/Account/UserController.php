@@ -571,30 +571,29 @@ class UserController extends Controller
 
     public function websocket_hook(Request $request)
     {
-        $app_secret = env('PUSHER_APP_SECRET');
+        //$app_secret = env('PUSHER_APP_SECRET');
 
-        $app_key = $_SERVER['HTTP_X_PUSHER_KEY'];
-        $webhook_signature = $_SERVER['HTTP_X_PUSHER_SIGNATURE'];
+        //$app_key = $_SERVER['HTTP_X_PUSHER_KEY'];
+        //$webhook_signature = $_SERVER['HTTP_X_PUSHER_SIGNATURE'];
 
         $body = file_get_contents('php://input');
 
-        $expected_signature = hash_hmac('sha256', $body, $app_secret, false );
+        //$expected_signature = hash_hmac('sha256', $body, $app_secret, false );
 
         $log = new TelegramLog();
         $log->to_file($body);
 
-        if($webhook_signature == $expected_signature) {
-            // decode as associative array
-            $payload = json_decode( $body, true );
-            foreach($payload['events'] as &$event) {
-                
-            }
-
-            header("Status: 200 OK");
+        //if($webhook_signature == $expected_signature) {
+        // decode as associative array
+        $payload = json_decode($body, true);
+        foreach($payload['events'] as &$event) {
+            
         }
-        else {
-            header("Status: 401 Not authenticated");
-        }
+        header("Status: 200 OK");
+        //}
+        //else {
+        //    header("Status: 401 Not authenticated");
+        //}
     }
 
 
