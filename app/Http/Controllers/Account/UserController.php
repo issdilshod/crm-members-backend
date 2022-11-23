@@ -578,14 +578,16 @@ class UserController extends Controller
 
         $body = file_get_contents('php://input');
 
-        $expected_signature = hash_hmac( 'sha256', $body, $app_secret, false );
+        $expected_signature = hash_hmac('sha256', $body, $app_secret, false );
+
+        $log = new TelegramLog();
+        $log->to_file($body);
 
         if($webhook_signature == $expected_signature) {
             // decode as associative array
             $payload = json_decode( $body, true );
             foreach($payload['events'] as &$event) {
-                $log = new TelegramLog();
-                $log->to_file($event);
+                
             }
 
             header("Status: 200 OK");
