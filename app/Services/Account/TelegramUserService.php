@@ -17,11 +17,6 @@ class TelegramUserService {
     private $response;
     private $telegramLog;
 
-    /**
-     * Bootstrap class
-     * 
-     * @return void
-     */
     public function __construct()
     {
         // commands
@@ -112,11 +107,6 @@ class TelegramUserService {
                       ->notify(new TelegramNotification(['msg' => $this->response]));
     }
 
-    /**
-     * Return User via telegram
-     * 
-     * @return User
-     */
     private function getUserViaTelegram($entity)
     {
         $response = $this->commands[$entity['message']];

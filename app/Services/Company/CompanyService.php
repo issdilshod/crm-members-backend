@@ -3,6 +3,7 @@
 namespace App\Services\Company;
 
 use App\Helpers\UserSystemInfoHelper;
+use App\Http\Resources\Account\ActivityResource;
 use App\Http\Resources\Company\CompanyPendingResource;
 use App\Http\Resources\Company\CompanyResource;
 use App\Models\Account\Activity;
@@ -530,8 +531,7 @@ class CompanyService {
         // company name
         $company_fn = $company['legal_name'];
         
-        // Activity log
-        Activity::create([
+        $activity = Activity::create([
             'user_uuid' => $entity['user_uuid'],
             'entity_uuid' => $company['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
@@ -541,6 +541,10 @@ class CompanyService {
             'action_code' => Config::get('common.activity.codes.company_add'),
             'status' => Config::get('common.status.actived')
         ]);
+
+        // push
+        $activity = $this->activityService->setLink($activity);
+        $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
 
         return $company;
     }
@@ -554,7 +558,7 @@ class CompanyService {
         // company name
         $company_fn = $company['legal_name'];
 
-        Activity::create([
+        $activity = Activity::create([
             'user_uuid' => $user_uuid,
             'entity_uuid' => $company['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
@@ -564,6 +568,10 @@ class CompanyService {
             'action_code' => Config::get('common.activity.codes.company_update'),
             'status' => Config::get('common.status.actived')
         ]);
+
+        // push
+        $activity = $this->activityService->setLink($activity);
+        $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
 
         return $company;
     }
@@ -576,8 +584,7 @@ class CompanyService {
         // company name
         $company_fn = $company['legal_name'];
 
-        // logs
-        Activity::create([
+        $activity = Activity::create([
             'user_uuid' => $entity['user_uuid'],
             'entity_uuid' => $company['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
@@ -588,6 +595,10 @@ class CompanyService {
             'status' => Config::get('common.status.actived')
         ]);
 
+        // push activity
+        $activity = $this->activityService->setLink($activity);
+        $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
+
         // notification
         $user = User::where('uuid', $entity['user_uuid'])->first();
 
@@ -596,7 +607,7 @@ class CompanyService {
                 '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/companies/'.$company['uuid'].')';
         $this->notificationService->telegram_to_headqurters($msg);
 
-        // push
+        // push pending
         $company['last_activity'] = $this->activityService->by_entity_last($company['uuid']);
         $this->notificationService->push_to_headquarters('pending', ['data' => new CompanyPendingResource($company), 'msg' => '', 'link' => '']);
 
@@ -615,8 +626,7 @@ class CompanyService {
         // company name
         $company_fn = $company['legal_name'];
 
-        // logs
-        Activity::create([
+        $activity = Activity::create([
             'user_uuid' => $user_uuid,
             'entity_uuid' => $company['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
@@ -627,6 +637,10 @@ class CompanyService {
             'status' => Config::get('common.status.actived')
         ]);
 
+        // push activity
+        $activity = $this->activityService->setLink($activity);
+        $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
+
         // notification
         $user = User::where('uuid', $user_uuid)->first();
 
@@ -635,7 +649,7 @@ class CompanyService {
                 '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/companies/'.$company['uuid'].')';
         $this->notificationService->telegram_to_headqurters($msg);
 
-        // push
+        // push pending
         $company['last_activity'] = $this->activityService->by_entity_last($company['uuid']);
         $this->notificationService->push_to_headquarters('pending', ['data' => new CompanyPendingResource($company), 'msg' => '', 'link' => '']);
 
@@ -651,8 +665,7 @@ class CompanyService {
         // company name
         $company_fn = $company['legal_name'];
 
-        // log
-        Activity::create([
+        $activity = Activity::create([
             'user_uuid' => $user_uuid,
             'entity_uuid' => $company['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
@@ -666,13 +679,19 @@ class CompanyService {
         // notification
         $user = User::where('uuid', $company['user_uuid'])->first();
 
+        // push activity
+        $activity = $this->activityService->setLink($activity);
+        $this->notificationService->push('activity', $user, ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
+        $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
+
+        // telegram
         $this->notificationService->telegram([
             'telegram' => $user['telegram'],
             'msg' => str_replace("{name}", "*" . $company_fn . "*", Config::get('common.activity.company.accept')) . "\n" .
                         '[link to view](' .env('APP_FRONTEND_ENDPOINT').'/companies/'.$company['uuid']. ')'
         ]);
 
-        // push
+        // push pending
         $company['last_activity'] = $this->activityService->by_entity_last($company['uuid']);
         $this->notificationService->push('pending', $user, ['data' => new CompanyPendingResource($company), 'msg' => '', 'link' => '']);
 
@@ -687,8 +706,7 @@ class CompanyService {
         // company name
         $company_fn = $company['legal_name'];
 
-        // logs
-        Activity::create([
+        $activity = Activity::create([
             'user_uuid' => $user_uuid,
             'entity_uuid' => $company['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
@@ -702,13 +720,19 @@ class CompanyService {
         // notification
         $user = User::where('uuid', $company['user_uuid'])->first();
 
+        // push activity
+        $activity = $this->activityService->setLink($activity);
+        $this->notificationService->push('activity', $user, ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
+        $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
+
+        // telegram
         $this->notificationService->telegram([
             'telegram' => $user['telegram'],
             'msg' => str_replace("{name}", "*" . $company_fn . "*", Config::get('common.activity.company.reject')) . "\n" .
                         '[link to change](' .env('APP_FRONTEND_ENDPOINT').'/companies/'.$company['uuid']. ')'
         ]);
 
-        // push
+        // push pending
         $company['last_activity'] = $this->activityService->by_entity_last($company['uuid']);
         $this->notificationService->push('pending', $user, ['data' => new CompanyPendingResource($company), 'msg' => '', 'link' => '']);
 

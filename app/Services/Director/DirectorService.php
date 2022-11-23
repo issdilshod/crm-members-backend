@@ -3,6 +3,7 @@
 namespace App\Services\Director;
 
 use App\Helpers\UserSystemInfoHelper;
+use App\Http\Resources\Account\ActivityResource;
 use App\Http\Resources\Director\DirectorPendingResource;
 use App\Http\Resources\Director\DirectorResource;
 use App\Models\Account\Activity;
@@ -374,7 +375,7 @@ class DirectorService {
         // director full name
         $director_fn = $director['first_name'] . ' ' . ($director['middle_name']!=null?$director['middle_name'].' ':'') . $director['last_name'];
 
-        Activity::create([
+        $activity = Activity::create([
             'user_uuid' => $entity['user_uuid'],
             'entity_uuid' => $director['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
@@ -384,6 +385,10 @@ class DirectorService {
             'action_code' => Config::get('common.activity.codes.director_add'),
             'status' => Config::get('common.status.actived')
         ]);
+
+        // push
+        $activity = $this->activityService->setLink($activity);
+        $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
 
         return $director;
     }
@@ -397,7 +402,7 @@ class DirectorService {
         // director full name
         $director_fn = $director['first_name'] . ' ' . ($director['middle_name']!=null?$director['middle_name'].' ':'') . $director['last_name'];
 
-        Activity::create([
+        $activity = Activity::create([
             'user_uuid' => $user_uuid,
             'entity_uuid' => $director['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
@@ -407,6 +412,10 @@ class DirectorService {
             'action_code' => Config::get('common.activity.codes.director_update'),
             'status' => Config::get('common.status.actived')
         ]);
+
+        // push
+        $activity = $this->activityService->setLink($activity);
+        $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
 
         return $director;
     }
@@ -419,8 +428,7 @@ class DirectorService {
         // director full name
         $director_fn = $director['first_name'] . ' ' . ($director['middle_name']!=null?$director['middle_name'].' ':'') . $director['last_name'];
 
-        // logs
-        Activity::create([
+        $activity = Activity::create([
             'user_uuid' => $entity['user_uuid'],
             'entity_uuid' => $director['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
@@ -434,12 +442,17 @@ class DirectorService {
         // notification
         $user = User::where('uuid', $entity['user_uuid'])->first();
 
+        // push activity
+        $activity = $this->activityService->setLink($activity);
+        $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
+
+        // telegram
         $msg = '*' . $user->first_name . ' ' . $user->last_name . "*\n" .
                 str_replace("{name}", "*" . $director_fn . "*", Config::get('common.activity.director.pending')) . "\n" .
                 '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/directors/'.$director['uuid'].')';
         $this->notificationService->telegram_to_headqurters($msg);
 
-        // push
+        // push pending
         $director['last_activity'] = $this->activityService->by_entity_last($director['uuid']);
         $this->notificationService->push_to_headquarters('pending', ['data' => new DirectorPendingResource($director), 'msg' => '', 'link' => '']);
 
@@ -459,8 +472,7 @@ class DirectorService {
         // director full name
         $director_fn = $director['first_name'] . ' ' . ($director['middle_name']!=null?$director['middle_name'].' ':'') . $director['last_name'];
 
-        // logs
-        Activity::create([
+        $activity = Activity::create([
             'user_uuid' => $user_uuid,
             'entity_uuid' => $director['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
@@ -474,12 +486,17 @@ class DirectorService {
         // notification
         $user = User::where('uuid', $user_uuid)->first();
 
+        // push activity
+        $activity = $this->activityService->setLink($activity);
+        $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
+
+        // telegram
         $msg = '*' . $user->first_name . ' ' . $user->last_name . "*\n" .
                 str_replace("{name}", "*" . $director_fn . "*", Config::get('common.activity.director.pending_update')) . "\n" .
                 '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/directors/'.$director['uuid'].')';
         $this->notificationService->telegram_to_headqurters($msg);
 
-        // push
+        // push pending
         $director['last_activity'] = $this->activityService->by_entity_last($director['uuid']);
         $this->notificationService->push_to_headquarters('pending', ['data' => new DirectorPendingResource($director), 'msg' => '', 'link' => '']);
 
@@ -495,8 +512,7 @@ class DirectorService {
         // director full name
         $director_fn = $director['first_name'] . ' ' . ($director['middle_name']!=null?$director['middle_name'].' ':'') . $director['last_name'];
         
-        // log
-        Activity::create([
+        $activity = Activity::create([
             'user_uuid' => $user_uuid,
             'entity_uuid' => $director['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
@@ -510,13 +526,19 @@ class DirectorService {
         // notification
         $user = User::where('uuid', $director['user_uuid'])->first();
 
+        // push activity
+        $activity = $this->activityService->setLink($activity);
+        $this->notificationService->push('activity', $user, ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
+        $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
+
+        // telegram
         $this->notificationService->telegram([
             'telegram' => $user['telegram'],
             'msg' => str_replace("{name}", "*" . $director_fn . "*", Config::get('common.activity.director.accept')) . "\n" .
             '[link to view]('.env('APP_FRONTEND_ENDPOINT').'/directors/'.$director['uuid'].')'
         ]);
 
-        // push
+        // push pending
         $director['last_activity'] = $this->activityService->by_entity_last($director['uuid']);
         $this->notificationService->push('pending', $user, ['data' => new DirectorPendingResource($director), 'msg' => '', 'link' => '']);
 
@@ -531,8 +553,7 @@ class DirectorService {
         // director full name
         $director_fn = $director['first_name'] . ' ' . ($director['middle_name']!=null?$director['middle_name'].' ':'') . $director['last_name'];
 
-        // logs
-        Activity::create([
+        $activity = Activity::create([
             'user_uuid' => $user_uuid,
             'entity_uuid' => $director['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
@@ -546,13 +567,19 @@ class DirectorService {
         // notification
         $user = User::where('uuid', $director['user_uuid'])->first();
 
+        // push activity
+        $activity = $this->activityService->setLink($activity);
+        $this->notificationService->push('activity', $user, ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
+        $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
+
+        // telegram
         $this->notificationService->telegram([
             'telegram' => $user['telegram'],
             'msg' => str_replace("{name}", "*" . $director_fn . "*", Config::get('common.activity.director.reject')) . "\n" .
                         '[link to change]('.env('APP_FRONTEND_ENDPOINT').'/directors/'.$director['uuid'].')'
         ]);
 
-        // push
+        // push pending
         $director['last_activity'] = $this->activityService->by_entity_last($director['uuid']);
         $this->notificationService->push('pending', $user, ['data' => new DirectorPendingResource($director), 'msg' => '', 'link' => '']);
 

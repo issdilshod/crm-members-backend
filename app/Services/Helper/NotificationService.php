@@ -4,7 +4,6 @@ namespace App\Services\Helper;
 
 use App\Helpers\TelegramHelper;
 use App\Helpers\WebSocket;
-use App\Models\Account\User;
 use App\Notifications\TelegramNotification;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
@@ -12,12 +11,6 @@ use Illuminate\Support\Facades\Notification;
 
 class NotificationService {
 
-    /**
-     * Send notification via websocket
-     * 
-     * @param   string user, msg, link
-     * @return  void
-     */
     public function push($section, $user, $entity)
     {
         event(new WebSocket([
@@ -40,20 +33,13 @@ class NotificationService {
                             $join->on('users.role_uuid', '=', 'roles.uuid')
                                     ->where('roles.alias', Config::get('common.role.headquarters'));
                         })
-                        ->select('users.*')
-                        ->get();
+                        ->get(['users.*']);
         // each users (headquarters)
         foreach($users AS $key => $value):
-            $this->push($section, $value->toArray(), $entity);
+            $this->push($section, json_decode(json_encode($value), true), $entity);
         endforeach;
     }
 
-    /**
-     * Send notification to telegram
-     * 
-     * @param   Array telegram, msg
-     * @return  void
-     */
     public function telegram($entity)
     {
         $chat_id = TelegramHelper::getTelegramChatId($entity['telegram']);
@@ -63,12 +49,6 @@ class NotificationService {
         }
     }
 
-    /**
-     * Send telegram notification to headquarters
-     * 
-     * @param   Array msg
-     * @return  void
-     */
     public function telegram_to_headqurters($msg)
     {
         // get headquarters uuid

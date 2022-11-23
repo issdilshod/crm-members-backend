@@ -3,6 +3,7 @@
 namespace App\Services\Chat;
 
 use App\Helpers\UserSystemInfoHelper;
+use App\Http\Resources\Account\ActivityResource;
 use App\Http\Resources\Chat\ChatResource;
 use App\Models\Account\Activity;
 use App\Models\Account\User;
@@ -71,8 +72,7 @@ class ChatService{
             $this->addMembers($chat->uuid, $entity['members']);
         }
 
-        // Activity log
-        Activity::create([
+        $activity = Activity::create([
             'user_uuid' => $entity['user_uuid'],
             'entity_uuid' => $chat['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
@@ -82,6 +82,9 @@ class ChatService{
             'action_code' => Config::get('common.activity.codes.chat_add'),
             'status' => Config::get('common.status.actived')
         ]);
+
+        // push
+        $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
 
         $chat = $this->setChatMembers($chat);
         $chat = $this->setChatLastMessage($chat);
@@ -102,8 +105,7 @@ class ChatService{
             $this->deleteMembers($chat->uuid, $entity['members_to_delete']);
         }
 
-        // Activity log
-        Activity::create([
+        $activity = Activity::create([
             'user_uuid' => $user_uuid,
             'entity_uuid' => $chat['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
@@ -113,6 +115,9 @@ class ChatService{
             'action_code' => Config::get('common.activity.codes.chat_update'),
             'status' => Config::get('common.status.actived')
         ]);
+
+         // push
+         $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
 
         $chat = $this->setChatMembers($chat);
         $chat = $this->setChatLastMessage($chat);

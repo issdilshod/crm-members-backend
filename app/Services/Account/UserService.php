@@ -3,6 +3,7 @@
 namespace App\Services\Account;
 
 use App\Helpers\UserSystemInfoHelper;
+use App\Http\Resources\Account\ActivityResource;
 use App\Http\Resources\Account\UserResource;
 use App\Models\Account\Activity;
 use App\Models\Account\InviteUser;
@@ -16,10 +17,12 @@ use Illuminate\Support\Str;
 class UserService {
 
     private $notificationService;
+    private $activityService;
 
     public function __construct()
     {
         $this->notificationService = new NotificationService();
+        $this->activityService = new ActivityService();
     }
 
     public function all()
@@ -128,8 +131,7 @@ class UserService {
     {
         $user = User::create($entity);
 
-        // Activity log
-        Activity::create([
+        $activity = Activity::create([
             'user_uuid' => $entity['user_uuid'],
             'entity_uuid' => $user['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
@@ -140,6 +142,10 @@ class UserService {
             'status' => Config::get('common.status.actived')
         ]);
 
+        // push
+        $activity = $this->activityService->setLink($activity);
+        $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
+
         return $user;
     }
 
@@ -147,8 +153,7 @@ class UserService {
     {
         $user->update($entity);
 
-        // Activity
-        Activity::create([
+        $activity = Activity::create([
             'user_uuid' => $entity['user_uuid'],
             'entity_uuid' => $user->uuid,
             'device' => UserSystemInfoHelper::device_full(),
@@ -159,6 +164,10 @@ class UserService {
             'status' => Config::get('common.status.actived')
         ]);
 
+        // push
+        $activity = $this->activityService->setLink($activity);
+        $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
+
         return $user;
     }
 
@@ -167,8 +176,7 @@ class UserService {
         $entity['status'] = Config::get('common.status.actived');
         $user->update($entity);
 
-        // logs
-        Activity::create([
+        $activity = Activity::create([
             'user_uuid' => $entity['user_uuid'],
             'entity_uuid' => $user['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
@@ -186,6 +194,10 @@ class UserService {
                     'This is your link for [login]('.env('APP_FRONTEND_ENDPOINT'). '/login/' .')' 
         ]);
 
+        // push
+        $activity = $this->activityService->setLink($activity);
+        $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
+
         return $user;
     }
 
@@ -194,8 +206,7 @@ class UserService {
         $user = User::where('uuid', $uuid)->first();
         $user->update(['status' => Config::get('common.status.deleted')]);
 
-        // logs
-        Activity::create([
+        $activity = Activity::create([
             'user_uuid' => $user_uuid,
             'entity_uuid' => $user['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
@@ -211,6 +222,10 @@ class UserService {
             'telegram' => $user['telegram'],
             'msg' => Config::get('common.activity.user.reject')
         ]);
+
+        // push
+        $activity = $this->activityService->setLink($activity);
+        $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
     }
 
     public function login($entity)
@@ -236,14 +251,17 @@ class UserService {
 
         $this->online($user->uuid);
 
-        // Activity log
-        Activity::create([
+        $activity = Activity::create([
             'user_uuid' => $user['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' =>  UserSystemInfoHelper::ip(),
             'description' => Config::get('common.activity.logged'),
             'status' => Config::get('common.status.actived')
         ]);
+
+        // push
+        $activity = $this->activityService->setLink($activity);
+        $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
 
         return $user;
     }
@@ -255,14 +273,17 @@ class UserService {
 
         $this->offline($entity['user_uuid']);
 
-        // Activity log
-        Activity::create([
+        $activity = Activity::create([
             'user_uuid' => $entity['user_uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
             'description' => Config::get('common.activity.logout'),
             'status' => Config::get('common.status.actived')
         ]);
+
+        // push
+        $activity = $this->activityService->setLink($activity);
+        $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
     }
 
     public function register($entity)
@@ -273,8 +294,6 @@ class UserService {
                                     ->first();
         
         if ($invite_user!=null){
-
-            #region Check
 
             $user = User::select('username')
                             ->where('status', Config::get('common.status.actived'))
@@ -310,8 +329,6 @@ class UserService {
                     'data' => ['msg' => 'Username is exsist.', 'data' => $check],
                 ], 409);
             }
-
-            #endregion
             
             $entity['status'] = Config::get('common.status.pending');
             $user = User::create($entity);
@@ -319,8 +336,7 @@ class UserService {
 
             $invite_user->update(['status'=> Config::get('common.status.deleted')]);
 
-            // activity
-            Activity::create([
+            $activity = Activity::create([
                 'user_uuid' => $user['uuid'],
                 'entity_uuid' => $user['uuid'],
                 'device' => UserSystemInfoHelper::device_full(),
@@ -336,6 +352,10 @@ class UserService {
                 Config::get('common.activity.user.register') . "\n" .
                 '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/departments/user/'.$user['uuid'].')';
             $this->notificationService->telegram_to_headqurters($msg);
+
+            // push
+            $activity = $this->activityService->setLink($activity);
+            $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
             
             return response()->json([
                 'data' => ['msg' => 'Succesfully sent request for register.'],

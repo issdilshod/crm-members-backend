@@ -53,17 +53,12 @@ class ActivityService {
         return $activity;
     }
 
-    /**
-     * Delete activity by id
-     *
-     * @return void
-     */
     public function delete(Activity $activity)
     {
         $activity->update(['status' => Config::get('common.status.deleted')]);
     }
 
-    private function setLink($activity)
+    public function setLink($activity)
     {
         $link = '';
         if ($activity['action_code']!=0){
@@ -73,11 +68,6 @@ class ActivityService {
         return $activity;
     }
 
-    /**
-     * Set mapping links to activity
-     * 
-     * @return Array(Activity)
-     */
     private function setLinks($activities)
     {
         foreach ($activities AS $key => $value):
