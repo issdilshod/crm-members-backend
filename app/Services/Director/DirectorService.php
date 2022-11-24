@@ -41,9 +41,23 @@ class DirectorService {
             'active' => Director::where('status', Config::get('common.status.actived'))
                                     ->where('user_uuid', 'like', $uuid . '%')
                                     ->count(),
-            'pending' => Director::where('status', Config::get('common.status.pending'))
+            'pending' => Director::where(function ($q){
+                                        $q->where('status', Config::get('common.status.pending'))
+                                            ->orWhere('status', Config::get('common.status.rejected'));
+                                    })
                                     ->where('user_uuid', 'like', $uuid . '%')
-                                    ->count()
+                                    ->count(),
+            'has_company' => count(Director::where('directors.status', '!=', Config::get('common.status.deleted'))
+                                    ->where('directors.user_uuid', 'like', $uuid . '%')
+                                    ->join('companies', 'companies.director_uuid', '=', 'directors.uuid')
+                                    ->groupBy('directors.uuid')
+                                    ->get()),
+            'with_id' => Director::where('directors.approved', Config::get('common.status.actived'))
+                                    ->where('directors.user_uuid', 'like', $uuid . '%')
+                                    ->count(),
+            'without_id' => Director::where('directors.approved', Config::get('common.status.deleted'))
+                                    ->where('directors.user_uuid', 'like', $uuid . '%')
+                                    ->count(),
         ];
 
         return $entity;
