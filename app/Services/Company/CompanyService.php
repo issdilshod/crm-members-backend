@@ -43,9 +43,12 @@ class CompanyService {
             'active' => Company::where('status', Config::get('common.status.actived'))
                                     ->where('user_uuid', 'like', $user_uuid . '%')
                                     ->count(),
-            'pending' => Company::where('status', Config::get('common.status.pending'))
-                                    ->where('user_uuid', 'like', $user_uuid . '%')
-                                    ->count()
+            'pending' => Company::where(function ($q){
+                                    $q->where('status', Config::get('common.status.pending'))
+                                        ->orWhere('status', Config::get('common.status.rejected'));
+                                })
+                                ->where('user_uuid', 'like', $user_uuid . '%')
+                                ->count()
         ];
 
         return $entity;
