@@ -55,7 +55,8 @@ class DirectorService {
             'with_id' => Director::where('directors.approved', Config::get('common.status.actived'))
                                     ->where('directors.user_uuid', 'like', $uuid . '%')
                                     ->count(),
-            'without_id' => Director::where('directors.approved', Config::get('common.status.deleted'))
+            'without_id' => Director::where('directors.status', '!=', Config::get('common.status.deleted'))
+                                    ->where('directors.approved', Config::get('common.status.deleted'))
                                     ->where('directors.user_uuid', 'like', $uuid . '%')
                                     ->count(),
         ];
