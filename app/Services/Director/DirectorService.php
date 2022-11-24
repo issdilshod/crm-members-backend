@@ -74,23 +74,54 @@ class DirectorService {
         return DirectorResource::collection($directors);
     }
 
-    public function by_user($user_uuid, $filter)
+    public function for_pending($user_uuid, $filter, $filter_summary)
     {
         $directors = Director::orderBy('updated_at', 'DESC')
-                                ->when(($filter!='' || $filter=='0') , function ($q) { // normal view
-                                    return $q->where('status', '!=', Config::get('common.status.deleted'));
-                                })
-                                ->when($filter=='1', function ($q) { // unapproved
-                                    return $q->where('status', Config::get('common.status.pending'));
-                                })
-                                ->when($filter=='2', function ($q) { // approved
-                                    return $q->where('status', Config::get('common.status.actived'));
-                                })
-                                ->when($filter=='3', function ($q) { // rejected
-                                    return $q->where('status', Config::get('common.status.rejected'));
-                                })
-                                ->where('user_uuid', $user_uuid)
-                                ->paginate(10);
+                            ->when(($filter_summary==''), function ($gq) use ($filter) { // no summary filter
+                                return $gq->when(($filter!='' || $filter=='0'), function ($q) { // normal view
+                                        return $q->where('status', '!=', Config::get('common.status.deleted'));
+                                    })
+                                    ->when($filter=='1', function ($q) { // unapproved
+                                        return $q->where('status', Config::get('common.status.pending'));
+                                    })
+                                    ->when($filter=='2', function ($q) { // approved
+                                        return $q->where('status', Config::get('common.status.actived'));
+                                    })
+                                    ->when($filter=='3', function ($q) { // rejected
+                                        return $q->where('status', Config::get('common.status.rejected'));
+                                    });
+                            })
+                            ->when(($filter_summary=='6' || $filter_summary=='7' || $filter_summary=='8'), function ($q){ // only company
+                                return $q->where('status', 100); // never true
+                            })
+                            ->when(($filter_summary=='0'), function ($q){ // all directors
+                                return $q->where('status', '!=', Config::get('common.status.deleted'));
+                            }) 
+                            ->when(($filter_summary=='1'), function ($q){ // approved directors
+                                return $q->where('status', '!=', Config::get('common.status.deleted'))
+                                        ->where('approved', Config::get('common.status.actived'));
+                            }) 
+                            ->when(($filter_summary=='2'), function ($q){ // pending directors
+                                return $q->where(function ($qq) {
+                                            $qq->where('status', Config::get('common.status.pending'))
+                                                ->orWhere('status', Config::get('common.status.rejected'));
+                                        });
+                            }) 
+                            ->when(($filter_summary=='3'), function ($q){ // available directors
+                                // query
+                            })   
+                            ->when(($filter_summary=='4'), function ($q){ // directors with ID
+                                return $q->where('status', '!=', Config::get('common.status.deleted'))
+                                        ->where('approved', Config::get('common.status.actived'));
+                            }) 
+                            ->when(($filter_summary=='5'), function ($q){ // directors without ID
+                                return $q->where('status', '!=', Config::get('common.status.deleted'))
+                                        ->where('approved', Config::get('common.status.deleted'));
+                            })
+                            ->when(($user_uuid!=''), function ($q) use($user_uuid){
+                                return $q->where('user_uuid', $user_uuid);
+                            })
+                            ->paginate(10);
 
         foreach($directors AS $key => $value):
             $directors[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
@@ -99,69 +130,7 @@ class DirectorService {
         return DirectorPendingResource::collection($directors);
     }
 
-    public function by_user_search($user_uuid, $search)
-    {
-        $directors = Director::select('directors.*')
-                                ->orderBy('directors.updated_at', 'DESC')
-                                ->groupBy('directors.uuid')
-                                ->join('addresses', 'addresses.entity_uuid', '=', 'directors.uuid')
-                                ->join('emails', 'emails.entity_uuid', '=', 'directors.uuid')
-                                ->where('directors.status', '!=', Config::get('common.status.deleted'))
-                                ->where('directors.user_uuid', $user_uuid)
-                                ->where(function ($q) use($search) {
-                                    $q->whereRaw("concat(directors.first_name, ' ', directors.last_name) like '%".$search."%'")
-                                        ->whereRaw("concat(directors.first_name, ' ', directors.middle_name, ' ', directors.last_name) like '%".$search."%'")
-                                        ->whereRaw("concat(directors.last_name, ' ', directors.first_name) like '%".$search."%'")
-
-                                        ->orWhere('directors.date_of_birth', 'like', $search.'%')
-                                        ->orWhere('directors.ssn_cpn', 'like', $search.'%')
-                                        ->orWhere('directors.company_association', 'like', $search.'%')
-                                        ->orWhere('directors.phone_number', 'like', $search.'%')
-
-                                        ->orWhereRaw("concat(addresses.street_address, ' ', addresses.address_line_2, ' ', addresses.city, ' ', addresses.state, ' ', addresses.postal) like '%".$search."%'")
-                                        ->orWhereRaw("concat(addresses.street_address, ', ', addresses.address_line_2, ', ', addresses.city, ', ', addresses.state, ', ', addresses.postal) like '%".$search."%'")
-
-                                        ->orWhereRaw("concat(addresses.street_address, ' ', addresses.city, ' ', addresses.state, ' ', addresses.postal) like '%".$search."%'")
-                                        ->orWhereRaw("concat(addresses.street_address, ', ', addresses.city, ', ', addresses.state, ', ', addresses.postal) like '%".$search."%'")
-
-                                        ->orWhere('emails.email', 'like', $search.'%')
-                                        ->orWhere('emails.phone', 'like', $search.'%');
-                                })
-                                ->limit(10)
-                                ->get();
-
-        foreach($directors AS $key => $value):
-            $directors[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
-        endforeach;
-
-        return DirectorPendingResource::collection($directors);
-    }
-
-    public function headquarters($filter)
-    {
-        $directors = Director::orderBy('updated_at', 'DESC')
-                                ->when(($filter!='' || $filter=='0') , function ($q) { // normal view
-                                    return $q->where('status', '!=', Config::get('common.status.deleted'));
-                                })
-                                ->when($filter=='1', function ($q) { // unapproved
-                                    return $q->where('status', Config::get('common.status.pending'));
-                                })
-                                ->when($filter=='2', function ($q) { // approved
-                                    return $q->where('status', Config::get('common.status.actived'));
-                                })
-                                ->when($filter=='3', function ($q) { // rejected
-                                    return $q->where('status', Config::get('common.status.rejected'));
-                                })
-                                ->paginate(10);       
-
-        foreach($directors AS $key => $value):
-            $directors[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
-        endforeach;
-
-        return DirectorPendingResource::collection($directors);
-    }
-
-    public function headquarters_search($search)
+    public function for_pending_search($user_uuid = '', $search)
     {
         $directors = Director::select('directors.*')
                                 ->orderBy('directors.updated_at', 'DESC')
@@ -187,6 +156,9 @@ class DirectorService {
 
                                         ->orWhere('emails.email', 'like', $search.'%')
                                         ->orWhere('emails.phone', 'like', $search.'%');
+                                })
+                                ->when(($user_uuid!=''), function ($q) use ($user_uuid){
+                                    return $q->where('directors.user_uuid', $user_uuid);
                                 })
                                 ->limit(10)
                                 ->get();

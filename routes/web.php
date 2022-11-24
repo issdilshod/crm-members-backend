@@ -29,7 +29,7 @@ Route::middleware('auth.custom')->group(function() {
     Route::resource('api/hosting', HostingController::class);
     Route::resource('api/department', DepartmentController::class);
     Route::resource('api/role', RoleController::class);
-    Route::get('api/pending', [PendingController::class, 'by_user']);
+    Route::get('api/pending', [PendingController::class, 'index']);
     Route::get('api/pending/search/{search}', [PendingController::class, 'search']);
     Route::post('api/pending/accept', [PendingController::class, 'accept']);
     Route::post('api/pending/reject', [PendingController::class, 'reject']);

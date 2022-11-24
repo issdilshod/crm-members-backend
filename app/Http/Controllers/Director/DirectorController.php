@@ -1108,8 +1108,8 @@ class DirectorController extends Controller
       */
     public function by_user(Request $request)
     {
-        $directors = $this->directorService->by_user($request->user_uuid, '');
-        return $directors;
+        //$directors = $this->directorService->by_user($request->user_uuid, '');
+        //return $directors;
     }
 
     /**     @OA\GET(

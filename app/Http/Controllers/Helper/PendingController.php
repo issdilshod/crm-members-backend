@@ -28,35 +28,39 @@ class PendingController extends Controller
     
     /**     @OA\GET(
       *         path="/api/pending",
-      *         operationId="list_pending_by_user",
+      *         operationId="list_pending",
       *         tags={"Helper"},
-      *         summary="List of pending by user",
-      *         description="List of pending by user",
+      *         summary="List of pending",
+      *         description="List of pending",
       *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=401, description="Not Authenticated"),
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function by_user(Request $request)
+    public function index(Request $request)
     {
-        $filter = '';
+        $user_uuid = ''; $filter = ''; $summary_filter = '';
+
+        // filters
         if (isset($request->filter)){ $filter = $request->filter; }
+        if (isset($request->summary_filter)){ $summary_filter = $request->summary_filter; }
 
-        // if now headquarters then show only belongs to them
-        if (!PermissionPolicy::permission($request->user_uuid)){
-            $directors = $this->directorService->by_user($request->user_uuid, $filter);
-            $companies = $this->companyService->by_user($request->user_uuid, $filter);
-            $summary['directors'] = $this->directorService->summary($request->user_uuid);
-            $summary['companies'] = $this->companyService->summary($request->user_uuid);
-        }else{
-            $directors = $this->directorService->headquarters($filter);
-            $companies = $this->companyService->headquarters($filter);
-            $summary['directors'] = $this->directorService->summary();
-            $summary['companies'] = $this->companyService->summary();
+        // get data
+        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.view'))){
+            $user_uuid = $request->user_uuid;
         }
+        $directors = $this->directorService->for_pending($user_uuid, $filter, $summary_filter);
+        $summary['directors'] = $this->directorService->summary($user_uuid);
 
-        // meta datas
+        $user_uuid = '';
+        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.view'))){
+            $user_uuid = $request->user_uuid;
+        }
+        $companies = $this->companyService->for_pending($user_uuid, $filter, $summary_filter);
+        $summary['companies'] = $this->companyService->summary($user_uuid);
+
+        // meta data
         $current_page = $directors->currentPage();
         $max_page = ($directors->lastPage()>$companies->lastPage()?$directors->lastPage():$companies->lastPage());
         $meta = [ 'current_page' => $current_page, 'max_page' => $max_page ];
@@ -78,15 +82,19 @@ class PendingController extends Controller
       */
     public function search(Request $request, $search)
     {
-        // if now headquarters then show only belongs to them
-        if (!PermissionPolicy::permission($request->user_uuid)){
-            $directors = $this->directorService->by_user_search($request->user_uuid, $search);
-            $companies = $this->companyService->by_user_search($request->user_uuid, $search);
-            return ['directors' => $directors, 'companies' => $companies];
-        }
+        $user_uuid = '';
 
-        $directors = $this->directorService->headquarters_search($search);
-        $companies = $this->companyService->headquarters_search($search);
+        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.view'))){
+            $user_uuid = $request->user_uuid;
+        }
+        $directors = $this->directorService->for_pending_search($user_uuid, $search);
+        
+        $user_uuid = '';
+        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.view'))){
+            $user_uuid = $request->user_uuid;
+        }
+        $companies = $this->companyService->for_pending_search($user_uuid, $search);
+
         return ['directors' => $directors, 'companies' => $companies];
     }
 

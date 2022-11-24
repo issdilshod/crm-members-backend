@@ -1500,8 +1500,8 @@ class CompanyController extends Controller
       */
     public function by_user(Request $request)
     {
-        $companies = $this->companyService->by_user($request->user_uuid, '');
-        return $companies;
+        //$companies = $this->companyService->by_user($request->user_uuid, '');
+        //return $companies;
     }
 
     /**     @OA\GET(

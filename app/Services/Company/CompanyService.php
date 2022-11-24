@@ -63,10 +63,11 @@ class CompanyService {
         return CompanyResource::collection($companies);
     }
 
-    public function by_user($user_uuid, $filter)
+    public function for_pending($user_uuid = '', $filter, $summary_filter)
     {
         $companies = Company::orderBy('updated_at', 'DESC')
-                                ->when(($filter!='' || $filter=='0') , function ($q) { // normal view
+                            ->when(($summary_filter==''), function ($gq) use ($filter) { // no summary filter
+                                return $gq->when(($filter!='' || $filter=='0') , function ($q) { // normal view
                                     return $q->where('status', '!=', Config::get('common.status.deleted'));
                                 })
                                 ->when($filter=='1', function ($q) { // unapproved
@@ -77,9 +78,28 @@ class CompanyService {
                                 })
                                 ->when($filter=='3', function ($q) { // rejected
                                     return $q->where('status', Config::get('common.status.rejected'));
-                                })
-                                ->where('user_uuid', $user_uuid)
-                                ->paginate(10);
+                                });
+                            })
+                            ->when(($summary_filter=='0' || $summary_filter=='1' || $summary_filter=='2' || $summary_filter=='3' || $summary_filter=='4' || $summary_filter=='5'), function ($q) { // only director
+                                return $q->where('status', 100); // never true
+                            })
+                            ->when(($summary_filter=='6'), function($q){ // all companies
+                                return $q->where('status', '!=', Config::get('common.status.deleted'));
+                            })
+                            ->when(($summary_filter=='7'), function($q){ // approved companies
+                                return $q->where('status', '!=', Config::get('common.status.deleted'))
+                                        ->where('approved', Config::get('common.status.actived'));
+                            })
+                            ->when(($summary_filter=='8'), function($q){ // pending companies
+                                return $q->where(function ($qq) {
+                                            $qq->where('status', Config::get('common.status.pending'))
+                                                ->orWhere('status', Config::get('common.status.rejected'));
+                                        });
+                            }) 
+                            ->when(($user_uuid!=''), function ($q) use ($user_uuid){
+                                return $q->where('user_uuid', $user_uuid);
+                            })
+                            ->paginate(10);
 
         foreach($companies AS $key => $value):
             $companies[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
@@ -88,7 +108,7 @@ class CompanyService {
         return CompanyPendingResource::collection($companies);
     }
 
-    public function by_user_search($user_uuid, $search)
+    public function for_pending_search($user_uuid = '', $search)
     {
         $companies = Company::select('companies.*')
                                 ->orderBy('companies.updated_at', 'DESC')
@@ -97,7 +117,6 @@ class CompanyService {
                                 ->leftJoin('emails', 'emails.entity_uuid', '=', 'companies.uuid')
                                 ->leftJoin('bank_accounts', 'bank_accounts.entity_uuid', '=', 'companies.uuid')
                                 ->where('companies.status', '!=', Config::get('common.status.deleted'))
-                                ->where('companies.user_uuid', $user_uuid)
                                 ->where(function ($q) use($search) {
                                     $q->where('companies.legal_name', 'like', '%'.$search.'%')
                                         ->orWhere('companies.ein', 'like', $search.'%')
@@ -122,72 +141,8 @@ class CompanyService {
                                         ->orWhere('bank_accounts.account_number', 'like', $search.'%')
                                         ->orWhere('bank_accounts.routing_number', 'like', $search.'%');
                                 })
-                                ->limit(10)
-                                ->get();
-
-        foreach($companies AS $key => $value):
-            $companies[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
-        endforeach;
-
-        return CompanyPendingResource::collection($companies);
-    }
-
-    public function headquarters($filter)
-    {
-        $companies = Company::orderBy('updated_at', 'DESC')
-                                ->when(($filter!='' || $filter=='0') , function ($q) { // normal view
-                                    return $q->where('status', '!=', Config::get('common.status.deleted'));
-                                })
-                                ->when($filter=='1', function ($q) { // unapproved
-                                    return $q->where('status', Config::get('common.status.pending'));
-                                })
-                                ->when($filter=='2', function ($q) { // approved
-                                    return $q->where('status', Config::get('common.status.actived'));
-                                })
-                                ->when($filter=='3', function ($q) { // rejected
-                                    return $q->where('status', Config::get('common.status.rejected'));
-                                })
-                                ->paginate(10);
-
-        foreach($companies AS $key => $value):
-            $companies[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
-        endforeach;
-
-        return CompanyPendingResource::collection($companies);
-    }
-
-    public function headquarters_search($search)
-    {
-        $companies = Company::select('companies.*')
-                                ->orderBy('companies.updated_at', 'DESC')
-                                ->groupBy('companies.uuid')
-                                ->leftJoin('addresses', 'addresses.entity_uuid', '=', 'companies.uuid')
-                                ->leftJoin('emails', 'emails.entity_uuid', '=', 'companies.uuid')
-                                ->leftJoin('bank_accounts', 'bank_accounts.entity_uuid', '=', 'companies.uuid')
-                                ->where('companies.status', '!=', Config::get('common.status.deleted'))
-                                ->where(function ($q) use($search) {
-                                    $q->where('companies.legal_name', 'like', $search.'%')
-                                        ->orWhere('companies.ein', 'like', $search.'%')
-                                        ->orWhere('companies.business_number', 'like', $search.'%')
-                                        ->orWhere('companies.voip_login', 'like', $search.'%')
-                                        ->orWhere('companies.business_mobile_number', 'like', $search.'%')
-                                        ->orWhere('companies.business_mobile_number_login', 'like', $search.'%')
-                                        ->orWhere('companies.website', 'like', $search.'%')
-                                        ->orWhere('companies.db_report_number', 'like', $search.'%')
-
-                                        ->orWhereRaw("concat(addresses.street_address, ' ', addresses.address_line_2, ' ', addresses.city, ' ', addresses.state, ' ', addresses.postal) like '%".$search."%'")
-                                        ->orWhereRaw("concat(addresses.street_address, ', ', addresses.address_line_2, ', ', addresses.city, ', ', addresses.state, ', ', addresses.postal) like '%".$search."%'")
-
-                                        ->orWhereRaw("concat(addresses.street_address, ' ', addresses.city, ' ', addresses.state, ' ', addresses.postal) like '%".$search."%'")
-                                        ->orWhereRaw("concat(addresses.street_address, ', ', addresses.city, ', ', addresses.state, ', ', addresses.postal) like '%".$search."%'")
-
-                                        ->orWhere('emails.email', 'like', $search.'%')
-                                        ->orWhere('emails.phone', 'like', $search.'%')
-                                        ->orWhere('bank_accounts.name', 'like', $search.'%')
-                                        ->orWhere('bank_accounts.website', 'like', $search.'%')
-                                        ->orWhere('bank_accounts.username', 'like', $search.'%')
-                                        ->orWhere('bank_accounts.account_number', 'like', $search.'%')
-                                        ->orWhere('bank_accounts.routing_number', 'like', $search.'%');
+                                ->when(($user_uuid!=''), function ($q) use($user_uuid) {
+                                    return $q->where('companies.user_uuid', $user_uuid);
                                 })
                                 ->limit(10)
                                 ->get();
