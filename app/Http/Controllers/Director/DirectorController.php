@@ -5,16 +5,13 @@ namespace App\Http\Controllers\Director;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Director\DirectorResource;
 use App\Models\Director\Director;
-use App\Models\Helper\Address;
-use App\Models\Helper\Email;
-use App\Models\Helper\File;
 use App\Policies\PermissionPolicy;
 use App\Services\Director\DirectorService;
 use App\Services\Helper\AddressService;
 use App\Services\Helper\EmailService;
+use App\Services\Helper\FileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Str;
 
 class DirectorController extends Controller
 {
@@ -22,12 +19,14 @@ class DirectorController extends Controller
     private $directorService;
     private $addressService;
     private $emailService;
+    private $fileService;
 
     public function __construct()
     {
         $this->directorService = new DirectorService();
         $this->addressService = new AddressService();
         $this->emailService = new EmailService();
+        $this->fileService = new FileService();
     }
 
     /**     @OA\GET(
@@ -60,7 +59,7 @@ class DirectorController extends Controller
       *         path="/api/director",
       *         operationId="post_director",
       *         tags={"Director"},
-      *         summary="Add director (not working on swagger)",
+      *         summary="Add director",
       *         description="Add director",
       *             @OA\RequestBody(
       *                 @OA\JsonContent(),
@@ -78,30 +77,11 @@ class DirectorController extends Controller
       *                         @OA\Property(property="phone_type", type="text"),
       *                         @OA\Property(property="phone_number", type="text"),
       *
-      *                         @OA\Property(property="address[dl_address][street_address]", type="text"),
-      *                         @OA\Property(property="address[dl_address][address_line_2]", type="text"),
-      *                         @OA\Property(property="address[dl_address][city]", type="text"),
-      *                         @OA\Property(property="address[dl_address][state]", type="text"),
-      *                         @OA\Property(property="address[dl_address][postal]", type="text"),
-      *                         @OA\Property(property="address[dl_address][country]", type="text"),
+      *                         @OA\Property(property="addresses[]", type="text"),
       *
-      *                         @OA\Property(property="address[credit_home_address][street_address]", type="text"),
-      *                         @OA\Property(property="address[credit_home_address][address_line_2]", type="text"),
-      *                         @OA\Property(property="address[credit_home_address][city]", type="text"),
-      *                         @OA\Property(property="address[credit_home_address][state]", type="text"),
-      *                         @OA\Property(property="address[credit_home_address][postal]", type="text"),
-      *                         @OA\Property(property="address[credit_home_address][country]", type="text"),
+      *                         @OA\Property(property="emails[]", type="text"),
       *
-      *                         @OA\Property(property="emails[hosting_uuid]", type="text"),
-      *                         @OA\Property(property="emails[email]", type="text"),
-      *                         @OA\Property(property="emails[password]", type="text"),
-      *                         @OA\Property(property="emails[phone]", type="text"),
-      *
-      *                         @OA\Property(property="files[dl_upload][front][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[dl_upload][back][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[ssn_upload][front][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[ssn_upload][back][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[cpn_docs_upload][]", type="file", format="binary")
+      *                         @OA\Property(property="files[]", type="text")
       *                     ),
       *                 ),
       *             ),
@@ -132,29 +112,23 @@ class DirectorController extends Controller
             'company_association' => '',
             'phone_type' => 'required',
             'phone_number' => 'required',
-            // addresses
-            'address.dl_address' => 'array',
 
-            'address.credit_home_address' => 'array',
+            // addresses
+            'addresses' => 'array',
+
             // emails
             'emails' => 'array',
+
+            // files
+            'files' => 'array',
 
             'user_uuid' => 'string'
         ]);
 
         $check = [];
 
-        if (isset($validated['emails'])){
+        /*if (isset($validated['emails'])){
             $tmpCheck = $this->emailService->check($validated['emails']);
-            $check = array_merge($check, $tmpCheck);
-        }
-
-        /*if (isset($validated['address']['dl_address'])){
-            $tmpCheck = $this->addressService->check($validated['address']['dl_address'], 'dl_address');
-            $check = array_merge($check, $tmpCheck);
-        }
-        if (isset($validated['address']['credit_home_address'])){
-            $tmpCheck = $this->addressService->check($validated['address']['credit_home_address'], 'credit_home_address');
             $check = array_merge($check, $tmpCheck);
         }*/
 
@@ -170,47 +144,28 @@ class DirectorController extends Controller
 
         $director = $this->directorService->create($validated);
 
-        // email
-        $validated['emails']['entity_uuid'] = $director['uuid'];
-        $this->emailService->create($validated['emails']);
-
-        //address
-        $validated['address']['dl_address']['address_parent'] = 'dl_address';
-        $validated['address']['dl_address']['entity_uuid'] = $director['uuid'];
-        $this->addressService->create($validated['address']['dl_address']);
-        $validated['address']['credit_home_address']['address_parent'] = 'credit_home_address';
-        $validated['address']['credit_home_address']['entity_uuid'] = $director['uuid'];
-        $this->addressService->create($validated['address']['credit_home_address']);
-
-
-        #region Files upload (if exsist)
-
-        if ($request->has('files')){
-            $files = $request->file('files');
-            foreach ($files AS $key => $value):
-                foreach ($value AS $key1 => $value1):
-                    if ($key1=='back' || $key1=='front'){
-                        $tmp_file = $value1;
-                        $file_parent = $key . '/' . $key1;
-                    }else{
-                        $tmp_file = $value;
-                        $file_parent = $key;
-                    }
-                    foreach ($tmp_file AS $key2 => $value2):
-                        $file = new File();
-                        $file->user_uuid = $validated['user_uuid'];
-                        $file->entity_uuid = $director['uuid'];
-                        $file->file_name = Str::uuid()->toString() . '.' . $value2->getClientOriginalExtension();
-                        $file->file_path = $file->file_name;
-                        $file->file_parent = $file_parent;
-                        $value2->move('uploads', $file->file_path);
-                        $file->save();
-                    endforeach;
-                endforeach;
+        // emails
+        if (isset($validated['emails'])){
+            foreach ($validated['emails'] AS $key => $value):
+                $value['entity_uuid'] = $director->uuid;
+                $this->emailService->save($value);
             endforeach;
         }
 
-        #endregion
+        // addresses
+        if (isset($validated['addresses'])){
+            foreach ($validated['addresses'] AS $key => $value):
+                $value['entity_uuid'] = $director->uuid;
+                $this->addressService->save($value);
+            endforeach;
+        }
+
+        // files
+        if (isset($validated['files'])){
+            foreach ($validated['files'] AS $key => $value):
+                $this->fileService->update(['entity_uuid' => $director->uuid], $value['uuid']);
+            endforeach;
+        }
 
         return new DirectorResource($director);
     }
@@ -255,7 +210,7 @@ class DirectorController extends Controller
       *         path="/api/director",
       *         operationId="update_director",
       *         tags={"Director"},
-      *         summary="Update director (not working on swagger)",
+      *         summary="Update director",
       *         description="Update director",
       *             @OA\Parameter(
       *                 name="uuid",
@@ -282,30 +237,11 @@ class DirectorController extends Controller
       *                         @OA\Property(property="phone_type", type="text"),
       *                         @OA\Property(property="phone_number", type="text"),
       *
-      *                         @OA\Property(property="address[dl_address][street_address]", type="text"),
-      *                         @OA\Property(property="address[dl_address][address_line_2]", type="text"),
-      *                         @OA\Property(property="address[dl_address][city]", type="text"),
-      *                         @OA\Property(property="address[dl_address][state]", type="text"),
-      *                         @OA\Property(property="address[dl_address][postal]", type="text"),
-      *                         @OA\Property(property="address[dl_address][country]", type="text"),
+      *                         @OA\Property(property="addresses[]", type="text"),
       *
-      *                         @OA\Property(property="address[credit_home_address][street_address]", type="text"),
-      *                         @OA\Property(property="address[credit_home_address][address_line_2]", type="text"),
-      *                         @OA\Property(property="address[credit_home_address][city]", type="text"),
-      *                         @OA\Property(property="address[credit_home_address][state]", type="text"),
-      *                         @OA\Property(property="address[credit_home_address][postal]", type="text"),
-      *                         @OA\Property(property="address[credit_home_address][country]", type="text"),
+      *                         @OA\Property(property="emails[]", type="text"),
       *
-      *                         @OA\Property(property="emails[hosting_uuid]", type="text"),
-      *                         @OA\Property(property="emails[email]", type="text"),
-      *                         @OA\Property(property="emails[password]", type="text"),
-      *                         @OA\Property(property="emails[phone]", type="text"),
-      *
-      *                         @OA\Property(property="files[dl_upload][front][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[dl_upload][back][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[ssn_upload][front][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[ssn_upload][back][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[cpn_docs_upload][]", type="file", format="binary"),
+      *                         @OA\Property(property="files[]", type="text"),
       *
       *                         @OA\Property(property="files_to_delete[]", type="text")
       *                     ),
@@ -338,29 +274,22 @@ class DirectorController extends Controller
             'company_association' => '',
             'phone_type' => 'required',
             'phone_number' => 'required',
-            // addresses
-            'address.dl_address' => 'array',
 
-            'address.credit_home_address' => 'array',
+            // addresses
+            'addresses' => 'array',
+
             // emails
             'emails' => 'array',
-            // files to delete by uuid
+
+            // files & files to delete by uuid
+            'files' => 'array',
             'files_to_delete' => 'array'
         ]);
 
         $check = [];
 
-        if (isset($validated['emails'])){
+        /*if (isset($validated['emails'])){
             $tmpCheck = $this->emailService->check_ignore($validated['emails'], $director->uuid);
-            $check = array_merge($check, $tmpCheck);
-        }
-
-        /*if (isset($validated['address']['dl_address'])){
-            $tmpCheck = $this->addressService->check_ignore($validated['address']['dl_address'], $director->uuid, 'dl_address');
-            $check = array_merge($check, $tmpCheck);
-        }
-        if (isset($validated['address']['credit_home_address'])){
-            $tmpCheck = $this->addressService->check_ignore($validated['address']['credit_home_address'], $director->uuid, 'credit_home_address');
             $check = array_merge($check, $tmpCheck);
         }*/
 
@@ -376,63 +305,35 @@ class DirectorController extends Controller
 
         $director = $this->directorService->update($director, $validated, $request->user_uuid);
 
+        // emails
         if (isset($validated['emails'])){
-            $email = Email::where('entity_uuid', $director['uuid']);
-            $email->update($validated['emails']);
+            foreach ($validated['emails'] AS $key => $value):
+                $value['entity_uuid'] = $director->uuid;
+                $this->emailService->save($value);
+            endforeach;
         }
 
-        if (isset($validated['address']['dl_address'])){
-            $address = Address::where('entity_uuid', $director['uuid'])
-                                        ->where('address_parent', 'dl_address');
-            $address->update($validated['address']['dl_address']);
-        }
-        if (isset($validated['address']['credit_home_address'])){
-            $address = Address::where('entity_uuid', $director['uuid'])
-                                        ->where('address_parent', 'credit_home_address');
-            $address->update($validated['address']['credit_home_address']);
+        // addresses
+        if (isset($validated['addresses'])){
+            foreach ($validated['addresses'] AS $key => $value):
+                $value['entity_uuid'] = $director->uuid;
+                $this->addressService->save($value);
+            endforeach;
         }
 
-        #region Files delete (if exsist)
-
+        // files to delete (first)
         if (isset($validated['files_to_delete'])){
             foreach ($validated['files_to_delete'] AS $key => $value):
-                if ($value!=null){
-                    $file = File::find($value);
-                    $file->update(['status'=> 0]);
-                }
+                $this->fileService->delete($value);
             endforeach;
         }
 
-        #endregion
-
-        #region Files upload (if exsist)
-
-        if ($request->has('files')){
-            $files = $request->file('files');
-            foreach ($files AS $key => $value):
-                foreach ($value AS $key1 => $value1):
-                    if ($key1=='back' || $key1=='front'){
-                        $tmp_file = $value1;
-                        $file_parent = $key . '/' . $key1;
-                    }else{
-                        $tmp_file = $value;
-                        $file_parent = $key;
-                    }
-                    foreach ($tmp_file AS $key2 => $value2):
-                        $file = new File();
-                        $file->user_uuid = $request->user_uuid;
-                        $file->entity_uuid = $director['uuid'];
-                        $file->file_name = Str::uuid()->toString() . '.' . $value2->getClientOriginalExtension();
-                        $file->file_path = $file->file_name;
-                        $file->file_parent = $file_parent;
-                        $value2->move('uploads', $file->file_path);
-                        $file->save();
-                    endforeach;
-                endforeach;
+        // file to upload
+        if (isset($validated['files'])){
+            foreach ($validated['files'] AS $key => $value):
+                $this->fileService->update(['entity_uuid' => $director->uuid], $value['uuid']);
             endforeach;
         }
-
-        #endregion
 
         return new DirectorResource($director);
     }
@@ -512,7 +413,7 @@ class DirectorController extends Controller
       *         path="/api/director-pending",
       *         operationId="pending_director",
       *         tags={"Director"},
-      *         summary="Pending director (not working on swagger)",
+      *         summary="Pending director",
       *         description="Pending director",
       *             @OA\RequestBody(
       *                 @OA\JsonContent(),
@@ -530,30 +431,11 @@ class DirectorController extends Controller
       *                         @OA\Property(property="phone_type", type="text"),
       *                         @OA\Property(property="phone_number", type="text"),
       *
-      *                         @OA\Property(property="address[dl_address][street_address]", type="text"),
-      *                         @OA\Property(property="address[dl_address][address_line_2]", type="text"),
-      *                         @OA\Property(property="address[dl_address][city]", type="text"),
-      *                         @OA\Property(property="address[dl_address][state]", type="text"),
-      *                         @OA\Property(property="address[dl_address][postal]", type="text"),
-      *                         @OA\Property(property="address[dl_address][country]", type="text"),
+      *                         @OA\Property(property="addresses[]", type="text"),
       *
-      *                         @OA\Property(property="address[credit_home_address][street_address]", type="text"),
-      *                         @OA\Property(property="address[credit_home_address][address_line_2]", type="text"),
-      *                         @OA\Property(property="address[credit_home_address][city]", type="text"),
-      *                         @OA\Property(property="address[credit_home_address][state]", type="text"),
-      *                         @OA\Property(property="address[credit_home_address][postal]", type="text"),
-      *                         @OA\Property(property="address[credit_home_address][country]", type="text"),
+      *                         @OA\Property(property="emails[]", type="text"),
       *
-      *                         @OA\Property(property="emails[hosting_uuid]", type="text"),
-      *                         @OA\Property(property="emails[email]", type="text"),
-      *                         @OA\Property(property="emails[password]", type="text"),
-      *                         @OA\Property(property="emails[phone]", type="text"),
-      *
-      *                         @OA\Property(property="files[dl_upload][front][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[dl_upload][back][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[ssn_upload][front][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[ssn_upload][back][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[cpn_docs_upload][]", type="file", format="binary")
+      *                         @OA\Property(property="files[]", type="text")
       *                     ),
       *                 ),
       *             ),
@@ -584,30 +466,23 @@ class DirectorController extends Controller
             'company_association' => '',
             'phone_type' => 'required',
             'phone_number' => 'required',
+            
             // addresses
-            'address.dl_address' => 'array',
-
-            'address.credit_home_address' => 'array',
+            'addresses' => 'array',
             
             // emails
             'emails' => 'array',
+
+            // files
+            'files' => 'array',
 
             'user_uuid' => 'string'
         ]);
 
         $check = [];
 
-        if (isset($validated['emails'])){
+        /*if (isset($validated['emails'])){
             $tmpCheck = $this->emailService->check($validated['emails']);
-            $check = array_merge($check, $tmpCheck);
-        }
-
-        /*if (isset($validated['address']['dl_address'])){
-            $tmpCheck = $this->addressService->check($validated['address']['dl_address'], 'dl_address');
-            $check = array_merge($check, $tmpCheck);
-        }
-        if (isset($validated['address']['credit_home_address'])){
-            $tmpCheck = $this->addressService->check($validated['address']['credit_home_address'], 'credit_home_address');
             $check = array_merge($check, $tmpCheck);
         }*/
 
@@ -623,49 +498,30 @@ class DirectorController extends Controller
 
         $director = $this->directorService->pending($validated);
 
-        // email
-        $validated['emails']['entity_uuid'] = $director['uuid'];
-        $validated['emails']['status'] = Config::get('common.status.pending');
-        $this->emailService->create($validated['emails']);
-
-        //address
-        $validated['address']['dl_address']['address_parent'] = 'dl_address';
-        $validated['address']['dl_address']['entity_uuid'] = $director['uuid'];
-        $validated['address']['dl_address']['status'] = Config::get('common.status.pending');
-        $this->addressService->create($validated['address']['dl_address']);
-        $validated['address']['credit_home_address']['address_parent'] = 'credit_home_address';
-        $validated['address']['credit_home_address']['entity_uuid'] = $director['uuid'];
-        $validated['address']['credit_home_address']['status'] = Config::get('common.status.pending');
-        $this->addressService->create($validated['address']['credit_home_address']);
-
-        #region Files upload (if exsist)
-
-        if ($request->has('files')){
-            $files = $request->file('files');
-            foreach ($files AS $key => $value):
-                foreach ($value AS $key1 => $value1):
-                    if ($key1=='back' || $key1=='front'){
-                        $tmp_file = $value1;
-                        $file_parent = $key . '/' . $key1;
-                    }else{
-                        $tmp_file = $value;
-                        $file_parent = $key;
-                    }
-                    foreach ($tmp_file AS $key2 => $value2):
-                        $file = new File();
-                        $file->user_uuid = $validated['user_uuid'];
-                        $file->entity_uuid = $director['uuid'];
-                        $file->file_name = Str::uuid()->toString() . '.' . $value2->getClientOriginalExtension();
-                        $file->file_path = $file->file_name;
-                        $file->file_parent = $file_parent;
-                        $value2->move('uploads', $file->file_path);
-                        $file->save();
-                    endforeach;
-                endforeach;
+        // emails
+        if (isset($validated['emails'])){
+            foreach ($validated['emails'] AS $key => $value):
+                $value['entity_uuid'] = $director->uuid;
+                $value['status'] = Config::get('common.status.pending');
+                $this->emailService->save($value);
             endforeach;
         }
 
-        #endregion
+        // addresses
+        if (isset($validated['addresses'])){
+            foreach ($validated['addresses'] AS $key => $value):
+                $value['entity_uuid'] = $director->uuid;
+                $value['status'] = Config::get('common.status.pending');
+                $this->addressService->save($value);
+            endforeach;
+        }
+
+        // files to upload
+        if (isset($validated['files'])){
+            foreach ($validated['files'] AS $key => $value):
+                $this->fileService->update(['entity_uuid' => $director->uuid], $value['uuid']);
+            endforeach;
+        }
 
         return new DirectorResource($director);
     }
@@ -674,7 +530,7 @@ class DirectorController extends Controller
       *         path="/api/director-pending-update/{uuid}",
       *         operationId="pending_update_director",
       *         tags={"Director"},
-      *         summary="Pending update director (not working on swagger)",
+      *         summary="Pending update director",
       *         description="Pending update director",
       *             @OA\Parameter(
       *                 name="uuid",
@@ -701,30 +557,11 @@ class DirectorController extends Controller
       *                         @OA\Property(property="phone_type", type="text"),
       *                         @OA\Property(property="phone_number", type="text"),
       *
-      *                         @OA\Property(property="address[dl_address][street_address]", type="text"),
-      *                         @OA\Property(property="address[dl_address][address_line_2]", type="text"),
-      *                         @OA\Property(property="address[dl_address][city]", type="text"),
-      *                         @OA\Property(property="address[dl_address][state]", type="text"),
-      *                         @OA\Property(property="address[dl_address][postal]", type="text"),
-      *                         @OA\Property(property="address[dl_address][country]", type="text"),
+      *                         @OA\Property(property="addresses[]", type="text"),
       *
-      *                         @OA\Property(property="address[credit_home_address][street_address]", type="text"),
-      *                         @OA\Property(property="address[credit_home_address][address_line_2]", type="text"),
-      *                         @OA\Property(property="address[credit_home_address][city]", type="text"),
-      *                         @OA\Property(property="address[credit_home_address][state]", type="text"),
-      *                         @OA\Property(property="address[credit_home_address][postal]", type="text"),
-      *                         @OA\Property(property="address[credit_home_address][country]", type="text"),
+      *                         @OA\Property(property="emails[]", type="text"),
       *
-      *                         @OA\Property(property="emails[hosting_uuid]", type="text"),
-      *                         @OA\Property(property="emails[email]", type="text"),
-      *                         @OA\Property(property="emails[password]", type="text"),
-      *                         @OA\Property(property="emails[phone]", type="text"),
-      *
-      *                         @OA\Property(property="files[dl_upload][front][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[dl_upload][back][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[ssn_upload][front][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[ssn_upload][back][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[cpn_docs_upload][]", type="file", format="binary"),
+      *                         @OA\Property(property="files[]", type="text"),
       *
       *                         @OA\Property(property="files_to_delete[]", type="text")
       *                     ),
@@ -767,29 +604,20 @@ class DirectorController extends Controller
             'phone_number' => 'required',
 
             // addresses
-            'address.dl_address' => 'array',
+            'addresses' => 'array',
 
-            'address.credit_home_address' => 'array',
             // emails
             'emails' => 'array',
 
             // files
+            'files' => 'array',
             'files_to_delete' => 'array',
         ]);
 
         $check = [];
 
-        if (isset($validated['emails'])){
+        /*if (isset($validated['emails'])){
             $tmpCheck = $this->emailService->check_ignore($validated['emails'], $director->uuid);
-            $check = array_merge($check, $tmpCheck);
-        }
-
-        /*if (isset($validated['address']['dl_address'])){
-            $tmpCheck = $this->addressService->check_ignore($validated['address']['dl_address'], $director->uuid, 'dl_address');
-            $check = array_merge($check, $tmpCheck);
-        }
-        if (isset($validated['address']['credit_home_address'])){
-            $tmpCheck = $this->addressService->check_ignore($validated['address']['credit_home_address'], $director->uuid, 'credit_home_address');
             $check = array_merge($check, $tmpCheck);
         }*/
 
@@ -805,66 +633,37 @@ class DirectorController extends Controller
 
         $director = $this->directorService->pending_update($uuid, $validated, $request->user_uuid);
 
+        // emails
         if (isset($validated['emails'])){
-            $email = Email::where('entity_uuid', $director['uuid']);  
-            $validated['emails']['status'] = Config::get('common.status.pending');
-            $email->update($validated['emails']);
+            foreach ($validated['emails'] AS $key => $value):
+                $value['entity_uuid'] = $director->uuid;
+                $value['status'] = Config::get('common.status.pending');
+                $this->emailService->save($value);
+            endforeach;
         }
 
-        if (isset($validated['address']['dl_address'])){
-            $address = Address::where('entity_uuid', $director['uuid'])
-                                        ->where('address_parent', 'dl_address');
-            $validated['address']['dl_address']['status'] = Config::get('common.status.pending');
-            $address->update($validated['address']['dl_address']);
-        }
-        if (isset($validated['address']['credit_home_address'])){
-            $address = Address::where('entity_uuid', $director['uuid'])
-                                        ->where('address_parent', 'credit_home_address');
-            $validated['address']['credit_home_address']['status'] = Config::get('common.status.pending');
-            $address->update($validated['address']['credit_home_address']);
+        // addresses
+        if (isset($validated['addresses'])){
+            foreach ($validated['addresses'] AS $key => $value):
+                $value['entity_uuid'] = $director->uuid;
+                $value['status'] = Config::get('common.status.pending');
+                $this->addressService->save($value);
+            endforeach;
         }
 
-        #region Files delete (if exsist)
-
+        // files to delete (first)
         if (isset($validated['files_to_delete'])){
             foreach ($validated['files_to_delete'] AS $key => $value):
-                if ($value!=null){
-                    $file = File::find($value);
-                    $file->update(['status'=> 0]);
-                }
+                $this->fileService->delete($value);
             endforeach;
         }
 
-        #endregion
-
-        #region Files upload (if exsist)
-
-        if ($request->has('files')){
-            $files = $request->file('files');
-            foreach ($files AS $key => $value):
-                foreach ($value AS $key1 => $value1):
-                    if ($key1=='back' || $key1=='front'){
-                        $tmp_file = $value1;
-                        $file_parent = $key . '/' . $key1;
-                    }else{
-                        $tmp_file = $value;
-                        $file_parent = $key;
-                    }
-                    foreach ($tmp_file AS $key2 => $value2):
-                        $file = new File();
-                        $file->user_uuid = $request->user_uuid;
-                        $file->entity_uuid = $director['uuid'];
-                        $file->file_name = Str::uuid()->toString() . '.' . $value2->getClientOriginalExtension();
-                        $file->file_path = $file->file_name;
-                        $file->file_parent = $file_parent;
-                        $value2->move('uploads', $file->file_path);
-                        $file->save();
-                    endforeach;
-                endforeach;
+        // file to upload
+        if (isset($validated['files'])){
+            foreach ($validated['files'] AS $key => $value):
+                $this->fileService->update(['entity_uuid' => $director->uuid], $value['uuid']);
             endforeach;
         }
-
-        #endregion
 
         return new DirectorResource($director);
     }
@@ -873,7 +672,7 @@ class DirectorController extends Controller
       *         path="/api/director-accept/{uuid}",
       *         operationId="accept_director",
       *         tags={"Director"},
-      *         summary="Accept director (not working on swagger)",
+      *         summary="Accept director",
       *         description="Accept director",
       *             @OA\Parameter(
       *                 name="uuid",
@@ -900,30 +699,11 @@ class DirectorController extends Controller
       *                         @OA\Property(property="phone_type", type="text"),
       *                         @OA\Property(property="phone_number", type="text"),
       *
-      *                         @OA\Property(property="address[dl_address][street_address]", type="text"),
-      *                         @OA\Property(property="address[dl_address][address_line_2]", type="text"),
-      *                         @OA\Property(property="address[dl_address][city]", type="text"),
-      *                         @OA\Property(property="address[dl_address][state]", type="text"),
-      *                         @OA\Property(property="address[dl_address][postal]", type="text"),
-      *                         @OA\Property(property="address[dl_address][country]", type="text"),
+      *                         @OA\Property(property="addresses[]", type="text"),
       *
-      *                         @OA\Property(property="address[credit_home_address][street_address]", type="text"),
-      *                         @OA\Property(property="address[credit_home_address][address_line_2]", type="text"),
-      *                         @OA\Property(property="address[credit_home_address][city]", type="text"),
-      *                         @OA\Property(property="address[credit_home_address][state]", type="text"),
-      *                         @OA\Property(property="address[credit_home_address][postal]", type="text"),
-      *                         @OA\Property(property="address[credit_home_address][country]", type="text"),
+      *                         @OA\Property(property="emails[]", type="text"),
       *
-      *                         @OA\Property(property="emails[hosting_uuid]", type="text"),
-      *                         @OA\Property(property="emails[email]", type="text"),
-      *                         @OA\Property(property="emails[password]", type="text"),
-      *                         @OA\Property(property="emails[phone]", type="text"),
-      *
-      *                         @OA\Property(property="files[dl_upload][front][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[dl_upload][back][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[ssn_upload][front][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[ssn_upload][back][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[cpn_docs_upload][]", type="file", format="binary"),
+      *                         @OA\Property(property="files[]", type="text"),
       *
       *                         @OA\Property(property="files_to_delete[]", type="text")
       *                     ),
@@ -956,15 +736,15 @@ class DirectorController extends Controller
             'company_association' => '',
             'phone_type' => 'required',
             'phone_number' => 'required',
-            // addresses
-            'address.dl_address' => 'array',
 
-            'address.credit_home_address' => 'array',
+            // addresses
+            'addresses' => 'array',
 
             // emails
             'emails' => 'array',
 
-            // files to delete by uuid
+            // files & files to delete by uuid
+            'files' => 'array',
             'files_to_delete' => 'array',
         ]);
 
@@ -972,17 +752,8 @@ class DirectorController extends Controller
 
         $check = [];
 
-        if (isset($validated['emails'])){
+        /*if (isset($validated['emails'])){
             $tmpCheck = $this->emailService->check_ignore($validated['emails'], $director->uuid);
-            $check = array_merge($check, $tmpCheck);
-        }
-
-        /*if (isset($validated['address']['dl_address'])){
-            $tmpCheck = $this->addressService->check_ignore($validated['address']['dl_address'], $director->uuid, 'dl_address');
-            $check = array_merge($check, $tmpCheck);
-        }
-        if (isset($validated['address']['credit_home_address'])){
-            $tmpCheck = $this->addressService->check_ignore($validated['address']['credit_home_address'], $director->uuid, 'credit_home_address');
             $check = array_merge($check, $tmpCheck);
         }*/
 
@@ -998,62 +769,37 @@ class DirectorController extends Controller
 
         $director = $this->directorService->accept($director, $validated, $request->user_uuid);
 
-        $email = Email::where('entity_uuid', $director['uuid']);
-        $validated['emails']['status'] = Config::get('common.status.actived');
-        $email->update($validated['emails']);
+        // emails
+        if (isset($validated['emails'])){
+            foreach ($validated['emails'] AS $key => $value):
+                $value['entity_uuid'] = $director->uuid;
+                $value['status'] = Config::get('common.status.actived');
+                $this->emailService->save($value);
+            endforeach;
+        }
         
-        $address = Address::where('entity_uuid', $director['uuid'])
-                                ->where('address_parent', 'dl_address');
-        $validated['address']['dl_address']['status'] = Config::get('common.status.actived');
-        $address->update($validated['address']['dl_address']);
-        
-        $address = Address::where('entity_uuid', $director['uuid'])
-                                    ->where('address_parent', 'credit_home_address');
-        $validated['address']['credit_home_address']['status'] = Config::get('common.status.actived');
-        $address->update($validated['address']['credit_home_address']);
+        // addresses
+        if (isset($validated['addresses'])){
+            foreach ($validated['addresses'] AS $key => $value):
+                $value['entity_uuid'] = $director->uuid;
+                $value['status'] = Config::get('common.status.actived');
+                $this->addressService->save($value);
+            endforeach;
+        }
            
-
-        #region Files delete (if exsist)
-
+        // files to delete
         if (isset($validated['files_to_delete'])){
             foreach ($validated['files_to_delete'] AS $key => $value):
-                if ($value!=null){
-                    $file = File::find($value);
-                    $file->update(['status'=> 0]);
-                }
+                $this->fileService->delete($value);
             endforeach;
         }
 
-        #endregion
-
-        #region Files upload (if exsist)
-
-        if ($request->has('files')){
-            $files = $request->file('files');
-            foreach ($files AS $key => $value):
-                foreach ($value AS $key1 => $value1):
-                    if ($key1=='back' || $key1=='front'){
-                        $tmp_file = $value1;
-                        $file_parent = $key . '/' . $key1;
-                    }else{
-                        $tmp_file = $value;
-                        $file_parent = $key;
-                    }
-                    foreach ($tmp_file AS $key2 => $value2):
-                        $file = new File();
-                        $file->user_uuid = $request->user_uuid;
-                        $file->entity_uuid = $director['uuid'];
-                        $file->file_name = Str::uuid()->toString() . '.' . $value2->getClientOriginalExtension();
-                        $file->file_path = $file->file_name;
-                        $file->file_parent = $file_parent;
-                        $value2->move('uploads', $file->file_path);
-                        $file->save();
-                    endforeach;
-                endforeach;
+        // files to upload
+        if (isset($validated['files'])){
+            foreach ($validated['files'] AS $key => $value):
+                $this->fileService->update(['entity_uuid' => $director->uuid], $value['uuid']);
             endforeach;
         }
-
-        #endregion
 
         return new DirectorResource($director);
     }
@@ -1223,31 +969,11 @@ class DirectorController extends Controller
       *                         @OA\Property(property="phone_type", type="text"),
       *                         @OA\Property(property="phone_number", type="text"),
       *
-      *                         @OA\Property(property="address[dl_address][street_address]", type="text"),
-      *                         @OA\Property(property="address[dl_address][address_line_2]", type="text"),
-      *                         @OA\Property(property="address[dl_address][city]", type="text"),
-      *                         @OA\Property(property="address[dl_address][state]", type="text"),
-      *                         @OA\Property(property="address[dl_address][postal]", type="text"),
-      *                         @OA\Property(property="address[dl_address][country]", type="text"),
+      *                         @OA\Property(property="addresses", type="text"),
       *
-      *                         @OA\Property(property="address[credit_home_address][street_address]", type="text"),
-      *                         @OA\Property(property="address[credit_home_address][address_line_2]", type="text"),
-      *                         @OA\Property(property="address[credit_home_address][city]", type="text"),
-      *                         @OA\Property(property="address[credit_home_address][state]", type="text"),
-      *                         @OA\Property(property="address[credit_home_address][postal]", type="text"),
-      *                         @OA\Property(property="address[credit_home_address][country]", type="text"),
+      *                         @OA\Property(property="emails[]", type="text"),
       *
-      *                         @OA\Property(property="emails[hosting_uuid]", type="text"),
-      *                         @OA\Property(property="emails[email]", type="text"),
-      *                         @OA\Property(property="emails[password]", type="text"),
-      *                         @OA\Property(property="emails[phone]", type="text"),
-      *
-      *                         @OA\Property(property="files[dl_upload][front][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[dl_upload][back][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[ssn_upload][front][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[ssn_upload][back][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[cpn_docs_upload][]", type="file", format="binary"),
-      *
+      *                         @OA\Property(property="files[]", type="text"),
       *                         @OA\Property(property="files_to_delete[]", type="text")
       *                     ),
       *                 ),
@@ -1275,15 +1001,15 @@ class DirectorController extends Controller
             'company_association' => '',
             'phone_type' => '',
             'phone_number' => '',
-            // addresses
-            'address.dl_address' => 'array',
 
-            'address.credit_home_address' => 'array',
+            // addresses
+            'addresses' => 'array',
 
             // emails
             'emails' => 'array',
 
-            // files to delete by uuid
+            // files & files to delete by uuid
+            'files' => 'array',
             'files_to_delete' => 'array',
         ]);
 
@@ -1291,62 +1017,37 @@ class DirectorController extends Controller
 
         $director = $this->directorService->accept($director, $validated, $request->user_uuid, true);
 
-        $email = Email::where('entity_uuid', $director['uuid']);
-        $validated['emails']['status'] = Config::get('common.status.actived');
-        $email->update($validated['emails']);
+        // emails
+        if (isset($validated['emails'])){
+            foreach ($validated['emails'] AS $key => $value):
+                $value['entity_uuid'] = $director->uuid;
+                $value['status'] = Config::get('common.status.actived');
+                $this->emailService->save($value);
+            endforeach;
+        }
 
-        $address = Address::where('entity_uuid', $director['uuid'])
-                                ->where('address_parent', 'dl_address');
-        $validated['address']['dl_address']['status'] = Config::get('common.status.actived');
-        $address->update($validated['address']['dl_address']);
-
-        $address = Address::where('entity_uuid', $director['uuid'])
-                                    ->where('address_parent', 'credit_home_address');
-        $validated['address']['credit_home_address']['status'] = Config::get('common.status.actived');
-        $address->update($validated['address']['credit_home_address']);
+        // addresses
+        if (isset($validated['addresses'])){
+            foreach ($validated['addresses'] AS $key => $value):
+                $value['entity_uuid'] = $director->uuid;
+                $value['status'] = Config::get('common.status.actived');
+                $this->addressService->save($value);
+            endforeach;
+        }
         
-
-        #region Files delete (if exsist)
-
+        // files to delete
         if (isset($validated['files_to_delete'])){
             foreach ($validated['files_to_delete'] AS $key => $value):
-                if ($value!=null){
-                    $file = File::find($value);
-                    $file->update(['status'=> 0]);
-                }
+                $this->fileService->delete($value);
             endforeach;
         }
 
-        #endregion
-
-        #region Files upload (if exsist)
-
-        if ($request->has('files')){
-            $files = $request->file('files');
-            foreach ($files AS $key => $value):
-                foreach ($value AS $key1 => $value1):
-                    if ($key1=='back' || $key1=='front'){
-                        $tmp_file = $value1;
-                        $file_parent = $key . '/' . $key1;
-                    }else{
-                        $tmp_file = $value;
-                        $file_parent = $key;
-                    }
-                    foreach ($tmp_file AS $key2 => $value2):
-                        $file = new File();
-                        $file->user_uuid = $request->user_uuid;
-                        $file->entity_uuid = $director['uuid'];
-                        $file->file_name = Str::uuid()->toString() . '.' . $value2->getClientOriginalExtension();
-                        $file->file_path = $file->file_name;
-                        $file->file_parent = $file_parent;
-                        $value2->move('uploads', $file->file_path);
-                        $file->save();
-                    endforeach;
-                endforeach;
+        // files to upload
+        if (isset($validated['files'])){
+            foreach ($validated['files'] AS $key => $value):
+                $this->fileService->update(['entity_uuid' => $director->uuid], $value['uuid']);
             endforeach;
         }
-
-        #endregion
 
         return new DirectorResource($director);
     }

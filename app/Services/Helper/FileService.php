@@ -31,6 +31,11 @@ class FileService
         return $respond;
     }
 
+    public function update($entity, $uuid)
+    {
+        File::where('uuid', $uuid)->update($entity);
+    }
+
     public function delete($uuid)
     {
         File::where('uuid', $uuid)->update(['status' => Config::get('common.status.deleted')]);

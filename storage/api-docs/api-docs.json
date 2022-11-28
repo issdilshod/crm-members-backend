@@ -3788,7 +3788,7 @@
                 "tags": [
                     "Director"
                 ],
-                "summary": "Update director (not working on swagger)",
+                "summary": "Update director",
                 "description": "Update director",
                 "operationId": "update_director",
                 "parameters": [
@@ -3841,73 +3841,14 @@
                                     "phone_number": {
                                         "type": "text"
                                     },
-                                    "address[dl_address][street_address]": {
+                                    "addresses[]": {
                                         "type": "text"
                                     },
-                                    "address[dl_address][address_line_2]": {
+                                    "emails[]": {
                                         "type": "text"
                                     },
-                                    "address[dl_address][city]": {
+                                    "files[]": {
                                         "type": "text"
-                                    },
-                                    "address[dl_address][state]": {
-                                        "type": "text"
-                                    },
-                                    "address[dl_address][postal]": {
-                                        "type": "text"
-                                    },
-                                    "address[dl_address][country]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][street_address]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][address_line_2]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][city]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][state]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][postal]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][country]": {
-                                        "type": "text"
-                                    },
-                                    "emails[hosting_uuid]": {
-                                        "type": "text"
-                                    },
-                                    "emails[email]": {
-                                        "type": "text"
-                                    },
-                                    "emails[password]": {
-                                        "type": "text"
-                                    },
-                                    "emails[phone]": {
-                                        "type": "text"
-                                    },
-                                    "files[dl_upload][front][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[dl_upload][back][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[ssn_upload][front][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[ssn_upload][back][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[cpn_docs_upload][]": {
-                                        "type": "file",
-                                        "format": "binary"
                                     },
                                     "files_to_delete[]": {
                                         "type": "text"
@@ -3949,7 +3890,7 @@
                 "tags": [
                     "Director"
                 ],
-                "summary": "Add director (not working on swagger)",
+                "summary": "Add director",
                 "description": "Add director",
                 "operationId": "post_director",
                 "requestBody": {
@@ -3990,73 +3931,14 @@
                                     "phone_number": {
                                         "type": "text"
                                     },
-                                    "address[dl_address][street_address]": {
+                                    "addresses[]": {
                                         "type": "text"
                                     },
-                                    "address[dl_address][address_line_2]": {
+                                    "emails[]": {
                                         "type": "text"
                                     },
-                                    "address[dl_address][city]": {
+                                    "files[]": {
                                         "type": "text"
-                                    },
-                                    "address[dl_address][state]": {
-                                        "type": "text"
-                                    },
-                                    "address[dl_address][postal]": {
-                                        "type": "text"
-                                    },
-                                    "address[dl_address][country]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][street_address]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][address_line_2]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][city]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][state]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][postal]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][country]": {
-                                        "type": "text"
-                                    },
-                                    "emails[hosting_uuid]": {
-                                        "type": "text"
-                                    },
-                                    "emails[email]": {
-                                        "type": "text"
-                                    },
-                                    "emails[password]": {
-                                        "type": "text"
-                                    },
-                                    "emails[phone]": {
-                                        "type": "text"
-                                    },
-                                    "files[dl_upload][front][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[dl_upload][back][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[ssn_upload][front][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[ssn_upload][back][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[cpn_docs_upload][]": {
-                                        "type": "file",
-                                        "format": "binary"
                                     }
                                 },
                                 "type": "object"
@@ -4212,7 +4094,7 @@
                 "tags": [
                     "Director"
                 ],
-                "summary": "Pending director (not working on swagger)",
+                "summary": "Pending director",
                 "description": "Pending director",
                 "operationId": "pending_director",
                 "requestBody": {
@@ -4253,73 +4135,14 @@
                                     "phone_number": {
                                         "type": "text"
                                     },
-                                    "address[dl_address][street_address]": {
+                                    "addresses[]": {
                                         "type": "text"
                                     },
-                                    "address[dl_address][address_line_2]": {
+                                    "emails[]": {
                                         "type": "text"
                                     },
-                                    "address[dl_address][city]": {
+                                    "files[]": {
                                         "type": "text"
-                                    },
-                                    "address[dl_address][state]": {
-                                        "type": "text"
-                                    },
-                                    "address[dl_address][postal]": {
-                                        "type": "text"
-                                    },
-                                    "address[dl_address][country]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][street_address]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][address_line_2]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][city]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][state]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][postal]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][country]": {
-                                        "type": "text"
-                                    },
-                                    "emails[hosting_uuid]": {
-                                        "type": "text"
-                                    },
-                                    "emails[email]": {
-                                        "type": "text"
-                                    },
-                                    "emails[password]": {
-                                        "type": "text"
-                                    },
-                                    "emails[phone]": {
-                                        "type": "text"
-                                    },
-                                    "files[dl_upload][front][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[dl_upload][back][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[ssn_upload][front][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[ssn_upload][back][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[cpn_docs_upload][]": {
-                                        "type": "file",
-                                        "format": "binary"
                                     }
                                 },
                                 "type": "object"
@@ -4360,7 +4183,7 @@
                 "tags": [
                     "Director"
                 ],
-                "summary": "Pending update director (not working on swagger)",
+                "summary": "Pending update director",
                 "description": "Pending update director",
                 "operationId": "pending_update_director",
                 "parameters": [
@@ -4413,73 +4236,14 @@
                                     "phone_number": {
                                         "type": "text"
                                     },
-                                    "address[dl_address][street_address]": {
+                                    "addresses[]": {
                                         "type": "text"
                                     },
-                                    "address[dl_address][address_line_2]": {
+                                    "emails[]": {
                                         "type": "text"
                                     },
-                                    "address[dl_address][city]": {
+                                    "files[]": {
                                         "type": "text"
-                                    },
-                                    "address[dl_address][state]": {
-                                        "type": "text"
-                                    },
-                                    "address[dl_address][postal]": {
-                                        "type": "text"
-                                    },
-                                    "address[dl_address][country]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][street_address]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][address_line_2]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][city]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][state]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][postal]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][country]": {
-                                        "type": "text"
-                                    },
-                                    "emails[hosting_uuid]": {
-                                        "type": "text"
-                                    },
-                                    "emails[email]": {
-                                        "type": "text"
-                                    },
-                                    "emails[password]": {
-                                        "type": "text"
-                                    },
-                                    "emails[phone]": {
-                                        "type": "text"
-                                    },
-                                    "files[dl_upload][front][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[dl_upload][back][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[ssn_upload][front][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[ssn_upload][back][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[cpn_docs_upload][]": {
-                                        "type": "file",
-                                        "format": "binary"
                                     },
                                     "files_to_delete[]": {
                                         "type": "text"
@@ -4523,7 +4287,7 @@
                 "tags": [
                     "Director"
                 ],
-                "summary": "Accept director (not working on swagger)",
+                "summary": "Accept director",
                 "description": "Accept director",
                 "operationId": "accept_director",
                 "parameters": [
@@ -4576,73 +4340,14 @@
                                     "phone_number": {
                                         "type": "text"
                                     },
-                                    "address[dl_address][street_address]": {
+                                    "addresses[]": {
                                         "type": "text"
                                     },
-                                    "address[dl_address][address_line_2]": {
+                                    "emails[]": {
                                         "type": "text"
                                     },
-                                    "address[dl_address][city]": {
+                                    "files[]": {
                                         "type": "text"
-                                    },
-                                    "address[dl_address][state]": {
-                                        "type": "text"
-                                    },
-                                    "address[dl_address][postal]": {
-                                        "type": "text"
-                                    },
-                                    "address[dl_address][country]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][street_address]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][address_line_2]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][city]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][state]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][postal]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][country]": {
-                                        "type": "text"
-                                    },
-                                    "emails[hosting_uuid]": {
-                                        "type": "text"
-                                    },
-                                    "emails[email]": {
-                                        "type": "text"
-                                    },
-                                    "emails[password]": {
-                                        "type": "text"
-                                    },
-                                    "emails[phone]": {
-                                        "type": "text"
-                                    },
-                                    "files[dl_upload][front][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[dl_upload][back][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[ssn_upload][front][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[ssn_upload][back][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[cpn_docs_upload][]": {
-                                        "type": "file",
-                                        "format": "binary"
                                     },
                                     "files_to_delete[]": {
                                         "type": "text"
@@ -4860,73 +4565,14 @@
                                     "phone_number": {
                                         "type": "text"
                                     },
-                                    "address[dl_address][street_address]": {
+                                    "addresses": {
                                         "type": "text"
                                     },
-                                    "address[dl_address][address_line_2]": {
+                                    "emails[]": {
                                         "type": "text"
                                     },
-                                    "address[dl_address][city]": {
+                                    "files[]": {
                                         "type": "text"
-                                    },
-                                    "address[dl_address][state]": {
-                                        "type": "text"
-                                    },
-                                    "address[dl_address][postal]": {
-                                        "type": "text"
-                                    },
-                                    "address[dl_address][country]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][street_address]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][address_line_2]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][city]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][state]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][postal]": {
-                                        "type": "text"
-                                    },
-                                    "address[credit_home_address][country]": {
-                                        "type": "text"
-                                    },
-                                    "emails[hosting_uuid]": {
-                                        "type": "text"
-                                    },
-                                    "emails[email]": {
-                                        "type": "text"
-                                    },
-                                    "emails[password]": {
-                                        "type": "text"
-                                    },
-                                    "emails[phone]": {
-                                        "type": "text"
-                                    },
-                                    "files[dl_upload][front][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[dl_upload][back][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[ssn_upload][front][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[ssn_upload][back][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[cpn_docs_upload][]": {
-                                        "type": "file",
-                                        "format": "binary"
                                     },
                                     "files_to_delete[]": {
                                         "type": "text"

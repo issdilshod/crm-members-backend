@@ -32,7 +32,7 @@ class DirectorResource extends JsonResource
             'phone_number' => $this->phone_number,
             'uploaded_files' => FileResource::collection($this->files),
             'emails' => EmailResource::collection($this->emails),
-            'address' => AddressResource::collection($this->addresses),
+            'addresses' => AddressResource::collection($this->addresses),
             'last_activity' => new ActivityResource($this->last_activity),
             'status' => $this->status,
 

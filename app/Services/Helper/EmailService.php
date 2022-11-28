@@ -18,7 +18,7 @@ class EmailService {
 
     public function save($entity)
     {
-        if ($entity['uuid']!=''){
+        if (isset($entity['uuid']) && $entity['uuid']!=''){
             $email = Email::where('uuid', $entity['uuid'])->first();
         }else{
             $email = Email::where('entity_uuid', $entity['entity_uuid'])
