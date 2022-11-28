@@ -11,6 +11,7 @@ use App\Http\Controllers\Company\CompanyController;
 use App\Http\Controllers\Company\FutureCompanyController;
 use App\Http\Controllers\Director\DirectorController;
 use App\Http\Controllers\Helper\DepartmentController;
+use App\Http\Controllers\Helper\FileController;
 use App\Http\Controllers\Helper\HostingController;
 use App\Http\Controllers\Helper\NoteController;
 use App\Http\Controllers\Helper\PendingController;
@@ -33,6 +34,7 @@ Route::middleware('auth.custom')->group(function() {
     Route::get('api/pending/search/{search}', [PendingController::class, 'search']);
     Route::post('api/pending/accept', [PendingController::class, 'accept']);
     Route::post('api/pending/reject', [PendingController::class, 'reject']);
+    Route::post('api/file-upload', [FileController::class, 'upload']);
 
     // account
     Route::resource('api/user', UserController::class);

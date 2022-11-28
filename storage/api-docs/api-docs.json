@@ -5062,6 +5062,58 @@
                 }
             }
         },
+        "/api/file-upload": {
+            "post": {
+                "tags": [
+                    "Helper"
+                ],
+                "summary": "Upload file",
+                "description": "Upload file",
+                "operationId": "file_upload",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "first_name",
+                                    "files"
+                                ],
+                                "properties": {
+                                    "file_parent": {
+                                        "type": "text"
+                                    },
+                                    "files[]": {
+                                        "type": "file",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            }
+        },
         "/api/hosting": {
             "get": {
                 "tags": [
@@ -5269,9 +5321,9 @@
                 "tags": [
                     "Helper"
                 ],
-                "summary": "List of pending by user",
-                "description": "List of pending by user",
-                "operationId": "list_pending_by_user",
+                "summary": "List of pending",
+                "description": "List of pending",
+                "operationId": "list_pending",
                 "responses": {
                     "200": {
                         "description": "Successfully"
