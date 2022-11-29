@@ -8,17 +8,20 @@ use App\Http\Resources\Chat\ChatResource;
 use App\Models\Account\Activity;
 use App\Models\Account\User;
 use App\Models\Chat\Chat;
+use App\Services\Helper\NotificationService;
 use Illuminate\Support\Facades\Config;
 
 class ChatService{
 
     private $chatUserService;
     private $messageService;
+    private $notificationService;
 
     public function __construct()
     {
         $this->chatUserService = new ChatUserService();
         $this->messageService = new MessageService();
+        $this->notificationService = new NotificationService();
     }
 
     public function all()
