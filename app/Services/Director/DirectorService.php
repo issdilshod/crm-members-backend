@@ -99,8 +99,7 @@ class DirectorService {
                                 return $q->where('status', '!=', Config::get('common.status.deleted'));
                             }) 
                             ->when(($filter_summary=='1'), function ($q){ // approved directors
-                                return $q->where('status', '!=', Config::get('common.status.deleted'))
-                                        ->where('approved', Config::get('common.status.actived'));
+                                return $q->where('status', Config::get('common.status.actived'));
                             }) 
                             ->when(($filter_summary=='2'), function ($q){ // pending directors
                                 return $q->where(function ($qq) {

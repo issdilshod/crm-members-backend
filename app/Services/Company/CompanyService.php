@@ -87,8 +87,7 @@ class CompanyService {
                                 return $q->where('status', '!=', Config::get('common.status.deleted'));
                             })
                             ->when(($summary_filter=='7'), function($q){ // approved companies
-                                return $q->where('status', '!=', Config::get('common.status.deleted'))
-                                        ->where('approved', Config::get('common.status.actived'));
+                                return $q->where('status', Config::get('common.status.actived'));
                             })
                             ->when(($summary_filter=='8'), function($q){ // pending companies
                                 return $q->where(function ($qq) {
