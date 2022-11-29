@@ -3,7 +3,6 @@
 namespace App\Services\Chat;
 
 use App\Http\Resources\Chat\MessageResource;
-use App\Logs\TelegramLog;
 use App\Models\Account\User;
 use App\Models\Chat\Chat;
 use App\Models\Chat\ChatUser;
@@ -96,9 +95,6 @@ class MessageService {
                     'msg' => '*' . $author->first_name . ' ' . $author->last_name . "*\n" . "Sent a message: \n" . '_' . $message->message . '_'
                 ]);
             }
-
-            $log = new TelegramLog();
-            $log->to_file($user);
 
             // push
             $this->notifiactionService->push('chat', $user, ['link'=>'', 'msg' => '', 'data' => $message]);
