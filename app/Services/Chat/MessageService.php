@@ -80,8 +80,6 @@ class MessageService {
 
         $chatUsers = array_merge($chatUsers->toArray(), [$chatAuthor->toArray()]);
 
-        $log = new TelegramLog();
-        $log->to_file($chatUsers);
 
         $author = User::where('uuid', $user_uuid)->first();
 
@@ -92,12 +90,15 @@ class MessageService {
             $user = User::where('uuid', $value['user_uuid'])->first();
 
             // if offline to telegram
-            if ($user->last_seen!=null){ // online
+            if ($user->last_seen!=null){ // offline
                 $this->notifiactionService->telegram([
                     'telegram'=> $user->telegram, 
                     'msg' => '*' . $author->first_name . ' ' . $author->last_name . "*\n" . "Sent a message: \n" . '_' . $message->message . '_'
                 ]);
             }
+
+            $log = new TelegramLog();
+            $log->to_file($user);
 
             // push
             $this->notifiactionService->push('chat', $user, ['link'=>'', 'msg' => '', 'data' => $message]);
