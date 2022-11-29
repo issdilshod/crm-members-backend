@@ -16,6 +16,7 @@ use App\Services\Helper\EmailService;
 use App\Services\Helper\NotificationService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 
 class DirectorService {
 
@@ -47,18 +48,28 @@ class DirectorService {
                                     })
                                     ->where('user_uuid', 'like', $uuid . '%')
                                     ->count(),
+            'avialable' => count(Director::from('directors as d1')->select('d1.*')
+                                        ->where('d1.status', '!=', Config::get('common.status.deleted'))
+                                        ->where('d1.user_uuid', 'like', $uuid . '%')
+                                        ->leftJoin('companies as c1', 'c1.director_uuid', '=', 'd1.uuid')
+                                        ->whereNull('c1.director_uuid')
+                                        ->groupBy('d1.uuid')
+                                        ->get()),
             'has_company' => count(Director::where('directors.status', '!=', Config::get('common.status.deleted'))
                                     ->where('directors.user_uuid', 'like', $uuid . '%')
                                     ->join('companies', 'companies.director_uuid', '=', 'directors.uuid')
                                     ->groupBy('directors.uuid')
                                     ->get()),
-            'with_id' => Director::where('directors.approved', Config::get('common.status.actived'))
+            'with_id' => count(Director::where('directors.status', '!=', Config::get('common.status.deleted'))
+                                    ->join('files', 'files.entity_uuid', '=', 'directors.uuid')
+                                    ->where(function ($q){
+                                        $q->where('files.file_parent', 'dl_upload__back') // dl back
+                                            ->orWhere('files.file_parent', 'dl_upload__front'); // dl front
+                                    })
+                                    ->groupBy('directors.uuid')
                                     ->where('directors.user_uuid', 'like', $uuid . '%')
-                                    ->count(),
-            'without_id' => Director::where('directors.status', '!=', Config::get('common.status.deleted'))
-                                    ->where('directors.approved', Config::get('common.status.deleted'))
-                                    ->where('directors.user_uuid', 'like', $uuid . '%')
-                                    ->count(),
+                                    ->get()),
+            'without_id' => count(DB::select(DB::raw('SELECT * FROM directors d1 LEFT JOIN files f1 ON f1.entity_uuid=d1.uuid WHERE d1.status!=0 AND NOT EXISTS (SELECT * FROM files f2 WHERE f2.entity_uuid=d1.uuid AND (f2.file_parent="dl_upload__back" OR f2.file_parent="dl_upload__front")) GROUP BY d1.uuid'))), // TODO: Change to eloquent
         ];
 
         return $entity;
@@ -77,49 +88,68 @@ class DirectorService {
 
     public function for_pending($user_uuid, $filter, $filter_summary)
     {
-        $directors = Director::orderBy('updated_at', 'DESC')
+        $directors = Director::from('directors as d1')->select('d1.*')
+                            ->orderBy('d1.updated_at', 'DESC')
                             ->when(($filter_summary==''), function ($gq) use ($filter) { // no summary filter
                                 return $gq->when(($filter!='' || $filter=='0'), function ($q) { // normal view
-                                        return $q->where('status', '!=', Config::get('common.status.deleted'));
+                                        return $q->where('d1.status', '!=', Config::get('common.status.deleted'));
                                     })
                                     ->when($filter=='1', function ($q) { // unapproved
-                                        return $q->where('status', Config::get('common.status.pending'));
+                                        return $q->where('d1.status', Config::get('common.status.pending'));
                                     })
                                     ->when($filter=='2', function ($q) { // approved
-                                        return $q->where('status', Config::get('common.status.actived'));
+                                        return $q->where('d1.status', Config::get('common.status.actived'));
                                     })
                                     ->when($filter=='3', function ($q) { // rejected
-                                        return $q->where('status', Config::get('common.status.rejected'));
+                                        return $q->where('d1.status', Config::get('common.status.rejected'));
                                     });
                             })
                             ->when(($filter_summary=='6' || $filter_summary=='7' || $filter_summary=='8'), function ($q){ // only company
-                                return $q->where('status', 100); // never true
+                                return $q->where('d1.status', 100); // never true
                             })
                             ->when(($filter_summary=='0'), function ($q){ // all directors
-                                return $q->where('status', '!=', Config::get('common.status.deleted'));
+                                return $q->where('d1.status', '!=', Config::get('common.status.deleted'));
                             }) 
                             ->when(($filter_summary=='1'), function ($q){ // approved directors
-                                return $q->where('status', Config::get('common.status.actived'));
+                                return $q->where('d1.status', Config::get('common.status.actived'));
                             }) 
                             ->when(($filter_summary=='2'), function ($q){ // pending directors
                                 return $q->where(function ($qq) {
-                                            $qq->where('status', Config::get('common.status.pending'))
-                                                ->orWhere('status', Config::get('common.status.rejected'));
+                                            $qq->where('d1.status', Config::get('common.status.pending'))
+                                                ->orWhere('d1.status', Config::get('common.status.rejected'));
                                         });
                             }) 
                             ->when(($filter_summary=='3'), function ($q){ // available directors
-                                // query
+                                return $q->leftJoin('companies as c1', 'c1.director_uuid', '=', 'd1.uuid')
+                                        ->where('d1.status', '!=', Config::get('common.status.deleted'))
+                                        ->whereNull('c1.director_uuid')
+                                        ->groupBy('d1.uuid');
                             })   
                             ->when(($filter_summary=='4'), function ($q){ // directors with ID
-                                return $q->where('status', '!=', Config::get('common.status.deleted'))
-                                        ->where('approved', Config::get('common.status.actived'));
+                                return $q->where('d1.status', '!=', Config::get('common.status.deleted'))
+                                            ->join('files', 'files.entity_uuid', '=', 'd1.uuid')
+                                            ->where(function ($qq){
+                                                $qq->where('files.file_parent', 'dl_upload__back') // dl back
+                                                    ->orWhere('files.file_parent', 'dl_upload__front'); // dl front
+                                            })
+                                            ->groupBy('d1.uuid');
                             }) 
-                            ->when(($filter_summary=='5'), function ($q){ // directors without ID
-                                return $q->where('status', '!=', Config::get('common.status.deleted'))
-                                        ->where('approved', Config::get('common.status.deleted'));
-                            })
                             ->when(($user_uuid!=''), function ($q) use($user_uuid){
-                                return $q->where('user_uuid', $user_uuid);
+                                return $q->where('d1.user_uuid', $user_uuid);
+                            })
+                            ->when(($filter_summary=='5'), function ($q){ // directors without ID
+                                return $q->leftJoin('files as f1', 'f1.entity_uuid', '=', 'd1.uuid')
+                                            ->where('d1.status', '!=', Config::get('common.status.deleted'))
+                                            ->whereNotExists(function($qq){
+                                                $qq->from('files as f2')
+                                                    ->select('f2.*')
+                                                    ->whereColumn('f2.entity_uuid', 'd1.uuid')
+                                                    ->where(function ($qqq){
+                                                        $qqq->where('f2.file_parent', 'dl_upload__back')
+                                                            ->orWhere('f2.file_parent', 'dl_upload__front');
+                                                    });
+                                            })
+                                            ->groupBy('d1.uuid');
                             })
                             ->paginate(10);
 
