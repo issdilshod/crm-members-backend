@@ -3,6 +3,7 @@
 namespace App\Services\Chat;
 
 use App\Http\Resources\Chat\MessageResource;
+use App\Logs\TelegramLog;
 use App\Models\Account\User;
 use App\Models\Chat\Chat;
 use App\Models\Chat\ChatUser;
@@ -78,6 +79,9 @@ class MessageService {
                             ->first(['user_uuid']);
 
         $chatUsers = array_merge($chatUsers->toArray(), [$chatAuthor->toArray()]);
+
+        $log = new TelegramLog();
+        $log->to_file($chatUsers);
 
         $author = User::where('uuid', $user_uuid)->first();
 
