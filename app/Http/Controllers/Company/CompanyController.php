@@ -12,8 +12,10 @@ use App\Models\Helper\File;
 use App\Policies\PermissionPolicy;
 use App\Services\Company\CompanyService;
 use App\Services\Helper\AddressService;
+use App\Services\Helper\BankAccountSecurityService;
 use App\Services\Helper\BankAccountService;
 use App\Services\Helper\EmailService;
+use App\Services\Helper\FileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
@@ -25,6 +27,8 @@ class CompanyController extends Controller
     private $emailService;
     private $addressService;
     private $bankAccountService;
+    private $bankAccountSecurityService;
+    private $fileService;
 
     public function __construct()
     {
@@ -32,6 +36,8 @@ class CompanyController extends Controller
         $this->emailService = new EmailService();
         $this->addressService = new AddressService();
         $this->bankAccountService = new BankAccountService();
+        $this->bankAccountSecurityService = new BankAccountSecurityService();
+        $this->fileService = new FileService();
     }
 
     /**     @OA\GET(
@@ -98,34 +104,15 @@ class CompanyController extends Controller
       *                         @OA\Property(property="website", type="text"),
       *                         @OA\Property(property="db_report_number", type="text"),
       *
-      *                         @OA\Property(property="address[street_address]", type="text"),
-      *                         @OA\Property(property="address[address_line_2]", type="text"),
-      *                         @OA\Property(property="address[city]", type="text"),
-      *                         @OA\Property(property="address[state]", type="text"),
-      *                         @OA\Property(property="address[postal]", type="text"),
-      *                         @OA\Property(property="address[country]", type="text"),
+      *                         @OA\Property(property="addresses[]", type="text"),
       *
-      *                         @OA\Property(property="extra_address", type="text"),
+      *                         @OA\Property(property="emails[]", type="text"),
       *
-      *                         @OA\Property(property="emails[hosting_uuid]", type="text"),
-      *                         @OA\Property(property="emails[email]", type="text"),
-      *                         @OA\Property(property="emails[password]", type="text"),
-      *                         @OA\Property(property="emails[phone]", type="text"),
+      *                         @OA\Property(property="bank_account[]", type="text"),
       *
-      *                         @OA\Property(property="bank_account[name]", type="text"),
-      *                         @OA\Property(property="bank_account[website]", type="text"),
-      *                         @OA\Property(property="bank_account[username]", type="text"),
-      *                         @OA\Property(property="bank_account[password]", type="text"),
-      *                         @OA\Property(property="bank_account[account_number]", type="text"),
-      *                         @OA\Property(property="bank_account[routing_number]", type="text"),
+      *                         @OA\Property(property="files[]", type="text"),
       *
-      *                         @OA\Property(property="bank_account_security[][question]", type="text"),
-      *                         @OA\Property(property="bank_account_security[][answer]", type="text"),
-      *
-      *                         @OA\Property(property="files[incorporation_state][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[doing_business_in_state][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[company_ein][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[db_report][]", type="file", format="binary")
+      *                         @OA\Property(property="files_to_delete[]", type="text")
       *                     ),
       *                 ),
       *             ),
@@ -174,8 +161,7 @@ class CompanyController extends Controller
             'db_report_number' => 'required',
 
             // addresses
-            'address' => 'array',
-            'extra_address' => 'array',
+            'addresses' => 'array',
 
             // emails
             'emails' => 'array',
@@ -183,8 +169,9 @@ class CompanyController extends Controller
             // bank account
             'bank_account' => 'array',
 
-            // bank account security
-            'bank_account_security' => 'array',
+            // files
+            'files' => 'array',
+            'files_to_delete' => 'array',
 
             'user_uuid' => 'string'
         ]);
@@ -196,20 +183,15 @@ class CompanyController extends Controller
             $check = array_merge($check, $tmpCheck);
         }*/
 
-        if (isset($validated['address'])){
+        /*if (isset($validated['addresses'])){
             $tmpCheck = $this->addressService->check($validated['address']);
             $check = array_merge($check, $tmpCheck);
-        }
+        }*/
 
-        if (isset($validated['extra_address'])){
-            $tmpCheck = $this->addressService->check($validated['extra_address'], '', 'extra_address');
-            $check = array_merge($check, $tmpCheck);
-        }
-
-        if (isset($validated['bank_account'])){
+        /*if (isset($validated['bank_account'])){
             $tmpCheck = $this->bankAccountService->check($validated['bank_account']);
             $check = array_merge($check, $tmpCheck);
-        }
+        }*/
         
         $tmpCheck = $this->companyService->check($validated);
         $check = array_merge($check, $tmpCheck);
@@ -223,53 +205,44 @@ class CompanyController extends Controller
 
         $company = $this->companyService->create($validated);
 
-        // email
+        // emails
         if (isset($validated['emails'])){
             foreach($validated['emails'] AS $key => $value):
-                $value['entity_uuid'] = $company['uuid'];
+                $value['entity_uuid'] = $company->uuid;
                 $this->emailService->save($value);
             endforeach;
         }
 
-        // bank account & account sercurity
-        $validated['bank_account']['entity_uuid'] = $company['uuid'];
-        $bank_account = $this->bankAccountService->save($validated['bank_account']);
-
-        // security
-        if (isset($validated['bank_account_security'])){
-            foreach ($validated['bank_account_security'] AS $key => $value):
-                $value['entity_uuid'] = $bank_account['uuid'];
-                BankAccountSecurity::create($value);
+        // addresses
+        if (isset($validated['addresses'])){
+            foreach ($validated['addresses'] AS $key => $value):
+                $value['entity_uuid'] = $company->uuid;
+                $this->addressService->save($value);
             endforeach;
         }
 
-        // address
-        $validated['address']['address_parent'] = '';
-        $validated['address']['entity_uuid'] = $company['uuid'];
-        $this->addressService->create($validated['address']);
-
-        if (isset($validated['extra_address'])){
-            $validated['extra_address']['address_parent'] = 'extra_address';
-            $validated['extra_address']['entity_uuid'] = $company['uuid'];
-            $this->addressService->create($validated['extra_address']);
+        // addresses to delete
+        if (isset($validated['addresses_to_delete'])){
+            foreach ($validated['addresses_to_delete'] AS $key => $value):
+                $this->addressService->delete($value);
+            endforeach;
         }
 
-        if ($request->has('files')){
-            $files = $request->file('files');
-            foreach ($files AS $key => $value):
-                $tmp_file = $value;
-                $file_parent = $key;
+        // bank account
+        $validated['bank_account']['entity_uuid'] = $company->uuid;
+        $bankAccount = $this->bankAccountService->save($validated['bank_account']);
 
-                foreach ($tmp_file AS $key2 => $value2):
-                    $file = new File();
-                    $file->user_uuid = $validated['user_uuid'];
-                    $file->entity_uuid = $company['uuid'];
-                    $file->file_name = Str::uuid()->toString() . '.' . $value2->getClientOriginalExtension();
-                    $file->file_path = $file->file_name;
-                    $file->file_parent = $file_parent;
-                    $value2->move('uploads', $file->file_path);
-                    $file->save();
-                endforeach;
+        // files to delete (first)
+        if (isset($validated['files_to_delete'])){
+            foreach ($validated['files_to_delete'] AS $key => $value):
+                $this->fileService->delete($value);
+            endforeach;
+        }
+
+        // files to upload
+        if (isset($validated['files'])){
+            foreach ($validated['files'] AS $key => $value):
+                $this->fileService->update(['entity_uuid' => $company->uuid], $value['uuid']);
             endforeach;
         }
 
@@ -359,37 +332,14 @@ class CompanyController extends Controller
       *                         @OA\Property(property="website", type="text"),
       *                         @OA\Property(property="db_report_number", type="text"),
       *
-      *                         @OA\Property(property="address[street_address]", type="text"),
-      *                         @OA\Property(property="address[address_line_2]", type="text"),
-      *                         @OA\Property(property="address[city]", type="text"),
-      *                         @OA\Property(property="address[state]", type="text"),
-      *                         @OA\Property(property="address[postal]", type="text"),
-      *                         @OA\Property(property="address[country]", type="text"),
+      *                         @OA\Property(property="addresses[]", type="text"),
       *
-      *                         @OA\Property(property="extra_address", type="text"),
-      *                         @OA\Property(property="extra_address_remove", type="text"),
+      *                         @OA\Property(property="emails[]", type="text"),
+      *                         @OA\Property(property="emails_to_delete[]", type="text"),
       *
-      *                         @OA\Property(property="emails[hosting_uuid]", type="text"),
-      *                         @OA\Property(property="emails[email]", type="text"),
-      *                         @OA\Property(property="emails[password]", type="text"),
-      *                         @OA\Property(property="emails[phone]", type="text"),
+      *                         @OA\Property(property="bank_account[]", type="text"),
       *
-      *                         @OA\Property(property="bank_account[name]", type="text"),
-      *                         @OA\Property(property="bank_account[website]", type="text"),
-      *                         @OA\Property(property="bank_account[username]", type="text"),
-      *                         @OA\Property(property="bank_account[password]", type="text"),
-      *                         @OA\Property(property="bank_account[account_number]", type="text"),
-      *                         @OA\Property(property="bank_account[routing_number]", type="text"),
-      *
-      *                         @OA\Property(property="bank_account_security[][question]", type="text"),
-      *                         @OA\Property(property="bank_account_security[][answer]", type="text"),
-      *
-      *                         @OA\Property(property="bank_account_security_to_delete[]", type="text"),
-      *
-      *                         @OA\Property(property="files[incorporation_state][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[doing_business_in_state][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[company_ein][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[db_report][]", type="file", format="binary"),
+      *                         @OA\Property(property="files[]", type="text"),
       *
       *                         @OA\Property(property="files_to_delete[]", type="text")
       *                     ),
@@ -440,9 +390,8 @@ class CompanyController extends Controller
             'db_report_number' => 'required',
 
             // addresses
-            'address' => 'array',
-            'extra_address' => 'array',
-            'extra_address_remove' => '',
+            'addresses' => 'array',
+            'addresses_to_delete' => 'array',
 
             // emails
             'emails' => 'array',
@@ -451,22 +400,20 @@ class CompanyController extends Controller
             // bank account
             'bank_account' => 'array',
 
-            // bank account security
-            'bank_account_security' => 'array',
-            'bank_account_security_to_delete' => 'array',
-
             // files to delete
+            'files' => 'array',
             'files_to_delete' => 'array'
         ]);
 
         $check = [];
 
+        // TODO: Turn on checking
         /*if (isset($validated['emails'])){
             $tmpCheck = $this->emailService->check_ignore($validated['emails'], $company->uuid);
             $check = array_merge($check, $tmpCheck);
         }*/
 
-        if (isset($validated['address'])){
+        /*if (isset($validated['address'])){
             $tmpCheck = $this->addressService->check_ignore($validated['address'], $company->uuid);
             $check = array_merge($check, $tmpCheck);
         }
@@ -474,12 +421,12 @@ class CompanyController extends Controller
         if (isset($validated['extra_address'])){
             $tmpCheck = $this->addressService->check_ignore($validated['extra_address'], $company->uuid, '', 'extra_address');
             $check = array_merge($check, $tmpCheck);
-        }
+        }*/
 
-        if (isset($validated['bank_account'])){
+        /*if (isset($validated['bank_account'])){
             $tmpCheck = $this->bankAccountService->check_ignore($validated['bank_account'], $company->uuid);
             $check = array_merge($check, $tmpCheck);
-        }
+        }*/
         
         $tmpCheck = $this->companyService->check_ignore($validated, $company->uuid);
         $check = array_merge($check, $tmpCheck);
@@ -493,91 +440,68 @@ class CompanyController extends Controller
 
         $company = $this->companyService->update($company, $validated, $request->user_uuid);
 
-        // email
+        // emails to delete
         if (isset($validated['emails_to_delete'])){
             foreach($validated['emails_to_delete'] AS $key => $value):
                 $this->emailService->delete($value);
             endforeach;
         }
 
+        // emails
         if (isset($validated['emails'])){
             foreach($validated['emails'] AS $key => $value):
-                $value['entity_uuid'] = $company['uuid'];
+                $value['entity_uuid'] = $company->uuid;
                 $value['status'] = Config::get('common.status.actived');
                 $this->emailService->save($value);
             endforeach;
         }
 
-        // address
-        $validated['address']['entity_uuid'] = $company['uuid'];
-        $validated['address']['address_parent'] = '';
-        $this->addressService->save($validated['address']);
-
-        if (isset($validated['extra_address'])){
-            $validated['extra_address']['entity_uuid'] = $company['uuid'];
-            $validated['extra_address']['address_parent'] = 'extra_address';
-            $validated['extra_address']['status'] = Config::get('common.status.actived');
-            $this->addressService->save($validated['extra_address']);
+        // addresses
+        if (isset($validated['addresses'])){
+            foreach ($validated['addresses'] AS $key => $value):
+                $value['entity_uuid'] = $company->uuid;
+                $this->addressService->save($value);
+            endforeach;
         }
 
-        // extra address remove
-        if (isset($validated['extra_address_remove']) && filter_var($validated['extra_address_remove'], FILTER_VALIDATE_BOOLEAN)){
-            $validated['extra_address']['entity_uuid'] = $company['uuid'];
-            $validated['extra_address']['address_parent'] = 'extra_address';
-            $validated['extra_address']['status'] = Config::get('common.status.deleted');
-            $this->addressService->save($validated['extra_address']);
+        // addresses to delete
+        if (isset($validated['addresses_to_delete'])){
+            foreach ($validated['addresses_to_delete'] AS $key => $value):
+                $this->addressService->delete($value);
+            endforeach;
         }
 
-        // bank account & security
-        $validated['bank_account']['entity_uuid'] = $company['uuid'];
-        $bank_account = $this->bankAccountService->save($validated['bank_account']);
+        // bank account
+        $validated['bank_account']['entity_uuid'] = $company->uuid;
+        $bankAccount = $this->bankAccountService->save($validated['bank_account']);
 
-        // security delete
+        // TODO: Chamge type of bank account security
+        // bank account security to delete
         if (isset($validated['bank_account_security_to_delete'])){
             foreach($validated['bank_account_security_to_delete'] AS $key => $value):
-                $bank_account_security = BankAccountSecurity::where('uuid', $value);
-                $bank_account_security->update(['status' => Config::get('common.status.deleted')]);
+                $this->bankAccountSecurityService->delete($value);
             endforeach;
         }
 
-        // security
+        // bank account security
         if (isset($validated['bank_account_security'])){
             foreach ($validated['bank_account_security'] AS $key => $value):
-                $value['entity_uuid'] = $bank_account['uuid'];
-                $bank_account_security = BankAccountSecurity::find($value);
-                if (!$bank_account_security->count()){
-                    BankAccountSecurity::create($value);
-                }else{
-                    $bank_account_security->update($value);
-                }
+                $value['entity_uuid'] = $bankAccount['uuid'];
+                $this->bankAccountSecurityService->save($value);
             endforeach;
         }
 
-        if (isset($validated['files_to_delete'])){ // files to delete
+        // files to delete (first)
+        if (isset($validated['files_to_delete'])){
             foreach ($validated['files_to_delete'] AS $key => $value):
-                if ($value!=null){
-                    $file = File::find($value);
-                    $file->update(['status'=> Config::get('common.status.deleted')]);
-                }
+                $this->fileService->delete($value);
             endforeach;
         }
 
-        if ($request->has('files')){ // files to upload
-            $files = $request->file('files');
-            foreach ($files AS $key => $value):
-                $tmp_file = $value;
-                $file_parent = $key;
-
-                foreach ($tmp_file AS $key2 => $value2):
-                    $file = new File();
-                    $file->user_uuid = $request->user_uuid;
-                    $file->entity_uuid = $company['uuid'];
-                    $file->file_name = Str::uuid()->toString() . '.' . $value2->getClientOriginalExtension();
-                    $file->file_path = $file->file_name;
-                    $file->file_parent = $file_parent;
-                    $value2->move('uploads', $file->file_path);
-                    $file->save();
-                endforeach;
+        // files to upload
+        if (isset($validated['files'])){
+            foreach ($validated['files'] AS $key => $value):
+                $this->fileService->update(['entity_uuid' => $company->uuid], $value['uuid']);
             endforeach;
         }
 
@@ -692,34 +616,15 @@ class CompanyController extends Controller
       *                         @OA\Property(property="website", type="text"),
       *                         @OA\Property(property="db_report_number", type="text"),
       *
-      *                         @OA\Property(property="address[street_address]", type="text"),
-      *                         @OA\Property(property="address[address_line_2]", type="text"),
-      *                         @OA\Property(property="address[city]", type="text"),
-      *                         @OA\Property(property="address[state]", type="text"),
-      *                         @OA\Property(property="address[postal]", type="text"),
-      *                         @OA\Property(property="address[country]", type="text"),
+      *                         @OA\Property(property="addresses[]", type="text"),
       *
-      *                         @OA\Property(property="extra_address", type="text"),
+      *                         @OA\Property(property="emails[]", type="text"),
       *
-      *                         @OA\Property(property="emails[hosting_uuid]", type="text"),
-      *                         @OA\Property(property="emails[email]", type="text"),
-      *                         @OA\Property(property="emails[password]", type="text"),
-      *                         @OA\Property(property="emails[phone]", type="text"),
+      *                         @OA\Property(property="bank_account[]", type="text"),
       *
-      *                         @OA\Property(property="bank_account[name]", type="text"),
-      *                         @OA\Property(property="bank_account[website]", type="text"),
-      *                         @OA\Property(property="bank_account[username]", type="text"),
-      *                         @OA\Property(property="bank_account[password]", type="text"),
-      *                         @OA\Property(property="bank_account[account_number]", type="text"),
-      *                         @OA\Property(property="bank_account[routing_number]", type="text"),
+      *                         @OA\Property(property="files[]", type="text"),
       *
-      *                         @OA\Property(property="bank_account_security[][question]", type="text"),
-      *                         @OA\Property(property="bank_account_security[][answer]", type="text"),
-      *
-      *                         @OA\Property(property="files[incorporation_state][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[doing_business_in_state][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[company_ein][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[db_report][]", type="file", format="binary"),
+      *                         @OA\Property(property="files_to_delete[]", type="text")
       *                     ),
       *                 ),
       *             ),
@@ -768,8 +673,7 @@ class CompanyController extends Controller
             'db_report_number' => 'required',
 
             // addresses
-            'address' => 'array',
-            'extra_address' => 'array',
+            'addresses' => 'array',
 
             // emails
             'emails' => 'array',
@@ -777,8 +681,9 @@ class CompanyController extends Controller
             // bank account
             'bank_account' => 'array',
 
-            // bank account security
-            'bank_account_security' => 'array',
+            // files
+            'files' => 'array',
+            'files_to_delete' => 'array',
 
             'user_uuid' => 'string'
         ]);
@@ -790,20 +695,15 @@ class CompanyController extends Controller
             $check = array_merge($check, $tmpCheck);
         }*/
 
-        if (isset($validated['address'])){
+        /*if (isset($validated['addresses'])){
             $tmpCheck = $this->addressService->check($validated['address']);
             $check = array_merge($check, $tmpCheck);
-        }
+        }*/
 
-        if (isset($validated['extra_address'])){
-            $tmpCheck = $this->addressService->check($validated['extra_address'], '', 'extra_address');
-            $check = array_merge($check, $tmpCheck);
-        }
-
-        if (isset($validated['bank_account'])){
+        /*if (isset($validated['bank_account'])){
             $tmpCheck = $this->bankAccountService->check($validated['bank_account']);
             $check = array_merge($check, $tmpCheck);
-        }
+        }*/
         
         $tmpCheck = $this->companyService->check($validated);
         $check = array_merge($check, $tmpCheck);
@@ -817,63 +717,47 @@ class CompanyController extends Controller
 
         $company = $this->companyService->pending($validated);
 
-        // email
+        // emails
         if (isset($validated['emails'])){
             foreach($validated['emails'] AS $key => $value):
-                $value['entity_uuid'] = $company['uuid'];
+                $value['entity_uuid'] = $company->uuid;
                 $value['status'] = Config::get('common.status.pending');
                 $this->emailService->save($value);
             endforeach;
         }
 
-        //address
-        $validated['address']['entity_uuid'] = $company['uuid'];
-        $validated['address']['address_parent'] = '';
-        $validated['address']['status'] = Config::get('common.status.pending');
-        $this->addressService->create($validated['address']);
-
-        if (isset($validated['extra_address'])){
-            $validated['extra_address']['address_parent'] = 'extra_address';
-            $validated['extra_address']['entity_uuid'] = $company['uuid'];
-            $validated['extra_address']['status'] = Config::get('common.status.pending');
-            $this->addressService->create($validated['extra_address']);
-        }
-
-        // bank account
-        $validated['bank_account']['entity_uuid'] = $company['uuid'];
-        $validated['bank_account']['status'] = Config::get('common.status.pending');
-        $bank_account = $this->bankAccountService->save($validated['bank_account']);
-
-        // security
-        if (isset($validated['bank_account_security'])){
-            foreach ($validated['bank_account_security'] AS $key => $value):
-                $value['entity_uuid'] = $bank_account['uuid'];
-                BankAccountSecurity::create($value);
+        // addresses
+        if (isset($validated['addresses'])){
+            foreach ($validated['addresses'] AS $key => $value):
+                $value['entity_uuid'] = $company->uuid;
+                $value['status'] = Config::get('common.status.pending');
+                $this->addressService->save($value);
             endforeach;
         }
 
-        if ($request->has('files')){ // file upload
-            $files = $request->file('files');
-            foreach ($files AS $key => $value):
-                foreach ($value AS $key1 => $value1):
-                    if ($key1=='back' || $key1=='front'){
-                        $tmp_file = $value1;
-                        $file_parent = $key . '/' . $key1;
-                    }else{
-                        $tmp_file = $value;
-                        $file_parent = $key;
-                    }
-                    foreach ($tmp_file AS $key2 => $value2):
-                        $file = new File();
-                        $file->user_uuid = $validated['user_uuid'];
-                        $file->entity_uuid = $company['uuid'];
-                        $file->file_name = Str::uuid()->toString() . '.' . $value2->getClientOriginalExtension();
-                        $file->file_path = $file->file_name;
-                        $file->file_parent = $file_parent;
-                        $value2->move('uploads', $file->file_path);
-                        $file->save();
-                    endforeach;
-                endforeach;
+        // addresses to delete
+        if (isset($validated['addresses_to_delete'])){
+            foreach ($validated['addresses_to_delete'] AS $key => $value):
+                $this->addressService->delete($value);
+            endforeach;
+        }
+
+        // bank account
+        $validated['bank_account']['entity_uuid'] = $company->uuid;
+        $validated['bank_account']['status'] = Config::get('common.status.pending');
+        $bankAccount = $this->bankAccountService->save($validated['bank_account']);
+
+        // files to delete (first)
+        if (isset($validated['files_to_delete'])){
+            foreach ($validated['files_to_delete'] AS $key => $value):
+                $this->fileService->delete($value);
+            endforeach;
+        }
+
+        // files to upload
+        if (isset($validated['files'])){
+            foreach ($validated['files'] AS $key => $value):
+                $this->fileService->update(['entity_uuid' => $company->uuid], $value['uuid']);
             endforeach;
         }
 
@@ -927,37 +811,14 @@ class CompanyController extends Controller
       *                         @OA\Property(property="website", type="text"),
       *                         @OA\Property(property="db_report_number", type="text"),
       *
-      *                         @OA\Property(property="address[street_address]", type="text"),
-      *                         @OA\Property(property="address[address_line_2]", type="text"),
-      *                         @OA\Property(property="address[city]", type="text"),
-      *                         @OA\Property(property="address[state]", type="text"),
-      *                         @OA\Property(property="address[postal]", type="text"),
-      *                         @OA\Property(property="address[country]", type="text"),
+      *                         @OA\Property(property="addresses[]", type="text"),
       *
-      *                         @OA\Property(property="extra_address", type="text"),
-      *                         @OA\Property(property="extra_address_remove", type="text"),
+      *                         @OA\Property(property="emails[]", type="text"),
+      *                         @OA\Property(property="emails_to_delete[]", type="text"),
       *
-      *                         @OA\Property(property="emails[hosting_uuid]", type="text"),
-      *                         @OA\Property(property="emails[email]", type="text"),
-      *                         @OA\Property(property="emails[password]", type="text"),
-      *                         @OA\Property(property="emails[phone]", type="text"),
+      *                         @OA\Property(property="bank_account[]", type="text"),
       *
-      *                         @OA\Property(property="bank_account[name]", type="text"),
-      *                         @OA\Property(property="bank_account[website]", type="text"),
-      *                         @OA\Property(property="bank_account[username]", type="text"),
-      *                         @OA\Property(property="bank_account[password]", type="text"),
-      *                         @OA\Property(property="bank_account[account_number]", type="text"),
-      *                         @OA\Property(property="bank_account[routing_number]", type="text"),
-      *
-      *                         @OA\Property(property="bank_account_security[][question]", type="text"),
-      *                         @OA\Property(property="bank_account_security[][answer]", type="text"),
-      *
-      *                         @OA\Property(property="bank_account_security_to_delete[]", type="text"),
-      *
-      *                         @OA\Property(property="files[incorporation_state][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[doing_business_in_state][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[company_ein][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[db_report][]", type="file", format="binary"),
+      *                         @OA\Property(property="files[]", type="text"),
       *
       *                         @OA\Property(property="files_to_delete[]", type="text")
       *                     ),
@@ -1016,9 +877,7 @@ class CompanyController extends Controller
             'db_report_number' => 'required',
 
             // addresses
-            'address' => 'array',
-            'extra_address' => 'array',
-            'extra_address_remove' => '',
+            'addresses' => 'array',
 
             // emails
             'emails' => 'array',
@@ -1027,10 +886,8 @@ class CompanyController extends Controller
             // bank account
             'bank_account' => 'array',
 
-            // bank account security
-            'bank_account_security' => 'array',
-            'bank_account_security_to_delete' => 'array',
-
+            // files
+            'files' => 'array',
             'files_to_delete' => 'array',
         ]);
 
@@ -1041,20 +898,15 @@ class CompanyController extends Controller
             $check = array_merge($check, $tmpCheck);
         }*/
 
-        if (isset($validated['address'])){
+        /*if (isset($validated['addresses'])){
             $tmpCheck = $this->addressService->check_ignore($validated['address'], $company->uuid);
             $check = array_merge($check, $tmpCheck);
-        }
+        }*/
 
-        if (isset($validated['extra_address'])){
-            $tmpCheck = $this->addressService->check_ignore($validated['extra_address'], $company->uuid, '', 'extra_address');
-            $check = array_merge($check, $tmpCheck);
-        }
-
-        if (isset($validated['bank_account'])){
+        /*if (isset($validated['bank_account'])){
             $tmpCheck = $this->bankAccountService->check_ignore($validated['bank_account'], $company->uuid);
             $check = array_merge($check, $tmpCheck);
-        }
+        }*/
 
         $tmpCheck = $this->companyService->check_ignore($validated, $company->uuid);
         $check = array_merge($check, $tmpCheck);
@@ -1068,100 +920,54 @@ class CompanyController extends Controller
 
         $company = $this->companyService->pending_update($uuid, $validated, $request->user_uuid);
 
-        // email
+        // emails to delete
         if (isset($validated['emails_to_delete'])){
             foreach($validated['emails_to_delete'] AS $key => $value):
                 $this->emailService->delete($value);
             endforeach;
         }
 
+        // emails
         if (isset($validated['emails'])){
             foreach($validated['emails'] AS $key => $value):
-                $value['entity_uuid'] = $company['uuid'];
+                $value['entity_uuid'] = $company->uuid;
                 $value['status'] = Config::get('common.status.pending');
                 $this->emailService->save($value);
             endforeach;
         }
 
-        // address
-        $validated['address']['entity_uuid'] = $company['uuid'];
-        $validated['address']['address_parent'] = '';
-        $validated['address']['status'] = Config::get('common.status.pending');
-        $this->addressService->save($validated['address']);
-
-        if (isset($validated['extra_address'])){
-            $validated['extra_address']['entity_uuid'] = $company['uuid'];
-            $validated['extra_address']['address_parent'] = 'extra_address';
-            $validated['extra_address']['status'] = Config::get('common.status.pending');
-            $this->addressService->save($validated['extra_address']);
+        // addresses
+        if (isset($validated['addresses'])){
+            foreach ($validated['addresses'] AS $key => $value):
+                $value['entity_uuid'] = $company->uuid;
+                $value['status'] = Config::get('common.status.pending');
+                $this->addressService->save($value);
+            endforeach;
         }
 
-        // remove extra address
-        if (isset($validated['extra_address_remove']) && filter_var($validated['extra_address_remove'], FILTER_VALIDATE_BOOLEAN)){ 
-            $validated['extra_address']['entity_uuid'] = $company['uuid'];
-            $validated['extra_address']['address_parent'] = 'extra_address';
-            $validated['extra_address']['status'] = Config::get('common.status.deleted');
-            $this->addressService->save($validated['extra_address']);
+        // addresses to delete
+        if (isset($validated['addresses_to_delete'])){
+            foreach ($validated['addresses_to_delete'] AS $key => $value):
+                $this->addressService->delete($value);
+            endforeach;
         }
-        
 
-        // bank account & security
-        $validated['bank_account']['entity_uuid'] = $company['uuid'];
+        // bank account
+        $validated['bank_account']['entity_uuid'] = $company->uuid;
         $validated['bank_account']['status'] = Config::get('common.status.pending');
-        $bank_account = $this->bankAccountService->save($validated['bank_account']);
+        $bankAccount = $this->bankAccountService->save($validated['bank_account']);
 
-        // security delete
-        if (isset($validated['bank_account_security_to_delete'])){
-            foreach($validated['bank_account_security_to_delete'] AS $key => $value):
-                $bank_account_security = BankAccountSecurity::where('uuid', $value);
-                $bank_account_security->update(['status' => Config::get('common.status.deleted')]);
-            endforeach;
-        }
-
-        // security
-        if (isset($validated['bank_account_security'])){
-            foreach ($validated['bank_account_security'] AS $key => $value):
-                $value['entity_uuid'] = $bank_account['uuid'];
-                $bank_account_security = BankAccountSecurity::find($value);
-                if (!$bank_account_security->count()){
-                    BankAccountSecurity::create($value);
-                }else{
-                    $bank_account_security->update($value);
-                }
-            endforeach;
-        }
-
-        if (isset($validated['files_to_delete'])){  // file to delete
+        // files to delete (first)
+        if (isset($validated['files_to_delete'])){
             foreach ($validated['files_to_delete'] AS $key => $value):
-                if ($value!=null){
-                    $file = File::find($value);
-                    $file->update(['status'=> 0]);
-                }
+                $this->fileService->delete($value);
             endforeach;
         }
 
-        if ($request->has('files')){ // file to upload
-            $files = $request->file('files');
-            foreach ($files AS $key => $value):
-                foreach ($value AS $key1 => $value1):
-                    if ($key1=='back' || $key1=='front'){
-                        $tmp_file = $value1;
-                        $file_parent = $key . '/' . $key1;
-                    }else{
-                        $tmp_file = $value;
-                        $file_parent = $key;
-                    }
-                    foreach ($tmp_file AS $key2 => $value2):
-                        $file = new File();
-                        $file->user_uuid = $request->user_uuid;
-                        $file->entity_uuid = $company['uuid'];
-                        $file->file_name = Str::uuid()->toString() . '.' . $value2->getClientOriginalExtension();
-                        $file->file_path = $file->file_name;
-                        $file->file_parent = $file_parent;
-                        $value2->move('uploads', $file->file_path);
-                        $file->save();
-                    endforeach;
-                endforeach;
+        // files to upload
+        if (isset($validated['files'])){
+            foreach ($validated['files'] AS $key => $value):
+                $this->fileService->update(['entity_uuid' => $company->uuid], $value['uuid']);
             endforeach;
         }
 
@@ -1215,37 +1021,14 @@ class CompanyController extends Controller
       *                         @OA\Property(property="website", type="text"),
       *                         @OA\Property(property="db_report_number", type="text"),
       *
-      *                         @OA\Property(property="address[street_address]", type="text"),
-      *                         @OA\Property(property="address[address_line_2]", type="text"),
-      *                         @OA\Property(property="address[city]", type="text"),
-      *                         @OA\Property(property="address[state]", type="text"),
-      *                         @OA\Property(property="address[postal]", type="text"),
-      *                         @OA\Property(property="address[country]", type="text"),
+      *                         @OA\Property(property="addresses[]", type="text"),
       *
-      *                         @OA\Property(property="extra_address", type="text"),
-      *                         @OA\Property(property="extra_address_remove", type="text"),
+      *                         @OA\Property(property="emails[]", type="text"),
+      *                         @OA\Property(property="emails_to_delete[]", type="text"),
       *
-      *                         @OA\Property(property="emails[hosting_uuid]", type="text"),
-      *                         @OA\Property(property="emails[email]", type="text"),
-      *                         @OA\Property(property="emails[password]", type="text"),
-      *                         @OA\Property(property="emails[phone]", type="text"),
+      *                         @OA\Property(property="bank_account[]", type="text"),
       *
-      *                         @OA\Property(property="bank_account[name]", type="text"),
-      *                         @OA\Property(property="bank_account[website]", type="text"),
-      *                         @OA\Property(property="bank_account[username]", type="text"),
-      *                         @OA\Property(property="bank_account[password]", type="text"),
-      *                         @OA\Property(property="bank_account[account_number]", type="text"),
-      *                         @OA\Property(property="bank_account[routing_number]", type="text"),
-      *
-      *                         @OA\Property(property="bank_account_security[][question]", type="text"),
-      *                         @OA\Property(property="bank_account_security[][answer]", type="text"),
-      *
-      *                         @OA\Property(property="bank_account_security_to_delete[]", type="text"),
-      *
-      *                         @OA\Property(property="files[incorporation_state][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[doing_business_in_state][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[company_ein][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[db_report][]", type="file", format="binary"),
+      *                         @OA\Property(property="files[]", type="text"),
       *
       *                         @OA\Property(property="files_to_delete[]", type="text")
       *                     ),
@@ -1296,9 +1079,7 @@ class CompanyController extends Controller
             'db_report_number' => 'required',
 
             // addresses
-            'address' => 'array',
-            'extra_address' => 'array',
-            'extra_address_remove' => '',
+            'addresses' => 'array',
 
             // emails
             'emails' => 'array',
@@ -1307,11 +1088,8 @@ class CompanyController extends Controller
             // bank account
             'bank_account' => 'array',
 
-            // bank account security
-            'bank_account_security' => 'array',
-            'bank_account_security_to_delete' => 'array',
-
             // files to delete
+            'files' => 'array',
             'files_to_delete' => 'array'
         ]);
 
@@ -1324,20 +1102,15 @@ class CompanyController extends Controller
             $check = array_merge($check, $tmpCheck);
         }*/
 
-        if (isset($validated['address'])){
+        /*if (isset($validated['addresses'])){
             $tmpCheck = $this->addressService->check_ignore($validated['address'], $company->uuid);
             $check = array_merge($check, $tmpCheck);
-        }
+        }*/
 
-        if (isset($validated['extra_address'])){
-            $tmpCheck = $this->addressService->check_ignore($validated['extra_address'], $company->uuid, '', 'extra_address');
-            $check = array_merge($check, $tmpCheck);
-        }
-
-        if (isset($validated['bank_account'])){
+        /*if (isset($validated['bank_account'])){
             $tmpCheck = $this->bankAccountService->check_ignore($validated['bank_account'], $company->uuid);
             $check = array_merge($check, $tmpCheck);
-        }
+        }*/
 
         $tmpCheck = $this->companyService->check_ignore($validated, $company->uuid);
         $check = array_merge($check, $tmpCheck);
@@ -1351,99 +1124,54 @@ class CompanyController extends Controller
 
         $company = $this->companyService->accept($company, $validated, $request->user_uuid);
 
-        // email
+        // emails to delete
         if (isset($validated['emails_to_delete'])){
             foreach($validated['emails_to_delete'] AS $key => $value):
                 $this->emailService->delete($value);
             endforeach;
         }
 
+        // emails
         if (isset($validated['emails'])){
             foreach($validated['emails'] AS $key => $value):
-                $value['entity_uuid'] = $company['uuid'];
+                $value['entity_uuid'] = $company->uuid;
                 $value['status'] = Config::get('common.status.actived');
                 $this->emailService->save($value);
             endforeach;
         }
 
-        //address
-        $validated['address']['entity_uuid'] = $company['uuid'];
-        $validated['address']['address_parent'] = '';
-        $validated['address']['status'] = Config::get('common.status.actived');
-        $this->addressService->save($validated['address']);
-
-        if (isset($validated['extra_address'])){
-            $validated['extra_address']['entity_uuid'] = $company['uuid'];
-            $validated['extra_address']['address_parent'] = 'extra_address';
-            $validated['extra_address']['status'] = Config::get('common.status.actived');
-            $this->addressService->save($validated['extra_address']);
+        // addresses
+        if (isset($validated['addresses'])){
+            foreach ($validated['addresses'] AS $key => $value):
+                $value['entity_uuid'] = $company->uuid;
+                $value['status'] = Config::get('common.status.actived');
+                $this->addressService->save($value);
+            endforeach;
         }
 
-        // extra address remove
-        if (isset($validated['extra_address_remove']) && filter_var($validated['extra_address_remove'], FILTER_VALIDATE_BOOLEAN)){
-            $validated['extra_address']['entity_uuid'] = $company['uuid'];
-            $validated['extra_address']['address_parent'] = 'extra_address';
-            $validated['extra_address']['status'] = Config::get('common.status.deleted');
-            $this->addressService->save($validated['extra_address']);
+        // addresses to delete
+        if (isset($validated['addresses_to_delete'])){
+            foreach ($validated['addresses_to_delete'] AS $key => $value):
+                $this->addressService->delete($value);
+            endforeach;
         }
 
-        // bank account & security
-        $validated['bank_account']['entity_uuid'] = $company['uuid'];
+        // bank account
+        $validated['bank_account']['entity_uuid'] = $company->uuid;
         $validated['bank_account']['status'] = Config::get('common.status.actived');
-        $bank_account = $this->bankAccountService->save($validated['bank_account']);
+        $bankAccount = $this->bankAccountService->save($validated['bank_account']);
 
-        // security delete
-        if (isset($validated['bank_account_security_to_delete'])){
-            foreach($validated['bank_account_security_to_delete'] AS $key => $value):
-                $bank_account_security = BankAccountSecurity::where('uuid', $value);
-                $bank_account_security->update(['status' => Config::get('common.status.deleted')]);
-            endforeach;
-        }
-
-        // security
-        if (isset($validated['bank_account_security'])){
-            foreach ($validated['bank_account_security'] AS $key => $value):
-                $value['entity_uuid'] = $bank_account['uuid'];
-                $bank_account_security = BankAccountSecurity::find($value);
-                if (!$bank_account_security->count()){
-                    BankAccountSecurity::create($value);
-                }else{
-                    $bank_account_security->update($value);
-                }
-            endforeach;
-        }
-
-        if (isset($validated['files_to_delete'])){ // files to delete
+        // files to delete (first)
+        if (isset($validated['files_to_delete'])){
             foreach ($validated['files_to_delete'] AS $key => $value):
-                if ($value!=null){
-                    $file = File::find($value);
-                    $file->update(['status'=> 0]);
-                }
+                $this->fileService->delete($value);
             endforeach;
         }
 
-        if ($request->has('files')){ // files to upload
-            $files = $request->file('files');
-            foreach ($files AS $key => $value):
-                foreach ($value AS $key1 => $value1):
-                    if ($key1=='back' || $key1=='front'){
-                        $tmp_file = $value1;
-                        $file_parent = $key . '/' . $key1;
-                    }else{
-                        $tmp_file = $value;
-                        $file_parent = $key;
-                    }
-                    foreach ($tmp_file AS $key2 => $value2):
-                        $file = new File();
-                        $file->user_uuid = $request->user_uuid;
-                        $file->entity_uuid = $company['uuid'];
-                        $file->file_name = Str::uuid()->toString() . '.' . $value2->getClientOriginalExtension();
-                        $file->file_path = $file->file_name;
-                        $file->file_parent = $file_parent;
-                        $value2->move('uploads', $file->file_path);
-                        $file->save();
-                    endforeach;
-                endforeach;
+        // files to upload
+        if (isset($validated['files'])){
+            foreach ($validated['files'] AS $key => $value):
+                $this->fileService->update(['entity_uuid' => $company->uuid], $value['uuid']);
             endforeach;
         }
 
@@ -1602,37 +1330,14 @@ class CompanyController extends Controller
       *                         @OA\Property(property="website", type="text"),
       *                         @OA\Property(property="db_report_number", type="text"),
       *
-      *                         @OA\Property(property="address[street_address]", type="text"),
-      *                         @OA\Property(property="address[address_line_2]", type="text"),
-      *                         @OA\Property(property="address[city]", type="text"),
-      *                         @OA\Property(property="address[state]", type="text"),
-      *                         @OA\Property(property="address[postal]", type="text"),
-      *                         @OA\Property(property="address[country]", type="text"),
+      *                         @OA\Property(property="addresses[]", type="text"),
       *
-      *                         @OA\Property(property="extra_address", type="text"),
-      *                         @OA\Property(property="extra_address_remove", type="text"),
+      *                         @OA\Property(property="emails[]", type="text"),
+      *                         @OA\Property(property="emails_to_delete[]", type="text"),
       *
-      *                         @OA\Property(property="emails[hosting_uuid]", type="text"),
-      *                         @OA\Property(property="emails[email]", type="text"),
-      *                         @OA\Property(property="emails[password]", type="text"),
-      *                         @OA\Property(property="emails[phone]", type="text"),
+      *                         @OA\Property(property="bank_account[]", type="text"),
       *
-      *                         @OA\Property(property="bank_account[name]", type="text"),
-      *                         @OA\Property(property="bank_account[website]", type="text"),
-      *                         @OA\Property(property="bank_account[username]", type="text"),
-      *                         @OA\Property(property="bank_account[password]", type="text"),
-      *                         @OA\Property(property="bank_account[account_number]", type="text"),
-      *                         @OA\Property(property="bank_account[routing_number]", type="text"),
-      *
-      *                         @OA\Property(property="bank_account_security[][question]", type="text"),
-      *                         @OA\Property(property="bank_account_security[][answer]", type="text"),
-      *
-      *                         @OA\Property(property="bank_account_security_to_delete[]", type="text"),
-      *
-      *                         @OA\Property(property="files[incorporation_state][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[doing_business_in_state][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[company_ein][]", type="file", format="binary"),
-      *                         @OA\Property(property="files[db_report][]", type="file", format="binary"),
+      *                         @OA\Property(property="files[]", type="text"),
       *
       *                         @OA\Property(property="files_to_delete[]", type="text")
       *                     ),
@@ -1681,9 +1386,7 @@ class CompanyController extends Controller
             'db_report_number' => '',
 
             // addresses
-            'address' => 'array',
-            'extra_address' => 'array',
-            'extra_address_remove' => '',
+            'addresses' => 'array',
 
             // emails
             'emails' => 'array',
@@ -1692,11 +1395,8 @@ class CompanyController extends Controller
             // bank account
             'bank_account' => 'array',
 
-            // bank account security
-            'bank_account_security' => 'array',
-            'bank_account_security_to_delete' => 'array',
-
             // files to delete
+            'files' => 'array',
             'files_to_delete' => 'array'
         ]);
 
@@ -1704,99 +1404,54 @@ class CompanyController extends Controller
 
         $company = $this->companyService->accept($company, $validated, $request->user_uuid, true);
 
-        // email
+        // emails to delete
         if (isset($validated['emails_to_delete'])){
             foreach($validated['emails_to_delete'] AS $key => $value):
                 $this->emailService->delete($value);
             endforeach;
         }
 
+        // emails
         if (isset($validated['emails'])){
             foreach($validated['emails'] AS $key => $value):
-                $value['entity_uuid'] = $company['uuid'];
+                $value['entity_uuid'] = $company->uuid;
                 $value['status'] = Config::get('common.status.actived');
                 $this->emailService->save($value);
             endforeach;
         }
 
-        //address
-        $validated['address']['entity_uuid'] = $company['uuid'];
-        $validated['address']['address_parent'] = '';
-        $validated['address']['status'] = Config::get('common.status.actived');
-        $this->addressService->save($validated['address']);
-
-        if (isset($validated['extra_address'])){
-            $validated['extra_address']['entity_uuid'] = $company['uuid'];
-            $validated['extra_address']['address_parent'] = 'extra_address';
-            $validated['extra_address']['status'] = Config::get('common.status.actived');
-            $this->addressService->save($validated['extra_address']);
+        // addresses
+        if (isset($validated['addresses'])){
+            foreach ($validated['addresses'] AS $key => $value):
+                $value['entity_uuid'] = $company->uuid;
+                $value['status'] = Config::get('common.status.actived');
+                $this->addressService->save($value);
+            endforeach;
         }
 
-        // extra address remove
-        if (isset($validated['extra_address_remove']) && filter_var($validated['extra_address_remove'], FILTER_VALIDATE_BOOLEAN)){
-            $validated['extra_address']['entity_uuid'] = $company['uuid'];
-            $validated['extra_address']['address_parent'] = 'extra_address';
-            $validated['extra_address']['status'] = Config::get('common.status.deleted');
-            $this->addressService->save($validated['extra_address']);
+        // addresses to delete
+        if (isset($validated['addresses_to_delete'])){
+            foreach ($validated['addresses_to_delete'] AS $key => $value):
+                $this->addressService->delete($value);
+            endforeach;
         }
 
-        // bank account & security
-        $validated['bank_account']['entity_uuid'] = $company['uuid'];
+        // bank account
+        $validated['bank_account']['entity_uuid'] = $company->uuid;
         $validated['bank_account']['status'] = Config::get('common.status.actived');
-        $bank_account = $this->bankAccountService->save($validated['bank_account']);
+        $bankAccount = $this->bankAccountService->save($validated['bank_account']);
 
-        // security delete
-        if (isset($validated['bank_account_security_to_delete'])){
-            foreach($validated['bank_account_security_to_delete'] AS $key => $value):
-                $bank_account_security = BankAccountSecurity::where('uuid', $value);
-                $bank_account_security->update(['status' => Config::get('common.status.deleted')]);
-            endforeach;
-        }
-
-        // security
-        if (isset($validated['bank_account_security'])){
-            foreach ($validated['bank_account_security'] AS $key => $value):
-                $value['entity_uuid'] = $bank_account['uuid'];
-                $bank_account_security = BankAccountSecurity::find($value);
-                if (!$bank_account_security->count()){
-                    BankAccountSecurity::create($value);
-                }else{
-                    $bank_account_security->update($value);
-                }
-            endforeach;
-        }
-
-        if (isset($validated['files_to_delete'])){ // files to delete
+        // files to delete (first)
+        if (isset($validated['files_to_delete'])){
             foreach ($validated['files_to_delete'] AS $key => $value):
-                if ($value!=null){
-                    $file = File::find($value);
-                    $file->update(['status'=> 0]);
-                }
+                $this->fileService->delete($value);
             endforeach;
         }
 
-        if ($request->has('files')){ // files to upload
-            $files = $request->file('files');
-            foreach ($files AS $key => $value):
-                foreach ($value AS $key1 => $value1):
-                    if ($key1=='back' || $key1=='front'){
-                        $tmp_file = $value1;
-                        $file_parent = $key . '/' . $key1;
-                    }else{
-                        $tmp_file = $value;
-                        $file_parent = $key;
-                    }
-                    foreach ($tmp_file AS $key2 => $value2):
-                        $file = new File();
-                        $file->user_uuid = $request->user_uuid;
-                        $file->entity_uuid = $company['uuid'];
-                        $file->file_name = Str::uuid()->toString() . '.' . $value2->getClientOriginalExtension();
-                        $file->file_path = $file->file_name;
-                        $file->file_parent = $file_parent;
-                        $value2->move('uploads', $file->file_path);
-                        $file->save();
-                    endforeach;
-                endforeach;
+        // files to upload
+        if (isset($validated['files'])){
+            foreach ($validated['files'] AS $key => $value):
+                $this->fileService->update(['entity_uuid' => $company->uuid], $value['uuid']);
             endforeach;
         }
 

@@ -24,7 +24,7 @@ class Company extends Model
     protected $attributes = ['status' => 1, 'approved' => 0];
 
     public function bank_account(){
-        return $this->hasMany(BankAccount::class, 'entity_uuid', 'uuid');
+        return $this->hasOne(BankAccount::class, 'entity_uuid', 'uuid');
     }
 
     public function files(){

@@ -309,6 +309,7 @@ class DirectorController extends Controller
         if (isset($validated['emails'])){
             foreach ($validated['emails'] AS $key => $value):
                 $value['entity_uuid'] = $director->uuid;
+                $value['status'] = Config::get('common.status.actived');
                 $this->emailService->save($value);
             endforeach;
         }

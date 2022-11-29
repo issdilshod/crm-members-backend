@@ -1782,84 +1782,20 @@
                                     "db_report_number": {
                                         "type": "text"
                                     },
-                                    "address[street_address]": {
+                                    "addresses[]": {
                                         "type": "text"
                                     },
-                                    "address[address_line_2]": {
+                                    "emails[]": {
                                         "type": "text"
                                     },
-                                    "address[city]": {
+                                    "emails_to_delete[]": {
                                         "type": "text"
                                     },
-                                    "address[state]": {
+                                    "bank_account[]": {
                                         "type": "text"
                                     },
-                                    "address[postal]": {
+                                    "files[]": {
                                         "type": "text"
-                                    },
-                                    "address[country]": {
-                                        "type": "text"
-                                    },
-                                    "extra_address": {
-                                        "type": "text"
-                                    },
-                                    "extra_address_remove": {
-                                        "type": "text"
-                                    },
-                                    "emails[hosting_uuid]": {
-                                        "type": "text"
-                                    },
-                                    "emails[email]": {
-                                        "type": "text"
-                                    },
-                                    "emails[password]": {
-                                        "type": "text"
-                                    },
-                                    "emails[phone]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[name]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[website]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[username]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[password]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[account_number]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[routing_number]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account_security[][question]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account_security[][answer]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account_security_to_delete[]": {
-                                        "type": "text"
-                                    },
-                                    "files[incorporation_state][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[doing_business_in_state][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[company_ein][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[db_report][]": {
-                                        "type": "file",
-                                        "format": "binary"
                                     },
                                     "files_to_delete[]": {
                                         "type": "text"
@@ -1978,78 +1914,20 @@
                                     "db_report_number": {
                                         "type": "text"
                                     },
-                                    "address[street_address]": {
+                                    "addresses[]": {
                                         "type": "text"
                                     },
-                                    "address[address_line_2]": {
+                                    "emails[]": {
                                         "type": "text"
                                     },
-                                    "address[city]": {
+                                    "bank_account[]": {
                                         "type": "text"
                                     },
-                                    "address[state]": {
+                                    "files[]": {
                                         "type": "text"
                                     },
-                                    "address[postal]": {
+                                    "files_to_delete[]": {
                                         "type": "text"
-                                    },
-                                    "address[country]": {
-                                        "type": "text"
-                                    },
-                                    "extra_address": {
-                                        "type": "text"
-                                    },
-                                    "emails[hosting_uuid]": {
-                                        "type": "text"
-                                    },
-                                    "emails[email]": {
-                                        "type": "text"
-                                    },
-                                    "emails[password]": {
-                                        "type": "text"
-                                    },
-                                    "emails[phone]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[name]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[website]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[username]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[password]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[account_number]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[routing_number]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account_security[][question]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account_security[][answer]": {
-                                        "type": "text"
-                                    },
-                                    "files[incorporation_state][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[doing_business_in_state][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[company_ein][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[db_report][]": {
-                                        "type": "file",
-                                        "format": "binary"
                                     }
                                 },
                                 "type": "object"
@@ -2282,78 +2160,20 @@
                                     "db_report_number": {
                                         "type": "text"
                                     },
-                                    "address[street_address]": {
+                                    "addresses[]": {
                                         "type": "text"
                                     },
-                                    "address[address_line_2]": {
+                                    "emails[]": {
                                         "type": "text"
                                     },
-                                    "address[city]": {
+                                    "bank_account[]": {
                                         "type": "text"
                                     },
-                                    "address[state]": {
+                                    "files[]": {
                                         "type": "text"
                                     },
-                                    "address[postal]": {
+                                    "files_to_delete[]": {
                                         "type": "text"
-                                    },
-                                    "address[country]": {
-                                        "type": "text"
-                                    },
-                                    "extra_address": {
-                                        "type": "text"
-                                    },
-                                    "emails[hosting_uuid]": {
-                                        "type": "text"
-                                    },
-                                    "emails[email]": {
-                                        "type": "text"
-                                    },
-                                    "emails[password]": {
-                                        "type": "text"
-                                    },
-                                    "emails[phone]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[name]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[website]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[username]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[password]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[account_number]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[routing_number]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account_security[][question]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account_security[][answer]": {
-                                        "type": "text"
-                                    },
-                                    "files[incorporation_state][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[doing_business_in_state][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[company_ein][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[db_report][]": {
-                                        "type": "file",
-                                        "format": "binary"
                                     }
                                 },
                                 "type": "object"
@@ -2483,84 +2303,20 @@
                                     "db_report_number": {
                                         "type": "text"
                                     },
-                                    "address[street_address]": {
+                                    "addresses[]": {
                                         "type": "text"
                                     },
-                                    "address[address_line_2]": {
+                                    "emails[]": {
                                         "type": "text"
                                     },
-                                    "address[city]": {
+                                    "emails_to_delete[]": {
                                         "type": "text"
                                     },
-                                    "address[state]": {
+                                    "bank_account[]": {
                                         "type": "text"
                                     },
-                                    "address[postal]": {
+                                    "files[]": {
                                         "type": "text"
-                                    },
-                                    "address[country]": {
-                                        "type": "text"
-                                    },
-                                    "extra_address": {
-                                        "type": "text"
-                                    },
-                                    "extra_address_remove": {
-                                        "type": "text"
-                                    },
-                                    "emails[hosting_uuid]": {
-                                        "type": "text"
-                                    },
-                                    "emails[email]": {
-                                        "type": "text"
-                                    },
-                                    "emails[password]": {
-                                        "type": "text"
-                                    },
-                                    "emails[phone]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[name]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[website]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[username]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[password]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[account_number]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[routing_number]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account_security[][question]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account_security[][answer]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account_security_to_delete[]": {
-                                        "type": "text"
-                                    },
-                                    "files[incorporation_state][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[doing_business_in_state][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[company_ein][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[db_report][]": {
-                                        "type": "file",
-                                        "format": "binary"
                                     },
                                     "files_to_delete[]": {
                                         "type": "text"
@@ -2693,84 +2449,20 @@
                                     "db_report_number": {
                                         "type": "text"
                                     },
-                                    "address[street_address]": {
+                                    "addresses[]": {
                                         "type": "text"
                                     },
-                                    "address[address_line_2]": {
+                                    "emails[]": {
                                         "type": "text"
                                     },
-                                    "address[city]": {
+                                    "emails_to_delete[]": {
                                         "type": "text"
                                     },
-                                    "address[state]": {
+                                    "bank_account[]": {
                                         "type": "text"
                                     },
-                                    "address[postal]": {
+                                    "files[]": {
                                         "type": "text"
-                                    },
-                                    "address[country]": {
-                                        "type": "text"
-                                    },
-                                    "extra_address": {
-                                        "type": "text"
-                                    },
-                                    "extra_address_remove": {
-                                        "type": "text"
-                                    },
-                                    "emails[hosting_uuid]": {
-                                        "type": "text"
-                                    },
-                                    "emails[email]": {
-                                        "type": "text"
-                                    },
-                                    "emails[password]": {
-                                        "type": "text"
-                                    },
-                                    "emails[phone]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[name]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[website]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[username]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[password]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[account_number]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[routing_number]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account_security[][question]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account_security[][answer]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account_security_to_delete[]": {
-                                        "type": "text"
-                                    },
-                                    "files[incorporation_state][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[doing_business_in_state][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[company_ein][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[db_report][]": {
-                                        "type": "file",
-                                        "format": "binary"
                                     },
                                     "files_to_delete[]": {
                                         "type": "text"
@@ -2985,84 +2677,20 @@
                                     "db_report_number": {
                                         "type": "text"
                                     },
-                                    "address[street_address]": {
+                                    "addresses[]": {
                                         "type": "text"
                                     },
-                                    "address[address_line_2]": {
+                                    "emails[]": {
                                         "type": "text"
                                     },
-                                    "address[city]": {
+                                    "emails_to_delete[]": {
                                         "type": "text"
                                     },
-                                    "address[state]": {
+                                    "bank_account[]": {
                                         "type": "text"
                                     },
-                                    "address[postal]": {
+                                    "files[]": {
                                         "type": "text"
-                                    },
-                                    "address[country]": {
-                                        "type": "text"
-                                    },
-                                    "extra_address": {
-                                        "type": "text"
-                                    },
-                                    "extra_address_remove": {
-                                        "type": "text"
-                                    },
-                                    "emails[hosting_uuid]": {
-                                        "type": "text"
-                                    },
-                                    "emails[email]": {
-                                        "type": "text"
-                                    },
-                                    "emails[password]": {
-                                        "type": "text"
-                                    },
-                                    "emails[phone]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[name]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[website]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[username]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[password]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[account_number]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account[routing_number]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account_security[][question]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account_security[][answer]": {
-                                        "type": "text"
-                                    },
-                                    "bank_account_security_to_delete[]": {
-                                        "type": "text"
-                                    },
-                                    "files[incorporation_state][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[doing_business_in_state][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[company_ein][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    },
-                                    "files[db_report][]": {
-                                        "type": "file",
-                                        "format": "binary"
                                     },
                                     "files_to_delete[]": {
                                         "type": "text"

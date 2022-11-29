@@ -106,4 +106,9 @@ class AddressService {
     {
         Address::where('entity_uuid', $uuid)->update(['status' => Config::get('common.status.deleted')]);
     }
+
+    public function delete($uuid)
+    {
+        Address::where('uuid', $uuid)->update(['status' => Config::get('common.status.deleted')]);
+    }
 }
