@@ -102,8 +102,8 @@ class PendingController extends Controller
         $company_related = $this->directorService->for_pending_related($companies);
 
         // merge related
-        $companies = $companies->merge($director_related);
-        $directors = $directors->merge($company_related);
+        $companies = $companies->merge($director_related); $companies = $companies->unique();
+        $directors = $directors->merge($company_related); $directors = $directors->unique();
 
         return ['directors' => $directors, 'companies' => $companies];
     }
