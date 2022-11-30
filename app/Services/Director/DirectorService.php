@@ -4,6 +4,7 @@ namespace App\Services\Director;
 
 use App\Helpers\UserSystemInfoHelper;
 use App\Http\Resources\Account\ActivityResource;
+use App\Http\Resources\Director\DirectorListResource;
 use App\Http\Resources\Director\DirectorPendingResource;
 use App\Http\Resources\Director\DirectorResource;
 use App\Models\Account\Activity;
@@ -83,7 +84,12 @@ class DirectorService {
                                 ->orderBy('updated_at', 'DESC')
                                 ->where('status', Config::get('common.status.actived'))
                                 ->paginate(20);
-        return DirectorResource::collection($directors);
+    
+        foreach($directors AS $key => $value):
+            $directors[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
+        endforeach;
+        
+        return DirectorPendingResource::collection($directors);
     }
 
     public function for_pending($user_uuid, $filter, $filter_summary)
@@ -211,32 +217,6 @@ class DirectorService {
         $director->update(['status' => Config::get('common.status.deleted')]);
         $this->addressService->delete_by_entity($director->uuid);
         $this->emailService->delete_by_entity($director->uuid);
-    }
-
-    public function search($value)
-    {
-        $directors = Director::orderBy('created_at', 'DESC')
-                                ->where('status', '!=', Config::get('common.status.deleted'))
-                                ->whereRaw("concat(first_name, ' ', last_name) like '%".$value."%'")
-                                ->paginate(20);
-        return DirectorResource::collection($directors);
-    }
-
-    private function is_idefier($check)
-    {
-        $idenfier = ['first_name', 'middle_name', 'last_name'];
-        $is_idefier = false;
-        foreach ($idenfier AS $key => $value):
-            if ($value==$check){
-                $is_idefier = true;
-            }
-        endforeach;
-        return $is_idefier;
-    }
-
-    private function message_where_exists($entity)
-    {
-        return ' On director card *' . $entity['first_name'] . ' ' . $entity['middle_name'] . ' ' . $entity['last_name'] . '*';
     }
 
     public function check($entity)
@@ -406,7 +386,8 @@ class DirectorService {
         $activity = $this->activityService->setLink($activity);
         $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
 
-        return $director;
+        $director['last_activity'] = $this->activityService->by_entity_last($director->uuid);
+        return new DirectorPendingResource($director);
     }
 
     public function update(Director $director, $entity, $user_uuid)
@@ -433,7 +414,8 @@ class DirectorService {
         $activity = $this->activityService->setLink($activity);
         $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
 
-        return $director;
+        $director['last_activity'] = $this->activityService->by_entity_last($director->uuid);
+        return new DirectorPendingResource($director);
     }
 
     public function pending($entity)
@@ -472,7 +454,7 @@ class DirectorService {
         $director['last_activity'] = $this->activityService->by_entity_last($director['uuid']);
         $this->notificationService->push_to_headquarters('pending', ['data' => new DirectorPendingResource($director), 'msg' => '', 'link' => '']);
 
-        return $director;
+        return new DirectorResource($director);
     }
 
     public function pending_update($uuid, $entity, $user_uuid)
@@ -516,7 +498,7 @@ class DirectorService {
         $director['last_activity'] = $this->activityService->by_entity_last($director['uuid']);
         $this->notificationService->push_to_headquarters('pending', ['data' => new DirectorPendingResource($director), 'msg' => '', 'link' => '']);
 
-        return $director;
+        return new DirectorResource($director);
     }
 
     public function accept(Director $director, $entity, $user_uuid, $override = false)
@@ -558,7 +540,8 @@ class DirectorService {
         $director['last_activity'] = $this->activityService->by_entity_last($director['uuid']);
         $this->notificationService->push('pending', $user, ['data' => new DirectorPendingResource($director), 'msg' => '', 'link' => '']);
 
-        return $director;
+        $director['last_activity'] = $this->activityService->by_entity_last($director->uuid);
+        return new DirectorPendingResource($director);
     }
 
     public function reject($uuid, $user_uuid)
@@ -613,6 +596,23 @@ class DirectorService {
                                 ->limit(20)
                                 ->get(['uuid', 'first_name', 'middle_name', 'last_name']);
         return $directors;
+    }
+
+    private function is_idefier($check)
+    {
+        $idenfier = ['first_name', 'middle_name', 'last_name'];
+        $is_idefier = false;
+        foreach ($idenfier AS $key => $value):
+            if ($value==$check){
+                $is_idefier = true;
+            }
+        endforeach;
+        return $is_idefier;
+    }
+
+    private function message_where_exists($entity)
+    {
+        return ' On director card *' . $entity['first_name'] . ' ' . $entity['middle_name'] . ' ' . $entity['last_name'] . '*';
     }
 
 }

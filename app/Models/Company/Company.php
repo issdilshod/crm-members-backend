@@ -42,6 +42,11 @@ class Company extends Model
                     ->where('status', '!=', Config::get('common.status.deleted'));
     }
 
+    public function address(): HasOne{
+        return $this->hasOne(Address::class, 'entity_uuid', 'uuid')
+                    ->where('address_parent', 'address');
+    }
+
     public function director(): BelongsTo
     {
         return $this->belongsTo(Director::class, 'director_uuid', 'uuid');

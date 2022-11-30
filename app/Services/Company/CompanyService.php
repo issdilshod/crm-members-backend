@@ -60,7 +60,12 @@ class CompanyService {
                                 ->orderBy('created_at', 'DESC')
                                 ->where('status', Config::get('common.status.actived'))
                                 ->paginate(20);
-        return CompanyResource::collection($companies);
+
+        foreach($companies AS $key => $value):
+            $companies[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
+        endforeach;
+        
+        return CompanyPendingResource::collection($companies);
     }
 
     public function for_pending($user_uuid = '', $filter, $summary_filter)
@@ -165,15 +170,6 @@ class CompanyService {
         $this->addressService->delete_by_entity($company->uuid);
         $this->emailService->delete_by_entity($company->uuid);
         $this->bankAccountService->delete_by_entity($company->uuid);
-    }
-
-    public function search($value)
-    {
-        $companies = Company::orderBy('created_at', 'DESC')
-                                ->where('status', '!=', Config::get('common.status.deleted'))
-                                ->where('legal_name', 'like', '%'.$value.'%')
-                                ->paginate(20);
-        return CompanyResource::collection($companies);
     }
 
     public function check($entity)
@@ -503,7 +499,8 @@ class CompanyService {
         $activity = $this->activityService->setLink($activity);
         $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
 
-        return $company;
+        $company['last_activity'] = $this->activityService->by_entity_last($company->uuid);
+        return new CompanyPendingResource($company);
     }
 
     public function update(Company $company, $entity, $user_uuid)
@@ -530,7 +527,8 @@ class CompanyService {
         $activity = $this->activityService->setLink($activity);
         $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
 
-        return $company;
+        $company['last_activity'] = $this->activityService->by_entity_last($company->uuid);
+        return new CompanyPendingResource($company);
     }
 
     public function pending($entity)
@@ -568,7 +566,8 @@ class CompanyService {
         $company['last_activity'] = $this->activityService->by_entity_last($company['uuid']);
         $this->notificationService->push_to_headquarters('pending', ['data' => new CompanyPendingResource($company), 'msg' => '', 'link' => '']);
 
-        return $company;
+        $company['last_activity'] = $this->activityService->by_entity_last($company->uuid);
+        return new CompanyPendingResource($company);
     }
 
     public function pending_update($uuid, $entity, $user_uuid)
@@ -610,7 +609,8 @@ class CompanyService {
         $company['last_activity'] = $this->activityService->by_entity_last($company['uuid']);
         $this->notificationService->push_to_headquarters('pending', ['data' => new CompanyPendingResource($company), 'msg' => '', 'link' => '']);
 
-        return $company;
+        $company['last_activity'] = $this->activityService->by_entity_last($company->uuid);
+        return new CompanyPendingResource($company);
     }
 
     public function accept(Company $company, $entity, $user_uuid, $override = false)
@@ -652,7 +652,8 @@ class CompanyService {
         $company['last_activity'] = $this->activityService->by_entity_last($company['uuid']);
         $this->notificationService->push('pending', $user, ['data' => new CompanyPendingResource($company), 'msg' => '', 'link' => '']);
 
-        return $company;
+        $company['last_activity'] = $this->activityService->by_entity_last($company->uuid);
+        return new CompanyPendingResource($company);
     }
 
     public function reject($uuid, $user_uuid)

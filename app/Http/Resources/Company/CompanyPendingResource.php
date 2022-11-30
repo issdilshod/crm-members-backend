@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Company;
 
+use App\Http\Resources\Helper\FileResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CompanyPendingResource extends JsonResource
@@ -17,6 +18,8 @@ class CompanyPendingResource extends JsonResource
         return [
             'uuid' => $this->uuid,
             'name' => $this->legal_name,
+            'address' => $this->address,
+            'uploaded_files' => FileResource::collection($this->files),
             'last_activity' => $this->last_activity,
             'updated_at' => $this->updated_at,
             'status' => $this->status

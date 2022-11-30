@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Director;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Director\DirectorResource;
 use App\Models\Director\Director;
 use App\Policies\PermissionPolicy;
 use App\Services\Director\DirectorService;
@@ -167,7 +166,7 @@ class DirectorController extends Controller
             endforeach;
         }
 
-        return new DirectorResource($director);
+        return $director;
     }
 
     /**     @OA\GET(
@@ -336,7 +335,7 @@ class DirectorController extends Controller
             endforeach;
         }
 
-        return new DirectorResource($director);
+        return $director;
     }
 
     /**     @OA\DELETE(
@@ -372,42 +371,6 @@ class DirectorController extends Controller
         }
 
         $this->directorService->delete($director);
-    }
-
-    /**     @OA\GET(
-      *         path="/api/director-search/{search}",
-      *         operationId="get_director_search",
-      *         tags={"Director"},
-      *         summary="Get director search",
-      *         description="Get director search",
-      *             @OA\Parameter(
-      *                 name="search",
-      *                 in="path",
-      *                 description="director search",
-      *                 @OA\Schema(
-      *                     type="string",
-      *                     format="text"
-      *                 ),
-      *                 required=true
-      *             ),
-      *             @OA\Response(response=200, description="Successfully"),
-      *             @OA\Response(response=400, description="Bad request"),
-      *             @OA\Response(response=401, description="Not Authenticated"),
-      *             @OA\Response(response=403, description="Not Autorized"),
-      *             @OA\Response(response=404, description="Resource Not Found"),
-      *     )
-      */
-    public function search(Request $request, $search)
-    {
-        // permission
-        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
-            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.view'))){
-                return response()->json([ 'data' => 'Not Authorized' ], 403);
-            }
-        }
-
-        $directors = $this->directorService->search($search);
-        return $directors;
     }
 
     /**     @OA\POST(
@@ -524,7 +487,7 @@ class DirectorController extends Controller
             endforeach;
         }
 
-        return new DirectorResource($director);
+        return $director;
     }
 
     /**     @OA\PUT(
@@ -666,7 +629,7 @@ class DirectorController extends Controller
             endforeach;
         }
 
-        return new DirectorResource($director);
+        return $director;
     }
 
     /**     @OA\PUT(
@@ -802,7 +765,7 @@ class DirectorController extends Controller
             endforeach;
         }
 
-        return new DirectorResource($director);
+        return $director;
     }
 
     /**     @OA\PUT(
@@ -838,25 +801,6 @@ class DirectorController extends Controller
         }
 
         $this->directorService->reject($uuid, $request->user_uuid);
-    }
-
-    /**     @OA\GET(
-      *         path="/api/director-user",
-      *         operationId="list_director_by_user",
-      *         tags={"Director"},
-      *         summary="List of director by user",
-      *         description="List of director by user",
-      *             @OA\Response(response=200, description="Successfully"),
-      *             @OA\Response(response=400, description="Bad request"),
-      *             @OA\Response(response=401, description="Not Authenticated"),
-      *             @OA\Response(response=403, description="Not Autorized"),
-      *             @OA\Response(response=404, description="Resource Not Found"),
-      *     )
-      */
-    public function by_user(Request $request)
-    {
-        //$directors = $this->directorService->by_user($request->user_uuid, '');
-        //return $directors;
     }
 
     /**     @OA\GET(
@@ -1050,7 +994,7 @@ class DirectorController extends Controller
             endforeach;
         }
 
-        return new DirectorResource($director);
+        return $director;
     }
 
 }

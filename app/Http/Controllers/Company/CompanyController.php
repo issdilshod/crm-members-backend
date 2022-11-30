@@ -246,7 +246,7 @@ class CompanyController extends Controller
             endforeach;
         }
 
-        return new CompanyResource($company);
+        return $company;
     }
 
     /**     @OA\GET(
@@ -505,7 +505,7 @@ class CompanyController extends Controller
             endforeach;
         }
 
-        return new CompanyResource($company);
+        return $company;
     }
 
     /**     @OA\DELETE(
@@ -541,42 +541,6 @@ class CompanyController extends Controller
         }
 
         $this->companyService->delete($company);
-    }
-
-    /**     @OA\GET(
-      *         path="/api/company-search/{search}",
-      *         operationId="get_company_search",
-      *         tags={"Company"},
-      *         summary="Get company search",
-      *         description="Get company search",
-      *             @OA\Parameter(
-      *                 name="search",
-      *                 in="path",
-      *                 description="company search",
-      *                 @OA\Schema(
-      *                     type="string",
-      *                     format="text"
-      *                 ),
-      *                 required=true
-      *             ),
-      *             @OA\Response(response=200, description="Successfully"),
-      *             @OA\Response(response=400, description="Bad request"),
-      *             @OA\Response(response=401, description="Not Authenticated"),
-      *             @OA\Response(response=403, description="Not Autorized"),
-      *             @OA\Response(response=404, description="Resource Not Found"),
-      *     )
-      */
-    public function search(Request $request, $search)
-    {
-        // permission
-        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
-            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.view'))){
-                return response()->json([ 'data' => 'Not Authorized' ], 403);
-            }
-        }
-
-        $companies = $this->companyService->search($search);
-        return $companies;
     }
 
     /**     @OA\POST(
@@ -761,7 +725,7 @@ class CompanyController extends Controller
             endforeach;
         }
 
-        return new CompanyResource($company);
+        return $company;
     }
   
     /**     @OA\PUT(
@@ -971,7 +935,7 @@ class CompanyController extends Controller
             endforeach;
         }
 
-        return new CompanyResource($company);
+        return $company;
     }
   
     /**     @OA\PUT(
@@ -1175,7 +1139,7 @@ class CompanyController extends Controller
             endforeach;
         }
 
-        return new CompanyResource($company);
+        return $company;
     }
   
     /**     @OA\PUT(
@@ -1211,25 +1175,6 @@ class CompanyController extends Controller
         }
 
         $this->companyService->reject($uuid, $request->user_uuid);
-    }
-
-    /**     @OA\GET(
-      *         path="/api/company-user",
-      *         operationId="list_company_by_user",
-      *         tags={"Company"},
-      *         summary="List of company by user",
-      *         description="List of company by user",
-      *             @OA\Response(response=200, description="Successfully"),
-      *             @OA\Response(response=400, description="Bad request"),
-      *             @OA\Response(response=401, description="Not Authenticated"),
-      *             @OA\Response(response=403, description="Not Autorized"),
-      *             @OA\Response(response=404, description="Resource Not Found"),
-      *     )
-      */
-    public function by_user(Request $request)
-    {
-        //$companies = $this->companyService->by_user($request->user_uuid, '');
-        //return $companies;
     }
 
     /**     @OA\GET(
@@ -1455,6 +1400,6 @@ class CompanyController extends Controller
             endforeach;
         }
 
-        return new CompanyResource($company);
+        return $company;
     }
 }

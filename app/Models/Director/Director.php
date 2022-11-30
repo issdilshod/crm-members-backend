@@ -34,6 +34,11 @@ class Director extends Model
         return $this->hasMany(Address::class, 'entity_uuid', 'uuid');
     }
 
+    public function address(): HasOne{
+        return $this->hasOne(Address::class, 'entity_uuid', 'uuid')
+                    ->where('address_parent', 'credit_home_address');
+    }
+
     public function company(): HasOne
     {
         return $this->hasOne(Company::class, 'director_uuid', 'uuid')
