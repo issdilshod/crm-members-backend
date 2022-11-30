@@ -28,12 +28,9 @@ class ChatService{
     {
         // order by last message
         $chats = Chat::select('chats.*')
-                        ->with('last_message')
                         ->where('chats.status', Config::get('common.status.actived'))
-                        ->paginate(20)
-                        ->sortByDesc('last_message.created_at');
+                        ->paginate(20);
         $chats = $this->setChatsMembers($chats);
-        $chats = $this->setChatsLastMessage($chats);
         return ChatResource::collection($chats);
     }
 
@@ -41,22 +38,18 @@ class ChatService{
     {
         // order by last message
         $chats = Chat::select('chats.*')
-                        ->with('last_message')
                         ->join('chat_users', 'chat_users.chat_uuid', '=', 'chats.uuid')
                         ->where('chat_users.user_uuid', $user_uuid)
                         ->where('chat_users.status', Config::get('common.status.actived'))
                         ->where('chats.status', Config::get('common.status.actived'))
-                        ->paginate(20)
-                        ->sortByDesc('last_message.created_at');
+                        ->paginate(20);
         $chats = $this->setChatsMembers($chats);
-        $chats = $this->setChatsLastMessage($chats);
         return ChatResource::collection($chats);
     }
 
     public function one($chat)
     {
         $chat = $this->setChatMembers($chat);
-        $chat = $this->setChatLastMessage($chat);
         $chat = new ChatResource($chat);
         return $chat;
     }
@@ -90,7 +83,6 @@ class ChatService{
         $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
 
         $chat = $this->setChatMembers($chat);
-        $chat = $this->setChatLastMessage($chat);
         return new ChatResource($chat);
     }
 
@@ -123,7 +115,6 @@ class ChatService{
          $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
 
         $chat = $this->setChatMembers($chat);
-        $chat = $this->setChatLastMessage($chat);
         return new ChatResource($chat);
     }
 
@@ -183,20 +174,6 @@ class ChatService{
     {
         foreach($chats AS $key => $value):
             $chats[$key]['members'] = $this->chatUserService->chat_members($value['uuid']);
-        endforeach;
-        return $chats;
-    }
-
-    private function setChatLastMessage($chat)
-    {
-        $chat['last_message'] = $this->messageService->last_message($chat['uuid']);
-        return $chat;
-    }
-
-    private function setChatsLastMessage($chats)
-    {
-        foreach($chats AS $key => $value):
-            $chats[$key]['last_message'] = $this->messageService->last_message($value['uuid']);
         endforeach;
         return $chats;
     }
