@@ -77,12 +77,10 @@ Route::middleware('auth.custom')->group(function() {
     Route::post('api/director', [DirectorController::class, 'store']);
     Route::put('api/director/{uuid}', [DirectorController::class, 'update']);
     Route::delete('api/director/{uuid}', [DirectorController::class, 'destroy']);
-    Route::get('api/director-search/{search}', [DirectorController::class, 'search']);
     Route::post('api/director-pending', [DirectorController::class, 'pending']);
     Route::put('api/director-pending-update/{uuid}', [DirectorController::class, 'pending_update']);
     Route::put('api/director-accept/{uuid}', [DirectorController::class, 'accept']);
     Route::put('api/director-reject/{uuid}', [DirectorController::class, 'reject']);
-    Route::get('api/director-user', [DirectorController::class, 'by_user']);
     Route::get('api/director-permission', [DirectorController::class, 'permission']);
     Route::get('api/director-list/{search?}', [DirectorController::class, 'director_list']);
     Route::put('api/director-override/{uuid}', [DirectorController::class, 'override']);
@@ -94,12 +92,10 @@ Route::middleware('auth.custom')->group(function() {
     Route::post('api/company', [CompanyController::class, 'store']);
     Route::put('api/company/{uuid}', [CompanyController::class, 'update']);
     Route::delete('api/company/{uuid}', [CompanyController::class, 'destroy']);
-    Route::get('api/company-search/{search}', [CompanyController::class, 'search']);
     Route::post('api/company-pending', [CompanyController::class, 'pending']);
     Route::put('api/company-pending-update/{uuid}', [CompanyController::class, 'pending_update']);
     Route::put('api/company-accept/{uuid}', [CompanyController::class, 'accept']);
     Route::put('api/company-reject/{uuid}', [CompanyController::class, 'reject']);
-    Route::get('api/company-user/', [CompanyController::class, 'by_user']);
     Route::get('api/company-permission', [CompanyController::class, 'permission']);
     Route::put('api/company-override/{uuid}', [CompanyController::class, 'override']);
 

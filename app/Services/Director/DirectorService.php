@@ -206,6 +206,22 @@ class DirectorService {
         return DirectorPendingResource::collection($directors);
     }
 
+    public function for_pending_related($companies)
+    {
+        $idS = [];
+        foreach($companies AS $key => $value):
+            $idS[] = $value['director_uuid'];
+        endforeach;
+
+        $directors = Director::whereIn('uuid', $idS)->get();
+
+        foreach($directors AS $key => $value):
+            $directors[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
+        endforeach;
+        
+        return DirectorPendingResource::collection($directors);
+    }
+
     public function one(Director $director)
     {
         $director = new DirectorResource($director);

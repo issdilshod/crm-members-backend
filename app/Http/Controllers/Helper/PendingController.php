@@ -89,11 +89,21 @@ class PendingController extends Controller
         }
         $directors = $this->directorService->for_pending_search($user_uuid, $search);
         
+        // get related
+        $director_related = $this->companyService->for_pending_related($directors);
+        
         $user_uuid = '';
         if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.view'))){
             $user_uuid = $request->user_uuid;
         }
         $companies = $this->companyService->for_pending_search($user_uuid, $search);
+
+        // get related
+        $company_related = $this->directorService->for_pending_related($companies);
+
+        // merge related
+        $companies = $companies->merge($director_related);
+        $directors = $directors->merge($company_related);
 
         return ['directors' => $directors, 'companies' => $companies];
     }

@@ -158,6 +158,22 @@ class CompanyService {
         return CompanyPendingResource::collection($companies);
     }
 
+    public function for_pending_related($directors)
+    {
+        $idS = [];
+        foreach($directors AS $key => $value):
+            $idS[] = $value['uuid'];
+        endforeach;
+
+        $companies = Company::whereIn('director_uuid', $idS)->get();
+
+        foreach($companies AS $key => $value):
+            $companies[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
+        endforeach;
+        
+        return CompanyPendingResource::collection($companies);
+    }
+
     public function one(Company $company)
     {
         $company = new CompanyResource($company);
