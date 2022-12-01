@@ -40,12 +40,12 @@ class ActivityService {
 
     public function by_entity_last($uuid)
     {
-        $log=  new TelegramLog();
-        $log->to_file($uuid);
         $activity = Activity::orderBy('updated_at', 'DESC')
                                 ->where('entity_uuid', $uuid)
                                 ->where('status', Config::get('common.status.actived'))
                                 ->first();
+        $log=  new TelegramLog();
+        $log->to_file($activity);
         $activity = $this->setLink($activity);
         return new ActivityResource($activity);
     }
