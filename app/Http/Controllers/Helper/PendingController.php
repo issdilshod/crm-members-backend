@@ -149,25 +149,29 @@ class PendingController extends Controller
 
         $pendings = [];
         foreach ($validated['pendings'] as $key => $value):
-            $director = Director::where('uuid', $value)->first();
-            $company = Company::where('uuid', $value)->first();
+            $director = Director::where('uuid', $value)->where('status', '!=', Config::get('common.status.deleted'))->first();
+            $company = Company::where('uuid', $value)->where('status', '!=', Config::get('common.status.deleted'))->first();
 
             if ($director!=null){ // accept director
                 $entity = $director->toArray();
-                $this->directorService->accept($director, $entity, $request->user_uuid);
+                $director = $this->directorService->accept($director, $entity, $request->user_uuid);
 
                 // emails
                 Email::where('entity_uuid', $director['uuid'])
+                        ->where('status', '!=', Config::get('common.status.deleted'))
                         ->update(['status' => Config::get('common.status.actived')]);
                 
                 // addresses
                 Address::where('entity_uuid', $director['uuid'])
+                        ->where('status', '!=', Config::get('common.status.deleted'))
                         ->update(['status' => Config::get('common.status.actived')]);
+
+                $value = $director;
             }
 
             if ($company!=null){ // accept company
                 $entity = $company->toArray();
-                $this->companyService->accept($company, $entity, $request->user_uuid);
+                $company = $this->companyService->accept($company, $entity, $request->user_uuid);
 
                 // emails
                 Email::where('entity_uuid', $company['uuid'])
@@ -176,11 +180,15 @@ class PendingController extends Controller
 
                 // address
                 Address::where('entity_uuid', $company['uuid'])
+                        ->where('status', '!=', Config::get('common.status.deleted'))
                         ->update(['status' => Config::get('common.status.actived')]);
 
                 // bank account
                 BankAccount::where('entity_uuid', $company['uuid'])
-                            ->update(['status' => Config::get('common.status.actived')]);
+                        ->where('status', '!=', Config::get('common.status.deleted'))
+                        ->update(['status' => Config::get('common.status.actived')]);
+
+                $value = $company;
             }
 
             $pendings[] = $value;
@@ -231,11 +239,11 @@ class PendingController extends Controller
             $company = Company::where('uuid', $value)->first();
 
             if ($director!=null){ // accept director
-                $this->directorService->reject($value, $request->user_uuid);
+                $value = $this->directorService->reject($value, $request->user_uuid);
             }
 
             if ($company!=null){ // accept company
-                $this->companyService->reject($value, $request->user_uuid);
+                $value = $this->companyService->reject($value, $request->user_uuid);
             }
 
             $pendings[] = $value;

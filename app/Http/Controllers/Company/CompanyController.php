@@ -333,6 +333,7 @@ class CompanyController extends Controller
       *                         @OA\Property(property="db_report_number", type="text"),
       *
       *                         @OA\Property(property="addresses[]", type="text"),
+      *                         @OA\Property(property="address_to_delete", type="text"),
       *
       *                         @OA\Property(property="emails[]", type="text"),
       *                         @OA\Property(property="emails_to_delete[]", type="text"),
@@ -391,7 +392,7 @@ class CompanyController extends Controller
 
             // addresses
             'addresses' => 'array',
-            'addresses_to_delete' => 'array',
+            'address_to_delete' => '',
 
             // emails
             'emails' => 'array',
@@ -464,11 +465,9 @@ class CompanyController extends Controller
             endforeach;
         }
 
-        // addresses to delete
-        if (isset($validated['addresses_to_delete'])){
-            foreach ($validated['addresses_to_delete'] AS $key => $value):
-                $this->addressService->delete($value);
-            endforeach;
+        // address to delete
+        if (isset($validated['address_to_delete'])){
+            $this->addressService->delete($validated['address_to_delete']);
         }
 
         // bank account
@@ -699,13 +698,6 @@ class CompanyController extends Controller
             endforeach;
         }
 
-        // addresses to delete
-        if (isset($validated['addresses_to_delete'])){
-            foreach ($validated['addresses_to_delete'] AS $key => $value):
-                $this->addressService->delete($value);
-            endforeach;
-        }
-
         // bank account
         $validated['bank_account']['entity_uuid'] = $company->uuid;
         $validated['bank_account']['status'] = Config::get('common.status.pending');
@@ -776,6 +768,7 @@ class CompanyController extends Controller
       *                         @OA\Property(property="db_report_number", type="text"),
       *
       *                         @OA\Property(property="addresses[]", type="text"),
+      *                         @OA\Property(property="address_to_delete", type="text"),
       *
       *                         @OA\Property(property="emails[]", type="text"),
       *                         @OA\Property(property="emails_to_delete[]", type="text"),
@@ -842,6 +835,7 @@ class CompanyController extends Controller
 
             // addresses
             'addresses' => 'array',
+            'address_to_delete' => '',
 
             // emails
             'emails' => 'array',
@@ -910,10 +904,8 @@ class CompanyController extends Controller
         }
 
         // addresses to delete
-        if (isset($validated['addresses_to_delete'])){
-            foreach ($validated['addresses_to_delete'] AS $key => $value):
-                $this->addressService->delete($value);
-            endforeach;
+        if (isset($validated['address_to_delete'])){
+            $this->addressService->delete($validated['address_to_delete']);
         }
 
         // bank account
@@ -986,6 +978,7 @@ class CompanyController extends Controller
       *                         @OA\Property(property="db_report_number", type="text"),
       *
       *                         @OA\Property(property="addresses[]", type="text"),
+      *                         @OA\Property(property="address_to_delete", type="text"),
       *
       *                         @OA\Property(property="emails[]", type="text"),
       *                         @OA\Property(property="emails_to_delete[]", type="text"),
@@ -1044,6 +1037,7 @@ class CompanyController extends Controller
 
             // addresses
             'addresses' => 'array',
+            'address_to_delete' => '',
 
             // emails
             'emails' => 'array',
@@ -1114,10 +1108,8 @@ class CompanyController extends Controller
         }
 
         // addresses to delete
-        if (isset($validated['addresses_to_delete'])){
-            foreach ($validated['addresses_to_delete'] AS $key => $value):
-                $this->addressService->delete($value);
-            endforeach;
+        if (isset($validated['address_to_delete'])){
+            $this->addressService->delete($validated['address_to_delete']);
         }
 
         // bank account
@@ -1276,6 +1268,7 @@ class CompanyController extends Controller
       *                         @OA\Property(property="db_report_number", type="text"),
       *
       *                         @OA\Property(property="addresses[]", type="text"),
+      *                         @OA\Property(property="address_to_delete", type="text"),
       *
       *                         @OA\Property(property="emails[]", type="text"),
       *                         @OA\Property(property="emails_to_delete[]", type="text"),
@@ -1332,6 +1325,7 @@ class CompanyController extends Controller
 
             // addresses
             'addresses' => 'array',
+            'address_to_delete' => '',
 
             // emails
             'emails' => 'array',
@@ -1375,10 +1369,8 @@ class CompanyController extends Controller
         }
 
         // addresses to delete
-        if (isset($validated['addresses_to_delete'])){
-            foreach ($validated['addresses_to_delete'] AS $key => $value):
-                $this->addressService->delete($value);
-            endforeach;
+        if (isset($validated['address_to_delete'])){
+            $this->addressService->delete($validated['address_to_delete']);
         }
 
         // bank account

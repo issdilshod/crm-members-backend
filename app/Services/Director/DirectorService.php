@@ -598,6 +598,7 @@ class DirectorService {
         $director['last_activity'] = $this->activityService->by_entity_last($director['uuid']);
         $this->notificationService->push('pending', $user, ['data' => new DirectorPendingResource($director), 'msg' => '', 'link' => '']);
 
+        return new DirectorPendingResource($director);
     }
 
     public function director_list($value = '')

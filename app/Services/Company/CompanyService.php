@@ -710,6 +710,7 @@ class CompanyService {
         $company['last_activity'] = $this->activityService->by_entity_last($company['uuid']);
         $this->notificationService->push('pending', $user, ['data' => new CompanyPendingResource($company), 'msg' => '', 'link' => '']);
 
+        return new CompanyPendingResource($company);
     }
 
     private function is_idefier($check)
