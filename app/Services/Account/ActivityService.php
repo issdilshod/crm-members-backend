@@ -3,7 +3,6 @@
 namespace App\Services\Account;
 
 use App\Http\Resources\Account\ActivityResource;
-use App\Logs\TelegramLog;
 use App\Models\Account\Activity;
 use Illuminate\Support\Facades\Config;
 
@@ -44,8 +43,6 @@ class ActivityService {
                                 ->where('entity_uuid', $uuid)
                                 ->where('status', Config::get('common.status.actived'))
                                 ->first();
-        $log=  new TelegramLog();
-        $log->to_file($activity);
         $activity = $this->setLink($activity);
         return new ActivityResource($activity);
     }
