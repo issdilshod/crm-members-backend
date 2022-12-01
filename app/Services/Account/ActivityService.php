@@ -3,6 +3,7 @@
 namespace App\Services\Account;
 
 use App\Http\Resources\Account\ActivityResource;
+use App\Logs\TelegramLog;
 use App\Models\Account\Activity;
 use Illuminate\Support\Facades\Config;
 
@@ -39,6 +40,8 @@ class ActivityService {
 
     public function by_entity_last($uuid)
     {
+        $log=  new TelegramLog();
+        $log->to_file($uuid);
         $activity = Activity::orderBy('updated_at', 'DESC')
                                 ->where('entity_uuid', $uuid)
                                 ->where('status', Config::get('common.status.actived'))
