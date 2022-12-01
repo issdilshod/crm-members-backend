@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Logs\TelegramLog;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -20,6 +21,9 @@ class WebSocket implements ShouldBroadcast
         $this->section = $data['section'];
         $this->data = $data['data'];
         $this->user = $data['user'];
+
+        $log = new TelegramLog();
+        $log->to_file($this->user);
     }
 
     public function broadcastOn()
