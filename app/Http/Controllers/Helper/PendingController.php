@@ -110,6 +110,32 @@ class PendingController extends Controller
 
         return ['directors' => $directors, 'companies' => $companies];
     }
+
+    /**     @OA\GET(
+      *         path="/api/pending/duplicate",
+      *         operationId="list_pending_duplicate",
+      *         tags={"Helper"},
+      *         summary="List of pending duplicate",
+      *         description="List of pending deplicate",
+      *             @OA\Response(response=200, description="Successfully"),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
+    public function duplicate(Request $request)
+    {
+
+        $user_uuid = '';
+
+        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.view'))){
+            $user_uuid = $request->user_uuid;
+        }
+        $directors = $this->directorService->for_pending_duplicate($user_uuid);
+
+
+
+        return ['directors' => $directors, 'companies' => '', 'meta' => ''];
     }
 
     /**     @OA\POST(
