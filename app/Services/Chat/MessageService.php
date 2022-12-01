@@ -98,7 +98,7 @@ class MessageService {
             }
 
             $log = new TelegramLog();
-            $log->to_file($user);
+            $log->to_file($message);
 
             // push
             $this->notifiactionService->push('chat', $user, ['link'=>'', 'msg' => '', 'data' => $message]);
