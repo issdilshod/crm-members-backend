@@ -97,7 +97,7 @@ class MessageService {
             }
 
             // push
-            $this->notifiactionService->push('chat', $user->toArray(), ['link'=>'', 'msg' => '', 'data' => $message->toArray()]);
+            $this->notifiactionService->push('chat', $user->toArray(), ['link'=>'', 'msg' => '', 'data' => $message]);
 
         endforeach;
     }
