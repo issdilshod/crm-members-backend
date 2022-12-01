@@ -105,10 +105,10 @@ class PendingController extends Controller
         $companies = $companies->merge($director_related);
         $directors = $directors->merge($company_related);
 
-        $companies = $companies->unique('uuid'); $companies->all();
-        $directors = $directors->unique('uuid'); $directors->all();
+        $companies = array_unique($companies, 'uuid');
+        $directors = array_unique($directors, 'uuid');
 
-        return ['directors' => $directors->toArray(), 'companies' => $companies->toArray()];
+        return ['directors' => $directors, 'companies' => $companies];
     }
 
     /**     @OA\POST(
