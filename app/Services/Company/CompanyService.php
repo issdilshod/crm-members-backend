@@ -165,7 +165,7 @@ class CompanyService {
             $idS[] = $value['uuid'];
         endforeach;
 
-        $companies = Company::whereIn('director_uuid', $idS)->get();
+        $companies = Company::where('status', '!=', Config::get('common.status.deleted'))->whereIn('director_uuid', $idS)->get();
 
         foreach($companies AS $key => $value):
             $companies[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);

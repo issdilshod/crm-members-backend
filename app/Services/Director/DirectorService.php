@@ -213,7 +213,7 @@ class DirectorService {
             $idS[] = $value['director_uuid'];
         endforeach;
 
-        $directors = Director::whereIn('uuid', $idS)->get();
+        $directors = Director::where('status', '!=', Config::get('common.status.deleted'))->whereIn('uuid', $idS)->get();
 
         foreach($directors AS $key => $value):
             $directors[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
