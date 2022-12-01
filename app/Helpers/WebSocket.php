@@ -24,7 +24,7 @@ class WebSocket implements ShouldBroadcast
 
     public function broadcastOn()
     {
-        return [$this->section.'_'.$this->user->uuid];
+        return [$this->section.'_'.$this->user['uuid']];
     }
 
     public function broadcastAs()
