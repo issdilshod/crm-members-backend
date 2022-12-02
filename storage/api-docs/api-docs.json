@@ -4494,7 +4494,7 @@
                 }
             }
         },
-        "/api/pending/search/{search}": {
+        "/api/pending/search?q=": {
             "get": {
                 "tags": [
                     "Helper"

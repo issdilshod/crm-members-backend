@@ -69,7 +69,7 @@ class PendingController extends Controller
     }
 
     /**     @OA\GET(
-      *         path="/api/pending/search/{search}",
+      *         path="/api/pending/search?q=",
       *         operationId="list_pending_search",
       *         tags={"Helper"},
       *         summary="List of pending search",
@@ -80,10 +80,13 @@ class PendingController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function search(Request $request, $search)
+    public function search(Request $request)
     {
+        // get query
+        $search = '';
+        if (isset($request->q)){ $search = $request->q; }
+        
         $user_uuid = '';
-
         if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.view'))){
             $user_uuid = $request->user_uuid;
         }
