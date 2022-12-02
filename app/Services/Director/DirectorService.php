@@ -171,8 +171,8 @@ class DirectorService {
         $directors = Director::select('directors.*')
                                 ->orderBy('directors.updated_at', 'DESC')
                                 ->groupBy('directors.uuid')
-                                ->join('addresses', 'addresses.entity_uuid', '=', 'directors.uuid')
-                                ->join('emails', 'emails.entity_uuid', '=', 'directors.uuid')
+                                ->leftJoin('addresses', 'addresses.entity_uuid', '=', 'directors.uuid')
+                                ->leftJoin('emails', 'emails.entity_uuid', '=', 'directors.uuid')
                                 ->where('directors.status', '!=', Config::get('common.status.deleted'))
                                 ->where(function ($q) use($search) {
                                     $q->orWhereRaw("concat(directors.first_name, ' ', directors.last_name) like '%".$search."%'")

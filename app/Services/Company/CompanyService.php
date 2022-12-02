@@ -122,7 +122,7 @@ class CompanyService {
                                 ->leftJoin('bank_accounts', 'bank_accounts.entity_uuid', '=', 'companies.uuid')
                                 ->where('companies.status', '!=', Config::get('common.status.deleted'))
                                 ->where(function ($q) use($search) {
-                                    $q->where('companies.legal_name', 'like', '%'.$search.'%')
+                                    $q->orWhere('companies.legal_name', 'like', '%'.$search.'%')
                                         ->orWhere('companies.ein', 'like', $search.'%')
                                         ->orWhere('companies.business_number', 'like', $search.'%')
                                         ->orWhere('companies.voip_login', 'like', $search.'%')
