@@ -2042,45 +2042,6 @@
                 }
             }
         },
-        "/api/company-search/{search}": {
-            "get": {
-                "tags": [
-                    "Company"
-                ],
-                "summary": "Get company search",
-                "description": "Get company search",
-                "operationId": "get_company_search",
-                "parameters": [
-                    {
-                        "name": "search",
-                        "in": "path",
-                        "description": "company search",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "text"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successfully"
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "401": {
-                        "description": "Not Authenticated"
-                    },
-                    "403": {
-                        "description": "Not Autorized"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    }
-                }
-            }
-        },
         "/api/comapny-pending": {
             "post": {
                 "tags": [
@@ -2530,33 +2491,6 @@
                         }
                     }
                 ],
-                "responses": {
-                    "200": {
-                        "description": "Successfully"
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "401": {
-                        "description": "Not Authenticated"
-                    },
-                    "403": {
-                        "description": "Not Autorized"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    }
-                }
-            }
-        },
-        "/api/company-user": {
-            "get": {
-                "tags": [
-                    "Company"
-                ],
-                "summary": "List of company by user",
-                "description": "List of company by user",
-                "operationId": "list_company_by_user",
                 "responses": {
                     "200": {
                         "description": "Successfully"
@@ -3690,45 +3624,6 @@
                 }
             }
         },
-        "/api/director-search/{search}": {
-            "get": {
-                "tags": [
-                    "Director"
-                ],
-                "summary": "Get director search",
-                "description": "Get director search",
-                "operationId": "get_director_search",
-                "parameters": [
-                    {
-                        "name": "search",
-                        "in": "path",
-                        "description": "director search",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "text"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successfully"
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "401": {
-                        "description": "Not Authenticated"
-                    },
-                    "403": {
-                        "description": "Not Autorized"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    }
-                }
-            }
-        },
         "/api/director-pending": {
             "post": {
                 "tags": [
@@ -4046,33 +3941,6 @@
                         }
                     }
                 ],
-                "responses": {
-                    "200": {
-                        "description": "Successfully"
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "401": {
-                        "description": "Not Authenticated"
-                    },
-                    "403": {
-                        "description": "Not Autorized"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    }
-                }
-            }
-        },
-        "/api/director-user": {
-            "get": {
-                "tags": [
-                    "Director"
-                ],
-                "summary": "List of director by user",
-                "description": "List of director by user",
-                "operationId": "list_director_by_user",
                 "responses": {
                     "200": {
                         "description": "Successfully"
@@ -4634,6 +4502,30 @@
                 "summary": "List of pending search",
                 "description": "List of pending search",
                 "operationId": "list_pending_search",
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/pending/duplicate": {
+            "get": {
+                "tags": [
+                    "Helper"
+                ],
+                "summary": "List of pending duplicate",
+                "description": "List of pending deplicate",
+                "operationId": "list_pending_duplicate",
                 "responses": {
                     "200": {
                         "description": "Successfully"

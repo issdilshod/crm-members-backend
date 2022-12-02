@@ -222,6 +222,12 @@ class DirectorService {
         return DirectorPendingResource::collection($directors);
     }
 
+    public function for_pending_duplicate($user_uuid = '')
+    {
+        /*$directors = Director::where('status', '!=', Config::get('common.status.actived'))
+                                ->where()*/
+    }
+
     public function one(Director $director)
     {
         $director = new DirectorResource($director);
@@ -240,21 +246,6 @@ class DirectorService {
 
         $check = [];
 
-        // Names
-        /*$check['tmp'] = Director::select('first_name', 'middle_name', 'last_name')
-                                    ->where('status', Config::get('common.status.actived'))
-                                    ->where('first_name', $entity['first_name'])
-                                    ->where('middle_name', (isset($entity['middle_name'])?$entity['middle_name']:''))
-                                    ->where('last_name', $entity['last_name'])
-                                    ->first();
-        if ($check['tmp']!=null){
-            $check['tmp'] = $check['tmp']->toArray();
-            foreach ($check['tmp'] AS $key => $value):
-                $check[$key] = Config::get('common.errors.exsist');
-            endforeach;
-        }
-        unset($check['tmp']);*/
-
         // Ssn
         if (isset($entity['ssn_cpn'])){
             $check['tmp'] = Director::select('ssn_cpn', 'first_name', 'middle_name', 'last_name')
@@ -271,19 +262,6 @@ class DirectorService {
             }
             unset($check['tmp']);
         }
-
-        // Company 
-        /*$check['tmp'] = Director::select('company_association')
-                                    ->where('status', Config::get('common.status.actived'))
-                                    ->where('company_association', $entity['company_association'])
-                                    ->first();
-        if ($check['tmp']!=null){
-            $check['tmp'] = $check['tmp']->toArray();
-            foreach ($check['tmp'] AS $key => $value):
-                $check[$key] = Config::get('common.errors.exsist');
-            endforeach;
-        }
-        unset($check['tmp']);*/
 
         // Phone
         if (isset($entity['phone_number'])){

@@ -34,6 +34,8 @@ Route::middleware('auth.custom')->group(function() {
     Route::get('api/pending/search/{search}', [PendingController::class, 'search']);
     Route::post('api/pending/accept', [PendingController::class, 'accept']);
     Route::post('api/pending/reject', [PendingController::class, 'reject']);
+    Route::get('api/pending/duplicate', [PendingController::class, 'duplicate']);
+
     Route::post('api/file-upload', [FileController::class, 'upload']);
 
     // account
