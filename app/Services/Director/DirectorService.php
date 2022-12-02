@@ -175,8 +175,10 @@ class DirectorService {
                                 ->leftJoin('emails', 'emails.entity_uuid', '=', 'directors.uuid')
                                 ->where('directors.status', '!=', Config::get('common.status.deleted'))
                                 ->where(function ($q) use($search) {
-                                    $q->orWhereRaw("concat(directors.first_name, ' ', directors.last_name) like '%".$search."%'")
+                                    $q
+                                        ->orWhereRaw("concat(directors.first_name, ' ', directors.last_name) like '%".$search."%'")
                                         ->orWhereRaw("concat(directors.first_name, ' ', directors.middle_name, ' ', directors.last_name) like '%".$search."%'")
+                                        ->orWhereRaw("concat(directors.last_name, ' ', directors.middle_name, ' ', directors.first_name) like '%".$search."%'")
                                         ->orWhereRaw("concat(directors.last_name, ' ', directors.first_name) like '%".$search."%'")
 
                                         ->orWhere('directors.date_of_birth', 'like', $search.'%')
