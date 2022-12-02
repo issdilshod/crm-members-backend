@@ -2,7 +2,6 @@
 
 namespace App\Models\Company;
 
-use App\Models\Account\Activity;
 use App\Models\Director\Director;
 use App\Models\Helper\Address;
 use App\Models\Helper\BankAccount;
@@ -50,19 +49,5 @@ class Company extends Model
     public function director(): BelongsTo
     {
         return $this->belongsTo(Director::class, 'director_uuid', 'uuid');
-    }
-
-    public function last_accepted(): HasOne
-    {
-        return $this->hasOne(Activity::class, 'entity_uuid', 'uuid')
-                    ->orderBy('created_at', 'DESC')
-                    ->where('action_code', Config::get('common.activity.codes.company_accept'));
-    }
-
-    public function last_rejected(): HasOne
-    {
-        return $this->hasOne(Activity::class, 'entity_uuid', 'uuid')
-                    ->orderBy('created_at', 'DESC')
-                    ->where('action_code', Config::get('common.activity.codes.company_reject'));
     }
 }
