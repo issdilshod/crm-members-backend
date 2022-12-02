@@ -599,6 +599,17 @@ class DirectorService {
         return $directors;
     }
 
+    public function unlink($uuid)
+    {
+        Company::where('director_uuid', $uuid)
+                ->update(['director_uuid' => null]);
+
+        Director::where('uuid', $uuid)
+                ->update(['company_association' => null]);
+
+        return true;
+    }
+
     private function is_idefier($check)
     {
         $idenfier = ['first_name', 'middle_name', 'last_name'];

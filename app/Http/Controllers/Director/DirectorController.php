@@ -997,4 +997,39 @@ class DirectorController extends Controller
         return $director;
     }
 
+    /**     @OA\GET(
+      *         path="/api/director-unlink/{uuid}",
+      *         operationId="unlink_director",
+      *         tags={"Director"},
+      *         summary="Unlink director from company",
+      *         description="Unlink director from company",
+      *             @OA\Parameter(
+      *                 name="uuid",
+      *                 in="path",
+      *                 description="director uuid",
+      *                 @OA\Schema(
+      *                     type="string",
+      *                     format="uuid"
+      *                 ),
+      *                 required=true
+      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=403, description="Not Autorized"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
+    public function unlink(Request $request, $uuid)
+    {
+        // permission
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            return response()->json(['status' => 'error', 'msg' => 'not autorized' ], 403);
+        }
+
+        $this->directorService->unlink($uuid);
+
+        return response()->json(['status' => 'ok', 'msg' => 'success'], 200);
+    }
+
 }
