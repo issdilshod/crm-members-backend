@@ -127,7 +127,7 @@ class CompanyService {
                                 ->where(function ($q) use($search) {
                                     $q
                                         // name
-                                        ->orWhere('companies.legal_name', 'like', $search.'%')
+                                        ->where('companies.legal_name', 'like', $search.'%')
                                         
                                         // incoroporation
                                         ->orWhere('companies.incorporation_date', 'like', $search.'%')
@@ -146,11 +146,11 @@ class CompanyService {
                                         ->orWhere('companies.db_report_number', 'like', $search.'%')
 
                                         // addresses
-                                        ->orWhereRaw("concat(addresses.street_address, ' ', addresses.address_line_2, ' ', addresses.city, ' ', addresses.state, ' ', addresses.postal, ' ', addresses.country, ' ', addresses.description) like '%".$search."%'")
-                                        ->orWhereRaw("concat(addresses.street_address, ' ', addresses.city, ' ', addresses.state, ' ', addresses.postal, ' ', addresses.country, ' ', addresses.description) like '%".$search."%'")
+                                        ->orWhereRaw("concat(addresses.street_address, ' ', addresses.address_line_2, ' ', addresses.city, ' ', addresses.state, ' ', addresses.postal, ' ', addresses.country) like '%".$search."%'")
+                                        ->orWhereRaw("concat(addresses.street_address, ' ', addresses.city, ' ', addresses.state, ' ', addresses.postal, ' ', addresses.country) like '%".$search."%'")
 
-                                        ->orWhereRaw("concat(addresses.street_address, ', ', addresses.address_line_2, ', ', addresses.city, ', ', addresses.state, ', ', addresses.postal, ', ', addresses.country, ', ', addresses.description) like '%".$search."%'")
-                                        ->orWhereRaw("concat(addresses.street_address, ', ', addresses.city, ', ', addresses.state, ', ', addresses.postal, ', ', addresses.country, ', ', addresses.description) like '%".$search."%'")
+                                        ->orWhereRaw("concat(addresses.street_address, ', ', addresses.address_line_2, ', ', addresses.city, ', ', addresses.state, ', ', addresses.postal, ', ', addresses.country) like '%".$search."%'")
+                                        ->orWhereRaw("concat(addresses.street_address, ', ', addresses.city, ', ', addresses.state, ', ', addresses.postal, ', ', addresses.country) like '%".$search."%'")
 
                                         // states
                                         ->orWhere('states1.full_name', $search.'%')

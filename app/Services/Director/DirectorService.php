@@ -177,7 +177,7 @@ class DirectorService {
                                 ->where(function ($q) use($search) {
                                     $q
                                         // names
-                                        ->orWhereRaw("concat(directors.first_name, ' ', directors.last_name) like '%".$search."%'")
+                                        ->whereRaw("concat(directors.first_name, ' ', directors.last_name) like '%".$search."%'")
                                         ->orWhereRaw("concat(directors.first_name, ' ', directors.middle_name, ' ', directors.last_name) like '%".$search."%'")
                                         ->orWhereRaw("concat(directors.last_name, ' ', directors.middle_name, ' ', directors.first_name) like '%".$search."%'")
                                         ->orWhereRaw("concat(directors.last_name, ' ', directors.first_name) like '%".$search."%'")
@@ -188,12 +188,11 @@ class DirectorService {
                                         ->orWhere('directors.phone_number', 'like', $search.'%')
 
                                         // addresses
-                                        ->orWhereRaw("concat(addresses.street_address, ' ', addresses.address_line_2, ' ', addresses.city, ' ', addresses.state, ' ', addresses.postal, ' ', addresses.country, ' ', addresses.description) like '%".$search."%'")
-                                        ->orWhereRaw("concat(addresses.street_address, ' ', addresses.city, ' ', addresses.state, ' ', addresses.postal, ' ', addresses.country, ' ', addresses.description) like '%".$search."%'")
+                                        ->orWhereRaw("concat(addresses.street_address, ' ', addresses.address_line_2, ' ', addresses.city, ' ', addresses.state, ' ', addresses.postal, ' ', addresses.country) like '%".$search."%'")
+                                        ->orWhereRaw("concat(addresses.street_address, ' ', addresses.city, ' ', addresses.state, ' ', addresses.postal, ' ', addresses.country) like '%".$search."%'")
 
-                                        ->orWhereRaw("concat(addresses.street_address, ', ', addresses.address_line_2, ', ', addresses.city, ', ', addresses.state, ', ', addresses.postal, ', ', addresses.country, ', ', addresses.description) like '%".$search."%'")
-                                        ->orWhereRaw("concat(addresses.street_address, ', ', addresses.city, ', ', addresses.state, ', ', addresses.postal, ', ', addresses.country, ', ', addresses.description) like '%".$search."%'")
-                                        
+                                        ->orWhereRaw("concat(addresses.street_address, ', ', addresses.address_line_2, ', ', addresses.city, ', ', addresses.state, ', ', addresses.postal, ', ', addresses.country) like '%".$search."%'")
+                                        ->orWhereRaw("concat(addresses.street_address, ', ', addresses.city, ', ', addresses.state, ', ', addresses.postal, ', ', addresses.country) like '%".$search."%'")
 
                                         // emails
                                         ->orWhere('emails.email', 'like', $search.'%')
