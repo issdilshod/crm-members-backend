@@ -85,6 +85,7 @@ Route::middleware('auth.custom')->group(function() {
     Route::put('api/director-reject/{uuid}', [DirectorController::class, 'reject']);
     Route::get('api/director-permission', [DirectorController::class, 'permission']);
     Route::get('api/director-list/{search?}', [DirectorController::class, 'director_list']);
+    Route::get('api/director-get/{uuid}', [DirectorController::class, 'director_get']);
     Route::put('api/director-override/{uuid}', [DirectorController::class, 'override']);
     Route::get('api/director-unlink/{uuid}', [DirectorController::class, 'unlink']);
 

@@ -239,6 +239,15 @@ class DirectorService {
         return $director;
     }
 
+    public function get($uuid)
+    {
+        $director = Director::where('uuid', $uuid)
+                            ->where('status', '!=', Config::get('common.status.deleted'))
+                            ->where('aprroved', Config::get('common.status.actived'))
+                            ->first(['uuid', 'first_name', 'middle_name', 'last_name']);
+        return $director;
+    }
+
     public function delete(Director $director)
     {
         $director->update(['status' => Config::get('common.status.deleted')]);

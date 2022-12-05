@@ -898,6 +898,33 @@ class DirectorController extends Controller
         return $directors;
     }
 
+    /**     @OA\GET(
+      *         path="/api/director-get/{uuid}",
+      *         operationId="director_list_get",
+      *         tags={"Director"},
+      *         summary="Get director",
+      *         description="Get director",
+      *             @OA\Parameter(
+      *                 name="search",
+      *                 in="path",
+      *                 description="director full name",
+      *                 @OA\Schema(
+      *                     type="string",
+      *                     format="text"
+      *                 )
+      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
+    public function get(Request $request, $uuid)
+    {
+        $director = $this->directorService->get($uuid);
+        return $director;
+    }
+
     /**     @OA\PUT(
       *         path="/api/director-override/{uuid}",
       *         operationId="override_director",

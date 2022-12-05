@@ -2510,27 +2510,6 @@
                 }
             }
         },
-        "/api/company-permission": {
-            "get": {
-                "tags": [
-                    "Company"
-                ],
-                "summary": "Get company permission of user",
-                "description": "Get company permission of user",
-                "operationId": "company_permission",
-                "responses": {
-                    "200": {
-                        "description": "Successfully"
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "401": {
-                        "description": "Not Authenticated"
-                    }
-                }
-            }
-        },
         "/api/company-override/{uuid}": {
             "put": {
                 "tags": [
@@ -2665,6 +2644,27 @@
                     },
                     "404": {
                         "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/company-permission": {
+            "get": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Get company permission of user",
+                "description": "Get company permission of user",
+                "operationId": "company_permission",
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
                     }
                 }
             }
@@ -3995,6 +3995,41 @@
                 "summary": "Get director list and search",
                 "description": "Get director list and search",
                 "operationId": "director_list_search",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "path",
+                        "description": "director full name",
+                        "schema": {
+                            "type": "string",
+                            "format": "text"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/director-get/{uuid}": {
+            "get": {
+                "tags": [
+                    "Director"
+                ],
+                "summary": "Get director",
+                "description": "Get director",
+                "operationId": "director_list_get",
                 "parameters": [
                     {
                         "name": "search",
