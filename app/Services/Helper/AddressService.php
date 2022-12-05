@@ -53,7 +53,7 @@ class AddressService {
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
                 foreach ($check['tmp'] AS $key => $value):
-                    $check['addresses'.'.'.$index.'.'.$key] = Config::get('common.errors.exsist') . $this->get_identifier_exists($check['tmp']['entity_uuid']);
+                    $check['addresses'.'.'.$entity['address_parent'].'.'.$key] = Config::get('common.errors.exsist') . $this->get_identifier_exists($check['tmp']['entity_uuid']);
                 endforeach;
             }
 
@@ -85,9 +85,9 @@ class AddressService {
                             ->first();
         $message = '';
         if ($director!=null){
-            $message = ' On director card *' . $director['first_name'] . ' ' . $director['middle_name'] . ' ' . $director['last_name'] . '*';
+            $message = ' on director card ' . strtoupper($director['first_name']) . ' ' . strtoupper($director['middle_name']) . ' ' . strtoupper($director['last_name']);
         }else if ($company!=null){
-            $message = ' On company card *' . $company['legal_name'] . '*';
+            $message = ' on company card ' . strtoupper($company['legal_name']);
         }
         return $message;
     }

@@ -83,7 +83,7 @@ class BankAccountService {
                             ->first();
         $message = '';
         if ($company!=null){
-            $message = ' On company card *' . $company['legal_name'] . '*';
+            $message = ' on company card ' . strtoupper($company['legal_name']);
         }
         return $message;
     }

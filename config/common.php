@@ -238,7 +238,7 @@ return [
     ],
 
     'errors' => [
-        'exsist' => 'Data exsist.',
+        'exsist' => 'Data exists',
         'invalid_login' => 'Invalid username or password',
     ],
 ];

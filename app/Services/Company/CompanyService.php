@@ -283,7 +283,7 @@ class CompanyService {
             unset($check['tmp']);
         }
 
-        // business mobile number type
+        // business mobile number
         if (isset($entity['business_mobile_number'])){
             $check['tmp'] = Company::select('business_mobile_number', 'legal_name')
                                     ->when(($ignore_uuid!=''), function ($q) use ($ignore_uuid){
@@ -609,7 +609,7 @@ class CompanyService {
 
     private function message_where_exists($entity)
     {
-        return ' On company card *' . $entity['legal_name'] . '*';
+        return ' on company card ' . strtoupper($entity['legal_name']);
     }
 
 }

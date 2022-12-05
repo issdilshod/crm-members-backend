@@ -564,7 +564,7 @@ class DirectorService {
 
     private function message_where_exists($entity)
     {
-        return ' On director card *' . $entity['first_name'] . ' ' . $entity['middle_name'] . ' ' . $entity['last_name'] . '*';
+        return ' on director card ' . strtoupper($entity['first_name']) . ' ' . strtoupper($entity['middle_name']) . ' ' . strtoupper($entity['last_name']);
     }
 
 }
