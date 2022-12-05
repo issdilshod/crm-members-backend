@@ -7,6 +7,13 @@ use Illuminate\Support\Facades\Config;
 
 class BankAccountService {
 
+    private $bankAccountSecurity;
+
+    public function __construct()
+    {
+        $this->bankAccountSecurity = new BankAccountSecurityService();
+    }
+
     public function save($entity)
     {
         $bankAccount = BankAccount::where('entity_uuid', $entity['entity_uuid'])->first();
@@ -15,6 +22,22 @@ class BankAccountService {
         }else{
             $bankAccount = BankAccount::create($entity);
         }
+
+        // security
+        if (isset($entity['bank_account_security'])){
+            foreach ($entity['bank_account_security'] AS $key => $value):
+                $value['entity_uuid'] = $bankAccount->uuid;
+                $this->bankAccountSecurity->save($value);
+            endforeach;
+        }
+
+        // security delete
+        if (isset($entity['bank_account_security_to_delete'])){
+            foreach ($entity['bank_account_security_to_delete'] AS $key => $value):
+                $this->bankAccountSecurity->delete($value);
+            endforeach;
+        }
+
         return $bankAccount;
     }
 

@@ -9,11 +9,10 @@ class BankAccountSecurityService{
 
     public function save($entity)
     {
-        $bankAccountSecurity = BankAccountSecurity::find($entity);
-        if (!$bankAccountSecurity->count()){
-            $bankAccountSecurity = BankAccountSecurity::create($entity);
+        if (isset($entity['uuid'])){
+            $bankAccountSecurity = BankAccountSecurity::where('uuid', $entity['uuid'])->update($entity);     
         }else{
-            $bankAccountSecurity->update($entity);
+            $bankAccountSecurity = BankAccountSecurity::create($entity);
         }
 
         return $bankAccountSecurity;

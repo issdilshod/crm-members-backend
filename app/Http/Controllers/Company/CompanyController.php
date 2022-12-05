@@ -3,22 +3,15 @@
 namespace App\Http\Controllers\Company;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Company\CompanyResource;
 use App\Models\Company\Company;
-use App\Models\Helper\Address;
-use App\Models\Helper\BankAccountSecurity;
-use App\Models\Helper\Email;
-use App\Models\Helper\File;
 use App\Policies\PermissionPolicy;
 use App\Services\Company\CompanyService;
 use App\Services\Helper\AddressService;
-use App\Services\Helper\BankAccountSecurityService;
 use App\Services\Helper\BankAccountService;
 use App\Services\Helper\EmailService;
 use App\Services\Helper\FileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Str;
 
 class CompanyController extends Controller
 {
@@ -27,7 +20,6 @@ class CompanyController extends Controller
     private $emailService;
     private $addressService;
     private $bankAccountService;
-    private $bankAccountSecurityService;
     private $fileService;
 
     public function __construct()
@@ -36,7 +28,6 @@ class CompanyController extends Controller
         $this->emailService = new EmailService();
         $this->addressService = new AddressService();
         $this->bankAccountService = new BankAccountService();
-        $this->bankAccountSecurityService = new BankAccountSecurityService();
         $this->fileService = new FileService();
     }
 
@@ -230,7 +221,7 @@ class CompanyController extends Controller
 
         // bank account
         $validated['bank_account']['entity_uuid'] = $company->uuid;
-        $bankAccount = $this->bankAccountService->save($validated['bank_account']);
+        $this->bankAccountService->save($validated['bank_account']);
 
         // files to delete (first)
         if (isset($validated['files_to_delete'])){
@@ -472,23 +463,7 @@ class CompanyController extends Controller
 
         // bank account
         $validated['bank_account']['entity_uuid'] = $company->uuid;
-        $bankAccount = $this->bankAccountService->save($validated['bank_account']);
-
-        // TODO: Chamge type of bank account security
-        // bank account security to delete
-        if (isset($validated['bank_account_security_to_delete'])){
-            foreach($validated['bank_account_security_to_delete'] AS $key => $value):
-                $this->bankAccountSecurityService->delete($value);
-            endforeach;
-        }
-
-        // bank account security
-        if (isset($validated['bank_account_security'])){
-            foreach ($validated['bank_account_security'] AS $key => $value):
-                $value['entity_uuid'] = $bankAccount['uuid'];
-                $this->bankAccountSecurityService->save($value);
-            endforeach;
-        }
+        $this->bankAccountService->save($validated['bank_account']);
 
         // files to delete (first)
         if (isset($validated['files_to_delete'])){
@@ -701,7 +676,7 @@ class CompanyController extends Controller
         // bank account
         $validated['bank_account']['entity_uuid'] = $company->uuid;
         $validated['bank_account']['status'] = Config::get('common.status.pending');
-        $bankAccount = $this->bankAccountService->save($validated['bank_account']);
+        $this->bankAccountService->save($validated['bank_account']);
 
         // files to delete (first)
         if (isset($validated['files_to_delete'])){
@@ -911,7 +886,7 @@ class CompanyController extends Controller
         // bank account
         $validated['bank_account']['entity_uuid'] = $company->uuid;
         $validated['bank_account']['status'] = Config::get('common.status.pending');
-        $bankAccount = $this->bankAccountService->save($validated['bank_account']);
+        $this->bankAccountService->save($validated['bank_account']);
 
         // files to delete (first)
         if (isset($validated['files_to_delete'])){
@@ -1115,7 +1090,7 @@ class CompanyController extends Controller
         // bank account
         $validated['bank_account']['entity_uuid'] = $company->uuid;
         $validated['bank_account']['status'] = Config::get('common.status.actived');
-        $bankAccount = $this->bankAccountService->save($validated['bank_account']);
+        $this->bankAccountService->save($validated['bank_account']);
 
         // files to delete (first)
         if (isset($validated['files_to_delete'])){
@@ -1376,7 +1351,7 @@ class CompanyController extends Controller
         // bank account
         $validated['bank_account']['entity_uuid'] = $company->uuid;
         $validated['bank_account']['status'] = Config::get('common.status.actived');
-        $bankAccount = $this->bankAccountService->save($validated['bank_account']);
+        $this->bankAccountService->save($validated['bank_account']);
 
         // files to delete (first)
         if (isset($validated['files_to_delete'])){
