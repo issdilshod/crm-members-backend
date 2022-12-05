@@ -246,7 +246,7 @@ class UserService {
         $expires_at = Carbon::now();
         $expires_at = $expires_at->addDays(Config::get('common.session.token_deadline'))->toDateTimeString(); // after CONFIG day expires
 
-        $user['access_token'] = ['user_uuid' => $user['uuid'], 'token' => $token, 'expires_at' => $expires_at];
+        $user['access_token'] = ['user_uuid' => $user['uuid'], 'token' => $token, 'ip' => UserSystemInfoHelper::ip(), 'device' => UserSystemInfoHelper::device_full(), 'expires_at' => $expires_at];
 
         UserAccessToken::create($user['access_token']);
 

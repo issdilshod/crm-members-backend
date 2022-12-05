@@ -10,7 +10,7 @@ class UserAccessToken extends Model
 {
     use HasFactory, TraitUuid;
 
-    protected $fillable = ['user_uuid', 'token', 'expires_at'];
+    protected $fillable = ['user_uuid', 'token', 'ip', 'device', 'expires_at'];
 
     public function user(){
         return $this->belongsTo(User::class, 'user_uuid', 'uuid');
