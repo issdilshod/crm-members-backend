@@ -126,21 +126,23 @@ class DirectorController extends Controller
 
         $check = [];
 
-        /*if (isset($validated['emails'])){
-            $tmpCheck = $this->emailService->check($validated['emails']);
-            $check = array_merge($check, $tmpCheck);
-        }*/
+        // emails check
+        if (isset($validated['emails'])){
+            foreach ($validated['emails'] AS $key => $value):
+                $tmpCheck = $this->emailService->check($value, $key);
+                $check = array_merge($check, $tmpCheck);
+            endforeach;
+        }
 
+        // director check
         $tmpCheck = $this->directorService->check($validated);
         $check = array_merge($check, $tmpCheck);
         
-        // exsist
         if (count($check)>0){
-            return response()->json([
-                'data' => $check,
-            ], 409);
+            return response()->json(['data' => $check], 409);
         }
 
+        // create
         $director = $this->directorService->create($validated);
 
         // emails
@@ -285,23 +287,26 @@ class DirectorController extends Controller
             'files_to_delete' => 'array'
         ]);
 
+        // check
         $check = [];
 
-        /*if (isset($validated['emails'])){
-            $tmpCheck = $this->emailService->check_ignore($validated['emails'], $director->uuid);
-            $check = array_merge($check, $tmpCheck);
-        }*/
-
-        $tmpCheck = $this->directorService->check_ignore($validated, $director->uuid);
-        $check = array_merge($check, $tmpCheck);
-        
-        // exsist
-        if (count($check)>0){
-            return response()->json([
-                'data' => $check,
-            ], 409);
+        // emails check
+        if (isset($validated['emails'])){
+            foreach ($validated['emails'] AS $key => $value):
+                $tmpCheck = $this->emailService->check($value, $key, $director->uuid);
+                $check = array_merge($check, $tmpCheck);
+            endforeach;
         }
 
+        // director check
+        $tmpCheck = $this->directorService->check($validated, $director->uuid);
+        $check = array_merge($check, $tmpCheck);
+        
+        if (count($check)>0){
+            return response()->json(['data' => $check], 409);
+        }
+
+        // update
         $director = $this->directorService->update($director, $validated, $request->user_uuid);
 
         // emails
@@ -317,6 +322,7 @@ class DirectorController extends Controller
         if (isset($validated['addresses'])){
             foreach ($validated['addresses'] AS $key => $value):
                 $value['entity_uuid'] = $director->uuid;
+                $value['status'] = Config::get('common.status.actived');
                 $this->addressService->save($value);
             endforeach;
         }
@@ -443,23 +449,26 @@ class DirectorController extends Controller
             'user_uuid' => 'string'
         ]);
 
+        // check
         $check = [];
 
-        /*if (isset($validated['emails'])){
-            $tmpCheck = $this->emailService->check($validated['emails']);
-            $check = array_merge($check, $tmpCheck);
-        }*/
+        // emails check
+        if (isset($validated['emails'])){
+            foreach ($validated['emails'] AS $key => $value):
+                $tmpCheck = $this->emailService->check($value, $key);
+                $check = array_merge($check, $tmpCheck);
+            endforeach;
+        }
 
+        // director check
         $tmpCheck = $this->directorService->check($validated);
         $check = array_merge($check, $tmpCheck);
         
-        // exsist
         if (count($check)>0){
-            return response()->json([
-                'data' => $check,
-            ], 409);
+            return response()->json(['data' => $check], 409);
         }
 
+        // create
         $director = $this->directorService->pending($validated);
 
         // emails
@@ -578,23 +587,26 @@ class DirectorController extends Controller
             'files_to_delete' => 'array',
         ]);
 
+        // check
         $check = [];
 
-        /*if (isset($validated['emails'])){
-            $tmpCheck = $this->emailService->check_ignore($validated['emails'], $director->uuid);
-            $check = array_merge($check, $tmpCheck);
-        }*/
-
-        $tmpCheck = $this->directorService->check_ignore($validated, $director->uuid);
-        $check = array_merge($check, $tmpCheck);
-        
-        // exsist
-        if (count($check)>0){
-            return response()->json([
-                'data' => $check,
-            ], 409);
+        // emails check
+        if (isset($validated['emails'])){
+            foreach ($validated['emails'] AS $key => $value):
+                $tmpCheck = $this->emailService->check($value, $key, $director->uuid);
+                $check = array_merge($check, $tmpCheck);
+            endforeach;
         }
 
+        // director check
+        $tmpCheck = $this->directorService->check($validated, $director->uuid);
+        $check = array_merge($check, $tmpCheck);
+        
+        if (count($check)>0){
+            return response()->json(['data' => $check], 409);
+        }
+
+        // update
         $director = $this->directorService->pending_update($uuid, $validated, $request->user_uuid);
 
         // emails
@@ -714,23 +726,26 @@ class DirectorController extends Controller
 
         $director = Director::where('uuid', $uuid)->first();
 
+        // check
         $check = [];
 
-        /*if (isset($validated['emails'])){
-            $tmpCheck = $this->emailService->check_ignore($validated['emails'], $director->uuid);
-            $check = array_merge($check, $tmpCheck);
-        }*/
-
-        $tmpCheck = $this->directorService->check_ignore($validated, $director->uuid);
-        $check = array_merge($check, $tmpCheck);
-        
-        // exsist
-        if (count($check)>0){
-            return response()->json([
-                'data' => $check,
-            ], 409);
+        // emails check
+        if (isset($validated['emails'])){
+            foreach ($validated['emails'] AS $key => $value):
+                $tmpCheck = $this->emailService->check($value, $key, $director->uuid);
+                $check = array_merge($check, $tmpCheck);
+            endforeach;
         }
 
+        // director check
+        $tmpCheck = $this->directorService->check($validated, $director->uuid);
+        $check = array_merge($check, $tmpCheck);
+        
+        if (count($check)>0){
+            return response()->json(['data' => $check], 409);
+        }
+
+        // update
         $director = $this->directorService->accept($director, $validated, $request->user_uuid);
 
         // emails

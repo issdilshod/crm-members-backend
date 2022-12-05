@@ -246,18 +246,22 @@ class DirectorService {
         $this->emailService->delete_by_entity($director->uuid);
     }
 
-    public function check($entity)
+    public function check($entity, $ignore_uuid = '')
     {
-
+ 
         $check = [];
 
         // Ssn
         if (isset($entity['ssn_cpn'])){
             $check['tmp'] = Director::select('ssn_cpn', 'first_name', 'middle_name', 'last_name')
+                                        ->when(($ignore_uuid!=''), function ($q) use ($ignore_uuid){
+                                            return $q->where('uuid', '!=', $ignore_uuid);
+                                        })
                                         ->where('status', '!=', Config::get('common.status.deleted'))
                                         ->where('approved', Config::get('common.status.actived'))
                                         ->where('ssn_cpn', $entity['ssn_cpn'])
                                         ->first();
+
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
                 foreach ($check['tmp'] AS $key => $value):
@@ -265,16 +269,21 @@ class DirectorService {
                     $check[$key] = Config::get('common.errors.exsist') . $this->message_where_exists($check['tmp']);
                 endforeach;
             }
+
             unset($check['tmp']);
         }
 
         // Phone
         if (isset($entity['phone_number'])){
             $check['tmp'] = Director::select('phone_number', 'first_name', 'middle_name', 'last_name')
+                                        ->when(($ignore_uuid!=''), function ($q) use ($ignore_uuid){
+                                            return $q->where('uuid', '!=', $ignore_uuid);
+                                        })
                                         ->where('status', '!=', Config::get('common.status.deleted'))
                                         ->where('approved', Config::get('common.status.actived'))
                                         ->where('phone_number', $entity['phone_number'])
                                         ->first();
+
             if ($check['tmp']!=null){
                 $check['tmp'] = $check['tmp']->toArray();
                 foreach ($check['tmp'] AS $key => $value):
@@ -282,80 +291,7 @@ class DirectorService {
                     $check[$key] = Config::get('common.errors.exsist') . $this->message_where_exists($check['tmp']);
                 endforeach;
             }
-            unset($check['tmp']);
-        }
 
-        return $check;
-    }
-
-    public function check_ignore($entity, $ignore_uuid)
-    {
-
-        $check = [];
-
-        // Names
-        /*$check['tmp'] = Director::select('first_name', 'middle_name', 'last_name')
-                                    ->where('uuid', '!=', $ignore_uuid)
-                                    ->where('status', Config::get('common.status.actived'))
-                                    ->where('first_name', $entity['first_name'])
-                                    ->where('middle_name', (isset($entity['middle_name'])?$entity['middle_name']:''))
-                                    ->where('last_name', $entity['last_name'])
-                                    ->first();
-        if ($check['tmp']!=null){
-            $check['tmp'] = $check['tmp']->toArray();
-            foreach ($check['tmp'] AS $key => $value):
-                $check[$key] = Config::get('common.errors.exsist');
-            endforeach;
-        }
-        unset($check['tmp']);*/
-
-        // Ssn
-        if (isset($entity['ssn_cpn'])){
-            $check['tmp'] = Director::select('ssn_cpn', 'first_name', 'middle_name', 'last_name')
-                                    ->where('uuid', '!=', $ignore_uuid)
-                                    ->where('status', '!=', Config::get('common.status.deleted'))
-                                    ->where('approved', Config::get('common.status.actived'))
-                                    ->where('ssn_cpn', $entity['ssn_cpn'])
-                                    ->first();
-            if ($check['tmp']!=null){
-                $check['tmp'] = $check['tmp']->toArray();
-                foreach ($check['tmp'] AS $key => $value):
-                    if ($this->is_idefier($key)){ continue; }
-                    $check[$key] = Config::get('common.errors.exsist') . $this->message_where_exists($check['tmp']);
-                endforeach;
-            }
-            unset($check['tmp']);
-        }
-
-        // Company 
-        /*$check['tmp'] = Director::select('company_association')
-                                    ->where('uuid', '!=', $ignore_uuid)
-                                    ->where('status', Config::get('common.status.actived'))
-                                    ->where('company_association', $entity['company_association'])
-                                    ->first();
-        if ($check['tmp']!=null){
-            $check['tmp'] = $check['tmp']->toArray();
-            foreach ($check['tmp'] AS $key => $value):
-                $check[$key] = Config::get('common.errors.exsist');
-            endforeach;
-        }
-        unset($check['tmp']);*/
-
-        // Phone
-        if (isset($entity['phone_number'])){
-            $check['tmp'] = Director::select('phone_number', 'first_name', 'middle_name', 'last_name')
-                                    ->where('uuid', '!=', $ignore_uuid)
-                                    ->where('status', '!=', Config::get('common.status.deleted'))
-                                    ->where('approved', Config::get('common.status.actived'))
-                                    ->where('phone_number', $entity['phone_number'])
-                                    ->first();
-            if ($check['tmp']!=null){
-                $check['tmp'] = $check['tmp']->toArray();
-                foreach ($check['tmp'] AS $key => $value):
-                    if ($this->is_idefier($key)){ continue; }
-                    $check[$key] = Config::get('common.errors.exsist') . $this->message_where_exists($check['tmp']);
-                endforeach;
-            }
             unset($check['tmp']);
         }
 
@@ -592,7 +528,12 @@ class DirectorService {
                                 ->orderBy('updated_at', 'DESC')
                                 ->where('status', '!=', Config::get('common.status.deleted'))
                                 ->where('approved', Config::get('common.status.actived'))
-                                ->whereRaw("concat(first_name, ' ', last_name) like '%".$value."%'")
+                                ->where(function($q) use ($value){
+                                    return $q->whereRaw("concat(first_name, ' ', middle_name, ' ', last_name) like '%".$value."%'")
+                                                ->orWhereRaw("concat(last_name, ' ', middle_name, ' ', first_name) like '%".$value."%'")
+                                                ->orWhereRaw("concat(first_name, ' ', last_name) like '%".$value."%'")
+                                                ->orWhereRaw("concat(last_name, ' ', first_name) like '%".$value."%'");
+                                })
                                 ->limit(20)
                                 ->get(['uuid', 'first_name', 'middle_name', 'last_name']);
         return $directors;
