@@ -167,33 +167,40 @@ class CompanyController extends Controller
             'user_uuid' => 'string'
         ]);
 
+        // check
         $check = [];
 
-        /*if (isset($validated['emails'])){
-            $tmpCheck = $this->emailService->check($validated['emails']);
-            $check = array_merge($check, $tmpCheck);
-        }*/
+        // emails check
+        if (isset($validated['emails'])){
+            foreach($validated['emails'] AS $key => $value):
+                $tmpCheck = $this->emailService->check($value, $key);
+                $check = array_merge($check, $tmpCheck);
+            endforeach;
+        }
 
-        /*if (isset($validated['addresses'])){
-            $tmpCheck = $this->addressService->check($validated['address']);
-            $check = array_merge($check, $tmpCheck);
-        }*/
+        // addresses check
+        if (isset($validated['addresses'])){
+            foreach($validated['addresses'] AS $key => $value):
+                $tmpCheck = $this->addressService->check($value, $key);
+                $check = array_merge($check, $tmpCheck);
+            endforeach;
+        }
 
-        /*if (isset($validated['bank_account'])){
+        // bank account check
+        if (isset($validated['bank_account'])){
             $tmpCheck = $this->bankAccountService->check($validated['bank_account']);
             $check = array_merge($check, $tmpCheck);
-        }*/
+        }
         
+        // company check
         $tmpCheck = $this->companyService->check($validated);
         $check = array_merge($check, $tmpCheck);
 
-        // exists
         if (count($check)>0){
-            return response()->json([
-                'data' => $check,
-            ], 409);
+            return response()->json(['data' => $check], 409);
         }
 
+        // create
         $company = $this->companyService->create($validated);
 
         // emails
@@ -397,39 +404,40 @@ class CompanyController extends Controller
             'files_to_delete' => 'array'
         ]);
 
+        // check
         $check = [];
 
-        // TODO: Turn on checking
-        /*if (isset($validated['emails'])){
-            $tmpCheck = $this->emailService->check_ignore($validated['emails'], $company->uuid);
-            $check = array_merge($check, $tmpCheck);
-        }*/
-
-        /*if (isset($validated['address'])){
-            $tmpCheck = $this->addressService->check_ignore($validated['address'], $company->uuid);
-            $check = array_merge($check, $tmpCheck);
+        // emails check
+        if (isset($validated['emails'])){
+            foreach($validated['emails'] AS $key => $value):
+                $tmpCheck = $this->emailService->check($value, $key, $company->uuid);
+                $check = array_merge($check, $tmpCheck);
+            endforeach;
         }
 
-        if (isset($validated['extra_address'])){
-            $tmpCheck = $this->addressService->check_ignore($validated['extra_address'], $company->uuid, '', 'extra_address');
-            $check = array_merge($check, $tmpCheck);
-        }*/
+        // addresses check
+        if (isset($validated['addresses'])){
+            foreach($validated['addresses'] AS $key => $value):
+                $tmpCheck = $this->addressService->check($value, $key, $company->uuid);
+                $check = array_merge($check, $tmpCheck);
+            endforeach;
+        }
 
-        /*if (isset($validated['bank_account'])){
-            $tmpCheck = $this->bankAccountService->check_ignore($validated['bank_account'], $company->uuid);
+        // bank account check
+        if (isset($validated['bank_account'])){
+            $tmpCheck = $this->bankAccountService->check($validated['bank_account'], $company->uuid);
             $check = array_merge($check, $tmpCheck);
-        }*/
+        }
         
-        $tmpCheck = $this->companyService->check_ignore($validated, $company->uuid);
+        // company check
+        $tmpCheck = $this->companyService->check($validated, $company->uuid);
         $check = array_merge($check, $tmpCheck);
         
-        // exists
         if (count($check)>0){
-            return response()->json([
-                'data' => $check,
-            ], 409);
+            return response()->json(['data' => $check], 409);
         }
 
+        // update
         $company = $this->companyService->update($company, $validated, $request->user_uuid);
 
         // emails to delete
@@ -626,33 +634,41 @@ class CompanyController extends Controller
             'user_uuid' => 'string'
         ]);
 
+        // check
         $check = [];
 
-        /*if (isset($validated['emails'])){
-            $tmpCheck = $this->emailService->check($validated['emails']);
-            $check = array_merge($check, $tmpCheck);
-        }*/
+        // emails check
+        if (isset($validated['emails'])){
+            foreach($validated['emails'] AS $key => $value):
+                $tmpCheck = $this->emailService->check($value, $key);
+                $check = array_merge($check, $tmpCheck);
+            endforeach;
+        }
 
-        /*if (isset($validated['addresses'])){
-            $tmpCheck = $this->addressService->check($validated['address']);
-            $check = array_merge($check, $tmpCheck);
-        }*/
+        // addresses check
+        if (isset($validated['addresses'])){
+            foreach($validated['addresses'] AS $key => $value):
+                $tmpCheck = $this->addressService->check($value, $key);
+                $check = array_merge($check, $tmpCheck);
+            endforeach;
+        }
 
-        /*if (isset($validated['bank_account'])){
+        // bank account check
+        if (isset($validated['bank_account'])){
             $tmpCheck = $this->bankAccountService->check($validated['bank_account']);
             $check = array_merge($check, $tmpCheck);
-        }*/
+        }
         
+        // company check
         $tmpCheck = $this->companyService->check($validated);
         $check = array_merge($check, $tmpCheck);
 
         // exists
         if (count($check)>0){
-            return response()->json([
-                'data' => $check,
-            ], 409);
+            return response()->json(['data' => $check], 409);
         }
 
+        // create
         $company = $this->companyService->pending($validated);
 
         // emails
@@ -824,33 +840,40 @@ class CompanyController extends Controller
             'files_to_delete' => 'array',
         ]);
 
+        // check
         $check = [];
 
-        /*if (isset($validated['emails'])){
-            $tmpCheck = $this->emailService->check_ignore($validated['emails'], $company->uuid);
-            $check = array_merge($check, $tmpCheck);
-        }*/
-
-        /*if (isset($validated['addresses'])){
-            $tmpCheck = $this->addressService->check_ignore($validated['address'], $company->uuid);
-            $check = array_merge($check, $tmpCheck);
-        }*/
-
-        /*if (isset($validated['bank_account'])){
-            $tmpCheck = $this->bankAccountService->check_ignore($validated['bank_account'], $company->uuid);
-            $check = array_merge($check, $tmpCheck);
-        }*/
-
-        $tmpCheck = $this->companyService->check_ignore($validated, $company->uuid);
-        $check = array_merge($check, $tmpCheck);
-        
-        // exsist
-        if (count($check)>0){
-            return response()->json([
-                'data' => $check,
-            ], 409);
+        // emails check
+        if (isset($validated['emails'])){
+            foreach($validated['emails'] AS $key => $value):
+                $tmpCheck = $this->emailService->check($value, $key, $company->uuid);
+                $check = array_merge($check, $tmpCheck);
+            endforeach;
         }
 
+        // addresses check
+        if (isset($validated['addresses'])){
+            foreach($validated['addresses'] AS $key => $value):
+                $tmpCheck = $this->addressService->check($value, $key, $company->uuid);
+                $check = array_merge($check, $tmpCheck);
+            endforeach;
+        }
+
+        // bank account check
+        if (isset($validated['bank_account'])){
+            $tmpCheck = $this->bankAccountService->check($validated['bank_account'], $company->uuid);
+            $check = array_merge($check, $tmpCheck);
+        }
+
+        // company
+        $tmpCheck = $this->companyService->check($validated, $company->uuid);
+        $check = array_merge($check, $tmpCheck);
+        
+        if (count($check)>0){
+            return response()->json(['data' => $check], 409);
+        }
+
+        // update
         $company = $this->companyService->pending_update($uuid, $validated, $request->user_uuid);
 
         // emails to delete
@@ -1028,33 +1051,40 @@ class CompanyController extends Controller
 
         $company = Company::where('uuid', $uuid)->first();
 
+        // check
         $check = [];
 
-        /*if (isset($validated['emails'])){
-            $tmpCheck = $this->emailService->check_ignore($validated['emails'], $company->uuid);
-            $check = array_merge($check, $tmpCheck);
-        }*/
-
-        /*if (isset($validated['addresses'])){
-            $tmpCheck = $this->addressService->check_ignore($validated['address'], $company->uuid);
-            $check = array_merge($check, $tmpCheck);
-        }*/
-
-        /*if (isset($validated['bank_account'])){
-            $tmpCheck = $this->bankAccountService->check_ignore($validated['bank_account'], $company->uuid);
-            $check = array_merge($check, $tmpCheck);
-        }*/
-
-        $tmpCheck = $this->companyService->check_ignore($validated, $company->uuid);
-        $check = array_merge($check, $tmpCheck);
-        
-        // exsist
-        if (count($check)>0){
-            return response()->json([
-                'data' => $check,
-            ], 409);
+        // emails check
+        if (isset($validated['emails'])){
+            foreach($validated['emails'] AS $key => $value):
+                $tmpCheck = $this->emailService->check($value, $key, $company->uuid);
+                $check = array_merge($check, $tmpCheck);
+            endforeach;
         }
 
+        // addresses check
+        if (isset($validated['addresses'])){
+            foreach($validated['addresses'] AS $key => $value):
+                $tmpCheck = $this->addressService->check($value, $key, $company->uuid);
+                $check = array_merge($check, $tmpCheck);
+            endforeach;
+        }
+
+        // bank account check
+        if (isset($validated['bank_account'])){
+            $tmpCheck = $this->bankAccountService->check($validated['bank_account'], $company->uuid);
+            $check = array_merge($check, $tmpCheck);
+        }
+
+        // company check
+        $tmpCheck = $this->companyService->check($validated, $company->uuid);
+        $check = array_merge($check, $tmpCheck);
+        
+        if (count($check)>0){
+            return response()->json(['data' => $check], 409);
+        }
+
+        // update
         $company = $this->companyService->accept($company, $validated, $request->user_uuid);
 
         // emails to delete
@@ -1142,57 +1172,6 @@ class CompanyController extends Controller
         }
 
         $this->companyService->reject($uuid, $request->user_uuid);
-    }
-
-    /**     @OA\GET(
-      *         path="/api/company-permission",
-      *         operationId="company_permission",
-      *         tags={"Company"},
-      *         summary="Get company permission of user",
-      *         description="Get company permission of user",
-      *             @OA\Response(response=200, description="Successfully"),
-      *             @OA\Response(response=400, description="Bad request"),
-      *             @OA\Response(response=401, description="Not Authenticated"),
-      *     )
-      */
-    public function permission(Request $request)
-    {
-        $permissions = [];
-
-        // permission
-        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.view'))){
-            $permissions[] = Config::get('common.permission.company.view');
-        }
-
-        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.access'))){
-            $permissions[] = Config::get('common.permission.company.access');
-        }
-
-        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.store'))){
-            $permissions[] = Config::get('common.permission.company.store');
-        }
-
-        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.save'))){
-            $permissions[] = Config::get('common.permission.company.save');
-        }
-
-        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.pre_save'))){
-            $permissions[] = Config::get('common.permission.company.pre_save');
-        }
-
-        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.delete'))){
-            $permissions[] = Config::get('common.permission.company.delete');
-        }
-
-        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.accept'))){
-            $permissions[] = Config::get('common.permission.company.accept');
-        }
-
-        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.download'))){
-            $permissions[] = Config::get('common.permission.company.download');
-        }
-
-        return $permissions;
     }
 
     /**     @OA\PUT(
@@ -1369,4 +1348,56 @@ class CompanyController extends Controller
 
         return $company;
     }
+
+    /**     @OA\GET(
+      *         path="/api/company-permission",
+      *         operationId="company_permission",
+      *         tags={"Company"},
+      *         summary="Get company permission of user",
+      *         description="Get company permission of user",
+      *             @OA\Response(response=200, description="Successfully"),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *     )
+      */
+    public function permission(Request $request)
+    {
+        $permissions = [];
+
+        // permission
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.view'))){
+            $permissions[] = Config::get('common.permission.company.view');
+        }
+
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.access'))){
+            $permissions[] = Config::get('common.permission.company.access');
+        }
+
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.store'))){
+            $permissions[] = Config::get('common.permission.company.store');
+        }
+
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.save'))){
+            $permissions[] = Config::get('common.permission.company.save');
+        }
+
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.pre_save'))){
+            $permissions[] = Config::get('common.permission.company.pre_save');
+        }
+
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.delete'))){
+            $permissions[] = Config::get('common.permission.company.delete');
+        }
+
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.accept'))){
+            $permissions[] = Config::get('common.permission.company.accept');
+        }
+
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.download'))){
+            $permissions[] = Config::get('common.permission.company.download');
+        }
+
+        return $permissions;
+    }
+ 
 }
