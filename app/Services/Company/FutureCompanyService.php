@@ -3,10 +3,12 @@
 namespace App\Services\Company;
 
 use App\Helpers\UserSystemInfoHelper;
+use App\Http\Resources\Company\FutureCompanyPendingResource;
 use App\Http\Resources\Company\FutureCompanyResource;
 use App\Models\Account\Activity;
 use App\Models\Account\User;
 use App\Models\Company\FutureCompany;
+use App\Services\Account\ActivityService;
 use App\Services\Helper\NotificationService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
@@ -14,10 +16,12 @@ use Illuminate\Support\Facades\Config;
 class FutureCompanyService{
 
     private $notificationService;
+    private $activityService;
 
     public function __construct()
     {
         $this->notificationService = new NotificationService();
+        $this->activityService = new ActivityService();
     }
 
     public function all()
@@ -25,7 +29,12 @@ class FutureCompanyService{
         $futureCompanies = FutureCompany::orderBy('updated_at')
                                             ->where('status', Config::get('common.status.actived'))
                                             ->paginate(20);
-        return FutureCompanyResource::collection($futureCompanies);
+                    
+        foreach($futureCompanies AS $key => $value):
+            $futureCompanies[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
+        endforeach;
+
+        return FutureCompanyPendingResource::collection($futureCompanies);
     }
 
     public function one(FutureCompany $futureCompany)
@@ -51,7 +60,8 @@ class FutureCompanyService{
             'status' => Config::get('common.status.actived')
         ]);
 
-        return new FutureCompanyResource($futureCompany);
+        $futureCompany['last_activity'] = $this->activityService->by_entity_last($futureCompany['uuid']);
+        return new FutureCompanyPendingResource($futureCompany);
     }
 
     public function update(FutureCompany $futureCompany, $entity, $user_uuid)
@@ -71,7 +81,8 @@ class FutureCompanyService{
             'status' => Config::get('common.status.actived')
         ]);
 
-        return new FutureCompanyResource($futureCompany);
+        $futureCompany['last_activity'] = $this->activityService->by_entity_last($futureCompany['uuid']);
+        return new FutureCompanyPendingResource($futureCompany);
     }
 
     public function delete(FutureCompany $futureCompany)
@@ -104,7 +115,8 @@ class FutureCompanyService{
                 '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/future-companies/'.$futureCompany['uuid'].')';
         $this->notificationService->telegram_to_headqurters($msg);
 
-        return new FutureCompanyResource($futureCompany);
+        $futureCompany['last_activity'] = $this->activityService->by_entity_last($futureCompany['uuid']);
+        return new FutureCompanyPendingResource($futureCompany);
     }
 
     public function pending_update(FutureCompany $futureCompany, $entity, $user_uuid)
@@ -133,7 +145,8 @@ class FutureCompanyService{
                 '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/future-companies/'.$futureCompany['uuid'].')';
         $this->notificationService->telegram_to_headqurters($msg);
 
-        return new FutureCompanyResource($futureCompany);
+        $futureCompany['last_activity'] = $this->activityService->by_entity_last($futureCompany['uuid']);
+        return new FutureCompanyPendingResource($futureCompany);
     }
 
     public function accept(FutureCompany $futureCompany, $entity, $user_uuid)
@@ -163,7 +176,8 @@ class FutureCompanyService{
                         '[link to view](' .env('APP_FRONTEND_ENDPOINT').'/future-company/'.$futureCompany['uuid']. ')'
         ]);
 
-        return new FutureCompanyResource($futureCompany);
+        $futureCompany['last_activity'] = $this->activityService->by_entity_last($futureCompany['uuid']);
+        return new FutureCompanyPendingResource($futureCompany);
     }
 
     public function reject($uuid, $user_uuid)
@@ -194,16 +208,22 @@ class FutureCompanyService{
                         '[link to view](' .env('APP_FRONTEND_ENDPOINT').'/future-companies/'.$futureCompany['uuid']. ')'
         ]);
 
-        return new FutureCompanyResource($futureCompany);
+        $futureCompany['last_activity'] = $this->activityService->by_entity_last($futureCompany['uuid']);
+        return new FutureCompanyPendingResource($futureCompany);
     }
 
     public function search($value)
     {
-        $futureCompany = FutureCompany::orderBy('updated_at')
+        $futureCompanies = FutureCompany::orderBy('updated_at')
                                             ->where('status', Config::get('common.status.actived'))
                                             ->where('revival_date', $value)
                                             ->paginate(20);
-        return FutureCompanyResource::collection($futureCompany);
+
+        foreach($futureCompanies AS $key => $value):
+            $futureCompanies[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
+        endforeach;
+
+        return FutureCompanyPendingResource::collection($futureCompanies);
     }
 
     public function check($entity)
