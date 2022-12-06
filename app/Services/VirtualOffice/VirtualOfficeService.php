@@ -3,10 +3,12 @@
 namespace App\Services\VirtualOffice;
 
 use App\Helpers\UserSystemInfoHelper;
+use App\Http\Resources\VirtualOffice\VirtualOfficePendingResource;
 use App\Http\Resources\VirtualOffice\VirtualOfficeResource;
 use App\Models\Account\Activity;
 use App\Models\Account\User;
 use App\Models\VirtualOffice\VirtualOffice;
+use App\Services\Account\ActivityService;
 use App\Services\Helper\NotificationService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
@@ -14,10 +16,12 @@ use Illuminate\Support\Facades\Config;
 class VirtualOfficeService{
 
     private $notificationService;
+    private $activityService;
 
     public function __construct()
     {
         $this->notificationService = new NotificationService();
+        $this->activityService = new ActivityService();
     }
 
     public function all()
@@ -25,7 +29,12 @@ class VirtualOfficeService{
         $virtualOffices = VirtualOffice::orderBy('updated_at')
                                             ->where('status', Config::get('common.status.actived'))
                                             ->paginate(20);
-        return VirtualOfficeResource::collection($virtualOffices);
+
+        foreach($virtualOffices AS $key => $value):
+            $virtualOffices[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
+        endforeach;
+
+        return VirtualOfficePendingResource::collection($virtualOffices);
     }
 
     public function one(VirtualOffice $virtualOffice)
@@ -51,7 +60,8 @@ class VirtualOfficeService{
             'status' => Config::get('common.status.actived')
         ]);
 
-        return new VirtualOfficeResource($virtualOffice);
+        $virtualOffice['last_activity'] = $this->activityService->by_entity_last($virtualOffice['uuid']);
+        return new VirtualOfficePendingResource($virtualOffice);
     }
 
     public function update(VirtualOffice $virtualOffice, $entity, $user_uuid)
@@ -71,7 +81,8 @@ class VirtualOfficeService{
             'status' => Config::get('common.status.actived')
         ]);
 
-        return new VirtualOfficeResource($virtualOffice);
+        $virtualOffice['last_activity'] = $this->activityService->by_entity_last($virtualOffice['uuid']);
+        return new VirtualOfficePendingResource($virtualOffice);
     }
 
     public function delete(VirtualOffice $virtualOffice)
@@ -104,7 +115,8 @@ class VirtualOfficeService{
                 '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/virtual-offices/'.$virtualOffice['uuid'].')';
         $this->notificationService->telegram_to_headqurters($msg);
 
-        return new VirtualOfficeResource($virtualOffice);
+        $virtualOffice['last_activity'] = $this->activityService->by_entity_last($virtualOffice['uuid']);
+        return new VirtualOfficePendingResource($virtualOffice);
     }
 
     public function pending_update(VirtualOffice $virtualOffice, $entity, $user_uuid)
@@ -133,7 +145,8 @@ class VirtualOfficeService{
                 '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/virtual-offices/'.$virtualOffice['uuid'].')';
         $this->notificationService->telegram_to_headqurters($msg);
 
-        return new VirtualOfficeResource($virtualOffice);
+        $virtualOffice['last_activity'] = $this->activityService->by_entity_last($virtualOffice['uuid']);
+        return new VirtualOfficePendingResource($virtualOffice);
     }
 
     public function accept(VirtualOffice $virtualOffice, $entity, $user_uuid)
@@ -163,7 +176,8 @@ class VirtualOfficeService{
                         '[link to view](' .env('APP_FRONTEND_ENDPOINT').'/virtual-offices/'.$virtualOffice['uuid']. ')'
         ]);
 
-        return new VirtualOfficeResource($virtualOffice);
+        $virtualOffice['last_activity'] = $this->activityService->by_entity_last($virtualOffice['uuid']);
+        return new VirtualOfficePendingResource($virtualOffice);
     }
 
     public function reject($uuid, $user_uuid)
@@ -194,16 +208,22 @@ class VirtualOfficeService{
                         '[link to view](' .env('APP_FRONTEND_ENDPOINT').'/vitual-offices/'.$virtualOffice['uuid']. ')'
         ]);
 
-        return new VirtualOfficeResource($virtualOffice);
+        $virtualOffice['last_activity'] = $this->activityService->by_entity_last($virtualOffice['uuid']);
+        return new VirtualOfficePendingResource($virtualOffice);
     }
 
     public function search($value)
     {
-        $virtualOffice = VirtualOffice::orderBy('updated_at')
+        $virtualOffices = VirtualOffice::orderBy('updated_at')
                                             ->where('status', Config::get('common.status.actived'))
                                             ->where('vo_provider_username', $value)
                                             ->paginate(20);
-        return  VirtualOfficeResource::collection($virtualOffice);
+
+        foreach($virtualOffices AS $key => $value):
+            $virtualOffices[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
+        endforeach;
+
+        return VirtualOfficePendingResource::collection($virtualOffices);
     }
 
     public function check($entity)
