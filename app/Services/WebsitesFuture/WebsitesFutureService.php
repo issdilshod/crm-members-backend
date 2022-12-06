@@ -3,10 +3,12 @@
 namespace App\Services\WebsitesFuture;
 
 use App\Helpers\UserSystemInfoHelper;
+use App\Http\Resources\WebsitesFuture\WebsitesFurutePendingResource;
 use App\Http\Resources\WebsitesFuture\WebsitesFutureResource;
 use App\Models\Account\Activity;
 use App\Models\Account\User;
 use App\Models\WebsitesFuture\WebsitesFuture;
+use App\Services\Account\ActivityService;
 use App\Services\Helper\NotificationService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
@@ -14,10 +16,12 @@ use Illuminate\Support\Facades\Config;
 class WebsitesFutureService{
 
     private $notificationService;
+    private $activityService;
 
     public function __construct()
     {
         $this->notificationService = new NotificationService();
+        $this->activityService = new ActivityService();
     }
 
     public function all()
@@ -25,7 +29,12 @@ class WebsitesFutureService{
         $futureWebsites = WebsitesFuture::orderBy('updated_at')
                                             ->where('status', Config::get('common.status.actived'))
                                             ->paginate(20);
-        return WebsitesFutureResource::collection($futureWebsites);
+                                        
+        foreach($futureWebsites AS $key => $value):
+            $futureWebsites[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
+        endforeach;
+
+        return WebsitesFurutePendingResource::collection($futureWebsites);
     }
 
     public function one(WebsitesFuture $websitesFuture)
@@ -51,7 +60,8 @@ class WebsitesFutureService{
             'status' => Config::get('common.status.actived')
         ]);
 
-        return new WebsitesFutureResource($futureWebsites);
+        $futureWebsites['last_activity'] = $this->activityService->by_entity_last($futureWebsites['uuid']);
+        return new WebsitesFurutePendingResource($futureWebsites);
     }
 
     public function update(WebsitesFuture $websitesFuture, $entity, $user_uuid)
@@ -71,7 +81,8 @@ class WebsitesFutureService{
             'status' => Config::get('common.status.actived')
         ]);
 
-        return new WebsitesFutureResource($websitesFuture);
+        $websitesFuture['last_activity'] = $this->activityService->by_entity_last($websitesFuture['uuid']);
+        return new WebsitesFurutePendingResource($websitesFuture);
     }
 
     public function delete(WebsitesFuture $websitesFuture)
@@ -104,7 +115,8 @@ class WebsitesFutureService{
                 '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/future-websites/'.$websitesFuture['uuid'].')';
         $this->notificationService->telegram_to_headqurters($msg);
 
-        return new WebsitesFutureResource($websitesFuture);
+        $websitesFuture['last_activity'] = $this->activityService->by_entity_last($websitesFuture['uuid']);
+        return new WebsitesFurutePendingResource($websitesFuture);
     }
 
     public function pending_update(WebsitesFuture $websitesFuture, $entity, $user_uuid)
@@ -133,7 +145,8 @@ class WebsitesFutureService{
                 '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/future-websites/'.$websitesFuture['uuid'].')';
         $this->notificationService->telegram_to_headqurters($msg);
 
-        return new WebsitesFutureResource($websitesFuture);
+        $websitesFuture['last_activity'] = $this->activityService->by_entity_last($websitesFuture['uuid']);
+        return new WebsitesFurutePendingResource($websitesFuture);
     }
 
     public function accept(WebsitesFuture $websitesFuture, $entity, $user_uuid)
@@ -163,7 +176,8 @@ class WebsitesFutureService{
                         '[link to view](' .env('APP_FRONTEND_ENDPOINT').'/future-websites/'.$websitesFuture['uuid']. ')'
         ]);
 
-        return new WebsitesFutureResource($websitesFuture);
+        $websitesFuture['last_activity'] = $this->activityService->by_entity_last($websitesFuture['uuid']);
+        return new WebsitesFurutePendingResource($websitesFuture);
     }
 
     public function reject($uuid, $user_uuid)
@@ -194,7 +208,8 @@ class WebsitesFutureService{
                         '[link to view](' .env('APP_FRONTEND_ENDPOINT').'/future-websites/'.$websitesFuture['uuid']. ')'
         ]);
 
-        return new WebsitesFutureResource($websitesFuture);
+        $websitesFuture['last_activity'] = $this->activityService->by_entity_last($websitesFuture['uuid']);
+        return new WebsitesFurutePendingResource($websitesFuture);
     }
 
     public function search($value)
@@ -203,7 +218,12 @@ class WebsitesFutureService{
                                             ->where('status', Config::get('common.status.actived'))
                                             ->where('link', $value)
                                             ->paginate(20);
-        return WebsitesFutureResource::collection($futureWebsites);
+        
+        foreach($futureWebsites AS $key => $value):
+            $futureWebsites[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
+        endforeach;
+
+        return WebsitesFurutePendingResource::collection($futureWebsites);
     }
 
     public function check($entity)
