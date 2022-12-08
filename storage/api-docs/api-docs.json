@@ -5066,7 +5066,7 @@
                                     "vo_provider_name": {
                                         "type": "text"
                                     },
-                                    "vo_provider_domain": {
+                                    "vo_website": {
                                         "type": "text"
                                     },
                                     "vo_provider_username": {
@@ -5075,22 +5075,43 @@
                                     "vo_provider_password": {
                                         "type": "text"
                                     },
-                                    "street_address": {
+                                    "vo_contact_person_name": {
                                         "type": "text"
                                     },
-                                    "address_line2": {
+                                    "vo_contact_person_phone_number": {
                                         "type": "text"
                                     },
-                                    "city": {
+                                    "vo_contact_person_email": {
                                         "type": "text"
                                     },
-                                    "state": {
+                                    "online_account": {
                                         "type": "text"
                                     },
-                                    "postal": {
+                                    "online_account_username": {
                                         "type": "text"
                                     },
-                                    "country": {
+                                    "online_account_password": {
+                                        "type": "text"
+                                    },
+                                    "card_on_file": {
+                                        "type": "text"
+                                    },
+                                    "card_last_four_digit": {
+                                        "type": "text"
+                                    },
+                                    "card_holder_name": {
+                                        "type": "text"
+                                    },
+                                    "monthly_payment_amount": {
+                                        "type": "text"
+                                    },
+                                    "contract": {
+                                        "type": "text"
+                                    },
+                                    "contract_terms": {
+                                        "type": "text"
+                                    },
+                                    "addresses[]": {
                                         "type": "text"
                                     }
                                 },
@@ -5193,7 +5214,7 @@
                                     "vo_provider_name": {
                                         "type": "text"
                                     },
-                                    "vo_provider_domain": {
+                                    "vo_website": {
                                         "type": "text"
                                     },
                                     "vo_provider_username": {
@@ -5202,22 +5223,43 @@
                                     "vo_provider_password": {
                                         "type": "text"
                                     },
-                                    "street_address": {
+                                    "vo_contact_person_name": {
                                         "type": "text"
                                     },
-                                    "address_line2": {
+                                    "vo_contact_person_phone_number": {
                                         "type": "text"
                                     },
-                                    "city": {
+                                    "vo_contact_person_email": {
                                         "type": "text"
                                     },
-                                    "state": {
+                                    "online_account": {
                                         "type": "text"
                                     },
-                                    "postal": {
+                                    "online_account_username": {
                                         "type": "text"
                                     },
-                                    "country": {
+                                    "online_account_password": {
+                                        "type": "text"
+                                    },
+                                    "card_on_file": {
+                                        "type": "text"
+                                    },
+                                    "card_last_four_digit": {
+                                        "type": "text"
+                                    },
+                                    "card_holder_name": {
+                                        "type": "text"
+                                    },
+                                    "monthly_payment_amount": {
+                                        "type": "text"
+                                    },
+                                    "contract": {
+                                        "type": "text"
+                                    },
+                                    "contract_terms": {
+                                        "type": "text"
+                                    },
+                                    "addresses[]": {
                                         "type": "text"
                                     }
                                 },
@@ -5347,7 +5389,7 @@
                                     "vo_provider_name": {
                                         "type": "text"
                                     },
-                                    "vo_provider_domain": {
+                                    "vo_website": {
                                         "type": "text"
                                     },
                                     "vo_provider_username": {
@@ -5356,22 +5398,43 @@
                                     "vo_provider_password": {
                                         "type": "text"
                                     },
-                                    "street_address": {
+                                    "vo_contact_person_name": {
                                         "type": "text"
                                     },
-                                    "address_line2": {
+                                    "vo_contact_person_phone_number": {
                                         "type": "text"
                                     },
-                                    "city": {
+                                    "vo_contact_person_email": {
                                         "type": "text"
                                     },
-                                    "state": {
+                                    "online_account": {
                                         "type": "text"
                                     },
-                                    "postal": {
+                                    "online_account_username": {
                                         "type": "text"
                                     },
-                                    "country": {
+                                    "online_account_password": {
+                                        "type": "text"
+                                    },
+                                    "card_on_file": {
+                                        "type": "text"
+                                    },
+                                    "card_last_four_digit": {
+                                        "type": "text"
+                                    },
+                                    "card_holder_name": {
+                                        "type": "text"
+                                    },
+                                    "monthly_payment_amount": {
+                                        "type": "text"
+                                    },
+                                    "contract": {
+                                        "type": "text"
+                                    },
+                                    "contract_terms": {
+                                        "type": "text"
+                                    },
+                                    "addresses[]": {
                                         "type": "text"
                                     }
                                 },
@@ -5437,7 +5500,7 @@
                                     "vo_provider_name": {
                                         "type": "text"
                                     },
-                                    "vo_provider_domain": {
+                                    "vo_website": {
                                         "type": "text"
                                     },
                                     "vo_provider_username": {
@@ -5446,22 +5509,43 @@
                                     "vo_provider_password": {
                                         "type": "text"
                                     },
-                                    "street_address": {
+                                    "vo_contact_person_name": {
                                         "type": "text"
                                     },
-                                    "address_line2": {
+                                    "vo_contact_person_phone_number": {
                                         "type": "text"
                                     },
-                                    "city": {
+                                    "vo_contact_person_email": {
                                         "type": "text"
                                     },
-                                    "state": {
+                                    "online_account": {
                                         "type": "text"
                                     },
-                                    "postal": {
+                                    "online_account_username": {
                                         "type": "text"
                                     },
-                                    "country": {
+                                    "online_account_password": {
+                                        "type": "text"
+                                    },
+                                    "card_on_file": {
+                                        "type": "text"
+                                    },
+                                    "card_last_four_digit": {
+                                        "type": "text"
+                                    },
+                                    "card_holder_name": {
+                                        "type": "text"
+                                    },
+                                    "monthly_payment_amount": {
+                                        "type": "text"
+                                    },
+                                    "contract": {
+                                        "type": "text"
+                                    },
+                                    "contract_terms": {
+                                        "type": "text"
+                                    },
+                                    "addresses": {
                                         "type": "text"
                                     }
                                 },
@@ -5527,7 +5611,7 @@
                                     "vo_provider_name": {
                                         "type": "text"
                                     },
-                                    "vo_provider_domain": {
+                                    "vo_website": {
                                         "type": "text"
                                     },
                                     "vo_provider_username": {
@@ -5536,22 +5620,43 @@
                                     "vo_provider_password": {
                                         "type": "text"
                                     },
-                                    "street_address": {
+                                    "vo_contact_person_name": {
                                         "type": "text"
                                     },
-                                    "address_line2": {
+                                    "vo_contact_person_phone_number": {
                                         "type": "text"
                                     },
-                                    "city": {
+                                    "vo_contact_person_email": {
                                         "type": "text"
                                     },
-                                    "state": {
+                                    "online_account": {
                                         "type": "text"
                                     },
-                                    "postal": {
+                                    "online_account_username": {
                                         "type": "text"
                                     },
-                                    "country": {
+                                    "online_account_password": {
+                                        "type": "text"
+                                    },
+                                    "card_on_file": {
+                                        "type": "text"
+                                    },
+                                    "card_last_four_digit": {
+                                        "type": "text"
+                                    },
+                                    "card_holder_name": {
+                                        "type": "text"
+                                    },
+                                    "monthly_payment_amount": {
+                                        "type": "text"
+                                    },
+                                    "contract": {
+                                        "type": "text"
+                                    },
+                                    "contract_terms": {
+                                        "type": "text"
+                                    },
+                                    "addresses[]": {
                                         "type": "text"
                                     }
                                 },

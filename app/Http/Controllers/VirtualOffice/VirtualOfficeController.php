@@ -5,6 +5,7 @@ namespace App\Http\Controllers\VirtualOffice;
 use App\Http\Controllers\Controller;
 use App\Models\VirtualOffice\VirtualOffice;
 use App\Policies\PermissionPolicy;
+use App\Services\Helper\AddressService;
 use App\Services\VirtualOffice\VirtualOfficeService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -13,10 +14,12 @@ class VirtualOfficeController extends Controller
 {
 
     private $virtualOfficeService;
+    private $addressService;
 
     public function __construct()
     {
         $this->virtualOfficeService = new VirtualOfficeService();
+        $this->addressService = new AddressService();
     }
     
     /**     @OA\GET(
@@ -61,15 +64,24 @@ class VirtualOfficeController extends Controller
       *                         required={},
       *                         
       *                         @OA\Property(property="vo_provider_name", type="text"),
-      *                         @OA\Property(property="vo_provider_domain", type="text"),
+      *                         @OA\Property(property="vo_website", type="text"),
       *                         @OA\Property(property="vo_provider_username", type="text"),
       *                         @OA\Property(property="vo_provider_password", type="text"),
-      *                         @OA\Property(property="street_address", type="text"),
-      *                         @OA\Property(property="address_line2", type="text"),
-      *                         @OA\Property(property="city", type="text"),
-      *                         @OA\Property(property="state", type="text"),
-      *                         @OA\Property(property="postal", type="text"),
-      *                         @OA\Property(property="country", type="text"),
+      *
+      *                         @OA\Property(property="vo_contact_person_name", type="text"),
+      *                         @OA\Property(property="vo_contact_person_phone_number", type="text"),
+      *                         @OA\Property(property="vo_contact_person_email", type="text"),
+      *                         @OA\Property(property="online_account", type="text"),
+      *                         @OA\Property(property="online_account_username", type="text"),
+      *                         @OA\Property(property="online_account_password", type="text"),
+      *                         @OA\Property(property="card_on_file", type="text"),
+      *                         @OA\Property(property="card_last_four_digit", type="text"),
+      *                         @OA\Property(property="card_holder_name", type="text"),
+      *                         @OA\Property(property="monthly_payment_amount", type="text"),
+      *                         @OA\Property(property="contract", type="text"),
+      *                         @OA\Property(property="contract_terms", type="text"),
+      *
+      *                         @OA\Property(property="addresses[]", type="text"),
       *                     ),
       *                 ),
       *             ),
@@ -93,32 +105,36 @@ class VirtualOfficeController extends Controller
 
         $validated = $request->validate([
             'vo_provider_name' => '',
-            'vo_provider_domain' => '',
+            'vo_website' => '',
             'vo_provider_username' => '',
             'vo_provider_password' => '',
-            'street_address' => '',
-            'address_line2' => '',
-            'city' => '',
-            'state' => '',
-            'postal' => '',
-            'country' => '',
+            'vo_contact_person_name' => '',
+            'vo_contact_person_phone_number' => '',
+            'vo_contact_person_email' => '',
+            'online_account' => '',
+            'online_account_username' => '',
+            'online_account_password' => '',
+            'card_on_file' => '',
+            'card_last_four_digit' => '',
+            'card_holder_name' => '',
+            'monthly_payment_amount' => '',
+            'contract' => '',
+            'contract_terms' => '',
+            
+            'addresses' => 'array',
 
             'user_uuid' => ''
         ]);
 
-        /*$check = [];
-
-        $tmpCheck = $this->virtualOfficeService->check($validated);
-        $check = array_merge($check, $tmpCheck);
-
-        // exists
-        if (count($check)>0){
-            return response()->json([
-                'data' => $check,
-            ], 409);
-        }*/
-
         $virtualOffice = $this->virtualOfficeService->create($validated);
+
+        // addresses
+        if (isset($validated['addresses'])){
+            foreach ($validated['addresses'] AS $key => $value):
+                $value['entity_uuid'] = $virtualOffice->uuid;
+                $this->addressService->save($value);
+            endforeach;
+        }
 
         return $virtualOffice;
     }
@@ -185,15 +201,24 @@ class VirtualOfficeController extends Controller
       *                         required={},
       *                         
       *                         @OA\Property(property="vo_provider_name", type="text"),
-      *                         @OA\Property(property="vo_provider_domain", type="text"),
+      *                         @OA\Property(property="vo_website", type="text"),
       *                         @OA\Property(property="vo_provider_username", type="text"),
       *                         @OA\Property(property="vo_provider_password", type="text"),
-      *                         @OA\Property(property="street_address", type="text"),
-      *                         @OA\Property(property="address_line2", type="text"),
-      *                         @OA\Property(property="city", type="text"),
-      *                         @OA\Property(property="state", type="text"),
-      *                         @OA\Property(property="postal", type="text"),
-      *                         @OA\Property(property="country", type="text"),
+      *
+      *                         @OA\Property(property="vo_contact_person_name", type="text"),
+      *                         @OA\Property(property="vo_contact_person_phone_number", type="text"),
+      *                         @OA\Property(property="vo_contact_person_email", type="text"),
+      *                         @OA\Property(property="online_account", type="text"),
+      *                         @OA\Property(property="online_account_username", type="text"),
+      *                         @OA\Property(property="online_account_password", type="text"),
+      *                         @OA\Property(property="card_on_file", type="text"),
+      *                         @OA\Property(property="card_last_four_digit", type="text"),
+      *                         @OA\Property(property="card_holder_name", type="text"),
+      *                         @OA\Property(property="monthly_payment_amount", type="text"),
+      *                         @OA\Property(property="contract", type="text"),
+      *                         @OA\Property(property="contract_terms", type="text"),
+      *
+      *                         @OA\Property(property="addresses[]", type="text"),
       *                     ),
       *                 ),
       *             ),
@@ -217,30 +242,33 @@ class VirtualOfficeController extends Controller
 
         $validated = $request->validate([
             'vo_provider_name' => '',
-            'vo_provider_domain' => '',
+            'vo_website' => '',
             'vo_provider_username' => '',
             'vo_provider_password' => '',
-            'street_address' => '',
-            'address_line2' => '',
-            'city' => '',
-            'state' => '',
-            'postal' => '',
-            'country' => ''
+            'vo_contact_person_name' => '',
+            'vo_contact_person_phone_number' => '',
+            'vo_contact_person_email' => '',
+            'online_account' => '',
+            'online_account_password' => '',
+            'card_on_file' => '',
+            'card_last_four_digit' => '',
+            'card_holder_name' => '',
+            'monthly_payment_amount' => '',
+            'contract' => '',
+            'contract_terms' => '',
+
+            'addresses' => 'array'
         ]);
 
-        /*$check = [];
-
-        $tmpCheck = $this->virtualOfficeService->check_ignore($validated, $virtualOffice->uuid);
-        $check = array_merge($check, $tmpCheck);
-
-        // exists
-        if (count($check)>0){
-            return response()->json([
-                'data' => $check,
-            ], 409);
-        }*/
-
         $virtualOffice = $this->virtualOfficeService->update($virtualOffice, $validated, $request->user_uuid);
+
+        // addresses
+        if (isset($validated['addresses'])){
+            foreach ($validated['addresses'] AS $key => $value):
+                $value['entity_uuid'] = $virtualOffice->uuid;
+                $this->addressService->save($value);
+            endforeach;
+        }
 
         return $virtualOffice;
     }
@@ -332,15 +360,24 @@ class VirtualOfficeController extends Controller
       *                         required={},
       *                         
       *                         @OA\Property(property="vo_provider_name", type="text"),
-      *                         @OA\Property(property="vo_provider_domain", type="text"),
+      *                         @OA\Property(property="vo_website", type="text"),
       *                         @OA\Property(property="vo_provider_username", type="text"),
       *                         @OA\Property(property="vo_provider_password", type="text"),
-      *                         @OA\Property(property="street_address", type="text"),
-      *                         @OA\Property(property="address_line2", type="text"),
-      *                         @OA\Property(property="city", type="text"),
-      *                         @OA\Property(property="state", type="text"),
-      *                         @OA\Property(property="postal", type="text"),
-      *                         @OA\Property(property="country", type="text"),
+      *
+      *                         @OA\Property(property="vo_contact_person_name", type="text"),
+      *                         @OA\Property(property="vo_contact_person_phone_number", type="text"),
+      *                         @OA\Property(property="vo_contact_person_email", type="text"),
+      *                         @OA\Property(property="online_account", type="text"),
+      *                         @OA\Property(property="online_account_username", type="text"),
+      *                         @OA\Property(property="online_account_password", type="text"),
+      *                         @OA\Property(property="card_on_file", type="text"),
+      *                         @OA\Property(property="card_last_four_digit", type="text"),
+      *                         @OA\Property(property="card_holder_name", type="text"),
+      *                         @OA\Property(property="monthly_payment_amount", type="text"),
+      *                         @OA\Property(property="contract", type="text"),
+      *                         @OA\Property(property="contract_terms", type="text"),
+      *
+      *                         @OA\Property(property="addresses[]", type="text"),
       *                     ),
       *                 ),
       *             ),
@@ -364,32 +401,37 @@ class VirtualOfficeController extends Controller
 
         $validated = $request->validate([
             'vo_provider_name' => '',
-            'vo_provider_domain' => '',
+            'vo_website' => '',
             'vo_provider_username' => '',
             'vo_provider_password' => '',
-            'street_address' => '',
-            'address_line2' => '',
-            'city' => '',
-            'state' => '',
-            'postal' => '',
-            'country' => '',
+            'vo_contact_person_name' => '',
+            'vo_contact_person_phone_number' => '',
+            'vo_contact_person_email' => '',
+
+            'online_account' => '',
+            'online_account_password' => '',
+            'card_on_file' => '',
+            'card_last_four_digit' => '',
+            'card_holder_name' => '',
+            'monthly_payment_amount' => '',
+            'contract' => '',
+            'contract_terms' => '',
+
+            // addresses
+            'addresses' => 'array',
 
             'user_uuid' => ''
         ]);
 
-        /*$check = [];
-
-        $tmpCheck = $this->virtualOfficeService->check($validated);
-        $check = array_merge($check, $tmpCheck);
-
-        // exists
-        if (count($check)>0){
-            return response()->json([
-                'data' => $check,
-            ], 409);
-        }*/
-
         $virtualOffice = $this->virtualOfficeService->pending($validated);
+
+        // addresses
+        if (isset($validated['addresses'])){
+            foreach ($validated['addresses'] AS $key => $value):
+                $value['entity_uuid'] = $virtualOffice->uuid;
+                $this->addressService->save($value);
+            endforeach;
+        }
 
         return $virtualOffice;
     }
@@ -419,15 +461,24 @@ class VirtualOfficeController extends Controller
       *                         required={},
       *                         
       *                         @OA\Property(property="vo_provider_name", type="text"),
-      *                         @OA\Property(property="vo_provider_domain", type="text"),
+      *                         @OA\Property(property="vo_website", type="text"),
       *                         @OA\Property(property="vo_provider_username", type="text"),
       *                         @OA\Property(property="vo_provider_password", type="text"),
-      *                         @OA\Property(property="street_address", type="text"),
-      *                         @OA\Property(property="address_line2", type="text"),
-      *                         @OA\Property(property="city", type="text"),
-      *                         @OA\Property(property="state", type="text"),
-      *                         @OA\Property(property="postal", type="text"),
-      *                         @OA\Property(property="country", type="text"),
+      *
+      *                         @OA\Property(property="vo_contact_person_name", type="text"),
+      *                         @OA\Property(property="vo_contact_person_phone_number", type="text"),
+      *                         @OA\Property(property="vo_contact_person_email", type="text"),
+      *                         @OA\Property(property="online_account", type="text"),
+      *                         @OA\Property(property="online_account_username", type="text"),
+      *                         @OA\Property(property="online_account_password", type="text"),
+      *                         @OA\Property(property="card_on_file", type="text"),
+      *                         @OA\Property(property="card_last_four_digit", type="text"),
+      *                         @OA\Property(property="card_holder_name", type="text"),
+      *                         @OA\Property(property="monthly_payment_amount", type="text"),
+      *                         @OA\Property(property="contract", type="text"),
+      *                         @OA\Property(property="contract_terms", type="text"),
+      *
+      *                         @OA\Property(property="addresses", type="text"),
       *                     ),
       *                 ),
       *             ),
@@ -451,32 +502,38 @@ class VirtualOfficeController extends Controller
 
         $validated = $request->validate([
             'vo_provider_name' => '',
-            'vo_provider_domain' => '',
+            'vo_website' => '',
             'vo_provider_username' => '',
             'vo_provider_password' => '',
-            'street_address' => '',
-            'address_line2' => '',
-            'city' => '',
-            'state' => '',
-            'postal' => '',
-            'country' => ''
+            'vo_contact_person_name' => '',
+            'vo_contact_person_phone_number' => '',
+            'vo_contact_person_email' => '',
+
+            'online_account' => '',
+            'online_account_password' => '',
+            'card_on_file' => '',
+            'card_last_four_digit' => '',
+            'card_holder_name' => '',
+            'monthly_payment_amount' => '',
+            'contract' => '',
+            'contract_terms' => '',
+
+            // addresses
+            'addresses' => 'array',
+
         ]);
 
         $virtualOffice = VirtualOffice::where('uuid', $uuid)->first();
 
-        /*$check = [];
-
-        $tmpCheck = $this->virtualOfficeService->check_ignore($validated, $virtualOffice->uuid);
-        $check = array_merge($check, $tmpCheck);
-
-        // exists
-        if (count($check)>0){
-            return response()->json([
-                'data' => $check,
-            ], 409);
-        }*/
-
         $virtualOffice = $this->virtualOfficeService->pending_update($virtualOffice, $validated, $request->user_uuid);
+
+        // addresses
+        if (isset($validated['addresses'])){
+            foreach ($validated['addresses'] AS $key => $value):
+                $value['entity_uuid'] = $virtualOffice->uuid;
+                $this->addressService->save($value);
+            endforeach;
+        }
 
         return $virtualOffice;
     }
@@ -506,15 +563,24 @@ class VirtualOfficeController extends Controller
       *                         required={},
       *                         
       *                         @OA\Property(property="vo_provider_name", type="text"),
-      *                         @OA\Property(property="vo_provider_domain", type="text"),
+      *                         @OA\Property(property="vo_website", type="text"),
       *                         @OA\Property(property="vo_provider_username", type="text"),
       *                         @OA\Property(property="vo_provider_password", type="text"),
-      *                         @OA\Property(property="street_address", type="text"),
-      *                         @OA\Property(property="address_line2", type="text"),
-      *                         @OA\Property(property="city", type="text"),
-      *                         @OA\Property(property="state", type="text"),
-      *                         @OA\Property(property="postal", type="text"),
-      *                         @OA\Property(property="country", type="text"),
+      *
+      *                         @OA\Property(property="vo_contact_person_name", type="text"),
+      *                         @OA\Property(property="vo_contact_person_phone_number", type="text"),
+      *                         @OA\Property(property="vo_contact_person_email", type="text"),
+      *                         @OA\Property(property="online_account", type="text"),
+      *                         @OA\Property(property="online_account_username", type="text"),
+      *                         @OA\Property(property="online_account_password", type="text"),
+      *                         @OA\Property(property="card_on_file", type="text"),
+      *                         @OA\Property(property="card_last_four_digit", type="text"),
+      *                         @OA\Property(property="card_holder_name", type="text"),
+      *                         @OA\Property(property="monthly_payment_amount", type="text"),
+      *                         @OA\Property(property="contract", type="text"),
+      *                         @OA\Property(property="contract_terms", type="text"),
+      *
+      *                         @OA\Property(property="addresses[]", type="text"),
       *                     ),
       *                 ),
       *             ),
@@ -538,32 +604,37 @@ class VirtualOfficeController extends Controller
 
         $validated = $request->validate([
             'vo_provider_name' => '',
-            'vo_provider_domain' => '',
+            'vo_website' => '',
             'vo_provider_username' => '',
             'vo_provider_password' => '',
-            'street_address' => '',
-            'address_line2' => '',
-            'city' => '',
-            'state' => '',
-            'postal' => '',
-            'country' => ''
+            'vo_contact_person_name' => '',
+            'vo_contact_person_phone_number' => '',
+            'vo_contact_person_email' => '',
+
+            'online_account' => '',
+            'online_account_password' => '',
+            'card_on_file' => '',
+            'card_last_four_digit' => '',
+            'card_holder_name' => '',
+            'monthly_payment_amount' => '',
+            'contract' => '',
+            'contract_terms' => '',
+
+            // addresses
+            'addresses' => 'array'
         ]);
 
         $virtualOffice = VirtualOffice::where('uuid', $uuid)->first();
 
-        /*$check = [];
-
-        $tmpCheck = $this->virtualOfficeService->check_ignore($validated, $virtualOffice->uuid);
-        $check = array_merge($check, $tmpCheck);
-
-        // exists
-        if (count($check)>0){
-            return response()->json([
-                'data' => $check,
-            ], 409);
-        }*/
-
         $virtualOffice = $this->virtualOfficeService->accept($virtualOffice, $validated, $request->user_uuid);
+
+        // addresses
+        if (isset($validated['addresses'])){
+            foreach ($validated['addresses'] AS $key => $value):
+                $value['entity_uuid'] = $virtualOffice->uuid;
+                $this->addressService->save($value);
+            endforeach;
+        }
 
         return $virtualOffice;
     }
