@@ -162,6 +162,11 @@ Route::middleware('auth.custom')->group(function() {
 
     // tasks
     Route::resource('api/task', TaskController::class);
+    Route::get('api/task', [TaskController::class, 'index']);
+    Route::get('api/task/{uuid}', [TaskController::class, 'show']);
+    Route::post('api/task', [TaskController::class, 'store']);
+    Route::put('api/task/{uuid}', [TaskController::class, 'update']);
+    Route::delete('api/task/{uuid}', [TaskController::class, 'destroy']);
 
     // notes
     Route::resource('api/note', NoteController::class);

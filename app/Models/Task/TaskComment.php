@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\TraitUuid;
 
-class TaskToUser extends Model
+class TaskComment extends Model
 {
     use HasFactory, TraitUuid;
     
-    protected $fillable = ['task_uuid', 'user_uuid', 'is_group', 'status'];
+    protected $fillable = ['user_uuid', 'task_uuid', 'comment', 'status'];
 
-    protected $attributes = ['status' => 1, 'is_group' => false];
+    protected $attributes = ['status' => 1];
 }

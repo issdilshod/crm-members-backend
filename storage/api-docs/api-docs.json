@@ -4801,110 +4801,16 @@
                 "operationId": "list_task",
                 "responses": {
                     "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
+                        "description": "Successfully"
                     },
                     "400": {
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Not Authenticated"
                     },
                     "404": {
                         "description": "Resource Not Found"
-                    }
-                }
-            },
-            "put": {
-                "tags": [
-                    "Task"
-                ],
-                "summary": "Update task (not working on swagger)",
-                "description": "Update task",
-                "operationId": "update_task",
-                "parameters": [
-                    {
-                        "name": "uuid",
-                        "in": "path",
-                        "description": "task uuid",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [],
-                                "properties": {
-                                    "user_uuid": {
-                                        "type": "text"
-                                    },
-                                    "company_uuid": {
-                                        "type": "text"
-                                    },
-                                    "due_date": {
-                                        "type": "string",
-                                        "format": "date"
-                                    },
-                                    "description": {
-                                        "type": "text"
-                                    },
-                                    "priority": {
-                                        "type": "integer"
-                                    },
-                                    "department_uuid": {
-                                        "type": "string"
-                                    },
-                                    "users[]": {
-                                        "type": "string"
-                                    },
-                                    "users_to_delete[]": {
-                                        "type": "string"
-                                    },
-                                    "files_to_delete[]": {
-                                        "type": "string"
-                                    },
-                                    "files[attachment][]": {
-                                        "type": "file",
-                                        "format": "binary"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        },
-                        "application/json": {
-                            "schema": {}
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    },
-                    "409": {
-                        "description": "Conflict"
                     }
                 }
             },
@@ -4912,7 +4818,7 @@
                 "tags": [
                     "Task"
                 ],
-                "summary": "Add task (not working on swagger)",
+                "summary": "Add task",
                 "description": "Add task",
                 "operationId": "post_task",
                 "requestBody": {
@@ -4920,36 +4826,22 @@
                         "multipart/form-data": {
                             "schema": {
                                 "required": [
-                                    "user_uuid",
-                                    "company_uuid",
-                                    "due_date",
-                                    "description",
-                                    "priority",
-                                    "department_uuid"
+                                    "task_name",
+                                    "department_uuid",
+                                    "due_date"
                                 ],
                                 "properties": {
-                                    "user_uuid": {
+                                    "task_name": {
                                         "type": "text"
                                     },
-                                    "company_uuid": {
+                                    "department_uuid": {
+                                        "type": "text"
+                                    },
+                                    "users[]": {
                                         "type": "text"
                                     },
                                     "due_date": {
-                                        "type": "string",
-                                        "format": "date"
-                                    },
-                                    "description": {
                                         "type": "text"
-                                    },
-                                    "priority": {
-                                        "type": "integer"
-                                    },
-                                    "department_uuid": {
-                                        "type": "string"
-                                    },
-                                    "files[attachment][]": {
-                                        "type": "file",
-                                        "format": "binary"
                                     }
                                 },
                                 "type": "object"
@@ -4962,24 +4854,22 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
+                        "description": "Successfully"
                     },
                     "400": {
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
                     },
                     "404": {
                         "description": "Resource Not Found"
                     },
-                    "409": {
-                        "description": "Conflict"
+                    "422": {
+                        "description": "Unprocessable Content"
                     }
                 }
             }
@@ -5006,21 +4896,93 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
+                        "description": "Successfully"
                     },
                     "400": {
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
                     },
                     "404": {
                         "description": "Resource Not Found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Update task",
+                "description": "Update task",
+                "operationId": "update_task",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "task uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "task_name",
+                                    "department_uuid",
+                                    "due_date"
+                                ],
+                                "properties": {
+                                    "task_name": {
+                                        "type": "text"
+                                    },
+                                    "department_uuid": {
+                                        "type": "text"
+                                    },
+                                    "users[]": {
+                                        "type": "text"
+                                    },
+                                    "users_to_delete[]": {
+                                        "type": "text"
+                                    },
+                                    "due_date": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
                     }
                 }
             },
@@ -5045,18 +5007,16 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
+                        "description": "Successfully"
                     },
                     "400": {
                         "description": "Bad request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
                     },
                     "404": {
                         "description": "Resource Not Found"

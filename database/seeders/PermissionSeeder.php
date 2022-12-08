@@ -22,10 +22,6 @@ class PermissionSeeder extends Seeder
                 'permission_name' => 'Director card save (without approve)',
                 'alias' => Config::get('common.permission.director.store')
             ],
-            /*[
-                'permission_name' => 'Director update',
-                'alias' => Config::get('common.permission.director.update')
-            ],*/
             [
                 'permission_name' => 'Director card delete',
                 'alias' => Config::get('common.permission.director.delete')
@@ -42,10 +38,6 @@ class PermissionSeeder extends Seeder
                 'permission_name' => 'Director card accept & reject',
                 'alias' => Config::get('common.permission.director.accept')
             ],
-            /*[
-                'permission_name' => 'Director reject',
-                'alias' => Config::get('common.permission.director.reject')
-            ],*/
             [
                 'permission_name' => 'Director cards view',
                 'alias' => Config::get('common.permission.director.view')
@@ -63,10 +55,6 @@ class PermissionSeeder extends Seeder
                 'permission_name' => 'Company card save (without approve)',
                 'alias' => Config::get('common.permission.company.store')
             ],
-            /*[
-                'permission_name' => 'Company update',
-                'alias' => Config::get('common.permission.company.update')
-            ],*/
             [
                 'permission_name' => 'Company card delete',
                 'alias' => Config::get('common.permission.company.delete')
@@ -83,10 +71,6 @@ class PermissionSeeder extends Seeder
                 'permission_name' => 'Company card accept & reject',
                 'alias' => Config::get('common.permission.company.accept')
             ],
-            /*[
-                'permission_name' => 'Company reject',
-                'alias' => Config::get('common.permission.company.reject')
-            ],*/
             [
                 'permission_name' => 'Company cards view',
                 'alias' => Config::get('common.permission.company.view')
@@ -104,10 +88,6 @@ class PermissionSeeder extends Seeder
                 'permission_name' => 'Future website card save (without approve)',
                 'alias' => Config::get('common.permission.websites_future.store')
             ],
-            /*[
-                'permission_name' => 'Future websites update',
-                'alias' => Config::get('common.permission.websites_future.update')
-            ],*/
             [
                 'permission_name' => 'Future website card delete',
                 'alias' => Config::get('common.permission.websites_future.delete')
@@ -120,10 +100,6 @@ class PermissionSeeder extends Seeder
                 'permission_name' => 'Future websites card accept & reject',
                 'alias' => Config::get('common.permission.websites_future.accept')
             ],
-            /*[
-                'permission_name' => 'Future websites reject',
-                'alias' => Config::get('common.permission.websites_future.reject')
-            ],*/
             [
                 'permission_name' => 'Future website card view',
                 'alias' => Config::get('common.permission.websites_future.view')
@@ -133,10 +109,6 @@ class PermissionSeeder extends Seeder
                 'permission_name' => 'Virtual office card save (without approve)',
                 'alias' => Config::get('common.permission.virtual_office.store')
             ],
-            /*[
-                'permission_name' => 'Virtual Office update',
-                'alias' => Config::get('common.permission.virtual_office.update')
-            ],*/
             [
                 'permission_name' => 'Virtual office card delete',
                 'alias' => Config::get('common.permission.virtual_office.delete')
@@ -149,10 +121,6 @@ class PermissionSeeder extends Seeder
                 'permission_name' => 'Virtual office card accept & reject',
                 'alias' => Config::get('common.permission.virtual_office.accept')
             ],
-            /*[
-                'permission_name' => 'Virtual office reject',
-                'alias' => Config::get('common.permission.virtual_office.reject')
-            ],*/
             [
                 'permission_name' => 'Virtual office card view',
                 'alias' => Config::get('common.permission.virtual_office.view')
@@ -162,10 +130,6 @@ class PermissionSeeder extends Seeder
                 'permission_name' => 'Future company card save (without approve)',
                 'alias' => Config::get('common.permission.future_company.store')
             ],
-            /*[
-                'permission_name' => 'Future Company update',
-                'alias' => Config::get('common.permission.future_company.update')
-            ],*/
             [
                 'permission_name' => 'Future company card delete',
                 'alias' => Config::get('common.permission.future_company.delete')
@@ -178,10 +142,6 @@ class PermissionSeeder extends Seeder
                 'permission_name' => 'Future company card accept & reject',
                 'alias' => Config::get('common.permission.future_company.accept')
             ],
-            /*[
-                'permission_name' => 'Future company reject',
-                'alias' => Config::get('common.permission.future_company.reject')
-            ],*/
             [
                 'permission_name' => 'Future company card view',
                 'alias' => Config::get('common.permission.future_company.view')
@@ -191,6 +151,11 @@ class PermissionSeeder extends Seeder
                 'permission_name' => 'Chat store', // add/update
                 'alias' => Config::get('common.permission.chat.store')
             ],
+            // task
+            [
+                'permission_name' => 'Task store', // add/update
+                'alias' => Config::get('common.permission.task.store')
+            ]
         ];
         Permission::query()->update(['status' => Config::get('common.status.deleted')]);
         foreach($permission_list AS $key => $value):
