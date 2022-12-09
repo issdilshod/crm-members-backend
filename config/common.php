@@ -73,6 +73,14 @@ return [
         'block' => 6
     ],
 
+    'task_progress' => [
+        'todo' => 1,
+        'doing' => 2,
+        'approve' => 3,
+        'rejected' => 4,
+        'completed' => 5
+    ],
+
     'activity' => [
         'logged' => 'User logged in',
         'logout' => 'User logged out',
@@ -230,8 +238,8 @@ return [
             38 => 'chats',
             39 => 'chats',
 
-            40 => 'tasks',
-            41 => 'tasks',
+            40 => '?section=task&uuid=',
+            41 => '?section=task&uuid=',
         ],
     ],
 

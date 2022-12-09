@@ -12,7 +12,7 @@ class Task extends Model
 {
     use HasFactory, TraitUuid;
 
-    protected $fillable = ['user_uuid', 'due_date', 'description', 'priority', 'progress', 'status'];
+    protected $fillable = ['user_uuid', 'task_name', 'due_date', 'description', 'priority', 'progress', 'status'];
 
     protected $attributes = ['progress' => 1, 'status' => 1];
 

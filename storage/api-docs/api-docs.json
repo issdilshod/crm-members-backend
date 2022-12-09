@@ -4828,6 +4828,7 @@
                                 "required": [
                                     "task_name",
                                     "department_uuid",
+                                    "priority",
                                     "due_date"
                                 ],
                                 "properties": {
@@ -4835,6 +4836,9 @@
                                         "type": "text"
                                     },
                                     "department_uuid": {
+                                        "type": "text"
+                                    },
+                                    "priority": {
                                         "type": "text"
                                     },
                                     "users[]": {
@@ -4938,6 +4942,7 @@
                                 "required": [
                                     "task_name",
                                     "department_uuid",
+                                    "priority",
                                     "due_date"
                                 ],
                                 "properties": {
@@ -4945,6 +4950,9 @@
                                         "type": "text"
                                     },
                                     "department_uuid": {
+                                        "type": "text"
+                                    },
+                                    "priority": {
                                         "type": "text"
                                     },
                                     "users[]": {

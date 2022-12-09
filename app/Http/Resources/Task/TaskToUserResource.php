@@ -18,6 +18,7 @@ class TaskToUserResource extends JsonResource
             'uuid' => $this->uuid,
             'task_uuid' => $this->task_uuid,
             'user_uuid' => $this->user_uuid,
+            'user' => $this->user,
             'is_group' => $this->is_group
         ];
     }

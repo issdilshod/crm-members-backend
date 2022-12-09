@@ -41,7 +41,7 @@ class TaskController extends Controller
         }
 
         $tasks = $this->taskService->all($user_uuid);
-        return response()->json(['status'=> 'ok', 'msg' => 'success', 'data' => $tasks], 200);
+        return $tasks;
     }
 
     /**     @OA\GET(
@@ -92,10 +92,11 @@ class TaskController extends Controller
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
       *                         type="object",
-      *                         required={"task_name", "department_uuid", "due_date"},
+      *                         required={"task_name", "department_uuid", "priority", "due_date"},
       *
       *                         @OA\Property(property="task_name", type="text"),
       *                         @OA\Property(property="department_uuid", type="text"),
+      *                         @OA\Property(property="priority", type="text"),
       *                         @OA\Property(property="users[]", type="text"),
       *                         @OA\Property(property="due_date", type="text"),
       *                     ),
@@ -122,7 +123,7 @@ class TaskController extends Controller
             'users' => 'array',
             'due_date' => 'required',
             'description' => '',
-            'priority' => '',
+            'priority' => 'required',
             'user_uuid' => ''
         ]);
 
@@ -152,10 +153,11 @@ class TaskController extends Controller
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
       *                         type="object",
-      *                         required={"task_name", "department_uuid", "due_date"},
+      *                         required={"task_name", "department_uuid", "priority", "due_date"},
       *
       *                         @OA\Property(property="task_name", type="text"),
       *                         @OA\Property(property="department_uuid", type="text"),
+      *                         @OA\Property(property="priority", type="text"),
       *                         @OA\Property(property="users[]", type="text"),
       *                         @OA\Property(property="users_to_delete[]", type="text"),
       *                         @OA\Property(property="due_date", type="text"),
@@ -186,7 +188,7 @@ class TaskController extends Controller
             'users_to_delete' => 'array',
             'due_date' => 'required',
             'description' => '',
-            'priority' => ''
+            'priority' => 'required'
         ]);
 
         $task = $this->taskService->update($task, $validated, $request->user_uuid);
