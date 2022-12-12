@@ -231,4 +231,29 @@ class TaskController extends Controller
         return response()->json(['status' => 'ok', 'msg' => 'success'], 200);
     }
 
+    /**     @OA\GET(
+      *         path="/api/task-permission",
+      *         operationId="task_permission",
+      *         tags={"Task"},
+      *         summary="Get task permission of user",
+      *         description="Get task permission of user",
+      *             @OA\Response(response=200, description="Successfully"),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=403, description="Not Autorized"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
+    public function permission(Request $request)
+    {
+        $permissions = [];
+
+        // permission
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.task.store'))){
+            $permissions[] = Config::get('common.permission.task.store');
+        }
+
+        return $permissions;
+    }
+
 }

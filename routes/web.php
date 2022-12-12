@@ -167,6 +167,7 @@ Route::middleware('auth.custom')->group(function() {
     Route::post('api/task', [TaskController::class, 'store']);
     Route::put('api/task/{uuid}', [TaskController::class, 'update']);
     Route::delete('api/task/{uuid}', [TaskController::class, 'destroy']);
+    Route::get('api/task-permission', [TaskController::class, 'permission']);
 
     // notes
     Route::resource('api/note', NoteController::class);

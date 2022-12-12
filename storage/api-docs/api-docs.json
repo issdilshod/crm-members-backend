@@ -5032,6 +5032,33 @@
                 }
             }
         },
+        "/api/task-permission": {
+            "get": {
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Get task permission of user",
+                "description": "Get task permission of user",
+                "operationId": "task_permission",
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
         "/api/virtual-office": {
             "get": {
                 "tags": [
