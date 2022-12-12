@@ -2,7 +2,6 @@
 
 namespace App\Services\Account;
 
-use App\Logs\TelegramLog;
 use App\Models\Account\TelegramUser;
 use App\Models\Account\User;
 use App\Notifications\TelegramNotification;
@@ -15,7 +14,6 @@ class TelegramUserService {
     private $updates;
     private $entity;
     private $response;
-    private $telegramLog;
 
     public function __construct()
     {
@@ -26,8 +24,6 @@ class TelegramUserService {
             '/link' => env('APP_FRONTEND_ENDPOINT'),
             '/profile' => 'You don\'t have profile in app yet.',
         ];
-
-        $this->telegramLog = new TelegramLog();
     }
 
     public function init()
