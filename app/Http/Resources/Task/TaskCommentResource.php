@@ -17,6 +17,7 @@ class TaskCommentResource extends JsonResource
         return [
             'uuid' => $this->uuid,
             'user_uuid' => $this->user_uuid,
+            'user' => $this->user,
             'task_uuid' => $this->task_uuid,
             'comment' => $this->comment,
             'status' => $this->status,

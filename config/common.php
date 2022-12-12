@@ -141,7 +141,10 @@ return [
         ],
         'task' => [
             'add' => 'Task {name} created',
-            'update' => 'Task {name} updated' 
+            'update' => 'Task {name} updated',
+            'to_progress' => 'Task {name} submitted', 
+            'approve' =>  'Task {name} approved',
+            'reject' => 'Task {name} rejected',
         ],
 
         'codes' => [
@@ -191,6 +194,9 @@ return [
 
             'task_add' => 40,
             'task_update' => 41,
+            'task_to_progress' => 42,
+            'task_reject' => 43,
+            'task_approve' => 44,
         ],
 
         'codes_link' => [
@@ -240,6 +246,9 @@ return [
 
             40 => '?section=task&uuid=',
             41 => '?section=task&uuid=',
+            42 => '?section=task&uuid=',
+            43 => '?section=task&uuid=',
+            44 => '?section=task&uuid=',
         ],
     ],
 

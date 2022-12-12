@@ -134,6 +134,139 @@ class TaskService {
         $task->update(['status' => Config::get('common.status.deleted')]);
     }
 
+    public function to_progress(Task $task, $entity)
+    {
+        $task->update(['progress' => $entity['progress']]);
+
+        $task = new TaskResource($task);
+
+        // activity
+        $activity = Activity::create([
+            'user_uuid' => $entity['user_uuid'],
+            'entity_uuid' => $task['uuid'],
+            'device' => UserSystemInfoHelper::device_full(),
+            'ip' => UserSystemInfoHelper::ip(),
+            'description' => str_replace("{name}", $task['task_name'], Config::get('common.activity.task.to_progress')),
+            'changes' => json_encode(new TaskResource($task)),
+            'action_code' => Config::get('common.activity.codes.task_to_progress'),
+            'status' => Config::get('common.status.actived')
+        ]);
+
+        // headquarters activity & task PUSH & TELEGRAM
+        $activity = $this->activityService->setLink($activity);
+        $activity = new ActivityResource($activity);
+        $this->notificationService->push_to_headquarters('activity', ['data' => $activity, 'msg' => '', 'link' => '']);
+        $this->notificationService->push_to_headquarters('task', ['data' => $task, 'msg' => '', 'link' => '']);
+
+        $msg = str_replace("{name}", "*" . $task['task_name'] . "*", Config::get('common.activity.task.to_progress')) . "\n" .'[link to view]('.env('APP_FRONTEND_ENDPOINT').'?section=task&uuid='.$task['uuid'].')';
+        $this->notificationService->telegram_to_headqurters($msg);
+
+        // telegram & push users task
+        $notifUser = TaskToUser::select('users.*')
+                                ->join('users', 'users.uuid', '=', 'task_to_users.user_uuid')
+                                ->where('task_to_users.task_uuid', $task['uuid'])
+                                ->where('task_to_users.status', Config::get('common.status.actived'))
+                                ->get();
+        foreach ($notifUser->toArray() AS $key => $value):
+            $this->notificationService->push('task', $value, ['data' => $task, 'msg' => '', 'link' => '']);
+
+            if ($entity['user_uuid']==$value['uuid']){ continue; }
+
+            $this->notificationService->telegram([
+                'telegram' => $value['telegram'],
+                'msg' => str_replace("{name}", "*" . $task['task_name'] . "*", Config::get('common.activity.task.to_progress')) . "\n" .
+                '[link to view]('.env('APP_FRONTEND_ENDPOINT').'?section=task&uuid='.$task['uuid'].')'
+            ]);
+        endforeach;
+
+        return $task;
+    }
+
+    public function approve($taskUuid, $userUuid)
+    {
+        $task = Task::where('uuid', $taskUuid)->first();
+        $task->update(['progress' => Config::get('common.task_progress.completed')]);
+
+        $task = new TaskResource($task);
+
+        // activity
+        $activity = Activity::create([
+            'user_uuid' => $userUuid,
+            'entity_uuid' => $task['uuid'],
+            'device' => UserSystemInfoHelper::device_full(),
+            'ip' => UserSystemInfoHelper::ip(),
+            'description' => str_replace("{name}", $task['task_name'], Config::get('common.activity.task.approve')),
+            'changes' => json_encode(new TaskResource($task)),
+            'action_code' => Config::get('common.activity.codes.task_approve'),
+            'status' => Config::get('common.status.actived')
+        ]);
+
+        // headquarters activity & task PUSH & TELEGRAM
+        $activity = $this->activityService->setLink($activity);
+        $activity = new ActivityResource($activity);
+        $this->notificationService->push_to_headquarters('activity', ['data' => $activity, 'msg' => '', 'link' => '']);
+        $this->notificationService->push_to_headquarters('task', ['data' => $task, 'msg' => '', 'link' => '']);
+
+        // telegram & push users task
+        $notifUser = TaskToUser::select('users.*')
+                                ->join('users', 'users.uuid', '=', 'task_to_users.user_uuid')
+                                ->where('task_to_users.task_uuid', $task['uuid'])
+                                ->where('task_to_users.status', Config::get('common.status.actived'))
+                                ->get();
+        foreach ($notifUser->toArray() AS $key => $value):
+            $this->notificationService->push('task', $value, ['data' => $task, 'msg' => '', 'link' => '']);
+
+            $this->notificationService->telegram([
+                'telegram' => $value['telegram'],
+                'msg' => str_replace("{name}", "*" . $task['task_name'] . "*", Config::get('common.activity.task.approve')) . "\n" .
+                '[link to view]('.env('APP_FRONTEND_ENDPOINT').'?section=task&uuid='.$task['uuid'].')'
+            ]);
+        endforeach;
+
+    }
+
+    public function reject($taskUuid, $userUuid)
+    {
+        $task = Task::where('uuid', $taskUuid)->first();
+        $task->update(['progress' => Config::get('common.task_progress.rejected')]);
+
+        $task = new TaskResource($task);
+
+        // activity
+        $activity = Activity::create([
+            'user_uuid' => $userUuid,
+            'entity_uuid' => $task['uuid'],
+            'device' => UserSystemInfoHelper::device_full(),
+            'ip' => UserSystemInfoHelper::ip(),
+            'description' => str_replace("{name}", $task['task_name'], Config::get('common.activity.task.reject')),
+            'changes' => json_encode(new TaskResource($task)),
+            'action_code' => Config::get('common.activity.codes.task_reject'),
+            'status' => Config::get('common.status.actived')
+        ]);
+
+        // headquarters activity & task PUSH & TELEGRAM
+        $activity = $this->activityService->setLink($activity);
+        $activity = new ActivityResource($activity);
+        $this->notificationService->push_to_headquarters('activity', ['data' => $activity, 'msg' => '', 'link' => '']);
+        $this->notificationService->push_to_headquarters('task', ['data' => $task, 'msg' => '', 'link' => '']);
+
+        // telegram & push users task
+        $notifUser = TaskToUser::select('users.*')
+                                ->join('users', 'users.uuid', '=', 'task_to_users.user_uuid')
+                                ->where('task_to_users.task_uuid', $task['uuid'])
+                                ->where('task_to_users.status', Config::get('common.status.actived'))
+                                ->get();
+        foreach ($notifUser->toArray() AS $key => $value):
+            $this->notificationService->push('task', $value, ['data' => $task, 'msg' => '', 'link' => '']);
+
+            $this->notificationService->telegram([
+                'telegram' => $value['telegram'],
+                'msg' => str_replace("{name}", "*" . $task['task_name'] . "*", Config::get('common.activity.task.reject')) . "\n" .
+                '[link to view]('.env('APP_FRONTEND_ENDPOINT').'?section=task&uuid='.$task['uuid'].')'
+            ]);
+        endforeach;
+    }
+
     private function add_user_to_task($task_uuid, $user_uuid, $is_group  = false)
     {
         $taskToUser = TaskToUser::where('task_uuid', $task_uuid)

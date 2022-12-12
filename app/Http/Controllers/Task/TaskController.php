@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Task;
 
 use App\Http\Controllers\Controller;
 use App\Models\Task\Task;
+use App\Models\Task\TaskToUser;
 use App\Policies\PermissionPolicy;
+use App\Services\Task\TaskCommentService;
 use App\Services\Task\TaskService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -13,10 +15,12 @@ class TaskController extends Controller
 {
 
     private $taskService;
+    private $taskCommentService;
 
     public function __construct()
     {
         $this->taskService = new TaskService();
+        $this->taskCommentService = new TaskCommentService();
     }
 
     /**     @OA\GET(
@@ -71,7 +75,11 @@ class TaskController extends Controller
     {
         // permission
         if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
-            if ($task->user_uuid!=$request->user_uuid){ // task not created by user
+            $taskUser = TaskToUser::where('user_uuid', $request->user_uuid)
+                                    ->where('task_uuid', $task->uuid)
+                                    ->where('status', Config::get('common.status.actived'))
+                                    ->first();
+            if ($taskUser==null){
                 return response()->json(['status' => 'error', 'msg' => 'not permitted'], 403);
             }
         }
@@ -228,6 +236,180 @@ class TaskController extends Controller
         }
 
         $this->taskService->delete($task);
+        return response()->json(['status' => 'ok', 'msg' => 'success'], 200);
+    }
+
+    /**     @OA\PUT(
+      *         path="/api/task-progress/{uuid}",
+      *         operationId="progress_task",
+      *         tags={"Task"},
+      *         summary="Progress task",
+      *         description="Progress task",
+      *             @OA\Parameter(
+      *                 name="uuid",
+      *                 in="path",
+      *                 description="task uuid",
+      *                 @OA\Schema(
+      *                     type="string",
+      *                     format="uuid"
+      *                 ),
+      *                 required=true
+      *             ),
+      *             @OA\RequestBody(
+      *                 @OA\JsonContent(),
+      *                 @OA\MediaType(
+      *                     mediaType="multipart/form-data",
+      *                     @OA\Schema(
+      *                         type="object",
+      *                         required={"comment", "progress"},
+      *
+      *                         @OA\Property(property="comment", type="text"),
+      *                         @OA\Property(property="progress", type="text")
+      *                     ),
+      *                 ),
+      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=403, description="Not Autorized"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *             @OA\Response(response=422, description="Unprocessable Content"),
+      *     )
+      */
+    public function to_progress(Request $request, $taskUuid)
+    {
+        // permission
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            $taskUser = TaskToUser::where('user_uuid', $request->user_uuid)
+                                    ->where('task_uuid', $taskUuid)
+                                    ->where('status', Config::get('common.status.actived'))
+                                    ->first();
+            if ($taskUser==null){
+                return response()->json(['status' => 'error', 'msg' => 'not permitted'], 403);
+            }
+        }
+
+        $validated = $request->validate([
+            'comment' => 'required',
+            'progress' => 'required',
+            'user_uuid' => ''
+        ]);
+
+        $task = Task::where('uuid', $taskUuid)->first();
+
+        // add comment
+        $comment = $this->taskCommentService->add([
+            'user_uuid' => $request->user_uuid,
+            'task_uuid' => $task->uuid,
+            'comment' => $validated['comment'],
+        ]);
+
+        // update progress
+        $task = $this->taskService->to_progress($task, $validated);
+
+        return $comment;
+    }
+
+    /**     @OA\GET(
+      *         path="/api/task-comments/{taskUuid}",
+      *         operationId="get_task_comments",
+      *         tags={"Task"},
+      *         summary="Get task comments",
+      *         description="Get task comments",
+      *             @OA\Parameter(
+      *                 name="uuid",
+      *                 in="path",
+      *                 description="task uuid",
+      *                 @OA\Schema(
+      *                     type="string",
+      *                     format="uuid"
+      *                 ),
+      *                 required=true
+      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=403, description="Not Autorized"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
+    public function comments(Request $request, $taskUuid)
+    {
+        // permission
+
+        $taskComments = $this->taskCommentService->all($taskUuid);
+        return $taskComments;
+    }
+
+    /**     @OA\PUT(
+      *         path="/api/task-approve/{uuid}",
+      *         operationId="approve_task",
+      *         tags={"Task"},
+      *         summary="Approve task",
+      *         description="Approve task",
+      *             @OA\Parameter(
+      *                 name="uuid",
+      *                 in="path",
+      *                 description="task uuid",
+      *                 @OA\Schema(
+      *                     type="string",
+      *                     format="uuid"
+      *                 ),
+      *                 required=true
+      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=403, description="Not Autorized"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *             @OA\Response(response=422, description="Unprocessable Content"),
+      *     )
+      */
+    public function approve(Request $request, $taskUuid)
+    {
+        // permission
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            return response()->json(['status' => 'error', 'msg' => 'not permitted'], 403);
+        }
+
+        $this->taskService->approve($taskUuid, $request->user_uuid);
+
+        return response()->json(['status' => 'ok', 'msg' => 'success'], 200);
+    }
+
+    /**     @OA\PUT(
+      *         path="/api/task-reject/{uuid}",
+      *         operationId="reject_task",
+      *         tags={"Task"},
+      *         summary="Reject task",
+      *         description="Reject task",
+      *             @OA\Parameter(
+      *                 name="uuid",
+      *                 in="path",
+      *                 description="task uuid",
+      *                 @OA\Schema(
+      *                     type="string",
+      *                     format="uuid"
+      *                 ),
+      *                 required=true
+      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=403, description="Not Autorized"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *             @OA\Response(response=422, description="Unprocessable Content"),
+      *     )
+      */
+    public function reject(Request $request, $taskUuid)
+    {
+        // permission
+        if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
+            return response()->json(['status' => 'error', 'msg' => 'not permitted'], 403);
+        }
+
+        $this->taskService->reject($taskUuid, $request->user_uuid);
+
         return response()->json(['status' => 'ok', 'msg' => 'success'], 200);
     }
 

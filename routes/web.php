@@ -168,6 +168,10 @@ Route::middleware('auth.custom')->group(function() {
     Route::put('api/task/{uuid}', [TaskController::class, 'update']);
     Route::delete('api/task/{uuid}', [TaskController::class, 'destroy']);
     Route::get('api/task-permission', [TaskController::class, 'permission']);
+    Route::put('api/task-progress/{uuid}', [TaskController::class, 'to_progress']);
+    Route::get('api/task-comment/{taskUuid}', [TaskController::class, 'comments']);
+    Route::put('api/task-approve/{uuid}', [TaskController::class, 'approve']);
+    Route::put('api/task-reject/{uuid}', [TaskController::class, 'reject']);
 
     // notes
     Route::resource('api/note', NoteController::class);
