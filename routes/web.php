@@ -152,6 +152,7 @@ Route::middleware('auth.custom')->group(function() {
     Route::post('api/chat', [ChatController::class, 'store']);
     Route::put('api/chat/{uuid}', [ChatController::class, 'update']);
     Route::delete('api/chat/{uuid}', [ChatController::class, 'destroy']);
+    Route::get('api/chat-permission', [ChatController::class, 'permission']);
     Route::resource('api/message', MessageController::class);
     Route::get('api/chat-messages/{chat_uuid}', [MessageController::class, 'by_chat']);
     Route::post('api/message', [MessageController::class, 'store']);

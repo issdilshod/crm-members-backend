@@ -56,16 +56,16 @@ class ChatService{
 
     public function create($entity)
     {
-        // get members 
-        $entity['members'] = $this->getMembers($entity['entity_uuid']);
-        $entity['partner_uuid'] = $entity['entity_uuid'];
-        unset($entity['entity_uuid']);
-
         $chat = Chat::create($entity);
+
+        // add personal user
+        $this->chatUserService->add_user_to_chat($chat->uuid, $entity['user_uuid']);
 
         // add members
         if (isset($entity['members'])){
-            $this->addMembers($chat->uuid, $entity['members']);
+            foreach ($entity['members'] AS $key => $value):
+                $this->chatUserService->add_user_to_chat($chat->uuid, $value['uuid']);
+            endforeach;
         }
 
         $activity = Activity::create([
@@ -90,16 +90,6 @@ class ChatService{
     {
         $chat = Chat::create($entity);
 
-        // add members
-        if (isset($entity['members'])){
-            $this->addMembers($chat->uuid, $entity['members']);
-        }
-
-        // delete members
-        if (isset($entity['members_to_delete'])){
-            $this->deleteMembers($chat->uuid, $entity['members_to_delete']);
-        }
-
         $activity = Activity::create([
             'user_uuid' => $user_uuid,
             'entity_uuid' => $chat['uuid'],
@@ -123,45 +113,31 @@ class ChatService{
         $chat->update(['status' => Config::get('common.status.deleted')]);
     }
 
-    public function check_exists($user_uuid, $entity_uuid)
+    public function check_exists($user_uuid, $entity)
     {
-        $chat = Chat::select('chats.*')
-                        ->leftJoin('chat_users', 'chat_users.chat_uuid', '=', 'chats.uuid')
-                        ->where(function ($q) use($user_uuid, $entity_uuid) {
-                            $q->where('chats.user_uuid', $user_uuid)
-                                ->where('chats.partner_uuid', $entity_uuid);
-                        })
-                        ->orWhere(function ($q) use($user_uuid, $entity_uuid) {
-                            $q->where('chats.partner_uuid', $user_uuid)
-                                ->where('chats.user_uuid', $entity_uuid);
-                        })
-                        ->first();
-        if ($chat!=null){
-            $chat = $this->setChatMembers($chat);
-            return new ChatResource($chat);
+        // if chat is group
+        if ($entity['type']==Config::get('common.chat.type.group')) { return null; } 
+
+        // check for exists
+        if (isset($entity['members'])){
+            $chat = Chat::select('chats.*')
+                            ->leftJoin('chat_users', 'chat_users.chat_uuid', '=', 'chats.uuid')
+                            ->where(function ($q) use($user_uuid, $entity) {
+                                $q->where('chats.user_uuid', $user_uuid)
+                                    ->where('chats.partner_uuid', $entity['members'][0]['uuid']);
+                            })
+                            ->orWhere(function ($q) use($user_uuid, $entity) {
+                                $q->where('chats.partner_uuid', $user_uuid)
+                                    ->where('chats.user_uuid', $entity['members'][0]['uuid']);
+                            })
+                            ->first();
+            if ($chat!=null){
+                $chat = $this->setChatMembers($chat);
+                return new ChatResource($chat);
+            }
         }
+
         return null;
-    }
-
-    private function getMembers($entity_uuid)
-    {
-        $members = [];
-        $user = User::where('uuid', $entity_uuid)->first();
-        $users = User::select('users.*')
-                        ->join('departments', 'departments.uuid', '=', 'users.department_uuid')
-                        ->where('departments.uuid', $entity_uuid)
-                        ->get();
-        if ($user!=null) {
-            $members[] = $user['uuid'];
-        }
-
-        if ($users!=null){
-            foreach($users AS $key => $value):
-                $members[] = $value['uuid'];
-            endforeach;
-        }
-
-        return $members;
     }
 
     private function setChatMembers($chat)
@@ -176,20 +152,6 @@ class ChatService{
             $chats[$key]['members'] = $this->chatUserService->chat_members($value['uuid']);
         endforeach;
         return $chats;
-    }
-
-    private function addMembers($chat_uuid, $members)
-    {
-        foreach ($members as $key => $value):
-            $this->chatUserService->add_user_to_chat($chat_uuid, $value);
-        endforeach;
-    }
-
-    private function deleteMembers($chat_uuid, $members)
-    {
-        foreach ($members as $key => $value):
-            $this->chatUserService->delete_user_from_chat($chat_uuid, $value);
-        endforeach;
     }
 
 }

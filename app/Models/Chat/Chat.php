@@ -14,7 +14,7 @@ class Chat extends Model
 {
     use HasFactory, TraitUuid;
 
-    protected $fillable = ['user_uuid', 'partner_uuid', 'name', 'status'];
+    protected $fillable = ['user_uuid', 'partner_uuid', 'name', 'type', 'status'];
 
     protected $attributes = ['status' => 1];
 

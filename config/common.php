@@ -59,6 +59,13 @@ return [
         ]
     ],
 
+    'chat' => [
+        'type' => [
+            'private' => 1,
+            'group' => 2
+        ],
+    ],
+
     'session' => [
         'token_deadline' => 7, // expires in days
     ], 

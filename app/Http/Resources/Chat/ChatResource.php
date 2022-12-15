@@ -19,6 +19,7 @@ class ChatResource extends JsonResource
             'user_uuid' => $this->user_uuid,
             'user' => $this->user,
             'name' => $this->name,
+            'type' => $this->type,
             'members' => (isset($this->members)?$this->members:[]),
             'last_message' => $this->last_message(),
             'created_at' => $this->created_at

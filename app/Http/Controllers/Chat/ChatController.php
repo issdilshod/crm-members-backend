@@ -83,10 +83,11 @@ class ChatController extends Controller
       *                     mediaType="multipart/form-data",
       *                     @OA\Schema(
       *                         type="object",
-      *                         required={"name", "entity_uuid"},
+      *                         required={"name", "type"},
       *
       *                         @OA\Property(property="name", type="text"),
-      *                         @OA\Property(property="entity_uuid", type="text"),
+      *                         @OA\Property(property="type", type="text"),
+      *                         @OA\Property(property="members[]", type="text"),
       *                     ),
       *                 ),
       *             ),
@@ -108,12 +109,13 @@ class ChatController extends Controller
 
         $validated = $request->validate([
             'name' => 'required',
-            'entity_uuid' => 'required',
+            'type' => 'required',
+            'members' => 'array',
             'user_uuid' => ''
         ]);
 
-        // check for exists
-        $chat = $this->chatService->check_exists($request->user_uuid, $validated['entity_uuid']);
+        // check if private chat then check for exists
+        $chat = $this->chatService->check_exists($request->user_uuid, $validated);
 
         if ($chat==null) { // then create
             $chat = $this->chatService->create($validated);
@@ -254,5 +256,29 @@ class ChatController extends Controller
         $this->chatService->delete($chat);
     }
 
+    /**     @OA\GET(
+      *         path="/api/chat-permission",
+      *         operationId="chat_permission",
+      *         tags={"Chat"},
+      *         summary="Get chat permission of user",
+      *         description="Get chat permission of user",
+      *             @OA\Response(response=200, description="Successfully"),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=403, description="Not Autorized"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
+    public function permission(Request $request)
+    {
+        $permissions = [];
+
+        // permission
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.chat.store'))){
+            $permissions[] = Config::get('common.permission.chat.store');
+        }
+
+        return $permissions;
+    }
 
 }
