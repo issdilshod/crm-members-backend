@@ -63,11 +63,11 @@ class VirtualOfficeController extends Controller
       *                         type="object",
       *                         required={},
       *                         
+      *                         @OA\Property(property="vo_signer_name", type="text"),
       *                         @OA\Property(property="vo_provider_name", type="text"),
       *                         @OA\Property(property="vo_website", type="text"),
       *                         @OA\Property(property="vo_provider_username", type="text"),
       *                         @OA\Property(property="vo_provider_password", type="text"),
-      *
       *                         @OA\Property(property="vo_contact_person_name", type="text"),
       *                         @OA\Property(property="vo_contact_person_phone_number", type="text"),
       *                         @OA\Property(property="vo_contact_person_email", type="text"),
@@ -80,6 +80,8 @@ class VirtualOfficeController extends Controller
       *                         @OA\Property(property="monthly_payment_amount", type="text"),
       *                         @OA\Property(property="contract", type="text"),
       *                         @OA\Property(property="contract_terms", type="text"),
+      *                         @OA\Property(property="contract_terms_notes", type="text"),
+      *                         @OA\Property(property="contract_effective_date", type="text"),
       *
       *                         @OA\Property(property="addresses[]", type="text"),
       *                     ),
@@ -104,6 +106,7 @@ class VirtualOfficeController extends Controller
         }
 
         $validated = $request->validate([
+            'vo_signer_uuid' => '',
             'vo_provider_name' => '',
             'vo_website' => '',
             'vo_provider_username' => '',
@@ -120,6 +123,8 @@ class VirtualOfficeController extends Controller
             'monthly_payment_amount' => '',
             'contract' => '',
             'contract_terms' => '',
+            'contract_terms_notes' => '',
+            'contract_effective_date' => '',
             
             'addresses' => 'array',
 
@@ -200,11 +205,11 @@ class VirtualOfficeController extends Controller
       *                         type="object",
       *                         required={},
       *                         
+      *                         @OA\Property(property="vo_signer_name", type="text"),
       *                         @OA\Property(property="vo_provider_name", type="text"),
       *                         @OA\Property(property="vo_website", type="text"),
       *                         @OA\Property(property="vo_provider_username", type="text"),
       *                         @OA\Property(property="vo_provider_password", type="text"),
-      *
       *                         @OA\Property(property="vo_contact_person_name", type="text"),
       *                         @OA\Property(property="vo_contact_person_phone_number", type="text"),
       *                         @OA\Property(property="vo_contact_person_email", type="text"),
@@ -217,6 +222,8 @@ class VirtualOfficeController extends Controller
       *                         @OA\Property(property="monthly_payment_amount", type="text"),
       *                         @OA\Property(property="contract", type="text"),
       *                         @OA\Property(property="contract_terms", type="text"),
+      *                         @OA\Property(property="contract_terms_notes", type="text"),
+      *                         @OA\Property(property="contract_effective_date", type="text"),
       *
       *                         @OA\Property(property="addresses[]", type="text"),
       *                     ),
@@ -241,6 +248,7 @@ class VirtualOfficeController extends Controller
         }
 
         $validated = $request->validate([
+            'vo_signer_uuid' => '',
             'vo_provider_name' => '',
             'vo_website' => '',
             'vo_provider_username' => '',
@@ -249,6 +257,7 @@ class VirtualOfficeController extends Controller
             'vo_contact_person_phone_number' => '',
             'vo_contact_person_email' => '',
             'online_account' => '',
+            'online_account_username' => '',
             'online_account_password' => '',
             'card_on_file' => '',
             'card_last_four_digit' => '',
@@ -256,6 +265,8 @@ class VirtualOfficeController extends Controller
             'monthly_payment_amount' => '',
             'contract' => '',
             'contract_terms' => '',
+            'contract_terms_notes' => '',
+            'contract_effective_date' => '',
 
             'addresses' => 'array'
         ]);
@@ -359,11 +370,11 @@ class VirtualOfficeController extends Controller
       *                         type="object",
       *                         required={},
       *                         
+      *                         @OA\Property(property="vo_signer_name", type="text"),
       *                         @OA\Property(property="vo_provider_name", type="text"),
       *                         @OA\Property(property="vo_website", type="text"),
       *                         @OA\Property(property="vo_provider_username", type="text"),
       *                         @OA\Property(property="vo_provider_password", type="text"),
-      *
       *                         @OA\Property(property="vo_contact_person_name", type="text"),
       *                         @OA\Property(property="vo_contact_person_phone_number", type="text"),
       *                         @OA\Property(property="vo_contact_person_email", type="text"),
@@ -376,6 +387,8 @@ class VirtualOfficeController extends Controller
       *                         @OA\Property(property="monthly_payment_amount", type="text"),
       *                         @OA\Property(property="contract", type="text"),
       *                         @OA\Property(property="contract_terms", type="text"),
+      *                         @OA\Property(property="contract_terms_notes", type="text"),
+      *                         @OA\Property(property="contract_effective_date", type="text"),
       *
       *                         @OA\Property(property="addresses[]", type="text"),
       *                     ),
@@ -400,6 +413,7 @@ class VirtualOfficeController extends Controller
         }
 
         $validated = $request->validate([
+            'vo_signer_uuid' => '',
             'vo_provider_name' => '',
             'vo_website' => '',
             'vo_provider_username' => '',
@@ -407,8 +421,8 @@ class VirtualOfficeController extends Controller
             'vo_contact_person_name' => '',
             'vo_contact_person_phone_number' => '',
             'vo_contact_person_email' => '',
-
             'online_account' => '',
+            'online_account_username' => '',
             'online_account_password' => '',
             'card_on_file' => '',
             'card_last_four_digit' => '',
@@ -416,6 +430,8 @@ class VirtualOfficeController extends Controller
             'monthly_payment_amount' => '',
             'contract' => '',
             'contract_terms' => '',
+            'contract_terms_notes' => '',
+            'contract_effective_date' => '',
 
             // addresses
             'addresses' => 'array',
@@ -460,11 +476,11 @@ class VirtualOfficeController extends Controller
       *                         type="object",
       *                         required={},
       *                         
+      *                         @OA\Property(property="vo_signer_name", type="text"),
       *                         @OA\Property(property="vo_provider_name", type="text"),
       *                         @OA\Property(property="vo_website", type="text"),
       *                         @OA\Property(property="vo_provider_username", type="text"),
       *                         @OA\Property(property="vo_provider_password", type="text"),
-      *
       *                         @OA\Property(property="vo_contact_person_name", type="text"),
       *                         @OA\Property(property="vo_contact_person_phone_number", type="text"),
       *                         @OA\Property(property="vo_contact_person_email", type="text"),
@@ -477,6 +493,8 @@ class VirtualOfficeController extends Controller
       *                         @OA\Property(property="monthly_payment_amount", type="text"),
       *                         @OA\Property(property="contract", type="text"),
       *                         @OA\Property(property="contract_terms", type="text"),
+      *                         @OA\Property(property="contract_terms_notes", type="text"),
+      *                         @OA\Property(property="contract_effective_date", type="text"),
       *
       *                         @OA\Property(property="addresses", type="text"),
       *                     ),
@@ -501,6 +519,7 @@ class VirtualOfficeController extends Controller
         }
 
         $validated = $request->validate([
+            'vo_signer_uuid' => '',
             'vo_provider_name' => '',
             'vo_website' => '',
             'vo_provider_username' => '',
@@ -508,8 +527,8 @@ class VirtualOfficeController extends Controller
             'vo_contact_person_name' => '',
             'vo_contact_person_phone_number' => '',
             'vo_contact_person_email' => '',
-
             'online_account' => '',
+            'online_account_username' => '',
             'online_account_password' => '',
             'card_on_file' => '',
             'card_last_four_digit' => '',
@@ -517,6 +536,8 @@ class VirtualOfficeController extends Controller
             'monthly_payment_amount' => '',
             'contract' => '',
             'contract_terms' => '',
+            'contract_terms_notes' => '',
+            'contract_effective_date' => '',
 
             // addresses
             'addresses' => 'array',
@@ -562,11 +583,11 @@ class VirtualOfficeController extends Controller
       *                         type="object",
       *                         required={},
       *                         
+      *                         @OA\Property(property="vo_signer_name", type="text"),
       *                         @OA\Property(property="vo_provider_name", type="text"),
       *                         @OA\Property(property="vo_website", type="text"),
       *                         @OA\Property(property="vo_provider_username", type="text"),
       *                         @OA\Property(property="vo_provider_password", type="text"),
-      *
       *                         @OA\Property(property="vo_contact_person_name", type="text"),
       *                         @OA\Property(property="vo_contact_person_phone_number", type="text"),
       *                         @OA\Property(property="vo_contact_person_email", type="text"),
@@ -579,6 +600,8 @@ class VirtualOfficeController extends Controller
       *                         @OA\Property(property="monthly_payment_amount", type="text"),
       *                         @OA\Property(property="contract", type="text"),
       *                         @OA\Property(property="contract_terms", type="text"),
+      *                         @OA\Property(property="contract_terms_notes", type="text"),
+      *                         @OA\Property(property="contract_effective_date", type="text"),
       *
       *                         @OA\Property(property="addresses[]", type="text"),
       *                     ),
@@ -603,6 +626,7 @@ class VirtualOfficeController extends Controller
         }
 
         $validated = $request->validate([
+            'vo_signer_uuid' => '',
             'vo_provider_name' => '',
             'vo_website' => '',
             'vo_provider_username' => '',
@@ -610,8 +634,8 @@ class VirtualOfficeController extends Controller
             'vo_contact_person_name' => '',
             'vo_contact_person_phone_number' => '',
             'vo_contact_person_email' => '',
-
             'online_account' => '',
+            'online_account_username' => '',
             'online_account_password' => '',
             'card_on_file' => '',
             'card_last_four_digit' => '',
@@ -619,6 +643,8 @@ class VirtualOfficeController extends Controller
             'monthly_payment_amount' => '',
             'contract' => '',
             'contract_terms' => '',
+            'contract_terms_notes' => '',
+            'contract_effective_date' => '',
 
             // addresses
             'addresses' => 'array'

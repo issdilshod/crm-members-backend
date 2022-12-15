@@ -19,6 +19,8 @@ class VirtualOfficeResource extends JsonResource
             'uuid' => $this->uuid,
             'user_uuid' => $this->user_uuid,
             
+            'vo_signer_uuid' => $this->vo_signer_uuid,
+            'director' => $this->director,
             'vo_provider_name' => $this->vo_provider_name,
             'vo_provider_username' => $this->vo_provider_username,
             'vo_provider_password' => $this->vo_provider_password,
@@ -35,6 +37,8 @@ class VirtualOfficeResource extends JsonResource
             'monthly_payment_amount' => $this->monthly_payment_amount,
             'contract' => $this->contract,
             'contract_terms' => $this->contract_terms,
+            'contract_terms_notes' => $this->contract_terms_notes,
+            'contract_effective_date' => $this->contract_effective_date,
 
             // addresses
             'addresses' => AddressResource::collection($this->addresses),
