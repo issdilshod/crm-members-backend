@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\Company;
 
-use App\Http\Resources\Helper\RegisterAgentResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CompanyIncorporationResource extends JsonResource
@@ -20,7 +19,8 @@ class CompanyIncorporationResource extends JsonResource
             'annual_report' => $this->annual_report,
             'effective_date' => $this->effective_date,
             'registered_agent_exists' => $this->registered_agent_exists,
-            'notes' => $this->notes
+            'notes' => $this->notes,
+            'parent' => $this->parent
         ];
     }
 }

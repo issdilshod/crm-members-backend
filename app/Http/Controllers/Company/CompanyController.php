@@ -107,6 +107,10 @@ class CompanyController extends Controller
       *
       *                         @OA\Property(property="bank_account[]", type="text"),
       *
+      *                         @OA\Property(property="register_agents[]", type="text"),
+      *
+      *                         @OA\Property(property="incorporations[]", type="text"),
+      *
       *                         @OA\Property(property="files[]", type="text"),
       *
       *                         @OA\Property(property="files_to_delete[]", type="text")
@@ -165,6 +169,12 @@ class CompanyController extends Controller
 
             // bank account
             'bank_account' => 'array',
+
+            // register agents
+            'register_agents' => 'array',
+
+            // incorporations
+            'incorporations' => 'array',
 
             // files
             'files' => 'array',
@@ -235,6 +245,22 @@ class CompanyController extends Controller
         // bank account
         $validated['bank_account']['entity_uuid'] = $company->uuid;
         $this->bankAccountService->save($validated['bank_account']);
+
+        // register agent
+        if (isset($validated['register_agents'])){
+            foreach ($validated['register_agents'] AS $key => $value):
+                $value['entity_uuid'] = $company->uuid;
+                $this->registerAgentService->save($value);
+            endforeach;
+        }
+
+        // incorporations
+        if (isset($validated['incorporations'])){
+            foreach ($validated['incorporations'] as $key => $value):
+                $value['entity_uuid'] = $company->uuid;
+                $this->companyIncorporationService->save($value);
+            endforeach;
+        }
 
         // files to delete (first)
         if (isset($validated['files_to_delete'])){
@@ -346,6 +372,8 @@ class CompanyController extends Controller
       *
       *                         @OA\Property(property="register_agents[]", type="text"),
       *
+      *                         @OA\Property(property="incorporations[]", type="text"),
+      *
       *                         @OA\Property(property="files[]", type="text"),
       *
       *                         @OA\Property(property="files_to_delete[]", type="text")
@@ -409,6 +437,9 @@ class CompanyController extends Controller
 
             // register agent
             'register_agents' => 'array',
+
+            // incorporations
+            'incorporations' => 'array',
 
             // files to delete
             'files' => 'array',
@@ -485,6 +516,14 @@ class CompanyController extends Controller
             foreach ($validated['register_agents'] AS $key => $value):
                 $value['entity_uuid'] = $company->uuid;
                 $this->registerAgentService->save($value);
+            endforeach;
+        }
+
+        // incorporations
+        if (isset($validated['incorporations'])){
+            foreach ($validated['incorporations'] as $key => $value):
+                $value['entity_uuid'] = $company->uuid;
+                $this->companyIncorporationService->save($value);
             endforeach;
         }
 
@@ -587,6 +626,10 @@ class CompanyController extends Controller
       *
       *                         @OA\Property(property="bank_account[]", type="text"),
       *
+      *                         @OA\Property(property="register_agents[]", type="text"),
+      *
+      *                         @OA\Property(property="incorporations[]", type="text"),
+      *
       *                         @OA\Property(property="files[]", type="text"),
       *
       *                         @OA\Property(property="files_to_delete[]", type="text")
@@ -645,6 +688,12 @@ class CompanyController extends Controller
 
             // bank account
             'bank_account' => 'array',
+
+            // register agents
+            'register_agents' => 'array',
+
+            // incorporations
+            'incorporations' => 'array',
 
             // files
             'files' => 'array',
@@ -712,6 +761,22 @@ class CompanyController extends Controller
         $validated['bank_account']['entity_uuid'] = $company->uuid;
         $validated['bank_account']['status'] = Config::get('common.status.pending');
         $this->bankAccountService->save($validated['bank_account']);
+
+        // register agent
+        if (isset($validated['register_agents'])){
+            foreach ($validated['register_agents'] AS $key => $value):
+                $value['entity_uuid'] = $company->uuid;
+                $this->registerAgentService->save($value);
+            endforeach;
+        }
+
+        // incorporations
+        if (isset($validated['incorporations'])){
+            foreach ($validated['incorporations'] as $key => $value):
+                $value['entity_uuid'] = $company->uuid;
+                $this->companyIncorporationService->save($value);
+            endforeach;
+        }
 
         // files to delete (first)
         if (isset($validated['files_to_delete'])){
@@ -785,6 +850,10 @@ class CompanyController extends Controller
       *
       *                         @OA\Property(property="bank_account[]", type="text"),
       *
+      *                         @OA\Property(property="register_agents[]", type="text"),
+      *
+      *                         @OA\Property(property="incorporations[]", type="text"),
+      *
       *                         @OA\Property(property="files[]", type="text"),
       *
       *                         @OA\Property(property="files_to_delete[]", type="text")
@@ -853,6 +922,12 @@ class CompanyController extends Controller
 
             // bank account
             'bank_account' => 'array',
+
+            // register agents
+            'register_agents' => 'array',
+
+            // incorporations
+            'incorporations' => 'array',
 
             // files
             'files' => 'array',
@@ -930,6 +1005,22 @@ class CompanyController extends Controller
         $validated['bank_account']['status'] = Config::get('common.status.pending');
         $this->bankAccountService->save($validated['bank_account']);
 
+        // register agent
+        if (isset($validated['register_agents'])){
+            foreach ($validated['register_agents'] AS $key => $value):
+                $value['entity_uuid'] = $company->uuid;
+                $this->registerAgentService->save($value);
+            endforeach;
+        }
+
+        // incorporations
+        if (isset($validated['incorporations'])){
+            foreach ($validated['incorporations'] as $key => $value):
+                $value['entity_uuid'] = $company->uuid;
+                $this->companyIncorporationService->save($value);
+            endforeach;
+        }
+
         // files to delete (first)
         if (isset($validated['files_to_delete'])){
             foreach ($validated['files_to_delete'] AS $key => $value):
@@ -1002,6 +1093,10 @@ class CompanyController extends Controller
       *
       *                         @OA\Property(property="bank_account[]", type="text"),
       *
+      *                         @OA\Property(property="register_agents[]", type="text"),
+      *
+      *                         @OA\Property(property="incorporations[]", type="text"),
+      *
       *                         @OA\Property(property="files[]", type="text"),
       *
       *                         @OA\Property(property="files_to_delete[]", type="text")
@@ -1062,6 +1157,12 @@ class CompanyController extends Controller
 
             // bank account
             'bank_account' => 'array',
+
+            // register agents
+            'register_agents' => 'array',
+
+            // incorporations
+            'incorporations' => 'array',
 
             // files to delete
             'files' => 'array',
@@ -1248,6 +1349,10 @@ class CompanyController extends Controller
       *
       *                         @OA\Property(property="bank_account[]", type="text"),
       *
+      *                         @OA\Property(property="register_agents[]", type="text"),
+      *
+      *                         @OA\Property(property="incorporations[]", type="text"),
+      *
       *                         @OA\Property(property="files[]", type="text"),
       *
       *                         @OA\Property(property="files_to_delete[]", type="text")
@@ -1307,6 +1412,12 @@ class CompanyController extends Controller
             // bank account
             'bank_account' => 'array',
 
+            // register agents
+            'register_agents' => 'array',
+            
+            // incorporations
+            'incorporations' => 'array',
+
             // files to delete
             'files' => 'array',
             'files_to_delete' => 'array'
@@ -1350,6 +1461,22 @@ class CompanyController extends Controller
         $validated['bank_account']['entity_uuid'] = $company->uuid;
         $validated['bank_account']['status'] = Config::get('common.status.actived');
         $this->bankAccountService->save($validated['bank_account']);
+
+        // register agent
+        if (isset($validated['register_agents'])){
+            foreach ($validated['register_agents'] AS $key => $value):
+                $value['entity_uuid'] = $company->uuid;
+                $this->registerAgentService->save($value);
+            endforeach;
+        }
+
+        // incorporations
+        if (isset($validated['incorporations'])){
+            foreach ($validated['incorporations'] as $key => $value):
+                $value['entity_uuid'] = $company->uuid;
+                $this->companyIncorporationService->save($value);
+            endforeach;
+        }
 
         // files to delete (first)
         if (isset($validated['files_to_delete'])){

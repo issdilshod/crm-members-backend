@@ -1827,6 +1827,12 @@
                                     "bank_account[]": {
                                         "type": "text"
                                     },
+                                    "register_agents[]": {
+                                        "type": "text"
+                                    },
+                                    "incorporations[]": {
+                                        "type": "text"
+                                    },
                                     "files[]": {
                                         "type": "text"
                                     },
@@ -1954,6 +1960,12 @@
                                         "type": "text"
                                     },
                                     "bank_account[]": {
+                                        "type": "text"
+                                    },
+                                    "register_agents[]": {
+                                        "type": "text"
+                                    },
+                                    "incorporations[]": {
                                         "type": "text"
                                     },
                                     "files[]": {
@@ -2163,6 +2175,12 @@
                                     "bank_account[]": {
                                         "type": "text"
                                     },
+                                    "register_agents[]": {
+                                        "type": "text"
+                                    },
+                                    "incorporations[]": {
+                                        "type": "text"
+                                    },
                                     "files[]": {
                                         "type": "text"
                                     },
@@ -2312,6 +2330,12 @@
                                     "bank_account[]": {
                                         "type": "text"
                                     },
+                                    "register_agents[]": {
+                                        "type": "text"
+                                    },
+                                    "incorporations[]": {
+                                        "type": "text"
+                                    },
                                     "files[]": {
                                         "type": "text"
                                     },
@@ -2459,6 +2483,12 @@
                                         "type": "text"
                                     },
                                     "bank_account[]": {
+                                        "type": "text"
+                                    },
+                                    "register_agents[]": {
+                                        "type": "text"
+                                    },
+                                    "incorporations[]": {
                                         "type": "text"
                                     },
                                     "files[]": {
@@ -2642,6 +2672,12 @@
                                         "type": "text"
                                     },
                                     "bank_account[]": {
+                                        "type": "text"
+                                    },
+                                    "register_agents[]": {
+                                        "type": "text"
+                                    },
+                                    "incorporations[]": {
                                         "type": "text"
                                     },
                                     "files[]": {
@@ -4217,6 +4253,525 @@
                 }
             }
         },
+        "/api/future-websites": {
+            "get": {
+                "tags": [
+                    "Future Websites"
+                ],
+                "summary": "List of future websites",
+                "description": "List of future websites",
+                "operationId": "list_future_websites",
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Future Websites"
+                ],
+                "summary": "Add future websites",
+                "description": "Add future websites",
+                "operationId": "post_future_websites",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "sic_code_uuid",
+                                    "link"
+                                ],
+                                "properties": {
+                                    "sic_code_uuid": {
+                                        "type": "text"
+                                    },
+                                    "link": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            }
+        },
+        "/api/future-websites/{uuid}": {
+            "get": {
+                "tags": [
+                    "Future Websites"
+                ],
+                "summary": "Get future websites",
+                "description": "Get future websites",
+                "operationId": "get_future_websites",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "future websites uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Future Websites"
+                ],
+                "summary": "Update future websites",
+                "description": "Update future websites",
+                "operationId": "update_future_websites",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "future websites uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "sic_code_uuid",
+                                    "link"
+                                ],
+                                "properties": {
+                                    "sic_code_uuid": {
+                                        "type": "text"
+                                    },
+                                    "link": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Future Websites"
+                ],
+                "summary": "Delete future websites",
+                "description": "Delete future websites",
+                "operationId": "delete_future_websites",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "future websites uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/future-websites-pending": {
+            "post": {
+                "tags": [
+                    "Future Websites"
+                ],
+                "summary": "Pending future websites",
+                "description": "Pending future websites",
+                "operationId": "pending_future_websites",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "sic_code_uuid",
+                                    "link"
+                                ],
+                                "properties": {
+                                    "sic_code_uuid": {
+                                        "type": "text"
+                                    },
+                                    "link": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            }
+        },
+        "/api/future-websites-pending-update/{uuid}": {
+            "put": {
+                "tags": [
+                    "Future Websites"
+                ],
+                "summary": "Pending update future websites",
+                "description": "Pending update future websites",
+                "operationId": "pending_update_future_websites",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "future websites uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "sic_code_uuid",
+                                    "link"
+                                ],
+                                "properties": {
+                                    "sic_code_uuid": {
+                                        "type": "text"
+                                    },
+                                    "link": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            }
+        },
+        "/api/future-websites-accept/{uuid}": {
+            "put": {
+                "tags": [
+                    "Future Websites"
+                ],
+                "summary": "Accept future websites",
+                "description": "Accept future websites",
+                "operationId": "accept_future_websites",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "future websites uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "sic_code_uuid",
+                                    "link"
+                                ],
+                                "properties": {
+                                    "sic_code_uuid": {
+                                        "type": "text"
+                                    },
+                                    "link": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            }
+        },
+        "/api/future-websites-reject/{uuid}": {
+            "put": {
+                "tags": [
+                    "Future Websites"
+                ],
+                "summary": "Reject future websites",
+                "description": "Reject future websites",
+                "operationId": "reject_future_websites",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "future websies uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/future-websites-search/{search}": {
+            "get": {
+                "tags": [
+                    "Future Websites"
+                ],
+                "summary": "Get future websites search",
+                "description": "Get future websites search",
+                "operationId": "get_future_websites_search",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "path",
+                        "description": "future websites search",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "text"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/future-websites-permission": {
+            "get": {
+                "tags": [
+                    "Future Websites"
+                ],
+                "summary": "Get future websites permission of user",
+                "description": "Get future websites permission of user",
+                "operationId": "future_websites_permission",
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    }
+                }
+            }
+        },
         "/api/department": {
             "get": {
                 "tags": [
@@ -5350,9 +5905,6 @@
                                     "online_account_password": {
                                         "type": "text"
                                     },
-                                    "effective_date": {
-                                        "type": "text"
-                                    },
                                     "card_on_file": {
                                         "type": "text"
                                     },
@@ -5508,9 +6060,6 @@
                                         "type": "text"
                                     },
                                     "online_account_password": {
-                                        "type": "text"
-                                    },
-                                    "effective_date": {
                                         "type": "text"
                                     },
                                     "card_on_file": {
@@ -5697,9 +6246,6 @@
                                     "online_account_password": {
                                         "type": "text"
                                     },
-                                    "effective_date": {
-                                        "type": "text"
-                                    },
                                     "card_on_file": {
                                         "type": "text"
                                     },
@@ -5818,9 +6364,6 @@
                                         "type": "text"
                                     },
                                     "online_account_password": {
-                                        "type": "text"
-                                    },
-                                    "effective_date": {
                                         "type": "text"
                                     },
                                     "card_on_file": {
@@ -5943,9 +6486,6 @@
                                     "online_account_password": {
                                         "type": "text"
                                     },
-                                    "effective_date": {
-                                        "type": "text"
-                                    },
                                     "card_on_file": {
                                         "type": "text"
                                     },
@@ -6054,525 +6594,6 @@
                 "summary": "Get virtual office permission of user",
                 "description": "Get virtual office permission of user",
                 "operationId": "virtual_office_permission",
-                "responses": {
-                    "200": {
-                        "description": "Successfully"
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "401": {
-                        "description": "Not Authenticated"
-                    }
-                }
-            }
-        },
-        "/api/future-websites": {
-            "get": {
-                "tags": [
-                    "Future Websites"
-                ],
-                "summary": "List of future websites",
-                "description": "List of future websites",
-                "operationId": "list_future_websites",
-                "responses": {
-                    "200": {
-                        "description": "Successfully"
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "401": {
-                        "description": "Not Authenticated"
-                    },
-                    "403": {
-                        "description": "Not Autorized"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    }
-                }
-            },
-            "post": {
-                "tags": [
-                    "Future Websites"
-                ],
-                "summary": "Add future websites",
-                "description": "Add future websites",
-                "operationId": "post_future_websites",
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [
-                                    "sic_code_uuid",
-                                    "link"
-                                ],
-                                "properties": {
-                                    "sic_code_uuid": {
-                                        "type": "text"
-                                    },
-                                    "link": {
-                                        "type": "text"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        },
-                        "application/json": {
-                            "schema": {}
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successfully"
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "401": {
-                        "description": "Not Authenticated"
-                    },
-                    "403": {
-                        "description": "Not Autorized"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    },
-                    "409": {
-                        "description": "Conflict"
-                    },
-                    "422": {
-                        "description": "Unprocessable Content"
-                    }
-                }
-            }
-        },
-        "/api/future-websites/{uuid}": {
-            "get": {
-                "tags": [
-                    "Future Websites"
-                ],
-                "summary": "Get future websites",
-                "description": "Get future websites",
-                "operationId": "get_future_websites",
-                "parameters": [
-                    {
-                        "name": "uuid",
-                        "in": "path",
-                        "description": "future websites uuid",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successfully"
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "401": {
-                        "description": "Not Authenticated"
-                    },
-                    "403": {
-                        "description": "Not Autorized"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    }
-                }
-            },
-            "put": {
-                "tags": [
-                    "Future Websites"
-                ],
-                "summary": "Update future websites",
-                "description": "Update future websites",
-                "operationId": "update_future_websites",
-                "parameters": [
-                    {
-                        "name": "uuid",
-                        "in": "path",
-                        "description": "future websites uuid",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [
-                                    "sic_code_uuid",
-                                    "link"
-                                ],
-                                "properties": {
-                                    "sic_code_uuid": {
-                                        "type": "text"
-                                    },
-                                    "link": {
-                                        "type": "text"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        },
-                        "application/json": {
-                            "schema": {}
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successfully"
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "401": {
-                        "description": "Not Authenticated"
-                    },
-                    "403": {
-                        "description": "Not Autorized"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    },
-                    "409": {
-                        "description": "Conflict"
-                    },
-                    "422": {
-                        "description": "Unprocessable Content"
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "Future Websites"
-                ],
-                "summary": "Delete future websites",
-                "description": "Delete future websites",
-                "operationId": "delete_future_websites",
-                "parameters": [
-                    {
-                        "name": "uuid",
-                        "in": "path",
-                        "description": "future websites uuid",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successfully"
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "401": {
-                        "description": "Not Authenticated"
-                    },
-                    "403": {
-                        "description": "Not Autorized"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    }
-                }
-            }
-        },
-        "/api/future-websites-pending": {
-            "post": {
-                "tags": [
-                    "Future Websites"
-                ],
-                "summary": "Pending future websites",
-                "description": "Pending future websites",
-                "operationId": "pending_future_websites",
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [
-                                    "sic_code_uuid",
-                                    "link"
-                                ],
-                                "properties": {
-                                    "sic_code_uuid": {
-                                        "type": "text"
-                                    },
-                                    "link": {
-                                        "type": "text"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        },
-                        "application/json": {
-                            "schema": {}
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successfully"
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "401": {
-                        "description": "Not Authenticated"
-                    },
-                    "403": {
-                        "description": "Not Autorized"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    },
-                    "409": {
-                        "description": "Conflict"
-                    },
-                    "422": {
-                        "description": "Unprocessable Content"
-                    }
-                }
-            }
-        },
-        "/api/future-websites-pending-update/{uuid}": {
-            "put": {
-                "tags": [
-                    "Future Websites"
-                ],
-                "summary": "Pending update future websites",
-                "description": "Pending update future websites",
-                "operationId": "pending_update_future_websites",
-                "parameters": [
-                    {
-                        "name": "uuid",
-                        "in": "path",
-                        "description": "future websites uuid",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [
-                                    "sic_code_uuid",
-                                    "link"
-                                ],
-                                "properties": {
-                                    "sic_code_uuid": {
-                                        "type": "text"
-                                    },
-                                    "link": {
-                                        "type": "text"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        },
-                        "application/json": {
-                            "schema": {}
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successfully"
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "401": {
-                        "description": "Not Authenticated"
-                    },
-                    "403": {
-                        "description": "Not Autorized"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    },
-                    "409": {
-                        "description": "Conflict"
-                    },
-                    "422": {
-                        "description": "Unprocessable Content"
-                    }
-                }
-            }
-        },
-        "/api/future-websites-accept/{uuid}": {
-            "put": {
-                "tags": [
-                    "Future Websites"
-                ],
-                "summary": "Accept future websites",
-                "description": "Accept future websites",
-                "operationId": "accept_future_websites",
-                "parameters": [
-                    {
-                        "name": "uuid",
-                        "in": "path",
-                        "description": "future websites uuid",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [
-                                    "sic_code_uuid",
-                                    "link"
-                                ],
-                                "properties": {
-                                    "sic_code_uuid": {
-                                        "type": "text"
-                                    },
-                                    "link": {
-                                        "type": "text"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        },
-                        "application/json": {
-                            "schema": {}
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successfully"
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "401": {
-                        "description": "Not Authenticated"
-                    },
-                    "403": {
-                        "description": "Not Autorized"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    },
-                    "409": {
-                        "description": "Conflict"
-                    },
-                    "422": {
-                        "description": "Unprocessable Content"
-                    }
-                }
-            }
-        },
-        "/api/future-websites-reject/{uuid}": {
-            "put": {
-                "tags": [
-                    "Future Websites"
-                ],
-                "summary": "Reject future websites",
-                "description": "Reject future websites",
-                "operationId": "reject_future_websites",
-                "parameters": [
-                    {
-                        "name": "uuid",
-                        "in": "path",
-                        "description": "future websies uuid",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successfully"
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "401": {
-                        "description": "Not Authenticated"
-                    },
-                    "403": {
-                        "description": "Not Autorized"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    }
-                }
-            }
-        },
-        "/api/future-websites-search/{search}": {
-            "get": {
-                "tags": [
-                    "Future Websites"
-                ],
-                "summary": "Get future websites search",
-                "description": "Get future websites search",
-                "operationId": "get_future_websites_search",
-                "parameters": [
-                    {
-                        "name": "search",
-                        "in": "path",
-                        "description": "future websites search",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "text"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successfully"
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "401": {
-                        "description": "Not Authenticated"
-                    },
-                    "403": {
-                        "description": "Not Autorized"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    }
-                }
-            }
-        },
-        "/api/future-websites-permission": {
-            "get": {
-                "tags": [
-                    "Future Websites"
-                ],
-                "summary": "Get future websites permission of user",
-                "description": "Get future websites permission of user",
-                "operationId": "future_websites_permission",
                 "responses": {
                     "200": {
                         "description": "Successfully"

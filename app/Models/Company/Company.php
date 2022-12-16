@@ -53,8 +53,8 @@ class Company extends Model
         return $this->belongsTo(Director::class, 'director_uuid', 'uuid');
     }
 
-    public function incorporation(): HasOne{
-        return $this->hasOne(CompanyIncorporation::class, 'entity_uuid', 'uuid');
+    public function incorporations(): HasMany{
+        return $this->hasMany(CompanyIncorporation::class, 'entity_uuid', 'uuid');
     }
 
     public function register_agents(): HasMany{

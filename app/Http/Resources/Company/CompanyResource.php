@@ -54,7 +54,7 @@ class CompanyResource extends JsonResource
             'uploaded_files' => FileResource::collection($this->files),
 
             'register_agents' => RegisterAgentResource::collection($this->register_agents),
-            'incorporation' => new CompanyIncorporationResource($this->incorporation),
+            'incorporations' => CompanyIncorporationResource::collection($this->incorporations),
 
             'status' => $this->status,
         ];

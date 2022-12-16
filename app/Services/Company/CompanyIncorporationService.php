@@ -2,22 +2,24 @@
 
 namespace App\Services\Company;
 
-use App\Services\Helper\AddressService;
-use App\Services\Helper\RegisterAgentService;
+use App\Models\Company\CompanyIncorporation;
 
 class CompanyIncorporationService{
 
-    private $registerAgentService;
-    private $addressService;
-
-    public function __construct()
-    {
-        $this->registerAgentService = new RegisterAgentService();
-        $this->addressService = new AddressService();
-    }
-
     public function save($entity)
     {
-        
+        $companyIncorporation = CompanyIncorporation::where('entity_uuid', $entity['entity_uuid'])
+                                            ->where(function ($q) use($entity){
+                                                $q->where('parent', $entity['parent'])
+                                                    ->orWhere('parent', null);
+                                            })
+                                            ->first();
+        if ($companyIncorporation!=null){
+            $companyIncorporation->update($entity);
+        }else{
+            $companyIncorporation = CompanyIncorporation::create($entity);
+        }
+
+        return $companyIncorporation;
     }
 }
