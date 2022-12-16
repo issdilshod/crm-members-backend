@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Company;
 use App\Http\Controllers\Controller;
 use App\Models\Company\Company;
 use App\Policies\PermissionPolicy;
+use App\Services\Company\CompanyIncorporationService;
 use App\Services\Company\CompanyService;
 use App\Services\Helper\AddressService;
 use App\Services\Helper\BankAccountService;
 use App\Services\Helper\EmailService;
 use App\Services\Helper\FileService;
+use App\Services\Helper\RegisterAgentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 
@@ -21,6 +23,8 @@ class CompanyController extends Controller
     private $addressService;
     private $bankAccountService;
     private $fileService;
+    private $registerAgentService;
+    private $companyIncorporationService;
 
     public function __construct()
     {
@@ -29,6 +33,8 @@ class CompanyController extends Controller
         $this->addressService = new AddressService();
         $this->bankAccountService = new BankAccountService();
         $this->fileService = new FileService();
+        $this->registerAgentService = new RegisterAgentService();
+        $this->companyIncorporationService = new CompanyIncorporationService();
     }
 
     /**     @OA\GET(
@@ -338,6 +344,8 @@ class CompanyController extends Controller
       *
       *                         @OA\Property(property="bank_account[]", type="text"),
       *
+      *                         @OA\Property(property="register_agents[]", type="text"),
+      *
       *                         @OA\Property(property="files[]", type="text"),
       *
       *                         @OA\Property(property="files_to_delete[]", type="text")
@@ -398,6 +406,9 @@ class CompanyController extends Controller
 
             // bank account
             'bank_account' => 'array',
+
+            // register agent
+            'register_agents' => 'array',
 
             // files to delete
             'files' => 'array',
@@ -467,6 +478,14 @@ class CompanyController extends Controller
         // address to delete
         if (isset($validated['address_to_delete'])){
             $this->addressService->delete($validated['address_to_delete']);
+        }
+
+        // register agent
+        if (isset($validated['register_agents'])){
+            foreach ($validated['register_agents'] AS $key => $value):
+                $value['entity_uuid'] = $company->uuid;
+                $this->registerAgentService->save($value);
+            endforeach;
         }
 
         // bank account

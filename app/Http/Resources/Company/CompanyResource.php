@@ -6,7 +6,7 @@ use App\Http\Resources\Helper\AddressResource;
 use App\Http\Resources\Helper\BankAccountResource;
 use App\Http\Resources\Helper\EmailResource;
 use App\Http\Resources\Helper\FileResource;
-use App\Http\Resources\Helper\FutureWebsiteResource;
+use App\Http\Resources\Helper\RegisterAgentResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CompanyResource extends JsonResource
@@ -52,6 +52,9 @@ class CompanyResource extends JsonResource
             'addresses' => AddressResource::collection($this->addresses),
             'emails' => EmailResource::collection($this->emails),
             'uploaded_files' => FileResource::collection($this->files),
+
+            'register_agents' => RegisterAgentResource::collection($this->register_agents),
+            'incorporation' => new CompanyIncorporationResource($this->incorporation),
 
             'status' => $this->status,
         ];

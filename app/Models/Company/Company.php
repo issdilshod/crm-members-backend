@@ -7,10 +7,12 @@ use App\Models\Helper\Address;
 use App\Models\Helper\BankAccount;
 use App\Models\Helper\Email;
 use App\Models\Helper\File;
+use App\Models\Helper\RegisterAgent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\TraitUuid;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Config;
 
@@ -49,5 +51,13 @@ class Company extends Model
     public function director(): BelongsTo
     {
         return $this->belongsTo(Director::class, 'director_uuid', 'uuid');
+    }
+
+    public function incorporation(): HasOne{
+        return $this->hasOne(CompanyIncorporation::class, 'entity_uuid', 'uuid');
+    }
+
+    public function register_agents(): HasMany{
+        return $this->hasMany(RegisterAgent::class, 'entity_uuid', 'uuid');
     }
 }
