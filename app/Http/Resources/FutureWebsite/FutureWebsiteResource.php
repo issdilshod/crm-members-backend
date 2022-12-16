@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\WebsitesFuture;
+namespace App\Http\Resources\FutureWebsite;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class WebsitesFutureResource extends JsonResource
+class FutureWebsiteResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

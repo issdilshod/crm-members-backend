@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Services\WebsitesFuture;
+namespace App\Services\FutureWebsite;
 
 use App\Helpers\UserSystemInfoHelper;
-use App\Http\Resources\WebsitesFuture\WebsitesFurutePendingResource;
-use App\Http\Resources\WebsitesFuture\WebsitesFutureResource;
+use App\Http\Resources\FutureWebsite\FutureWebsitePendingResource;
+use App\Http\Resources\FutureWebsite\FutureWebsiteResource;
 use App\Models\Account\Activity;
 use App\Models\Account\User;
-use App\Models\WebsitesFuture\WebsitesFuture;
+use App\Models\FutureWebsite\FutureWebsite;
 use App\Services\Account\ActivityService;
 use App\Services\Helper\NotificationService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
 
-class WebsitesFutureService{
+class FutureWebsiteService{
 
     private $notificationService;
     private $activityService;
@@ -26,84 +26,84 @@ class WebsitesFutureService{
 
     public function all()
     {
-        $futureWebsites = WebsitesFuture::orderBy('updated_at')
-                                            ->where('status', Config::get('common.status.actived'))
-                                            ->paginate(20);
+        $futureWebsites = FutureWebsite::orderBy('updated_at')
+                                        ->where('status', Config::get('common.status.actived'))
+                                        ->paginate(20);
                                         
         foreach($futureWebsites AS $key => $value):
             $futureWebsites[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
         endforeach;
 
-        return WebsitesFurutePendingResource::collection($futureWebsites);
+        return FutureWebsitePendingResource::collection($futureWebsites);
     }
 
-    public function one(WebsitesFuture $websitesFuture)
+    public function one(FutureWebsite $futureWebsite)
     {
-        $websitesFuture = new WebsitesFutureResource($websitesFuture);
-        return $websitesFuture;
+        $futureWebsite = new FutureWebsiteResource($futureWebsite);
+        return $futureWebsite;
     }
 
     public function create($entity)
     {
         $entity['approved'] = Config::get('common.status.actived');
-        $futureWebsites = WebsitesFuture::create($entity);
+        $futureWebsite = FutureWebsite::create($entity);
 
         // Activity log
         Activity::create([
             'user_uuid' => $entity['user_uuid'],
-            'entity_uuid' => $futureWebsites['uuid'],
+            'entity_uuid' => $futureWebsite['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
-            'description' => str_replace("{link}", $futureWebsites['link'], Config::get('common.activity.websites_future.add')),
+            'description' => str_replace("{link}", $futureWebsite['link'], Config::get('common.activity.future_website.add')),
             'changes' => json_encode($entity),
-            'action_code' => Config::get('common.activity.codes.websites_future_add'),
+            'action_code' => Config::get('common.activity.codes.future_website_add'),
             'status' => Config::get('common.status.actived')
         ]);
 
-        $futureWebsites['last_activity'] = $this->activityService->by_entity_last($futureWebsites['uuid']);
-        return new WebsitesFurutePendingResource($futureWebsites);
+        $futureWebsite['last_activity'] = $this->activityService->by_entity_last($futureWebsite['uuid']);
+        return new FutureWebsitePendingResource($futureWebsite);
     }
 
-    public function update(WebsitesFuture $websitesFuture, $entity, $user_uuid)
+    public function update(FutureWebsite $futureWebsite, $entity, $user_uuid)
     {
         $entity['updated_at'] = Carbon::now();
         $entity['approved'] = Config::get('common.status.actived');
-        $websitesFuture->update($entity);
+        $futureWebsite->update($entity);
 
         Activity::create([
             'user_uuid' => $user_uuid,
-            'entity_uuid' => $websitesFuture['uuid'],
+            'entity_uuid' => $futureWebsite['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
-            'description' => str_replace("{link}", $websitesFuture['link'], Config::get('common.activity.websites_future.updated')),
+            'description' => str_replace("{link}", $futureWebsite['link'], Config::get('common.activity.future_website.updated')),
             'changes' => json_encode($entity),
-            'action_code' => Config::get('common.activity.codes.websites_future_update'),
+            'action_code' => Config::get('common.activity.codes.future_website_update'),
             'status' => Config::get('common.status.actived')
         ]);
 
-        $websitesFuture['last_activity'] = $this->activityService->by_entity_last($websitesFuture['uuid']);
-        return new WebsitesFurutePendingResource($websitesFuture);
+        $futureWebsite['last_activity'] = $this->activityService->by_entity_last($futureWebsite['uuid']);
+        return new FutureWebsitePendingResource($futureWebsite);
     }
 
-    public function delete(WebsitesFuture $websitesFuture)
+    public function delete(FutureWebsite $futureWebsite)
     {
-        $websitesFuture->update(['status' => Config::get('common.status.deleted')]);
+        $futureWebsite->update(['status' => Config::get('common.status.deleted')]);
     }
 
     public function pending($entity)
     {
         $entity['status'] = Config::get('common.status.pending');
-        $websitesFuture = WebsitesFuture::create($entity);
+        $futureWebsite = FutureWebsite::create($entity);
 
         // Activity log
         Activity::create([
             'user_uuid' => $entity['user_uuid'],
-            'entity_uuid' => $websitesFuture['uuid'],
+            'entity_uuid' => $futureWebsite['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
-            'description' => str_replace("{link}", $websitesFuture['link'], Config::get('common.activity.websites_future.pending')),
+            'description' => str_replace("{link}", $futureWebsite['link'], Config::get('common.activity.future_website.pending')),
             'changes' => json_encode($entity),
-            'action_code' => Config::get('common.activity.codes.websites_future_pending'),
+            'action_code' => Config::get('common.activity.codes.future_website_pending'),
             'status' => Config::get('common.status.actived')
         ]);
 
@@ -111,110 +111,110 @@ class WebsitesFutureService{
         $user = User::where('uuid', $entity['user_uuid'])->first();
 
         $msg = '*' . $user->first_name . ' ' . $user->last_name . "*\n" .
-                str_replace("{link}", "*" . $websitesFuture['link'] . "*", Config::get('common.activity.websites_future.pending')) . "\n" .
-                '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/future-websites/'.$websitesFuture['uuid'].')';
+                str_replace("{link}", "*" . $futureWebsite['link'] . "*", Config::get('common.activity.future_website.pending')) . "\n" .
+                '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/future-websites/'.$futureWebsite['uuid'].')';
         $this->notificationService->telegram_to_headqurters($msg);
 
-        $websitesFuture['last_activity'] = $this->activityService->by_entity_last($websitesFuture['uuid']);
-        return new WebsitesFurutePendingResource($websitesFuture);
+        $futureWebsite['last_activity'] = $this->activityService->by_entity_last($futureWebsite['uuid']);
+        return new FutureWebsitePendingResource($futureWebsite);
     }
 
-    public function pending_update(WebsitesFuture $websitesFuture, $entity, $user_uuid)
+    public function pending_update(FutureWebsite $futureWebsite, $entity, $user_uuid)
     {
         $entity['updated_at'] = Carbon::now();
         $entity['status'] = Config::get('common.status.pending');
-        $websitesFuture->update($entity);
+        $futureWebsite->update($entity);
 
         // logs
         Activity::create([
             'user_uuid' => $user_uuid,
-            'entity_uuid' => $websitesFuture['uuid'],
+            'entity_uuid' => $futureWebsite['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
-            'description' => str_replace("{link}", $websitesFuture['link'], Config::get('common.activity.websites_future.pending_update')),
+            'description' => str_replace("{link}", $futureWebsite['link'], Config::get('common.activity.future_website.pending_update')),
             'changes' => json_encode($entity),
-            'action_code' => Config::get('common.activity.codes.websites_future_pending_update'),
+            'action_code' => Config::get('common.activity.codes.future_website_pending_update'),
             'status' => Config::get('common.status.actived')
         ]);
 
         // notification
-        $user = User::where('uuid', $websitesFuture['user_uuid'])->first();
+        $user = User::where('uuid', $futureWebsite['user_uuid'])->first();
 
         $msg = '*' . $user->first_name . ' ' . $user->last_name . "*\n" .
-                str_replace("{link}", "*" . $websitesFuture['link'] . "*", Config::get('common.activity.websites_future.pending_update')) . "\n" .
-                '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/future-websites/'.$websitesFuture['uuid'].')';
+                str_replace("{link}", "*" . $futureWebsite['link'] . "*", Config::get('common.activity.future_website.pending_update')) . "\n" .
+                '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/future-websites/'.$futureWebsite['uuid'].')';
         $this->notificationService->telegram_to_headqurters($msg);
 
-        $websitesFuture['last_activity'] = $this->activityService->by_entity_last($websitesFuture['uuid']);
-        return new WebsitesFurutePendingResource($websitesFuture);
+        $futureWebsite['last_activity'] = $this->activityService->by_entity_last($futureWebsite['uuid']);
+        return new FutureWebsitePendingResource($futureWebsite);
     }
 
-    public function accept(WebsitesFuture $websitesFuture, $entity, $user_uuid)
+    public function accept(FutureWebsite $futureWebsite, $entity, $user_uuid)
     {
         $entity['status'] = Config::get('common.status.actived');
         $entity['approved'] = Config::get('common.status.actived');
-        $websitesFuture->update($entity);
+        $futureWebsite->update($entity);
 
         // log
         Activity::create([
             'user_uuid' => $user_uuid,
-            'entity_uuid' => $websitesFuture['uuid'],
+            'entity_uuid' => $futureWebsite['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
-            'description' => str_replace("{link}", $websitesFuture['link'], Config::get('common.activity.websites_future.accept')),
+            'description' => str_replace("{link}", $futureWebsite['link'], Config::get('common.activity.future_website.accept')),
             'changes' => json_encode($entity),
-            'action_code' => Config::get('common.activity.codes.websites_future_accept'),
+            'action_code' => Config::get('common.activity.codes.future_website_accept'),
             'status' => Config::get('common.status.actived')
         ]);
 
         // notification
-        $user = User::where('uuid', $websitesFuture['user_uuid'])->first();
+        $user = User::where('uuid', $futureWebsite['user_uuid'])->first();
 
         $this->notificationService->telegram([
             'telegram' => $user['telegram'],
-            'msg' => str_replace("{link}", "*" . $websitesFuture['link'] . "*", Config::get('common.activity.websites_future.accept')) . "\n" .
-                        '[link to view](' .env('APP_FRONTEND_ENDPOINT').'/future-websites/'.$websitesFuture['uuid']. ')'
+            'msg' => str_replace("{link}", "*" . $futureWebsite['link'] . "*", Config::get('common.activity.future_website.accept')) . "\n" .
+                        '[link to view](' .env('APP_FRONTEND_ENDPOINT').'/future-websites/'.$futureWebsite['uuid']. ')'
         ]);
 
-        $websitesFuture['last_activity'] = $this->activityService->by_entity_last($websitesFuture['uuid']);
-        return new WebsitesFurutePendingResource($websitesFuture);
+        $futureWebsite['last_activity'] = $this->activityService->by_entity_last($futureWebsite['uuid']);
+        return new FutureWebsitePendingResource($futureWebsite);
     }
 
     public function reject($uuid, $user_uuid)
     {
-        $websitesFuture = WebsitesFuture::where('uuid', $uuid)->first();
+        $futureWebsite = FutureWebsite::where('uuid', $uuid)->first();
 
         $entity['status'] = Config::get('common.status.rejected');
-        $websitesFuture->update($entity);
+        $futureWebsite->update($entity);
 
         // log
         Activity::create([
             'user_uuid' => $user_uuid,
-            'entity_uuid' => $websitesFuture['uuid'],
+            'entity_uuid' => $futureWebsite['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
-            'description' => str_replace("{link}", $websitesFuture['link'], Config::get('common.activity.websites_future.reject')),
+            'description' => str_replace("{link}", $futureWebsite['link'], Config::get('common.activity.future_website.reject')),
             'changes' => json_encode($entity),
-            'action_code' => Config::get('common.activity.codes.websites_future_reject'),
+            'action_code' => Config::get('common.activity.codes.future_website_reject'),
             'status' => Config::get('common.status.actived')
         ]);
 
         // notification
-        $user = User::where('uuid', $websitesFuture['user_uuid'])->first();
+        $user = User::where('uuid', $futureWebsite['user_uuid'])->first();
 
         $this->notificationService->telegram([
             'telegram' => $user['telegram'],
-            'msg' => str_replace("{link}", "*" . $websitesFuture['link'] . "*", Config::get('common.activity.websites_future.reject')) . "\n" .
-                        '[link to view](' .env('APP_FRONTEND_ENDPOINT').'/future-websites/'.$websitesFuture['uuid']. ')'
+            'msg' => str_replace("{link}", "*" . $futureWebsite['link'] . "*", Config::get('common.activity.future_website.reject')) . "\n" .
+                        '[link to view](' .env('APP_FRONTEND_ENDPOINT').'/future-websites/'.$futureWebsite['uuid']. ')'
         ]);
 
-        $websitesFuture['last_activity'] = $this->activityService->by_entity_last($websitesFuture['uuid']);
-        return new WebsitesFurutePendingResource($websitesFuture);
+        $futureWebsite['last_activity'] = $this->activityService->by_entity_last($futureWebsite['uuid']);
+        return new FutureWebsitePendingResource($futureWebsite);
     }
 
     public function search($value)
     {
-        $futureWebsites = WebsitesFuture::orderBy('updated_at')
+        $futureWebsites = FutureWebsite::orderBy('updated_at')
                                             ->where('status', Config::get('common.status.actived'))
                                             ->where('link', $value)
                                             ->paginate(20);
@@ -223,7 +223,7 @@ class WebsitesFutureService{
             $futureWebsites[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
         endforeach;
 
-        return WebsitesFurutePendingResource::collection($futureWebsites);
+        return FutureWebsitePendingResource::collection($futureWebsites);
     }
 
     public function check($entity)
@@ -231,7 +231,7 @@ class WebsitesFutureService{
         $check = [];
 
         if (isset($entity['link'])){
-            $check['tmp'] = WebsitesFuture::select('link')
+            $check['tmp'] = FutureWebsite::select('link')
                                         ->where('status', Config::get('common.status.actived'))
                                         ->where('link', $entity['link'])->first();
             if ($check['tmp']!=null){
@@ -251,7 +251,7 @@ class WebsitesFutureService{
         $check = [];
 
         if (isset($entity['link'])){
-            $check['tmp'] = WebsitesFuture::select('link')
+            $check['tmp'] = FutureWebsite::select('link')
                                         ->where('status', Config::get('common.status.actived'))
                                         ->where('uuid', '!=', $ignore_uuid)
                                         ->where('link', $entity['link'])->first();

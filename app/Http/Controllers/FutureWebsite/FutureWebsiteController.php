@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Http\Controllers\WebsitesFuture;
+namespace App\Http\Controllers\FutureWebsite;
 
 use App\Http\Controllers\Controller;
-use App\Models\WebsitesFuture\WebsitesFuture;
+use App\Models\FutureWebsite\FutureWebsite;
 use App\Policies\PermissionPolicy;
-use App\Services\WebsitesFuture\WebsitesFutureService;
+use App\Services\FutureWebsite\FutureWebsiteService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 
-class WebsitesFutureController extends Controller
+class FutureWebsiteController extends Controller
 {
-    private $websitesFutureService;
+    private $futureWebsiteService;
 
     public function __construct()
     {
-        $this->websitesFutureService = new WebsitesFutureService();
+        $this->futureWebsiteService = new FutureWebsiteService();
     }
     
     /**     @OA\GET(
@@ -35,14 +35,14 @@ class WebsitesFutureController extends Controller
     {
         // permission
         if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
-            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.view'))){
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.future_website.view'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
             }
         }
 
-        $websitesFuture = $this->websitesFutureService->all();
+        $futureWebsites = $this->futureWebsiteService->all();
 
-        return $websitesFuture;
+        return $futureWebsites;
     }
 
     /**     @OA\POST(
@@ -77,7 +77,7 @@ class WebsitesFutureController extends Controller
     {
         // permission
         if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
-            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.store'))){
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.future_website.store'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
             }
         }
@@ -90,7 +90,7 @@ class WebsitesFutureController extends Controller
 
         $check = [];
 
-        $tmpCheck = $this->websitesFutureService->check($validated);
+        $tmpCheck = $this->futureWebsiteService->check($validated);
         $check = array_merge($check, $tmpCheck);
 
         // exists
@@ -100,9 +100,9 @@ class WebsitesFutureController extends Controller
             ], 409);
         }
 
-        $websitesFuture = $this->websitesFutureService->create($validated);
+        $futureWebsite = $this->futureWebsiteService->create($validated);
 
-        return $websitesFuture;
+        return $futureWebsite;
     }
 
     /**     @OA\GET(
@@ -132,16 +132,16 @@ class WebsitesFutureController extends Controller
     {
         // permission
         if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
-            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.view'))){
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.future_website.view'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
             }
         }
 
-        $websitesFuture = WebsitesFuture::where('uuid', $uuid)->first();
+        $futureWebsite = FutureWebsite::where('uuid', $uuid)->first();
 
-        $websitesFuture = $this->websitesFutureService->one($websitesFuture);
+        $futureWebsite = $this->futureWebsiteService->one($futureWebsite);
 
-        return $websitesFuture;
+        return $futureWebsite;
     }
 
     /**     @OA\PUT(
@@ -186,7 +186,7 @@ class WebsitesFutureController extends Controller
     {
         // permission
         if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
-            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.store'))){
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.future_website.store'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
             }
         }
@@ -196,11 +196,11 @@ class WebsitesFutureController extends Controller
             'link' => 'required'
         ]);
 
-        $websitesFuture = WebsitesFuture::where('uuid', $uuid)->first();
+        $futureWebsite = FutureWebsite::where('uuid', $uuid)->first();
 
         $check = [];
 
-        $tmpCheck = $this->websitesFutureService->check_ignore($validated, $websitesFuture->uuid);
+        $tmpCheck = $this->futureWebsiteService->check_ignore($validated, $futureWebsite->uuid);
         $check = array_merge($check, $tmpCheck);
 
         // exists
@@ -210,9 +210,9 @@ class WebsitesFutureController extends Controller
             ], 409);
         }
 
-        $websitesFuture = $this->websitesFutureService->update($websitesFuture, $validated, $request->user_uuid);
+        $futureWebsite = $this->futureWebsiteService->update($futureWebsite, $validated, $request->user_uuid);
 
-        return $websitesFuture;
+        return $futureWebsite;
     }
 
     /**     @OA\DELETE(
@@ -238,16 +238,16 @@ class WebsitesFutureController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function destroy(Request $request, WebsitesFuture $websitesFuture)
+    public function destroy(Request $request, FutureWebsite $futureWebsite)
     {
         // permission
         if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
-            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.delete'))){
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.future_website.delete'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
             }
         }
 
-        $this->websitesFutureService->delete($websitesFuture);
+        $this->futureWebsiteService->delete($futureWebsite);
     }
 
     /**     @OA\POST(
@@ -282,7 +282,7 @@ class WebsitesFutureController extends Controller
     {
         // permission
         if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
-            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.save'))){
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.future_website.save'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
             }
         }
@@ -295,7 +295,7 @@ class WebsitesFutureController extends Controller
 
         $check = [];
 
-        $tmpCheck = $this->websitesFutureService->check($validated);
+        $tmpCheck = $this->futureWebsiteService->check($validated);
         $check = array_merge($check, $tmpCheck);
 
         // exists
@@ -305,9 +305,9 @@ class WebsitesFutureController extends Controller
             ], 409);
         }
 
-        $websitesFuture = $this->websitesFutureService->pending($validated);
+        $futureWebsite = $this->futureWebsiteService->pending($validated);
 
-        return $websitesFuture;
+        return $futureWebsite;
     }
 
     /**     @OA\PUT(
@@ -352,7 +352,7 @@ class WebsitesFutureController extends Controller
     {
         // permission
         if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
-            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.save'))){
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.future_website.save'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
             }
         }
@@ -364,9 +364,9 @@ class WebsitesFutureController extends Controller
 
         $check = [];
 
-        $websitesFuture = WebsitesFuture::where('uuid', $uuid)->first();
+        $futureWebsite = FutureWebsite::where('uuid', $uuid)->first();
 
-        $tmpCheck = $this->websitesFutureService->check_ignore($validated, $websitesFuture->uuid);
+        $tmpCheck = $this->futureWebsiteService->check_ignore($validated, $futureWebsite->uuid);
         $check = array_merge($check, $tmpCheck);
 
         // exists
@@ -376,9 +376,9 @@ class WebsitesFutureController extends Controller
             ], 409);
         }
 
-        $websitesFuture = $this->websitesFutureService->pending_update($websitesFuture, $validated, $request->user_uuid);
+        $futureWebsite = $this->futureWebsiteService->pending_update($futureWebsite, $validated, $request->user_uuid);
 
-        return $websitesFuture;
+        return $futureWebsite;
     }
 
     /**     @OA\PUT(
@@ -423,7 +423,7 @@ class WebsitesFutureController extends Controller
     {
         // permission
         if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
-            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.accept'))){
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.future_website.accept'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
             }
         }
@@ -435,9 +435,9 @@ class WebsitesFutureController extends Controller
 
         $check = [];
 
-        $websitesFuture = WebsitesFuture::where('uuid', $uuid)->first();
+        $futureWebsite = FutureWebsite::where('uuid', $uuid)->first();
 
-        $tmpCheck = $this->websitesFutureService->check_ignore($validated, $websitesFuture->uuid);
+        $tmpCheck = $this->futureWebsiteService->check_ignore($validated, $futureWebsite->uuid);
         $check = array_merge($check, $tmpCheck);
 
         // exists
@@ -447,9 +447,9 @@ class WebsitesFutureController extends Controller
             ], 409);
         }
 
-        $websitesFuture = $this->websitesFutureService->accept($websitesFuture, $validated, $request->user_uuid);
+        $futureWebsite = $this->futureWebsiteService->accept($futureWebsite, $validated, $request->user_uuid);
 
-        return $websitesFuture;
+        return $futureWebsite;
     }
 
     /**     @OA\PUT(
@@ -479,12 +479,12 @@ class WebsitesFutureController extends Controller
     {
         // permission
         if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
-            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.accept'))){
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.future_website.accept'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
             }
         }
 
-        $this->websitesFutureService->reject($uuid, $request->user_uuid);
+        $this->futureWebsiteService->reject($uuid, $request->user_uuid);
     }
 
     /**     @OA\GET(
@@ -514,14 +514,14 @@ class WebsitesFutureController extends Controller
     {
         // permission
         if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
-            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.view'))){
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.future_website.view'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
             }
         }
 
-        $websitesFuture = $this->websitesFutureService->search($search);
+        $futureWebsite = $this->futureWebsiteService->search($search);
 
-        return $websitesFuture;
+        return $futureWebsite;
     }
 
     /**     @OA\GET(
@@ -540,24 +540,24 @@ class WebsitesFutureController extends Controller
         $permissions = [];
 
         // permission
-        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.view'))){
-            $permissions[] = Config::get('common.permission.websites_future.view');
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.future_website.view'))){
+            $permissions[] = Config::get('common.permission.future_website.view');
         }
 
-        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.store'))){
-            $permissions[] = Config::get('common.permission.websites_future.store');
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.future_website.store'))){
+            $permissions[] = Config::get('common.permission.future_website.store');
         }
 
-        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.save'))){
-            $permissions[] = Config::get('common.permission.websites_future.save');
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.future_website.save'))){
+            $permissions[] = Config::get('common.permission.future_website.save');
         }
 
-        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.delete'))){
-            $permissions[] = Config::get('common.permission.websites_future.delete');
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.future_website.delete'))){
+            $permissions[] = Config::get('common.permission.future_website.delete');
         }
 
-        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.websites_future.accept'))){
-            $permissions[] = Config::get('common.permission.websites_future.accept');
+        if (PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.future_website.accept'))){
+            $permissions[] = Config::get('common.permission.future_website.accept');
         }
 
         return $permissions;

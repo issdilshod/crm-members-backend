@@ -86,23 +86,23 @@ class PermissionSeeder extends Seeder
             // future websites
             [
                 'permission_name' => 'Future website card save (without approve)',
-                'alias' => Config::get('common.permission.websites_future.store')
+                'alias' => Config::get('common.permission.future_website.store')
             ],
             [
                 'permission_name' => 'Future website card delete',
-                'alias' => Config::get('common.permission.websites_future.delete')
+                'alias' => Config::get('common.permission.future_website.delete')
             ],
             [
                 'permission_name' => 'Future website card save',
-                'alias' => Config::get('common.permission.websites_future.save')
+                'alias' => Config::get('common.permission.future_website.save')
             ],
             [
                 'permission_name' => 'Future websites card accept & reject',
-                'alias' => Config::get('common.permission.websites_future.accept')
+                'alias' => Config::get('common.permission.future_website.accept')
             ],
             [
                 'permission_name' => 'Future website card view',
-                'alias' => Config::get('common.permission.websites_future.view')
+                'alias' => Config::get('common.permission.future_website.view')
             ],
             // virtual office
             [

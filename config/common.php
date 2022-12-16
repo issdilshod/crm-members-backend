@@ -30,12 +30,12 @@ return [
             'access' => 'company_access',
             'download' => 'company_download'
         ],
-        'websites_future' => [
-            'store' => 'websites_future_store', // add/update
-            'delete' => 'websites_future_delete',
-            'save' => 'websites_future_save', // pending add/update
-            'accept' => 'websites_future_accept', // accept/reject
-            'view' => 'websites_future_view'
+        'future_website' => [
+            'store' => 'future_website_store', // add/update
+            'delete' => 'future_website_delete',
+            'save' => 'future_website_save', // pending add/update
+            'accept' => 'future_website_accept', // accept/reject
+            'view' => 'future_website_view'
         ],
         'virtual_office' => [
             'store' => 'virtual_office_store', // add/update
@@ -118,7 +118,7 @@ return [
             'accept' => 'Company {name} card accepted',
             'override' => 'Company {name} card override',
         ],
-        'websites_future' => [
+        'future_website' => [
             'add' => 'Future website {link} card added',
             'updated' => 'Future website {link} card updated',
             'pending' => 'Future website {link} card approval request sent',
@@ -175,12 +175,12 @@ return [
             'user_reject' => 18,
             'user_accept' => 19,
 
-            'websites_future_add' => 20,
-            'websites_future_update' => 21,
-            'websites_future_pending' => 22,
-            'websites_future_pending_update' => 23,
-            'websites_future_accept' => 24,
-            'websites_future_reject' => 25,
+            'future_website_add' => 20,
+            'future_website_update' => 21,
+            'future_website_pending' => 22,
+            'future_website_pending_update' => 23,
+            'future_website_accept' => 24,
+            'future_website_reject' => 25,
 
             'virtual_office_add' => 26,
             'virtual_office_update' => 27,

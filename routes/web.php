@@ -10,6 +10,7 @@ use App\Http\Controllers\Chat\MessageController;
 use App\Http\Controllers\Company\CompanyController;
 use App\Http\Controllers\Company\FutureCompanyController;
 use App\Http\Controllers\Director\DirectorController;
+use App\Http\Controllers\FutureWebsite\FutureWebsiteController;
 use App\Http\Controllers\Helper\DepartmentController;
 use App\Http\Controllers\Helper\FileController;
 use App\Http\Controllers\Helper\HostingController;
@@ -20,7 +21,6 @@ use App\Http\Controllers\Helper\SicCodeController;
 use App\Http\Controllers\Helper\StateController;
 use App\Http\Controllers\Task\TaskController;
 use App\Http\Controllers\VirtualOffice\VirtualOfficeController;
-use App\Http\Controllers\WebsitesFuture\WebsitesFutureController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth.custom')->group(function() {
@@ -104,18 +104,18 @@ Route::middleware('auth.custom')->group(function() {
     Route::put('api/company-override/{uuid}', [CompanyController::class, 'override']);
 
     // websites future
-    Route::resource('api/future-websites', WebsitesFutureController::class);
-    Route::get('api/future-websites', [WebsitesFutureController::class, 'index']);
-    Route::get('api/future-websites/{uuid}', [WebsitesFutureController::class, 'show']);
-    Route::post('api/future-websites', [WebsitesFutureController::class, 'store']);
-    Route::put('api/future-websites/{uuid}', [WebsitesFutureController::class, 'update']);
-    Route::delete('api/future-websites/{uuid}', [WebsitesFutureController::class, 'destroy']);
-    Route::get('api/future-websites-search/{search}', [WebsitesFutureController::class, 'search']);
-    Route::post('api/future-websites-pending', [WebsitesFutureController::class, 'pending']);
-    Route::put('api/future-websites-pending-update/{uuid}', [WebsitesFutureController::class, 'pending_update']);
-    Route::put('api/future-websites-accept/{uuid}', [WebsitesFutureController::class, 'accept']);
-    Route::put('api/future-websites-reject/{uuid}', [WebsitesFutureController::class, 'reject']);
-    Route::get('api/future-websites-permission', [WebsitesFutureController::class, 'permission']);
+    Route::resource('api/future-websites', FutureWebsiteController::class);
+    Route::get('api/future-websites', [FutureWebsiteController::class, 'index']);
+    Route::get('api/future-websites/{uuid}', [FutureWebsiteController::class, 'show']);
+    Route::post('api/future-websites', [FutureWebsiteController::class, 'store']);
+    Route::put('api/future-websites/{uuid}', [FutureWebsiteController::class, 'update']);
+    Route::delete('api/future-websites/{uuid}', [FutureWebsiteController::class, 'destroy']);
+    Route::get('api/future-websites-search/{search}', [FutureWebsiteController::class, 'search']);
+    Route::post('api/future-websites-pending', [FutureWebsiteController::class, 'pending']);
+    Route::put('api/future-websites-pending-update/{uuid}', [FutureWebsiteController::class, 'pending_update']);
+    Route::put('api/future-websites-accept/{uuid}', [FutureWebsiteController::class, 'accept']);
+    Route::put('api/future-websites-reject/{uuid}', [FutureWebsiteController::class, 'reject']);
+    Route::get('api/future-websites-permission', [FutureWebsiteController::class, 'permission']);
 
     // virtual office
     Route::resource('api/virtual-office', VirtualOfficeController::class);
