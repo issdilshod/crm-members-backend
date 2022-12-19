@@ -94,9 +94,15 @@ class CompanyController extends Controller
       *                         @OA\Property(property="voip_password", type="text"),
       *                         @OA\Property(property="business_mobile_number", type="text"),
       *                         @OA\Property(property="business_mobile_number_type", type="text"),
-      *                         @OA\Property(property="business_mobile_number_provider", type="text"),
-      *                         @OA\Property(property="business_mobile_number_login", type="text"),
-      *                         @OA\Property(property="business_mobile_number_password", type="text"),
+      *
+      *                         @OA\Property(property="business_mobile_provider", type="text"),
+      *                         @OA\Property(property="business_mobile_website", type="text"),
+      *                         @OA\Property(property="business_mobile_login", type="text"),
+      *                         @OA\Property(property="business_mobile_password", type="text"),
+      *
+      *                         @OA\Property(property="card_on_file", type="text"),
+      *                         @OA\Property(property="card_last_four_digit", type="text"),
+      *                         @OA\Property(property="card_holder_name", type="text"),
       *
       *                         @OA\Property(property="website", type="text"),
       *                         @OA\Property(property="db_report_number", type="text"),
@@ -154,9 +160,15 @@ class CompanyController extends Controller
             'voip_password' => '',
             'business_mobile_number' => '',
             'business_mobile_number_type' => '',
-            'business_mobile_number_provider' => '',
-            'business_mobile_number_login' => '',
-            'business_mobile_number_password' => '',
+
+            'business_mobile_provider' => '',
+            'business_mobile_website' => '',
+            'business_mobile_login' => '',
+            'business_mobile_password' => '',
+
+            'card_on_file' => '',
+            'card_last_four_digit' => '',
+            'card_holder_name' => '',
 
             'website' => '',
             'db_report_number' => 'required',
@@ -355,9 +367,15 @@ class CompanyController extends Controller
       *                         @OA\Property(property="voip_password", type="text"),
       *                         @OA\Property(property="business_mobile_number", type="text"),
       *                         @OA\Property(property="business_mobile_number_type", type="text"),
-      *                         @OA\Property(property="business_mobile_number_provider", type="text"),
-      *                         @OA\Property(property="business_mobile_number_login", type="text"),
-      *                         @OA\Property(property="business_mobile_number_password", type="text"),
+      *            
+      *                         @OA\Property(property="business_mobile_provider", type="text"),
+      *                         @OA\Property(property="business_mobile_website", type="text"),
+      *                         @OA\Property(property="business_mobile_login", type="text"),
+      *                         @OA\Property(property="business_mobile_password", type="text"),
+      *
+      *                         @OA\Property(property="card_on_file", type="text"),
+      *                         @OA\Property(property="card_last_four_digit", type="text"),
+      *                         @OA\Property(property="card_holder_name", type="text"),
       *
       *                         @OA\Property(property="website", type="text"),
       *                         @OA\Property(property="db_report_number", type="text"),
@@ -417,9 +435,15 @@ class CompanyController extends Controller
             'voip_password' => '',
             'business_mobile_number' => '',
             'business_mobile_number_type' => '',
-            'business_mobile_number_provider' => '',
-            'business_mobile_number_login' => '',
-            'business_mobile_number_password' => '',
+            
+            'business_mobile_provider' => '',
+            'business_mobile_website' => '',
+            'business_mobile_login' => '',
+            'business_mobile_password' => '',
+
+            'card_on_file' => '',
+            'card_last_four_digit' => '',
+            'card_holder_name' => '',
 
             'website' => '',
             'db_report_number' => 'required',
@@ -613,9 +637,15 @@ class CompanyController extends Controller
       *                         @OA\Property(property="voip_password", type="text"),
       *                         @OA\Property(property="business_mobile_number", type="text"),
       *                         @OA\Property(property="business_mobile_number_type", type="text"),
-      *                         @OA\Property(property="business_mobile_number_provider", type="text"),
-      *                         @OA\Property(property="business_mobile_number_login", type="text"),
-      *                         @OA\Property(property="business_mobile_number_password", type="text"),
+      *
+      *                         @OA\Property(property="business_mobile_provider", type="text"),
+      *                         @OA\Property(property="business_mobile_website", type="text"),
+      *                         @OA\Property(property="business_mobile_login", type="text"),
+      *                         @OA\Property(property="business_mobile_password", type="text"),
+      *
+      *                         @OA\Property(property="card_on_file", type="text"),
+      *                         @OA\Property(property="card_last_four_digit", type="text"),
+      *                         @OA\Property(property="card_holder_name", type="text"),
       *
       *                         @OA\Property(property="website", type="text"),
       *                         @OA\Property(property="db_report_number", type="text"),
@@ -673,9 +703,15 @@ class CompanyController extends Controller
             'voip_password' => '',
             'business_mobile_number' => '',
             'business_mobile_number_type' => '',
-            'business_mobile_number_provider' => '',
-            'business_mobile_number_login' => '',
-            'business_mobile_number_password' => '',
+            
+            'business_mobile_provider' => '',
+            'business_mobile_website' => '',
+            'business_mobile_login' => '',
+            'business_mobile_password' => '',
+
+            'card_on_file' => '',
+            'card_last_four_digit' => '',
+            'card_holder_name' => '',
 
             'website' => '',
             'db_report_number' => 'required',
@@ -835,9 +871,15 @@ class CompanyController extends Controller
       *                         @OA\Property(property="voip_password", type="text"),
       *                         @OA\Property(property="business_mobile_number", type="text"),
       *                         @OA\Property(property="business_mobile_number_type", type="text"),
-      *                         @OA\Property(property="business_mobile_number_provider", type="text"),
-      *                         @OA\Property(property="business_mobile_number_login", type="text"),
-      *                         @OA\Property(property="business_mobile_number_password", type="text"),
+      *
+      *                         @OA\Property(property="business_mobile_provider", type="text"),
+      *                         @OA\Property(property="business_mobile_website", type="text"),
+      *                         @OA\Property(property="business_mobile_login", type="text"),
+      *                         @OA\Property(property="business_mobile_password", type="text"),
+      *
+      *                         @OA\Property(property="card_on_file", type="text"),
+      *                         @OA\Property(property="card_last_four_digit", type="text"),
+      *                         @OA\Property(property="card_holder_name", type="text"),
       *
       *                         @OA\Property(property="website", type="text"),
       *                         @OA\Property(property="db_report_number", type="text"),
@@ -905,9 +947,15 @@ class CompanyController extends Controller
             'voip_password' => '',
             'business_mobile_number' => '',
             'business_mobile_number_type' => '',
-            'business_mobile_number_provider' => '',
-            'business_mobile_number_login' => '',
-            'business_mobile_number_password' => '',
+            
+            'business_mobile_provider' => '',
+            'business_mobile_website' => '',
+            'business_mobile_login' => '',
+            'business_mobile_password' => '',
+
+            'card_on_file' => '',
+            'card_last_four_digit' => '',
+            'card_holder_name' => '',
 
             'website' => '',
             'db_report_number' => 'required',
@@ -1078,9 +1126,15 @@ class CompanyController extends Controller
       *                         @OA\Property(property="voip_password", type="text"),
       *                         @OA\Property(property="business_mobile_number", type="text"),
       *                         @OA\Property(property="business_mobile_number_type", type="text"),
-      *                         @OA\Property(property="business_mobile_number_provider", type="text"),
-      *                         @OA\Property(property="business_mobile_number_login", type="text"),
-      *                         @OA\Property(property="business_mobile_number_password", type="text"),
+      *
+      *                         @OA\Property(property="business_mobile_provider", type="text"),
+      *                         @OA\Property(property="business_mobile_website", type="text"),
+      *                         @OA\Property(property="business_mobile_login", type="text"),
+      *                         @OA\Property(property="business_mobile_password", type="text"),
+      *
+      *                         @OA\Property(property="card_on_file", type="text"),
+      *                         @OA\Property(property="card_last_four_digit", type="text"),
+      *                         @OA\Property(property="card_holder_name", type="text"),
       *
       *                         @OA\Property(property="website", type="text"),
       *                         @OA\Property(property="db_report_number", type="text"),
@@ -1140,9 +1194,15 @@ class CompanyController extends Controller
             'voip_password' => '',
             'business_mobile_number' => '',
             'business_mobile_number_type' => '',
-            'business_mobile_number_provider' => '',
-            'business_mobile_number_login' => '',
-            'business_mobile_number_password' => '',
+            
+            'business_mobile_provider' => '',
+            'business_mobile_website' => '',
+            'business_mobile_login' => '',
+            'business_mobile_password' => '',
+
+            'card_on_file' => '',
+            'card_last_four_digit' => '',
+            'card_holder_name' => '',
 
             'website' => '',
             'db_report_number' => 'required',
@@ -1334,9 +1394,15 @@ class CompanyController extends Controller
       *                         @OA\Property(property="voip_password", type="text"),
       *                         @OA\Property(property="business_mobile_number", type="text"),
       *                         @OA\Property(property="business_mobile_number_type", type="text"),
-      *                         @OA\Property(property="business_mobile_number_provider", type="text"),
-      *                         @OA\Property(property="business_mobile_number_login", type="text"),
-      *                         @OA\Property(property="business_mobile_number_password", type="text"),
+      *
+      *                         @OA\Property(property="business_mobile_provider", type="text"),
+      *                         @OA\Property(property="business_mobile_website", type="text"),
+      *                         @OA\Property(property="business_mobile_login", type="text"),
+      *                         @OA\Property(property="business_mobile_password", type="text"),
+      *
+      *                         @OA\Property(property="card_on_file", type="text"),
+      *                         @OA\Property(property="card_last_four_digit", type="text"),
+      *                         @OA\Property(property="card_holder_name", type="text"),
       *
       *                         @OA\Property(property="website", type="text"),
       *                         @OA\Property(property="db_report_number", type="text"),
@@ -1394,9 +1460,15 @@ class CompanyController extends Controller
             'voip_password' => '',
             'business_mobile_number' => '',
             'business_mobile_number_type' => '',
-            'business_mobile_number_provider' => '',
-            'business_mobile_number_login' => '',
-            'business_mobile_number_password' => '',
+            
+            'business_mobile_provider' => '',
+            'business_mobile_website' => '',
+            'business_mobile_login' => '',
+            'business_mobile_password' => '',
+
+            'card_on_file' => '',
+            'card_last_four_digit' => '',
+            'card_holder_name' => '',
 
             'website' => '',
             'db_report_number' => '',

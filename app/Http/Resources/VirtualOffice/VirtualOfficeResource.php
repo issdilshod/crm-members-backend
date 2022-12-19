@@ -35,7 +35,12 @@ class VirtualOfficeResource extends JsonResource
             'card_last_four_digit' => $this->card_last_four_digit,
             'card_holder_name' => $this->card_holder_name,
             'monthly_payment_amount' => $this->monthly_payment_amount,
-            'contract' => $this->contract,
+
+            'agreement_terms' => $this->agreement_terms,
+            'deposit' => $this->deposit,
+            'registration_fee' => $this->registration_fee,
+            'etc' => $this->etc,
+
             'contract_terms' => $this->contract_terms,
             'contract_terms_notes' => $this->contract_terms_notes,
             'contract_effective_date' => $this->contract_effective_date,

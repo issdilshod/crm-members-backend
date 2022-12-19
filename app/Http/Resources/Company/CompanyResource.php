@@ -40,9 +40,15 @@ class CompanyResource extends JsonResource
             'voip_password' => $this->voip_password,
             'business_mobile_number' => $this->business_mobile_number,
             'business_mobile_number_type' => $this->business_mobile_number_type,
-            'business_mobile_number_provider' => $this->business_mobile_number_provider,
-            'business_mobile_number_login' => $this->business_mobile_number_login,
-            'business_mobile_number_password' => $this->business_mobile_number_password,
+
+            'business_mobile_provider' => $this->business_mobile_provider,
+            'business_mobile_website' => $this->business_mobile_website,
+            'business_mobile_login' => $this->business_mobile_login,
+            'business_mobile_password' => $this->business_mobile_password,
+
+            'card_on_file' => $this->card_on_file,
+            'card_last_four_digit' => $this->card_last_four_digit,
+            'card_holder_name' => $this->card_holder_name,
 
             'website' => $this->website,
             'db_report_number' => $this->db_report_number,

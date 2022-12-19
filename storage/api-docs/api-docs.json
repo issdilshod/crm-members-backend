@@ -1797,13 +1797,25 @@
                                     "business_mobile_number_type": {
                                         "type": "text"
                                     },
-                                    "business_mobile_number_provider": {
+                                    "business_mobile_provider": {
                                         "type": "text"
                                     },
-                                    "business_mobile_number_login": {
+                                    "business_mobile_website": {
                                         "type": "text"
                                     },
-                                    "business_mobile_number_password": {
+                                    "business_mobile_login": {
+                                        "type": "text"
+                                    },
+                                    "business_mobile_password": {
+                                        "type": "text"
+                                    },
+                                    "card_on_file": {
+                                        "type": "text"
+                                    },
+                                    "card_last_four_digit": {
+                                        "type": "text"
+                                    },
+                                    "card_holder_name": {
                                         "type": "text"
                                     },
                                     "website": {
@@ -1938,13 +1950,25 @@
                                     "business_mobile_number_type": {
                                         "type": "text"
                                     },
-                                    "business_mobile_number_provider": {
+                                    "business_mobile_provider": {
                                         "type": "text"
                                     },
-                                    "business_mobile_number_login": {
+                                    "business_mobile_website": {
                                         "type": "text"
                                     },
-                                    "business_mobile_number_password": {
+                                    "business_mobile_login": {
+                                        "type": "text"
+                                    },
+                                    "business_mobile_password": {
+                                        "type": "text"
+                                    },
+                                    "card_on_file": {
+                                        "type": "text"
+                                    },
+                                    "card_last_four_digit": {
+                                        "type": "text"
+                                    },
+                                    "card_holder_name": {
                                         "type": "text"
                                     },
                                     "website": {
@@ -2151,13 +2175,25 @@
                                     "business_mobile_number_type": {
                                         "type": "text"
                                     },
-                                    "business_mobile_number_provider": {
+                                    "business_mobile_provider": {
                                         "type": "text"
                                     },
-                                    "business_mobile_number_login": {
+                                    "business_mobile_website": {
                                         "type": "text"
                                     },
-                                    "business_mobile_number_password": {
+                                    "business_mobile_login": {
+                                        "type": "text"
+                                    },
+                                    "business_mobile_password": {
+                                        "type": "text"
+                                    },
+                                    "card_on_file": {
+                                        "type": "text"
+                                    },
+                                    "card_last_four_digit": {
+                                        "type": "text"
+                                    },
+                                    "card_holder_name": {
                                         "type": "text"
                                     },
                                     "website": {
@@ -2300,13 +2336,25 @@
                                     "business_mobile_number_type": {
                                         "type": "text"
                                     },
-                                    "business_mobile_number_provider": {
+                                    "business_mobile_provider": {
                                         "type": "text"
                                     },
-                                    "business_mobile_number_login": {
+                                    "business_mobile_website": {
                                         "type": "text"
                                     },
-                                    "business_mobile_number_password": {
+                                    "business_mobile_login": {
+                                        "type": "text"
+                                    },
+                                    "business_mobile_password": {
+                                        "type": "text"
+                                    },
+                                    "card_on_file": {
+                                        "type": "text"
+                                    },
+                                    "card_last_four_digit": {
+                                        "type": "text"
+                                    },
+                                    "card_holder_name": {
                                         "type": "text"
                                     },
                                     "website": {
@@ -2455,13 +2503,25 @@
                                     "business_mobile_number_type": {
                                         "type": "text"
                                     },
-                                    "business_mobile_number_provider": {
+                                    "business_mobile_provider": {
                                         "type": "text"
                                     },
-                                    "business_mobile_number_login": {
+                                    "business_mobile_website": {
                                         "type": "text"
                                     },
-                                    "business_mobile_number_password": {
+                                    "business_mobile_login": {
+                                        "type": "text"
+                                    },
+                                    "business_mobile_password": {
+                                        "type": "text"
+                                    },
+                                    "card_on_file": {
+                                        "type": "text"
+                                    },
+                                    "card_last_four_digit": {
+                                        "type": "text"
+                                    },
+                                    "card_holder_name": {
                                         "type": "text"
                                     },
                                     "website": {
@@ -2644,13 +2704,25 @@
                                     "business_mobile_number_type": {
                                         "type": "text"
                                     },
-                                    "business_mobile_number_provider": {
+                                    "business_mobile_provider": {
                                         "type": "text"
                                     },
-                                    "business_mobile_number_login": {
+                                    "business_mobile_website": {
                                         "type": "text"
                                     },
-                                    "business_mobile_number_password": {
+                                    "business_mobile_login": {
+                                        "type": "text"
+                                    },
+                                    "business_mobile_password": {
+                                        "type": "text"
+                                    },
+                                    "card_on_file": {
+                                        "type": "text"
+                                    },
+                                    "card_last_four_digit": {
+                                        "type": "text"
+                                    },
+                                    "card_holder_name": {
                                         "type": "text"
                                     },
                                     "website": {
@@ -5917,7 +5989,16 @@
                                     "monthly_payment_amount": {
                                         "type": "text"
                                     },
-                                    "contract": {
+                                    "agreement_terms": {
+                                        "type": "text"
+                                    },
+                                    "deposit": {
+                                        "type": "text"
+                                    },
+                                    "registration_fee": {
+                                        "type": "text"
+                                    },
+                                    "etc": {
                                         "type": "text"
                                     },
                                     "contract_terms": {
@@ -6074,7 +6155,16 @@
                                     "monthly_payment_amount": {
                                         "type": "text"
                                     },
-                                    "contract": {
+                                    "agreement_terms": {
+                                        "type": "text"
+                                    },
+                                    "deposit": {
+                                        "type": "text"
+                                    },
+                                    "registration_fee": {
+                                        "type": "text"
+                                    },
+                                    "etc": {
                                         "type": "text"
                                     },
                                     "contract_terms": {
@@ -6258,7 +6348,16 @@
                                     "monthly_payment_amount": {
                                         "type": "text"
                                     },
-                                    "contract": {
+                                    "agreement_terms": {
+                                        "type": "text"
+                                    },
+                                    "deposit": {
+                                        "type": "text"
+                                    },
+                                    "registration_fee": {
+                                        "type": "text"
+                                    },
+                                    "etc": {
                                         "type": "text"
                                     },
                                     "contract_terms": {
@@ -6378,7 +6477,16 @@
                                     "monthly_payment_amount": {
                                         "type": "text"
                                     },
-                                    "contract": {
+                                    "agreement_terms": {
+                                        "type": "text"
+                                    },
+                                    "deposit": {
+                                        "type": "text"
+                                    },
+                                    "registration_fee": {
+                                        "type": "text"
+                                    },
+                                    "etc": {
                                         "type": "text"
                                     },
                                     "contract_terms": {
@@ -6498,7 +6606,16 @@
                                     "monthly_payment_amount": {
                                         "type": "text"
                                     },
-                                    "contract": {
+                                    "agreement_terms": {
+                                        "type": "text"
+                                    },
+                                    "deposit": {
+                                        "type": "text"
+                                    },
+                                    "registration_fee": {
+                                        "type": "text"
+                                    },
+                                    "etc": {
                                         "type": "text"
                                     },
                                     "contract_terms": {

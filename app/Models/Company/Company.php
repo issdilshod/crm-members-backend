@@ -20,7 +20,7 @@ class Company extends Model
 {
     use HasFactory, TraitUuid;
 
-    protected $fillable = ['user_uuid', 'legal_name', 'sic_code_uuid', 'director_uuid', 'incorporation_date', 'incorporation_state_uuid', 'incorporation_state_name', 'doing_business_in_state_uuid', 'doing_business_in_state_name', 'ein', 'business_number', 'business_number_type', 'voip_provider', 'voip_login', 'voip_password', 'business_mobile_number', 'business_mobile_number_type', 'business_mobile_number_provider', 'business_mobile_number_login', 'business_mobile_number_password', 'website', 'db_report_number', 'status', 'approved'];
+    protected $fillable = ['user_uuid', 'legal_name', 'sic_code_uuid', 'director_uuid', 'incorporation_date', 'incorporation_state_uuid', 'incorporation_state_name', 'doing_business_in_state_uuid', 'doing_business_in_state_name', 'ein', 'business_number', 'business_number_type', 'voip_provider', 'voip_login', 'voip_password', 'business_mobile_number', 'business_mobile_number_type', 'business_mobile_provider', 'business_mobile_website', 'business_mobile_login', 'business_mobile_password', 'card_on_file', 'card_last_four_digit', 'card_holder_name', 'website', 'db_report_number', 'status', 'approved'];
 
     protected $attributes = ['status' => 1, 'approved' => 0];
 

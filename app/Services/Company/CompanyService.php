@@ -305,15 +305,15 @@ class CompanyService {
             unset($check['tmp']);
         }
 
-        // business mobile number login
-        if (isset($entity['business_mobile_number_login'])){
-            $check['tmp'] = Company::select('business_mobile_number_login', 'legal_name')
+        // business mobile login
+        if (isset($entity['business_mobile_login'])){
+            $check['tmp'] = Company::select('business_mobile_login', 'legal_name')
                                     ->when(($ignore_uuid!=''), function ($q) use ($ignore_uuid){
                                         return $q->where('uuid', '!=', $ignore_uuid);
                                     })
                                     ->where('status', '!=', Config::get('common.status.deleted'))
                                     ->where('approved', Config::get('common.status.actived'))
-                                    ->where('business_mobile_number_login', $entity['business_mobile_number_login'])
+                                    ->where('business_mobile_login', $entity['business_mobile_login'])
                                     ->first();
 
             if ($check['tmp']!=null){
