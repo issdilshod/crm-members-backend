@@ -103,7 +103,7 @@ class CompanyService {
                             ->when(($user_uuid!=''), function ($q) use ($user_uuid){
                                 return $q->where('user_uuid', $user_uuid);
                             })
-                            ->paginate(10);
+                            ->paginate(5);
 
         foreach($companies AS $key => $value):
             $companies[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
@@ -173,7 +173,7 @@ class CompanyService {
                                 ->when(($user_uuid!=''), function ($q) use($user_uuid) {
                                     return $q->where('companies.user_uuid', $user_uuid);
                                 })
-                                ->limit(10)
+                                ->limit(5)
                                 ->get();
 
         foreach($companies AS $key => $value):

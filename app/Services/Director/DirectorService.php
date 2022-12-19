@@ -157,7 +157,7 @@ class DirectorService {
                                             })
                                             ->groupBy('d1.uuid');
                             })
-                            ->paginate(10);
+                            ->paginate(5);
 
         foreach($directors AS $key => $value):
             $directors[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
@@ -201,7 +201,7 @@ class DirectorService {
                                 ->when(($user_uuid!=''), function ($q) use ($user_uuid){
                                     return $q->where('directors.user_uuid', $user_uuid);
                                 })
-                                ->limit(10)
+                                ->limit(5)
                                 ->get();
 
         foreach($directors AS $key => $value):

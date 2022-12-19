@@ -27,9 +27,15 @@ class Chat extends Model
     }
 
     public function last_message() {
-        return Message::where('chat_uuid', $this->uuid)
-                    ->where('status', Config::get('common.status.actived'))
-                    ->orderBy('created_at', 'DESC')
-                    ->first();
+        $user_uuid = request('user_uuid');
+        return Message::select('messages.*')
+                        ->orderBy('messages.created_at', 'DESC')
+                        ->leftJoin('chat_users', 'chat_users.chat_uuid', '=', 'messages.chat_uuid')
+                        ->where('chat_users.user_uuid', $user_uuid)
+                        ->whereColumn('messages.created_at', '>', 'chat_users.updated_at')
+                        ->where('messages.status', '!=', Config::get('common.status.deleted'))
+                        ->where('messages.chat_uuid', $this->uuid)
+                        ->groupBy('messages.uuid')
+                        ->first();
     }
 }

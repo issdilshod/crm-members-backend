@@ -44,7 +44,7 @@ class MessageController extends Controller
     {
         // check permission
 
-        $messages = $this->messageService->chat_messages($chat_uuid);
+        $messages = $this->messageService->chat_messages($chat_uuid, $request->user_uuid);
 
         return $messages;
     }

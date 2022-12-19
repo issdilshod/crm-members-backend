@@ -19,12 +19,17 @@ class MessageService {
         $this->notifiactionService = new NotificationService();
     }
 
-    public function chat_messages($chat_uuid)
+    public function chat_messages($chat_uuid, $user_uuid)
     {
-        $messages = Message::orderBy('created_at', 'DESC')
-                            ->where('status', '!=', Config::get('common.status.deleted'))
-                            ->where('chat_uuid', $chat_uuid)
-                            ->paginate(20);
+        $messages = Message::select('messages.*')
+                            ->orderBy('messages.created_at', 'DESC')
+                            ->leftJoin('chat_users', 'chat_users.chat_uuid', '=', 'messages.chat_uuid')
+                            ->where('chat_users.user_uuid', $user_uuid)
+                            ->whereColumn('messages.created_at', '>', 'chat_users.updated_at')
+                            ->where('messages.status', '!=', Config::get('common.status.deleted'))
+                            ->where('messages.chat_uuid', $chat_uuid)
+                            ->groupBy('messages.uuid')
+                            ->paginate(100);
         return MessageResource::collection($messages);
     }
 
