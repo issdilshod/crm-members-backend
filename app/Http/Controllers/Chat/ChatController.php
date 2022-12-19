@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Chat;
 use App\Http\Controllers\Controller;
 use App\Models\Chat\Chat;
 use App\Policies\PermissionPolicy;
+use App\Services\Account\UserService;
 use App\Services\Chat\ChatService;
-use App\Services\Helper\DepartmentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 
@@ -14,12 +14,12 @@ class ChatController extends Controller
 {
 
     private $chatService;
-    private $departmentService;
+    private $userService;
 
     public function __construct()
     {
         $this->chatService = new ChatService();
-        $this->departmentService = new DepartmentService();
+        $this->userService = new UserService();
     }
     
     /**     @OA\GET(
@@ -48,11 +48,11 @@ class ChatController extends Controller
     }
 
     /**     @OA\GET(
-      *         path="/api/chat-department",
-      *         operationId="list_of_depatment_on_chat",
+      *         path="/api/chat-users",
+      *         operationId="list_of_users",
       *         tags={"Chat"},
-      *         summary="List of departments to create the chat",
-      *         description="List of departments to create the chat",
+      *         summary="List of users to create the chat",
+      *         description="List of users to create the chat",
       *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=401, description="Not Authenticated"),
@@ -60,15 +60,15 @@ class ChatController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function departments(Request $request)
+    public function users(Request $request)
     {
         // permission
         if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.chat.store'))){
             return response()->json([ 'data' => 'Not Authorized' ], 403);
         }
 
-        $departments = $this->departmentService->getDepartments();
-        return $departments;
+        $users = $this->userService->all();
+        return $users;
     }
 
     /**     @OA\POST(

@@ -1268,14 +1268,14 @@
                 }
             }
         },
-        "/api/chat-department": {
+        "/api/chat-users": {
             "get": {
                 "tags": [
                     "Chat"
                 ],
-                "summary": "List of departments to create the chat",
-                "description": "List of departments to create the chat",
-                "operationId": "list_of_depatment_on_chat",
+                "summary": "List of users to create the chat",
+                "description": "List of users to create the chat",
+                "operationId": "list_of_users",
                 "responses": {
                     "200": {
                         "description": "Successfully"
