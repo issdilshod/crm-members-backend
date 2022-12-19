@@ -80,10 +80,8 @@ class VirtualOfficeController extends Controller
       *                         @OA\Property(property="monthly_payment_amount", type="text"),
       *
       *                         @OA\Property(property="agreement_terms", type="text"),
-      *                         @OA\Property(property="deposit", type="text"),
-      *                         @OA\Property(property="registration_fee", type="text"),
-      *                         @OA\Property(property="etc", type="text"),
       *
+      *                         @OA\Property(property="contract", type="text"),
       *                         @OA\Property(property="contract_terms", type="text"),
       *                         @OA\Property(property="contract_terms_notes", type="text"),
       *                         @OA\Property(property="contract_effective_date", type="text"),
@@ -128,10 +126,8 @@ class VirtualOfficeController extends Controller
             'monthly_payment_amount' => '',
 
             'agreement_terms' => '',
-            'deposit' => '',
-            'registration_fee' => '',
-            'etc' => '',
 
+            'contract' => '',
             'contract_terms' => '',
             'contract_terms_notes' => '',
             'contract_effective_date' => '',
@@ -232,10 +228,8 @@ class VirtualOfficeController extends Controller
       *                         @OA\Property(property="monthly_payment_amount", type="text"),
       *
       *                         @OA\Property(property="agreement_terms", type="text"),
-      *                         @OA\Property(property="deposit", type="text"),
-      *                         @OA\Property(property="registration_fee", type="text"),
-      *                         @OA\Property(property="etc", type="text"),
       *
+      *                         @OA\Property(property="contract", type="text"),
       *                         @OA\Property(property="contract_terms", type="text"),
       *                         @OA\Property(property="contract_terms_notes", type="text"),
       *                         @OA\Property(property="contract_effective_date", type="text"),
@@ -280,10 +274,8 @@ class VirtualOfficeController extends Controller
             'monthly_payment_amount' => '',
 
             'agreement_terms' => '',
-            'deposit' => '',
-            'registration_fee' => '',
-            'etc' => '',
 
+            'contract' => '',
             'contract_terms' => '',
             'contract_terms_notes' => '',
             'contract_effective_date' => '',
@@ -407,10 +399,8 @@ class VirtualOfficeController extends Controller
       *                         @OA\Property(property="monthly_payment_amount", type="text"),
       *
       *                         @OA\Property(property="agreement_terms", type="text"),
-      *                         @OA\Property(property="deposit", type="text"),
-      *                         @OA\Property(property="registration_fee", type="text"),
-      *                         @OA\Property(property="etc", type="text"),
       *
+      *                         @OA\Property(property="contract", type="text"),
       *                         @OA\Property(property="contract_terms", type="text"),
       *                         @OA\Property(property="contract_terms_notes", type="text"),
       *                         @OA\Property(property="contract_effective_date", type="text"),
@@ -455,10 +445,8 @@ class VirtualOfficeController extends Controller
             'monthly_payment_amount' => '',
             
             'agreement_terms' => '',
-            'deposit' => '',
-            'registration_fee' => '',
-            'etc' => '',
 
+            'contract' => '',
             'contract_terms' => '',
             'contract_terms_notes' => '',
             'contract_effective_date' => '',
@@ -523,10 +511,8 @@ class VirtualOfficeController extends Controller
       *                         @OA\Property(property="monthly_payment_amount", type="text"),
       *
       *                         @OA\Property(property="agreement_terms", type="text"),
-      *                         @OA\Property(property="deposit", type="text"),
-      *                         @OA\Property(property="registration_fee", type="text"),
-      *                         @OA\Property(property="etc", type="text"),
       *
+      *                         @OA\Property(property="contract", type="text"),
       *                         @OA\Property(property="contract_terms", type="text"),
       *                         @OA\Property(property="contract_terms_notes", type="text"),
       *                         @OA\Property(property="contract_effective_date", type="text"),
@@ -571,10 +557,8 @@ class VirtualOfficeController extends Controller
             'monthly_payment_amount' => '',
             
             'agreement_terms' => '',
-            'deposit' => '',
-            'registration_fee' => '',
-            'etc' => '',
 
+            'contract' => '',
             'contract_terms' => '',
             'contract_terms_notes' => '',
             'contract_effective_date' => '',
@@ -640,10 +624,8 @@ class VirtualOfficeController extends Controller
       *                         @OA\Property(property="monthly_payment_amount", type="text"),
       *
       *                         @OA\Property(property="agreement_terms", type="text"),
-      *                         @OA\Property(property="deposit", type="text"),
-      *                         @OA\Property(property="registration_fee", type="text"),
-      *                         @OA\Property(property="etc", type="text"),
       *
+      *                         @OA\Property(property="contract", type="text"),
       *                         @OA\Property(property="contract_terms", type="text"),
       *                         @OA\Property(property="contract_terms_notes", type="text"),
       *                         @OA\Property(property="contract_effective_date", type="text"),
@@ -688,10 +670,8 @@ class VirtualOfficeController extends Controller
             'monthly_payment_amount' => '',
             
             'agreement_terms' => '',
-            'deposit' => '',
-            'registration_fee' => '',
-            'etc' => '',
 
+            'contract' => '',
             'contract_terms' => '',
             'contract_terms_notes' => '',
             'contract_effective_date' => '',

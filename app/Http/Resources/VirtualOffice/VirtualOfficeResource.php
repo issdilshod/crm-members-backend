@@ -34,16 +34,15 @@ class VirtualOfficeResource extends JsonResource
             'card_on_file' => $this->card_on_file,
             'card_last_four_digit' => $this->card_last_four_digit,
             'card_holder_name' => $this->card_holder_name,
-            'monthly_payment_amount' => $this->monthly_payment_amount,
 
-            'agreement_terms' => $this->agreement_terms,
-            'deposit' => $this->deposit,
-            'registration_fee' => $this->registration_fee,
-            'etc' => $this->etc,
-
+            'contract' => $this->contract,
             'contract_terms' => $this->contract_terms,
             'contract_terms_notes' => $this->contract_terms_notes,
             'contract_effective_date' => $this->contract_effective_date,
+
+            'monthly_payment_amount' => $this->monthly_payment_amount,
+
+            'agreement_terms' => $this->agreement_terms,
 
             // addresses
             'addresses' => AddressResource::collection($this->addresses),

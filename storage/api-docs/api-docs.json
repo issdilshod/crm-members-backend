@@ -5992,13 +5992,7 @@
                                     "agreement_terms": {
                                         "type": "text"
                                     },
-                                    "deposit": {
-                                        "type": "text"
-                                    },
-                                    "registration_fee": {
-                                        "type": "text"
-                                    },
-                                    "etc": {
+                                    "contract": {
                                         "type": "text"
                                     },
                                     "contract_terms": {
@@ -6158,13 +6152,7 @@
                                     "agreement_terms": {
                                         "type": "text"
                                     },
-                                    "deposit": {
-                                        "type": "text"
-                                    },
-                                    "registration_fee": {
-                                        "type": "text"
-                                    },
-                                    "etc": {
+                                    "contract": {
                                         "type": "text"
                                     },
                                     "contract_terms": {
@@ -6351,13 +6339,7 @@
                                     "agreement_terms": {
                                         "type": "text"
                                     },
-                                    "deposit": {
-                                        "type": "text"
-                                    },
-                                    "registration_fee": {
-                                        "type": "text"
-                                    },
-                                    "etc": {
+                                    "contract": {
                                         "type": "text"
                                     },
                                     "contract_terms": {
@@ -6480,13 +6462,7 @@
                                     "agreement_terms": {
                                         "type": "text"
                                     },
-                                    "deposit": {
-                                        "type": "text"
-                                    },
-                                    "registration_fee": {
-                                        "type": "text"
-                                    },
-                                    "etc": {
+                                    "contract": {
                                         "type": "text"
                                     },
                                     "contract_terms": {
@@ -6609,13 +6585,7 @@
                                     "agreement_terms": {
                                         "type": "text"
                                     },
-                                    "deposit": {
-                                        "type": "text"
-                                    },
-                                    "registration_fee": {
-                                        "type": "text"
-                                    },
-                                    "etc": {
+                                    "contract": {
                                         "type": "text"
                                     },
                                     "contract_terms": {

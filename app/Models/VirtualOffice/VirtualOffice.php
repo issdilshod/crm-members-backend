@@ -14,7 +14,7 @@ class VirtualOffice extends Model
 {
     use HasFactory, TraitUuid;
 
-    protected $fillable = ['user_uuid', 'vo_signer_uuid', 'vo_provider_name', 'vo_provider_username', 'vo_provider_password', 'vo_website', 'vo_contact_person_name', 'vo_contact_person_phone_number', 'vo_contact_person_email', 'vo_contact_person_email', 'online_account', 'online_account_username', 'online_account_password', 'card_on_file', 'card_last_four_digit', 'card_holder_name', 'monthly_payment_amount', 'agreement_terms', 'deposit', 'registration_fee', 'etc', 'contract_terms', 'contract_terms_notes', 'contract_effective_date', 'status', 'approved'];
+    protected $fillable = ['user_uuid', 'vo_signer_uuid', 'vo_provider_name', 'vo_provider_username', 'vo_provider_password', 'vo_website', 'vo_contact_person_name', 'vo_contact_person_phone_number', 'vo_contact_person_email', 'vo_contact_person_email', 'online_account', 'online_account_username', 'online_account_password', 'card_on_file', 'card_last_four_digit', 'card_holder_name', 'contract', 'contract_terms', 'contract_terms_notes', 'contract_effective_date', 'monthly_payment_amount', 'agreement_terms', 'status', 'approved'];
 
     protected $attributes = ['status' => 1, 'approved' => 0];
 
