@@ -8,6 +8,7 @@ use App\Http\Resources\Chat\ChatResource;
 use App\Models\Account\Activity;
 use App\Models\Account\User;
 use App\Models\Chat\Chat;
+use App\Services\Account\ActivityService;
 use App\Services\Helper\NotificationService;
 use Illuminate\Support\Facades\Config;
 
@@ -16,12 +17,14 @@ class ChatService{
     private $chatUserService;
     private $messageService;
     private $notificationService;
+    private $activityService;
 
     public function __construct()
     {
         $this->chatUserService = new ChatUserService();
         $this->messageService = new MessageService();
         $this->notificationService = new NotificationService();
+        $this->activityService = new ActivityService();
     }
 
     public function all()
@@ -80,6 +83,7 @@ class ChatService{
         ]);
 
         // push
+        $activity = $this->activityService->setLink($activity);
         $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
 
         $chat = $this->setChatMembers($chat);
@@ -101,8 +105,8 @@ class ChatService{
             'status' => Config::get('common.status.actived')
         ]);
 
-         // push
-         $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
+        // push
+        $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
 
         $chat = $this->setChatMembers($chat);
         return new ChatResource($chat);
@@ -123,13 +127,10 @@ class ChatService{
             $chat = Chat::select('chats.*')
                             ->leftJoin('chat_users', 'chat_users.chat_uuid', '=', 'chats.uuid')
                             ->where(function ($q) use($user_uuid, $entity) {
-                                $q->where('chats.user_uuid', $user_uuid)
-                                    ->where('chats.partner_uuid', $entity['members'][0]['uuid']);
+                                $q->where('chat_users.user_uuid', $user_uuid)
+                                    ->orWhere('chat_users.user_uuid', $entity['members'][0]['uuid']);
                             })
-                            ->orWhere(function ($q) use($user_uuid, $entity) {
-                                $q->where('chats.partner_uuid', $user_uuid)
-                                    ->where('chats.user_uuid', $entity['members'][0]['uuid']);
-                            })
+                            ->where('chats.type', Config::get('common.chat.type.private'))
                             ->first();
             if ($chat!=null){
                 $chat = $this->setChatMembers($chat);

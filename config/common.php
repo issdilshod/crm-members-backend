@@ -248,8 +248,8 @@ return [
             36 => 'future-companies',
             37 => 'future-companies',
 
-            38 => 'chats',
-            39 => 'chats',
+            38 => '?section=chat&part=chats&uuid=',
+            39 => '?section=chat&part=chats&uuid=',
 
             40 => '?section=task&uuid=',
             41 => '?section=task&uuid=',
