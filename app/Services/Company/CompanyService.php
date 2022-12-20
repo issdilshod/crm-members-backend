@@ -140,7 +140,7 @@ class CompanyService {
                                         // phones
                                         ->orWhere('companies.business_number', 'like', $search.'%')
                                         ->orWhere('companies.business_mobile_number', 'like', $search.'%')
-                                        ->orWhere('companies.business_mobile_number_login', 'like', $search.'%')
+                                        ->orWhere('companies.business_mobile_login', 'like', $search.'%')
                                         ->orWhere('companies.voip_login', 'like', $search.'%')
                                         ->orWhere('companies.website', 'like', $search.'%')
                                         ->orWhere('companies.db_report_number', 'like', $search.'%')
