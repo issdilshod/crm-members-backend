@@ -2,6 +2,7 @@
 
 namespace App\Services\Helper;
 
+use App\Logs\Log;
 use App\Models\Company\Company;
 use App\Models\Director\Director;
 use App\Models\Helper\Address;
@@ -32,21 +33,22 @@ class AddressService {
         return $address;
     }
 
-    public function check($entity, $index, $ignore_uuid = '')
+    public function check($entity, $index, $ignore_uuid = '', $join = '')
     {
         $check = [];
 
         if (isset($entity['street_address']) && isset($entity['address_line_2']) && isset($entity['city']) && isset($entity['postal'])){
-            $check['tmp'] = Address::select('entity_uuid', 'street_address', 'address_line_2', 'city', 'postal', 'address_parent')
+            $check['tmp'] = Address::select('addresses.entity_uuid', 'addresses.street_address', 'addresses.address_line_2', 'addresses.city', 'addresses.postal', 'addresses.address_parent')
+                                    ->join($join, $join . '.uuid', '=', 'addresses.entity_uuid')
                                     ->when(($ignore_uuid!=''), function ($q) use ($ignore_uuid){
-                                        return $q->where('entity_uuid', '!=', $ignore_uuid);
+                                        return $q->where('addresses.entity_uuid', '!=', $ignore_uuid);
                                     })
-                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('addresses.status', Config::get('common.status.actived'))
                                     ->where(function($q) use ($entity){
-                                        $q->where('street_address', $entity['street_address'])
-                                            ->where('address_line_2', $entity['address_line_2'])
-                                            ->where('city', $entity['city'])
-                                            ->where('postal', $entity['postal']);
+                                        $q->where('addresses.street_address', $entity['street_address'])
+                                            ->where('addresses.address_line_2', $entity['address_line_2'])
+                                            ->where('addresses.city', $entity['city'])
+                                            ->where('addresses.postal', $entity['postal']);
                                     })
                                     ->first();
 

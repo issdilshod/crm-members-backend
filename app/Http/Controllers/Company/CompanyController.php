@@ -209,7 +209,7 @@ class CompanyController extends Controller
         // addresses check
         if (isset($validated['addresses'])){
             foreach($validated['addresses'] AS $key => $value):
-                $tmpCheck = $this->addressService->check($value, $key);
+                $tmpCheck = $this->addressService->check($value, $key, '', 'companies');
                 $check = array_merge($check, $tmpCheck);
             endforeach;
         }
@@ -484,7 +484,7 @@ class CompanyController extends Controller
         // addresses check
         if (isset($validated['addresses'])){
             foreach($validated['addresses'] AS $key => $value):
-                $tmpCheck = $this->addressService->check($value, $key, $company->uuid);
+                $tmpCheck = $this->addressService->check($value, $key, $company->uuid, 'companies');
                 $check = array_merge($check, $tmpCheck);
             endforeach;
         }
@@ -526,6 +526,7 @@ class CompanyController extends Controller
         if (isset($validated['addresses'])){
             foreach ($validated['addresses'] AS $key => $value):
                 $value['entity_uuid'] = $company->uuid;
+                $value['status'] = Config::get('common.status.actived');
                 $this->addressService->save($value);
             endforeach;
         }
@@ -752,7 +753,7 @@ class CompanyController extends Controller
         // addresses check
         if (isset($validated['addresses'])){
             foreach($validated['addresses'] AS $key => $value):
-                $tmpCheck = $this->addressService->check($value, $key);
+                $tmpCheck = $this->addressService->check($value, $key, '', 'companies');
                 $check = array_merge($check, $tmpCheck);
             endforeach;
         }
@@ -996,7 +997,7 @@ class CompanyController extends Controller
         // addresses check
         if (isset($validated['addresses'])){
             foreach($validated['addresses'] AS $key => $value):
-                $tmpCheck = $this->addressService->check($value, $key, $company->uuid);
+                $tmpCheck = $this->addressService->check($value, $key, $company->uuid, 'companies');
                 $check = array_merge($check, $tmpCheck);
             endforeach;
         }
@@ -1245,7 +1246,7 @@ class CompanyController extends Controller
         // addresses check
         if (isset($validated['addresses'])){
             foreach($validated['addresses'] AS $key => $value):
-                $tmpCheck = $this->addressService->check($value, $key, $company->uuid);
+                $tmpCheck = $this->addressService->check($value, $key, $company->uuid, 'companies');
                 $check = array_merge($check, $tmpCheck);
             endforeach;
         }
