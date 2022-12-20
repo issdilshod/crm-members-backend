@@ -37,6 +37,22 @@ class VirtualOfficeService{
         return VirtualOfficePendingResource::collection($virtualOffices);
     }
 
+    public function for_pending($user_uuid)
+    {
+        $virtualOffices = VirtualOffice::orderBy('updated_at', 'DESC')
+                                        ->where('status', '!=', Config::get('common.status.deleted'))
+                                        ->when(($user_uuid!=''), function ($q) use($user_uuid){
+                                            return $q->where('user_uuid', $user_uuid);
+                                        })
+                                        ->paginate(5);
+
+        foreach($virtualOffices AS $key => $value):
+            $virtualOffices[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
+        endforeach;
+
+        return VirtualOfficePendingResource::collection($virtualOffices);
+    }
+
     public function one(VirtualOffice $virtualOffice)
     {
         $virtualOffice = new VirtualOfficeResource($virtualOffice);

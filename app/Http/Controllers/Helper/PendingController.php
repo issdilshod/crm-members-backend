@@ -11,6 +11,7 @@ use App\Models\Helper\Email;
 use App\Policies\PermissionPolicy;
 use App\Services\Company\CompanyService;
 use App\Services\Director\DirectorService;
+use App\Services\VirtualOffice\VirtualOfficeService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 
@@ -19,11 +20,13 @@ class PendingController extends Controller
 
     private $directorService;
     private $companyService;
+    private $virtualOfficesService;
 
     public function __construct()
     {
         $this->directorService = new DirectorService();
         $this->companyService = new CompanyService();
+        $this->virtualOfficesService = new VirtualOfficeService();
     }
     
     /**     @OA\GET(
@@ -40,19 +43,21 @@ class PendingController extends Controller
       */
     public function index(Request $request)
     {
-        $user_uuid = ''; $filter = ''; $summary_filter = '';
+        $filter = ''; $summary_filter = '';
 
         // filters
         if (isset($request->filter)){ $filter = $request->filter; }
         if (isset($request->summary_filter)){ $summary_filter = $request->summary_filter; }
 
-        // get data
+        // get directors
+        $user_uuid = '';
         if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.view'))){
             $user_uuid = $request->user_uuid;
         }
         $directors = $this->directorService->for_pending($user_uuid, $filter, $summary_filter);
         $summary['directors'] = $this->directorService->summary($user_uuid);
 
+        // get companies
         $user_uuid = '';
         if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.view'))){
             $user_uuid = $request->user_uuid;
@@ -60,12 +65,40 @@ class PendingController extends Controller
         $companies = $this->companyService->for_pending($user_uuid, $filter, $summary_filter);
         $summary['companies'] = $this->companyService->summary($user_uuid);
 
+        // get virtual offices
+        $user_uuid = '';
+        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.view'))){
+            $user_uuid = $request->user_uuid;
+        }
+        $virtualOffices = $this->virtualOfficesService->for_pending($user_uuid);
+
         // meta data
         $current_page = $directors->currentPage();
-        $max_page = ($directors->lastPage()>$companies->lastPage()?$directors->lastPage():$companies->lastPage());
+
+        // max page
+        $max_page = 0;
+        if ($directors->lastPage()>$max_page){ // director max page
+            $max_page = $directors->lastPage();
+        }
+
+        if ($directors->lastPage()>$max_page){ // company max page
+            $max_page = $companies->lastPage();
+        }
+
+        if ($virtualOffices->lastPage()>$max_page){ // virtual offices max page
+            $max_page = $virtualOffices->lastPage();
+        }
+
         $meta = [ 'current_page' => $current_page, 'max_page' => $max_page ];
 
-        return ['directors' => $directors, 'companies' => $companies, 'meta' => $meta, 'summary' => $summary];
+        return [
+            'directors' => $directors, 
+            'companies' => $companies, 
+            'virtual_offices' => $virtualOffices,
+            
+            'meta' => $meta, 
+            'summary' => $summary
+        ];
     }
 
     /**     @OA\GET(
