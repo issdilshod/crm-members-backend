@@ -47,18 +47,19 @@ class EmailService {
         Email::where('entity_uuid', $uuid)->update(['status' => Config::get('common.status.deleted')]);
     }
 
-    public function check($entity, $index, $ignore_uuid = '')
+    public function check($entity, $index, $ignore_uuid = '', $join = '')
     {
         $check = [];
 
         if (isset($entity['hosting_uuid']) && isset($entity['email'])){
-            $check['tmp'] = Email::select('entity_uuid', 'hosting_uuid', 'email')
+            $check['tmp'] = Email::select('emails.entity_uuid', 'emails.hosting_uuid', 'emails.email')
+                                    ->join($join, $join . '.uuid', '=', 'emails.entity_uuid')
                                     ->when(($ignore_uuid!=''), function ($q) use($ignore_uuid){
-                                        return $q->where('entity_uuid', '!=', $ignore_uuid);
+                                        return $q->where('emails.entity_uuid', '!=', $ignore_uuid);
                                     })
-                                    ->where('status', Config::get('common.status.actived'))
-                                    ->where('hosting_uuid', $entity['hosting_uuid'])
-                                    ->where('email', $entity['email'])
+                                    ->where('emails.status', Config::get('common.status.actived'))
+                                    ->where('emails.hosting_uuid', $entity['hosting_uuid'])
+                                    ->where('emails.email', $entity['email'])
                                     ->first();
 
             if ($check['tmp']!=null){
@@ -73,12 +74,13 @@ class EmailService {
 
         // Phone
         if (isset($entity['phone'])){
-            $check['tmp'] = Email::select('entity_uuid', 'phone')
+            $check['tmp'] = Email::select('emails.entity_uuid', 'emails.phone')
+                                ->join($join, $join . '.uuid', '=', 'emails.entity_uuid')
                                 ->when(($ignore_uuid!=''), function ($q) use($ignore_uuid){
-                                    return $q->where('entity_uuid', '!=', $ignore_uuid);
+                                    return $q->where('emails.entity_uuid', '!=', $ignore_uuid);
                                 })
-                                ->where('status', Config::get('common.status.actived'))
-                                ->where('phone', $entity['phone'])
+                                ->where('emails.status', Config::get('common.status.actived'))
+                                ->where('emails.phone', $entity['phone'])
                                 ->first();
 
             if ($check['tmp']!=null){

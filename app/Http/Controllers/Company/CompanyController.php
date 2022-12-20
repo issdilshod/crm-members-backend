@@ -201,7 +201,7 @@ class CompanyController extends Controller
         // emails check
         if (isset($validated['emails'])){
             foreach($validated['emails'] AS $key => $value):
-                $tmpCheck = $this->emailService->check($value, $key);
+                $tmpCheck = $this->emailService->check($value, $key, '', 'companies');
                 $check = array_merge($check, $tmpCheck);
             endforeach;
         }
@@ -476,7 +476,7 @@ class CompanyController extends Controller
         // emails check
         if (isset($validated['emails'])){
             foreach($validated['emails'] AS $key => $value):
-                $tmpCheck = $this->emailService->check($value, $key, $company->uuid);
+                $tmpCheck = $this->emailService->check($value, $key, $company->uuid, 'companies');
                 $check = array_merge($check, $tmpCheck);
             endforeach;
         }
@@ -744,7 +744,7 @@ class CompanyController extends Controller
         // emails check
         if (isset($validated['emails'])){
             foreach($validated['emails'] AS $key => $value):
-                $tmpCheck = $this->emailService->check($value, $key);
+                $tmpCheck = $this->emailService->check($value, $key, '', 'companies');
                 $check = array_merge($check, $tmpCheck);
             endforeach;
         }
@@ -988,7 +988,7 @@ class CompanyController extends Controller
         // emails check
         if (isset($validated['emails'])){
             foreach($validated['emails'] AS $key => $value):
-                $tmpCheck = $this->emailService->check($value, $key, $company->uuid);
+                $tmpCheck = $this->emailService->check($value, $key, $company->uuid, 'companies');
                 $check = array_merge($check, $tmpCheck);
             endforeach;
         }
@@ -1237,7 +1237,7 @@ class CompanyController extends Controller
         // emails check
         if (isset($validated['emails'])){
             foreach($validated['emails'] AS $key => $value):
-                $tmpCheck = $this->emailService->check($value, $key, $company->uuid);
+                $tmpCheck = $this->emailService->check($value, $key, $company->uuid, 'companies');
                 $check = array_merge($check, $tmpCheck);
             endforeach;
         }
