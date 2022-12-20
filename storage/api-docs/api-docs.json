@@ -6019,6 +6019,9 @@
                                     "card_on_file": {
                                         "type": "text"
                                     },
+                                    "autopay": {
+                                        "type": "text"
+                                    },
                                     "card_last_four_digit": {
                                         "type": "text"
                                     },
@@ -6177,6 +6180,9 @@
                                         "type": "text"
                                     },
                                     "card_on_file": {
+                                        "type": "text"
+                                    },
+                                    "autopay": {
                                         "type": "text"
                                     },
                                     "card_last_four_digit": {
@@ -6366,6 +6372,9 @@
                                     "card_on_file": {
                                         "type": "text"
                                     },
+                                    "autopay": {
+                                        "type": "text"
+                                    },
                                     "card_last_four_digit": {
                                         "type": "text"
                                     },
@@ -6489,6 +6498,9 @@
                                     "card_on_file": {
                                         "type": "text"
                                     },
+                                    "autopay": {
+                                        "type": "text"
+                                    },
                                     "card_last_four_digit": {
                                         "type": "text"
                                     },
@@ -6610,6 +6622,9 @@
                                         "type": "text"
                                     },
                                     "card_on_file": {
+                                        "type": "text"
+                                    },
+                                    "autopay": {
                                         "type": "text"
                                     },
                                     "card_last_four_digit": {

@@ -31,7 +31,9 @@ class VirtualOfficeResource extends JsonResource
             'online_account' => $this->online_account,
             'online_account_username' => $this->online_account_username,
             'online_account_password' => $this->online_account_password,
+
             'card_on_file' => $this->card_on_file,
+            'autopay' => $this->autopay,
             'card_last_four_digit' => $this->card_last_four_digit,
             'card_holder_name' => $this->card_holder_name,
 

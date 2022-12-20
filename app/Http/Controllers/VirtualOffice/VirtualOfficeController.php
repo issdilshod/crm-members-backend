@@ -74,7 +74,9 @@ class VirtualOfficeController extends Controller
       *                         @OA\Property(property="online_account", type="text"),
       *                         @OA\Property(property="online_account_username", type="text"),
       *                         @OA\Property(property="online_account_password", type="text"),
+      *
       *                         @OA\Property(property="card_on_file", type="text"),
+      *                         @OA\Property(property="autopay", type="text"),
       *                         @OA\Property(property="card_last_four_digit", type="text"),
       *                         @OA\Property(property="card_holder_name", type="text"),
       *                         @OA\Property(property="monthly_payment_amount", type="text"),
@@ -120,7 +122,9 @@ class VirtualOfficeController extends Controller
             'online_account' => '',
             'online_account_username' => '',
             'online_account_password' => '',
+
             'card_on_file' => '',
+            'autopay' => '',
             'card_last_four_digit' => '',
             'card_holder_name' => '',
             'monthly_payment_amount' => '',
@@ -222,7 +226,9 @@ class VirtualOfficeController extends Controller
       *                         @OA\Property(property="online_account", type="text"),
       *                         @OA\Property(property="online_account_username", type="text"),
       *                         @OA\Property(property="online_account_password", type="text"),
+      *
       *                         @OA\Property(property="card_on_file", type="text"),
+      *                         @OA\Property(property="autopay", type="text"),
       *                         @OA\Property(property="card_last_four_digit", type="text"),
       *                         @OA\Property(property="card_holder_name", type="text"),
       *                         @OA\Property(property="monthly_payment_amount", type="text"),
@@ -268,7 +274,9 @@ class VirtualOfficeController extends Controller
             'online_account' => '',
             'online_account_username' => '',
             'online_account_password' => '',
+
             'card_on_file' => '',
+            'autopay' => '',
             'card_last_four_digit' => '',
             'card_holder_name' => '',
             'monthly_payment_amount' => '',
@@ -393,7 +401,9 @@ class VirtualOfficeController extends Controller
       *                         @OA\Property(property="online_account", type="text"),
       *                         @OA\Property(property="online_account_username", type="text"),
       *                         @OA\Property(property="online_account_password", type="text"),
+      *
       *                         @OA\Property(property="card_on_file", type="text"),
+      *                         @OA\Property(property="autopay", type="text"),
       *                         @OA\Property(property="card_last_four_digit", type="text"),
       *                         @OA\Property(property="card_holder_name", type="text"),
       *                         @OA\Property(property="monthly_payment_amount", type="text"),
@@ -439,7 +449,9 @@ class VirtualOfficeController extends Controller
             'online_account' => '',
             'online_account_username' => '',
             'online_account_password' => '',
+
             'card_on_file' => '',
+            'autopay' => '',
             'card_last_four_digit' => '',
             'card_holder_name' => '',
             'monthly_payment_amount' => '',
@@ -505,7 +517,9 @@ class VirtualOfficeController extends Controller
       *                         @OA\Property(property="online_account", type="text"),
       *                         @OA\Property(property="online_account_username", type="text"),
       *                         @OA\Property(property="online_account_password", type="text"),
+      *
       *                         @OA\Property(property="card_on_file", type="text"),
+      *                         @OA\Property(property="autopay", type="text"),
       *                         @OA\Property(property="card_last_four_digit", type="text"),
       *                         @OA\Property(property="card_holder_name", type="text"),
       *                         @OA\Property(property="monthly_payment_amount", type="text"),
@@ -551,7 +565,9 @@ class VirtualOfficeController extends Controller
             'online_account' => '',
             'online_account_username' => '',
             'online_account_password' => '',
+
             'card_on_file' => '',
+            'autopay' => '',
             'card_last_four_digit' => '',
             'card_holder_name' => '',
             'monthly_payment_amount' => '',
@@ -618,7 +634,9 @@ class VirtualOfficeController extends Controller
       *                         @OA\Property(property="online_account", type="text"),
       *                         @OA\Property(property="online_account_username", type="text"),
       *                         @OA\Property(property="online_account_password", type="text"),
+      *
       *                         @OA\Property(property="card_on_file", type="text"),
+      *                         @OA\Property(property="autopay", type="text"),
       *                         @OA\Property(property="card_last_four_digit", type="text"),
       *                         @OA\Property(property="card_holder_name", type="text"),
       *                         @OA\Property(property="monthly_payment_amount", type="text"),
@@ -664,7 +682,9 @@ class VirtualOfficeController extends Controller
             'online_account' => '',
             'online_account_username' => '',
             'online_account_password' => '',
+
             'card_on_file' => '',
+            'autopay' => '',
             'card_last_four_digit' => '',
             'card_holder_name' => '',
             'monthly_payment_amount' => '',
