@@ -54,7 +54,7 @@ class VirtualOfficeService{
             'entity_uuid' => $virtualOffice['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
-            'description' => str_replace("{name}", $virtualOffice['vo_provider_username'], Config::get('common.activity.virtual_office.add')),
+            'description' => str_replace("{name}", $virtualOffice['vo_provider_name'], Config::get('common.activity.virtual_office.add')),
             'changes' => json_encode($entity),
             'action_code' => Config::get('common.activity.codes.virtual_office_add'),
             'status' => Config::get('common.status.actived')
@@ -75,7 +75,7 @@ class VirtualOfficeService{
             'entity_uuid' => $virtualOffice['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
-            'description' => str_replace("{name}", $virtualOffice['vo_provider_username'], Config::get('common.activity.virtual_office.updated')),
+            'description' => str_replace("{name}", $virtualOffice['vo_provider_name'], Config::get('common.activity.virtual_office.updated')),
             'changes' => json_encode($entity),
             'action_code' => Config::get('common.activity.codes.virtual_office_update'),
             'status' => Config::get('common.status.actived')
@@ -101,7 +101,7 @@ class VirtualOfficeService{
             'entity_uuid' => $virtualOffice['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
-            'description' => str_replace("{name}", $virtualOffice['vo_provider_username'], Config::get('common.activity.virtual_office.pending')),
+            'description' => str_replace("{name}", $virtualOffice['vo_provider_name'], Config::get('common.activity.virtual_office.pending')),
             'changes' => json_encode($entity),
             'action_code' => Config::get('common.activity.codes.virtual_office_pending'),
             'status' => Config::get('common.status.actived')
@@ -111,7 +111,7 @@ class VirtualOfficeService{
         $user = User::where('uuid', $entity['user_uuid'])->first();
 
         $msg = '*' . $user->first_name . ' ' . $user->last_name . "*\n" .
-                str_replace("{name}", "*" . $virtualOffice['vo_provider_username'] . "*", Config::get('common.activity.virtual_office.pending')) . "\n" .
+                str_replace("{name}", "*" . $virtualOffice['vo_provider_name'] . "*", Config::get('common.activity.virtual_office.pending')) . "\n" .
                 '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/virtual-offices/'.$virtualOffice['uuid'].')';
         $this->notificationService->telegram_to_headqurters($msg);
 
@@ -131,7 +131,7 @@ class VirtualOfficeService{
             'entity_uuid' => $virtualOffice['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
-            'description' => str_replace("{name}", $virtualOffice['vo_provider_username'], Config::get('common.activity.virtual_office.pending_update')),
+            'description' => str_replace("{name}", $virtualOffice['vo_provider_name'], Config::get('common.activity.virtual_office.pending_update')),
             'changes' => json_encode($entity),
             'action_code' => Config::get('common.activity.codes.virtual_office_pending_update'),
             'status' => Config::get('common.status.actived')
@@ -141,7 +141,7 @@ class VirtualOfficeService{
         $user = User::where('uuid', $virtualOffice['user_uuid'])->first();
 
         $msg = '*' . $user->first_name . ' ' . $user->last_name . "*\n" .
-                str_replace("{name}", "*" . $virtualOffice['vo_provider_username'] . "*", Config::get('common.activity.virtual_office.pending_update')) . "\n" .
+                str_replace("{name}", "*" . $virtualOffice['vo_provider_name'] . "*", Config::get('common.activity.virtual_office.pending_update')) . "\n" .
                 '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/virtual-offices/'.$virtualOffice['uuid'].')';
         $this->notificationService->telegram_to_headqurters($msg);
 
@@ -161,7 +161,7 @@ class VirtualOfficeService{
             'entity_uuid' => $virtualOffice['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
-            'description' => str_replace("{name}", $virtualOffice['vo_provider_username'], Config::get('common.activity.virtual_office.accept')),
+            'description' => str_replace("{name}", $virtualOffice['vo_provider_name'], Config::get('common.activity.virtual_office.accept')),
             'changes' => json_encode($entity),
             'action_code' => Config::get('common.activity.codes.virtual_office_accept'),
             'status' => Config::get('common.status.actived')
@@ -172,7 +172,7 @@ class VirtualOfficeService{
 
         $this->notificationService->telegram([
             'telegram' => $user['telegram'],
-            'msg' => str_replace("{name}", "*" . $virtualOffice['vo_provider_username'] . "*", Config::get('common.activity.virtual_office.accept')) . "\n" .
+            'msg' => str_replace("{name}", "*" . $virtualOffice['vo_provider_name'] . "*", Config::get('common.activity.virtual_office.accept')) . "\n" .
                         '[link to view](' .env('APP_FRONTEND_ENDPOINT').'/virtual-offices/'.$virtualOffice['uuid']. ')'
         ]);
 
@@ -193,7 +193,7 @@ class VirtualOfficeService{
             'entity_uuid' => $virtualOffice['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
-            'description' => str_replace("{name}", $virtualOffice['vo_provider_username'], Config::get('common.activity.virtual_office.reject')),
+            'description' => str_replace("{name}", $virtualOffice['vo_provider_name'], Config::get('common.activity.virtual_office.reject')),
             'changes' => json_encode($entity),
             'action_code' => Config::get('common.activity.codes.virtual_office_reject'),
             'status' => Config::get('common.status.actived')
@@ -204,7 +204,7 @@ class VirtualOfficeService{
 
         $this->notificationService->telegram([
             'telegram' => $user['telegram'],
-            'msg' => str_replace("{name}", "*" . $virtualOffice['vo_provider_username'] . "*", Config::get('common.activity.virtual_office.reject')) . "\n" .
+            'msg' => str_replace("{name}", "*" . $virtualOffice['vo_provider_name'] . "*", Config::get('common.activity.virtual_office.reject')) . "\n" .
                         '[link to view](' .env('APP_FRONTEND_ENDPOINT').'/vitual-offices/'.$virtualOffice['uuid']. ')'
         ]);
 
@@ -216,7 +216,7 @@ class VirtualOfficeService{
     {
         $virtualOffices = VirtualOffice::orderBy('updated_at')
                                             ->where('status', Config::get('common.status.actived'))
-                                            ->where('vo_provider_username', $value)
+                                            ->where('vo_provider_name', $value)
                                             ->paginate(20);
 
         foreach($virtualOffices AS $key => $value):
@@ -256,7 +256,7 @@ class VirtualOfficeService{
     {
         $check = [];
 
-        if (isset($entity['vo_provider_username'])){
+        if (isset($entity['address_line2'])){
             $check['tmp'] = VirtualOffice::select('address_line1', 'address_line2', 'city', 'state', 'postal')
                                         ->where('status', '!=', Config::get('common.status.deleted'))
                                         ->where('approved', Config::get('common.status.actived'))
