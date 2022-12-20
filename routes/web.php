@@ -102,6 +102,7 @@ Route::middleware('auth.custom')->group(function() {
     Route::put('api/company-reject/{uuid}', [CompanyController::class, 'reject']);
     Route::get('api/company-permission', [CompanyController::class, 'permission']);
     Route::put('api/company-override/{uuid}', [CompanyController::class, 'override']);
+    Route::get('api/company-by-director/{uuid}', [CompanyController::class, 'by_director']);
 
     // websites future
     Route::resource('api/future-websites', FutureWebsiteController::class);

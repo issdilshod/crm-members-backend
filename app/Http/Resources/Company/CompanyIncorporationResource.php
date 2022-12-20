@@ -16,9 +16,11 @@ class CompanyIncorporationResource extends JsonResource
     {
         return [
             'uuid' => $this->uuid,
+            'state_office_website' => $this->state_office_website,
             'incorporation_date' => $this->incorporation_date,
             'annual_report_date' => $this->annual_report_date,
             'registered_agent_exists' => $this->registered_agent_exists,
+            'registered_agent_company_name' => $this->registered_agent_company_name,
             'notes' => $this->notes,
             'parent' => $this->parent
         ];

@@ -2807,6 +2807,45 @@
                 }
             }
         },
+        "/api/company-by-director/{uuid}": {
+            "get": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Get company by director",
+                "description": "Get company by director",
+                "operationId": "get_company_by_director",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "director uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
         "/api/future-company": {
             "get": {
                 "tags": [

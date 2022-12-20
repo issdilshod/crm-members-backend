@@ -1617,5 +1617,35 @@ class CompanyController extends Controller
 
         return $permissions;
     }
+
+    /**     @OA\GET(
+      *         path="/api/company-by-director/{uuid}",
+      *         operationId="get_company_by_director",
+      *         tags={"Company"},
+      *         summary="Get company by director",
+      *         description="Get company by director",
+      *             @OA\Parameter(
+      *                 name="uuid",
+      *                 in="path",
+      *                 description="director uuid",
+      *                 @OA\Schema(
+      *                     type="string",
+      *                     format="uuid"
+      *                 ),
+      *                 required=true
+      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=403, description="Not Autorized"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
+    public function by_director(Request $request, $uuid)
+    {
+        $company = Company::where('director_uuid', $uuid)
+                            ->first(['legal_name']);
+        return $company;
+    }
  
 }

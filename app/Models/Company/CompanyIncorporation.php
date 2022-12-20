@@ -10,7 +10,7 @@ class CompanyIncorporation extends Model
 {
     use HasFactory, TraitUuid;
 
-    protected $fillable = ['entity_uuid', 'incorporation_date', 'annual_report_date', 'registered_agent_exists', 'notes', 'parent'];
+    protected $fillable = ['state_office_website', 'entity_uuid', 'incorporation_date', 'annual_report_date', 'registered_agent_exists', 'registered_agent_company_name', 'notes', 'parent'];
 
     protected $attributes = ['status' => 1];
 
