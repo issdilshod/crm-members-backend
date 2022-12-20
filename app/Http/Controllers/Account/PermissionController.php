@@ -82,8 +82,7 @@ class PermissionController extends Controller
                         ->where('alias', $department->alias)
                         ->first();
 
-        $permissions = RolePermission::where('status', Config::get('common.status.actived'))
-                                        ->where('role_uuid', $role->uuid)
+        $permissions = RolePermission::where('role_uuid', $role->uuid)
                                         ->get();
                                     
         return RolePermissionResource::collection($permissions);
@@ -119,8 +118,7 @@ class PermissionController extends Controller
             return response()->json([ 'data' => 'Not Authorized' ], 403);
         }
 
-        $permissions = UserPermission::where('status', Config::get('common.status.actived'))
-                                        ->where('user_uuid', $uuid)
+        $permissions = UserPermission::where('user_uuid', $uuid)
                                         ->get();
                                     
         return UserPermissionResource::collection($permissions);

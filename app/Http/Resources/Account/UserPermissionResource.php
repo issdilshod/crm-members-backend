@@ -18,6 +18,7 @@ class UserPermissionResource extends JsonResource
             'uuid' => $this->uuid,
             'permission_uuid' => $this->permission_uuid,
             'user_uuid' => $this->user_uuid,
+            'status' => $this->status
         ];
     }
 }
