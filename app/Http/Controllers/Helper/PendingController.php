@@ -70,7 +70,7 @@ class PendingController extends Controller
         if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.view'))){
             $user_uuid = $request->user_uuid;
         }
-        $virtualOffices = $this->virtualOfficesService->for_pending($user_uuid);
+        $virtualOffices = $this->virtualOfficesService->for_pending($user_uuid, $filter, $summary_filter);
 
         // meta data
         $current_page = $directors->currentPage();

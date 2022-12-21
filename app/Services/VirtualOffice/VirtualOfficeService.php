@@ -40,10 +40,27 @@ class VirtualOfficeService{
         return VirtualOfficePendingResource::collection($virtualOffices);
     }
 
-    public function for_pending($user_uuid)
+    public function for_pending($user_uuid, $filter, $filter_summary)
     {
         $virtualOffices = VirtualOffice::orderBy('updated_at', 'DESC')
                                         ->where('status', '!=', Config::get('common.status.deleted'))
+                                        ->when(($filter_summary==''), function ($gq) use ($filter) { // no summary filter
+                                            return $gq->when(($filter!='' || $filter=='0'), function ($q) { // normal view
+                                                    return $q->where('status', '!=', Config::get('common.status.deleted'));
+                                                })
+                                                ->when($filter=='1', function ($q) { // unapproved
+                                                    return $q->where('status', Config::get('common.status.pending'));
+                                                })
+                                                ->when($filter=='2', function ($q) { // approved
+                                                    return $q->where('status', Config::get('common.status.actived'));
+                                                })
+                                                ->when($filter=='3', function ($q) { // rejected
+                                                    return $q->where('status', Config::get('common.status.rejected'));
+                                                });
+                                        })
+                                        ->when(($filter!=''), function($q){ // never true
+                                            return $q->where('status', 100); // never true
+                                        })
                                         ->when(($user_uuid!=''), function ($q) use($user_uuid){
                                             return $q->where('user_uuid', $user_uuid);
                                         })
