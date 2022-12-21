@@ -595,6 +595,14 @@ class CompanyService {
         return new CompanyPendingResource($company);
     }
 
+    public function by_director($director_uuid)
+    {
+        $company = Company::where('director_uuid', $director_uuid)
+                            ->where('status', '!=', Config::get('common.status.deleted'))
+                            ->first(['legal_name']);
+        return $company;
+    }
+
     private function is_idefier($check)
     {
         $idenfier = ['legal_name'];

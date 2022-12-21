@@ -1644,8 +1644,7 @@ class CompanyController extends Controller
       */
     public function by_director(Request $request, $uuid)
     {
-        $company = Company::where('director_uuid', $uuid)
-                            ->first(['legal_name']);
+        $company = $this->companyService->by_director($uuid);
         return $company;
     }
  
