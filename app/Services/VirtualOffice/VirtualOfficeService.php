@@ -3,6 +3,7 @@
 namespace App\Services\VirtualOffice;
 
 use App\Helpers\UserSystemInfoHelper;
+use App\Http\Resources\Account\ActivityResource;
 use App\Http\Resources\VirtualOffice\VirtualOfficePendingResource;
 use App\Http\Resources\VirtualOffice\VirtualOfficeResource;
 use App\Models\Account\Activity;
@@ -141,7 +142,7 @@ class VirtualOfficeService{
         $name = $this->get_name($entity);
 
         // Activity log
-        Activity::create([
+        $activity = Activity::create([
             'user_uuid' => $entity['user_uuid'],
             'entity_uuid' => $virtualOffice['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
@@ -155,10 +156,19 @@ class VirtualOfficeService{
         // notification
         $user = User::where('uuid', $entity['user_uuid'])->first();
 
+        // telegram
         $msg = '*' . $user->first_name . ' ' . $user->last_name . "*\n" .
                 str_replace("{name}", "*" . $name . "*", Config::get('common.activity.virtual_office.pending')) . "\n" .
                 '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/virtual-offices/'.$virtualOffice['uuid'].')';
         $this->notificationService->telegram_to_headqurters($msg);
+
+        // push activity
+        $activity = $this->activityService->setLink($activity);
+        $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
+
+        // push pending
+        $virtualOffice['last_activity'] = $this->activityService->by_entity_last($virtualOffice['uuid']);
+        $this->notificationService->push_to_headquarters('pending', ['data' => new VirtualOfficePendingResource($virtualOffice), 'msg' => '', 'link' => '']);
 
         $virtualOffice['last_activity'] = $this->activityService->by_entity_last($virtualOffice['uuid']);
         return new VirtualOfficePendingResource($virtualOffice);
@@ -174,7 +184,7 @@ class VirtualOfficeService{
         $name = $this->get_name($entity);
 
         // logs
-        Activity::create([
+        $activity = Activity::create([
             'user_uuid' => $user_uuid,
             'entity_uuid' => $virtualOffice['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
@@ -188,10 +198,19 @@ class VirtualOfficeService{
         // notification
         $user = User::where('uuid', $virtualOffice['user_uuid'])->first();
 
+        // telegram
         $msg = '*' . $user->first_name . ' ' . $user->last_name . "*\n" .
                 str_replace("{name}", "*" . $name . "*", Config::get('common.activity.virtual_office.pending_update')) . "\n" .
                 '[link to approve]('.env('APP_FRONTEND_ENDPOINT').'/virtual-offices/'.$virtualOffice['uuid'].')';
         $this->notificationService->telegram_to_headqurters($msg);
+
+        // push activity
+        $activity = $this->activityService->setLink($activity);
+        $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
+
+        // push pending
+        $virtualOffice['last_activity'] = $this->activityService->by_entity_last($virtualOffice['uuid']);
+        $this->notificationService->push_to_headquarters('pending', ['data' => new VirtualOfficePendingResource($virtualOffice), 'msg' => '', 'link' => '']);
 
         $virtualOffice['last_activity'] = $this->activityService->by_entity_last($virtualOffice['uuid']);
         return new VirtualOfficePendingResource($virtualOffice);
@@ -207,7 +226,7 @@ class VirtualOfficeService{
         $name = $this->get_name($entity);
 
         // log
-        Activity::create([
+        $activity = Activity::create([
             'user_uuid' => $user_uuid,
             'entity_uuid' => $virtualOffice['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
@@ -221,11 +240,21 @@ class VirtualOfficeService{
         // notification
         $user = User::where('uuid', $virtualOffice['user_uuid'])->first();
 
+        // telegram
         $this->notificationService->telegram([
             'telegram' => $user['telegram'],
             'msg' => str_replace("{name}", "*" . $name . "*", Config::get('common.activity.virtual_office.accept')) . "\n" .
                         '[link to view](' .env('APP_FRONTEND_ENDPOINT').'/virtual-offices/'.$virtualOffice['uuid']. ')'
         ]);
+
+        // push activity
+        $activity = $this->activityService->setLink($activity);
+        $this->notificationService->push('activity', $user, ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
+        $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
+
+        // push pending
+        $virtualOffice['last_activity'] = $this->activityService->by_entity_last($virtualOffice['uuid']);
+        $this->notificationService->push('pending', $user, ['data' => new VirtualOfficePendingResource($virtualOffice), 'msg' => '', 'link' => '']);
 
         $virtualOffice['last_activity'] = $this->activityService->by_entity_last($virtualOffice['uuid']);
         return new VirtualOfficePendingResource($virtualOffice);
@@ -242,7 +271,7 @@ class VirtualOfficeService{
         $name = $this->get_name($entity);
 
         // log
-        Activity::create([
+        $activity = Activity::create([
             'user_uuid' => $user_uuid,
             'entity_uuid' => $virtualOffice['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
@@ -256,11 +285,21 @@ class VirtualOfficeService{
         // notification
         $user = User::where('uuid', $virtualOffice['user_uuid'])->first();
 
+        // telegram
         $this->notificationService->telegram([
             'telegram' => $user['telegram'],
             'msg' => str_replace("{name}", "*" . $name . "*", Config::get('common.activity.virtual_office.reject')) . "\n" .
                         '[link to view](' .env('APP_FRONTEND_ENDPOINT').'/vitual-offices/'.$virtualOffice['uuid']. ')'
         ]);
+
+        // push activity
+        $activity = $this->activityService->setLink($activity);
+        $this->notificationService->push('activity', $user, ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
+        $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
+
+        // push pending
+        $virtualOffice['last_activity'] = $this->activityService->by_entity_last($virtualOffice['uuid']);
+        $this->notificationService->push('pending', $user, ['data' => new VirtualOfficePendingResource($virtualOffice), 'msg' => '', 'link' => '']);
 
         $virtualOffice['last_activity'] = $this->activityService->by_entity_last($virtualOffice['uuid']);
         return new VirtualOfficePendingResource($virtualOffice);
