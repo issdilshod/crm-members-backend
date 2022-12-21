@@ -58,7 +58,7 @@ class VirtualOfficeService{
                                                     return $q->where('status', Config::get('common.status.rejected'));
                                                 });
                                         })
-                                        ->when(($filter!=''), function($q){ // never true
+                                        ->when(($filter_summary!=''), function($q){ // never true
                                             return $q->where('status', 100); // never true
                                         })
                                         ->when(($user_uuid!=''), function ($q) use($user_uuid){
