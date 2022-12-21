@@ -22,13 +22,14 @@ class VirtualOfficeResource extends JsonResource
             'vo_signer_uuid' => $this->vo_signer_uuid,
             'director' => $this->director,
             'vo_provider_name' => $this->vo_provider_name,
-            'vo_provider_username' => $this->vo_provider_username,
-            'vo_provider_password' => $this->vo_provider_password,
             'vo_website' => $this->vo_website,
+            'vo_provider_phone_number' => $this->vo_provider_phone_number,
             'vo_contact_person_name' => $this->vo_contact_person_name,
             'vo_contact_person_phone_number' => $this->vo_contact_person_phone_number,
             'vo_contact_person_email' => $this->vo_contact_person_email,
+            
             'online_account' => $this->online_account,
+            'online_email' => $this->online_email,
             'online_account_username' => $this->online_account_username,
             'online_account_password' => $this->online_account_password,
 

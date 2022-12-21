@@ -5992,10 +5992,7 @@
                                     "vo_website": {
                                         "type": "text"
                                     },
-                                    "vo_provider_username": {
-                                        "type": "text"
-                                    },
-                                    "vo_provider_password": {
+                                    "vo_provider_phone_number": {
                                         "type": "text"
                                     },
                                     "vo_contact_person_name": {
@@ -6008,6 +6005,9 @@
                                         "type": "text"
                                     },
                                     "online_account": {
+                                        "type": "text"
+                                    },
+                                    "online_email": {
                                         "type": "text"
                                     },
                                     "online_account_username": {
@@ -6155,10 +6155,7 @@
                                     "vo_website": {
                                         "type": "text"
                                     },
-                                    "vo_provider_username": {
-                                        "type": "text"
-                                    },
-                                    "vo_provider_password": {
+                                    "vo_provider_phone_number": {
                                         "type": "text"
                                     },
                                     "vo_contact_person_name": {
@@ -6171,6 +6168,9 @@
                                         "type": "text"
                                     },
                                     "online_account": {
+                                        "type": "text"
+                                    },
+                                    "online_email": {
                                         "type": "text"
                                     },
                                     "online_account_username": {
@@ -6345,10 +6345,7 @@
                                     "vo_website": {
                                         "type": "text"
                                     },
-                                    "vo_provider_username": {
-                                        "type": "text"
-                                    },
-                                    "vo_provider_password": {
+                                    "vo_provider_phone_number": {
                                         "type": "text"
                                     },
                                     "vo_contact_person_name": {
@@ -6361,6 +6358,9 @@
                                         "type": "text"
                                     },
                                     "online_account": {
+                                        "type": "text"
+                                    },
+                                    "online_email": {
                                         "type": "text"
                                     },
                                     "online_account_username": {
@@ -6471,10 +6471,7 @@
                                     "vo_website": {
                                         "type": "text"
                                     },
-                                    "vo_provider_username": {
-                                        "type": "text"
-                                    },
-                                    "vo_provider_password": {
+                                    "vo_provider_phone_number": {
                                         "type": "text"
                                     },
                                     "vo_contact_person_name": {
@@ -6487,6 +6484,9 @@
                                         "type": "text"
                                     },
                                     "online_account": {
+                                        "type": "text"
+                                    },
+                                    "online_email": {
                                         "type": "text"
                                     },
                                     "online_account_username": {
@@ -6597,10 +6597,7 @@
                                     "vo_website": {
                                         "type": "text"
                                     },
-                                    "vo_provider_username": {
-                                        "type": "text"
-                                    },
-                                    "vo_provider_password": {
+                                    "vo_provider_phone_number": {
                                         "type": "text"
                                     },
                                     "vo_contact_person_name": {
@@ -6613,6 +6610,9 @@
                                         "type": "text"
                                     },
                                     "online_account": {
+                                        "type": "text"
+                                    },
+                                    "online_email": {
                                         "type": "text"
                                     },
                                     "online_account_username": {
