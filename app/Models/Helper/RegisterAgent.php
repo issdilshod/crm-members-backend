@@ -10,7 +10,7 @@ class RegisterAgent extends Model
 {
     use HasFactory, TraitUuid;
 
-    protected $fillable = ['entity_uuid', 'name', 'website', 'login', 'password', 'email', 'phone', 'parent', 'status'];
+    protected $fillable = ['entity_uuid', 'company_name', 'name', 'website', 'login', 'password', 'email', 'phone', 'parent', 'status'];
 
     protected $attributes = ['status' => 1];
 

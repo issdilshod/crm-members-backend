@@ -16,6 +16,7 @@ class RegisterAgentResource extends JsonResource
     {
         return [
             'uuid' => $this->uuid,
+            'company_name' => $this->company_name,
             'name' => $this->name,
             'website' => $this->website,
             'login' => $this->login,

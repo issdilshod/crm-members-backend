@@ -20,7 +20,6 @@ class CompanyIncorporationResource extends JsonResource
             'incorporation_date' => $this->incorporation_date,
             'annual_report_date' => $this->annual_report_date,
             'registered_agent_exists' => $this->registered_agent_exists,
-            'registered_agent_company_name' => $this->registered_agent_company_name,
             'notes' => $this->notes,
             'parent' => $this->parent
         ];
