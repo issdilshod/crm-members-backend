@@ -81,7 +81,7 @@ class PendingController extends Controller
             $max_page = $directors->lastPage();
         }
 
-        if ($directors->lastPage()>$max_page){ // company max page
+        if ($companies->lastPage()>$max_page){ // company max page
             $max_page = $companies->lastPage();
         }
 
