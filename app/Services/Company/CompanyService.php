@@ -47,7 +47,9 @@ class CompanyService {
                                     $q->where('status', Config::get('common.status.pending'))
                                         ->orWhere('status', Config::get('common.status.rejected'));
                                 })
-                                ->where('user_uuid', 'like', $user_uuid . '%')
+                                ->when(($user_uuid!=''), function ($q) use ($user_uuid){
+                                    $q->where('user_uuid', $user_uuid);
+                                })
                                 ->count()
         ];
 

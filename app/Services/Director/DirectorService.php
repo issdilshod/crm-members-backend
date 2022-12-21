@@ -47,7 +47,9 @@ class DirectorService {
                                         $q->where('status', Config::get('common.status.pending'))
                                             ->orWhere('status', Config::get('common.status.rejected'));
                                     })
-                                    ->where('user_uuid', 'like', $uuid . '%')
+                                    ->when(($uuid!=''), function ($q) use ($uuid){
+                                        $q->where('user_uuid', $uuid);
+                                    })
                                     ->count(),
             'avialable' => count(Director::from('directors as d1')->select('d1.*')
                                         ->where('d1.status', '!=', Config::get('common.status.deleted'))
