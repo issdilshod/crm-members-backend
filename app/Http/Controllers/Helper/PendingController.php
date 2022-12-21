@@ -8,6 +8,7 @@ use App\Models\Director\Director;
 use App\Models\Helper\Address;
 use App\Models\Helper\BankAccount;
 use App\Models\Helper\Email;
+use App\Models\VirtualOffice\VirtualOffice;
 use App\Policies\PermissionPolicy;
 use App\Services\Company\CompanyService;
 use App\Services\Director\DirectorService;
@@ -214,6 +215,7 @@ class PendingController extends Controller
         foreach ($validated['pendings'] as $key => $value):
             $director = Director::where('uuid', $value)->where('status', '!=', Config::get('common.status.deleted'))->first();
             $company = Company::where('uuid', $value)->where('status', '!=', Config::get('common.status.deleted'))->first();
+            $virtualOffice = VirtualOffice::where('uuid', $value)->where('status', '!=', Config::get('common.status.deleted'))->first();
 
             if ($director!=null){ // accept director
                 $entity = $director->toArray();
@@ -252,6 +254,18 @@ class PendingController extends Controller
                         ->update(['status' => Config::get('common.status.actived')]);
 
                 $value = $company;
+            }
+
+            if ($virtualOffice!=null){ // accept virtual office
+                $entity = $virtualOffice->toArray();
+                $virtualOffice = $this->virtualOfficesService->accept($virtualOffice, $entity, $request->user_uuid);
+
+                // address
+                Address::where('entity_uuid', $virtualOffice['uuid'])
+                        ->where('status', '!=', Config::get('common.status.deleted'))
+                        ->update(['status' => Config::get('common.status.actived')]);
+
+                $value = $virtualOffice;
             }
 
             $pendings[] = $value;
@@ -300,6 +314,7 @@ class PendingController extends Controller
         foreach ($validated['pendings'] as $key => $value):
             $director = Director::where('uuid', $value)->first();
             $company = Company::where('uuid', $value)->first();
+            $virtualOffice = VirtualOffice::where('uuid', $value)->first();
 
             if ($director!=null){ // accept director
                 $value = $this->directorService->reject($value, $request->user_uuid);
@@ -307,6 +322,10 @@ class PendingController extends Controller
 
             if ($company!=null){ // accept company
                 $value = $this->companyService->reject($value, $request->user_uuid);
+            }
+
+            if ($virtualOffice!=null){
+                $value = $this->virtualOfficesService->reject($value, $request->user_uuid);
             }
 
             $pendings[] = $value;
