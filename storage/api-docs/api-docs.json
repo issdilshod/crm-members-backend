@@ -4153,6 +4153,24 @@
                         }
                     }
                 ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [],
+                                "properties": {
+                                    "description": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "Successfully"
@@ -6018,6 +6036,9 @@
                             "schema": {
                                 "required": [],
                                 "properties": {
+                                    "vo_active": {
+                                        "type": "text"
+                                    },
                                     "vo_signer_uuid": {
                                         "type": "text"
                                     },
@@ -6184,6 +6205,9 @@
                             "schema": {
                                 "required": [],
                                 "properties": {
+                                    "vo_active": {
+                                        "type": "text"
+                                    },
                                     "vo_signer_uuid": {
                                         "type": "text"
                                     },
@@ -6377,6 +6401,9 @@
                             "schema": {
                                 "required": [],
                                 "properties": {
+                                    "vo_active": {
+                                        "type": "text"
+                                    },
                                     "vo_signer_uuid": {
                                         "type": "text"
                                     },
@@ -6506,6 +6533,9 @@
                             "schema": {
                                 "required": [],
                                 "properties": {
+                                    "vo_active": {
+                                        "type": "text"
+                                    },
                                     "vo_signer_uuid": {
                                         "type": "text"
                                     },
@@ -6635,6 +6665,9 @@
                             "schema": {
                                 "required": [],
                                 "properties": {
+                                    "vo_active": {
+                                        "type": "text"
+                                    },
                                     "vo_signer_uuid": {
                                         "type": "text"
                                     },

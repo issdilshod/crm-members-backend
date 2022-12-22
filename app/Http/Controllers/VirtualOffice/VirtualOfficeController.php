@@ -63,6 +63,7 @@ class VirtualOfficeController extends Controller
       *                         type="object",
       *                         required={},
       *                         
+      *                         @OA\Property(property="vo_active", type="text"),
       *                         @OA\Property(property="vo_signer_uuid", type="text"),
       *                         @OA\Property(property="vo_signer_company_uuid", type="text"),
       *                         @OA\Property(property="vo_provider_name", type="text"),
@@ -112,6 +113,7 @@ class VirtualOfficeController extends Controller
         }
 
         $validated = $request->validate([
+            'vo_active' => '',
             'vo_signer_uuid' => '',
             'vo_signer_company_uuid' => '',
             'vo_provider_name' => '',
@@ -217,6 +219,7 @@ class VirtualOfficeController extends Controller
       *                         type="object",
       *                         required={},
       *                         
+      *                         @OA\Property(property="vo_active", type="text"),
       *                         @OA\Property(property="vo_signer_uuid", type="text"),
       *                         @OA\Property(property="vo_signer_company_uuid", type="text"),
       *                         @OA\Property(property="vo_provider_name", type="text"),
@@ -266,6 +269,7 @@ class VirtualOfficeController extends Controller
         }
 
         $validated = $request->validate([
+            'vo_active' => '',
             'vo_signer_uuid' => '',
             'vo_signer_company_uuid' => '',
             'vo_provider_name' => '',
@@ -394,6 +398,7 @@ class VirtualOfficeController extends Controller
       *                         type="object",
       *                         required={},
       *                         
+      *                         @OA\Property(property="vo_active", type="text"),
       *                         @OA\Property(property="vo_signer_uuid", type="text"),
       *                         @OA\Property(property="vo_signer_company_uuid", type="text"),
       *                         @OA\Property(property="vo_provider_name", type="text"),
@@ -443,6 +448,7 @@ class VirtualOfficeController extends Controller
         }
 
         $validated = $request->validate([
+            'vo_active' => '',
             'vo_signer_uuid' => '',
             'vo_signer_company_uuid' => '',
             'vo_provider_name' => '',
@@ -512,6 +518,7 @@ class VirtualOfficeController extends Controller
       *                         type="object",
       *                         required={},
       *                         
+      *                         @OA\Property(property="vo_active", type="text"),
       *                         @OA\Property(property="vo_signer_uuid", type="text"),
       *                         @OA\Property(property="vo_signer_company_uuid", type="text"),
       *                         @OA\Property(property="vo_provider_name", type="text"),
@@ -561,6 +568,7 @@ class VirtualOfficeController extends Controller
         }
 
         $validated = $request->validate([
+            'vo_active' => '',
             'vo_signer_uuid' => '',
             'vo_signer_company_uuid' => '',
             'vo_provider_name' => '',
@@ -630,7 +638,8 @@ class VirtualOfficeController extends Controller
       *                     @OA\Schema(
       *                         type="object",
       *                         required={},
-      *                         
+      *                     
+      *                         @OA\Property(property="vo_active", type="text"),    
       *                         @OA\Property(property="vo_signer_uuid", type="text"),
       *                         @OA\Property(property="vo_signer_company_uuid", type="text"),
       *                         @OA\Property(property="vo_provider_name", type="text"),
@@ -680,6 +689,7 @@ class VirtualOfficeController extends Controller
         }
 
         $validated = $request->validate([
+            'vo_active' => '',
             'vo_signer_uuid' => '',
             'vo_signer_company_uuid' => '',
             'vo_provider_name' => '',

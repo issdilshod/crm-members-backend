@@ -19,6 +19,8 @@ class VirtualOfficeResource extends JsonResource
             'uuid' => $this->uuid,
             'user_uuid' => $this->user_uuid,
             
+            'vo_active' => $this->vo_active,
+
             'vo_signer_uuid' => $this->vo_signer_uuid,
             'director' => $this->director,
             'vo_signer_company_uuid' => $this->vo_signer_company_uuid,
