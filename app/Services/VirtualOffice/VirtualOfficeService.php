@@ -268,7 +268,7 @@ class VirtualOfficeService{
         $virtualOffice->update($entity);
 
         // get name
-        $name = $this->get_name($entity);
+        $name = $this->get_name($virtualOffice);
 
         // log
         $activity = Activity::create([
@@ -375,8 +375,8 @@ class VirtualOfficeService{
     private function get_name($entity)
     {
         $name = $entity['vo_provider_name'];
-        if ($entity['vo_signer_uuid']!=''){
-            $company = $this->companyService->by_director($entity['vo_signer_uuid']);
+        if (isset($entity['vo_signer_company_uuid']) && $entity['vo_signer_company_uuid']!=''){
+            $company = $this->companyService->by_uuid($entity['vo_signer_company_uuid']);
             if ($company!=null){
                 $name = ' for company ' . $company['legal_name'];
             }

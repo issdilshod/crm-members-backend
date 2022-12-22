@@ -1645,6 +1645,9 @@ class CompanyController extends Controller
     public function by_director($uuid)
     {
         $company = $this->companyService->by_director($uuid);
+        if ($company==null){
+            return response()->json(['status' => 'error', 'msg' => 'not found'], 404);
+        }
         return $company;
     }
 

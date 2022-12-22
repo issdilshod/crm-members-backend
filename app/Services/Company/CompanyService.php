@@ -616,6 +616,15 @@ class CompanyService {
         return $companies;
     }
 
+    public function by_uuid($uuid)
+    {
+        $company = Company::where('uuid', $uuid)
+                            ->where('status', '!=', Config::get('common.status.deleted'))
+                            ->first();
+
+        return $company;
+    }
+
     private function is_idefier($check)
     {
         $idenfier = ['legal_name'];
