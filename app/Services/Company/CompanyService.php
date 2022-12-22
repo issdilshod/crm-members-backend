@@ -601,8 +601,19 @@ class CompanyService {
     {
         $company = Company::where('director_uuid', $director_uuid)
                             ->where('status', '!=', Config::get('common.status.deleted'))
-                            ->first(['legal_name']);
+                            ->first(['uuid', 'legal_name']);
         return $company;
+    }
+
+    public function company_list($value = '')
+    {
+        $companies = Company::orderBy('legal_name', 'ASC')
+                            ->where('status', '!=', Config::get('common.status.deleted'))
+                            ->where('approved', Config::get('common.status.actived'))
+                            ->where('legal_name', 'like', '%'. $value .'%')
+                            ->limit(20)
+                            ->get(['uuid', 'legal_name']);
+        return $companies;
     }
 
     private function is_idefier($check)

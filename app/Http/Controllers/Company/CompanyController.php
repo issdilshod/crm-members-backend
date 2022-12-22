@@ -1642,10 +1642,37 @@ class CompanyController extends Controller
       *             @OA\Response(response=404, description="Resource Not Found"),
       *     )
       */
-    public function by_director(Request $request, $uuid)
+    public function by_director($uuid)
     {
         $company = $this->companyService->by_director($uuid);
         return $company;
+    }
+
+    /**     @OA\GET(
+      *         path="/api/comapny-list/{search?}",
+      *         operationId="company_list_search",
+      *         tags={"Company"},
+      *         summary="Get company list and search",
+      *         description="Get company list and search",
+      *             @OA\Parameter(
+      *                 name="search",
+      *                 in="path",
+      *                 description="company full name",
+      *                 @OA\Schema(
+      *                     type="string",
+      *                     format="text"
+      *                 )
+      *             ),
+      *             @OA\Response(response=200, description="Successfully"),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
+    public function company_list($search = '')
+    {
+        $companies = $this->companyService->company_list($search);
+        return $companies;
     }
  
 }

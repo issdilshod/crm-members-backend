@@ -63,7 +63,8 @@ class VirtualOfficeController extends Controller
       *                         type="object",
       *                         required={},
       *                         
-      *                         @OA\Property(property="vo_signer_name", type="text"),
+      *                         @OA\Property(property="vo_signer_uuid", type="text"),
+      *                         @OA\Property(property="vo_signer_company_uuid", type="text"),
       *                         @OA\Property(property="vo_provider_name", type="text"),
       *                         @OA\Property(property="vo_website", type="text"),
       *                         @OA\Property(property="vo_provider_phone_number", type="text"),
@@ -112,6 +113,7 @@ class VirtualOfficeController extends Controller
 
         $validated = $request->validate([
             'vo_signer_uuid' => '',
+            'vo_signer_company_uuid' => '',
             'vo_provider_name' => '',
             'vo_website' => '',
             'vo_provider_phone_number' => '',
@@ -215,7 +217,8 @@ class VirtualOfficeController extends Controller
       *                         type="object",
       *                         required={},
       *                         
-      *                         @OA\Property(property="vo_signer_name", type="text"),
+      *                         @OA\Property(property="vo_signer_uuid", type="text"),
+      *                         @OA\Property(property="vo_signer_company_uuid", type="text"),
       *                         @OA\Property(property="vo_provider_name", type="text"),
       *                         @OA\Property(property="vo_website", type="text"),
       *                         @OA\Property(property="vo_provider_phone_number", type="text"),
@@ -264,6 +267,7 @@ class VirtualOfficeController extends Controller
 
         $validated = $request->validate([
             'vo_signer_uuid' => '',
+            'vo_signer_company_uuid' => '',
             'vo_provider_name' => '',
             'vo_website' => '',
             'vo_provider_phone_number' => '',
@@ -390,7 +394,8 @@ class VirtualOfficeController extends Controller
       *                         type="object",
       *                         required={},
       *                         
-      *                         @OA\Property(property="vo_signer_name", type="text"),
+      *                         @OA\Property(property="vo_signer_uuid", type="text"),
+      *                         @OA\Property(property="vo_signer_company_uuid", type="text"),
       *                         @OA\Property(property="vo_provider_name", type="text"),
       *                         @OA\Property(property="vo_website", type="text"),
       *                         @OA\Property(property="vo_provider_phone_number", type="text"),
@@ -439,6 +444,7 @@ class VirtualOfficeController extends Controller
 
         $validated = $request->validate([
             'vo_signer_uuid' => '',
+            'vo_signer_company_uuid' => '',
             'vo_provider_name' => '',
             'vo_website' => '',
             'vo_provider_phone_number' => '',
@@ -506,7 +512,8 @@ class VirtualOfficeController extends Controller
       *                         type="object",
       *                         required={},
       *                         
-      *                         @OA\Property(property="vo_signer_name", type="text"),
+      *                         @OA\Property(property="vo_signer_uuid", type="text"),
+      *                         @OA\Property(property="vo_signer_company_uuid", type="text"),
       *                         @OA\Property(property="vo_provider_name", type="text"),
       *                         @OA\Property(property="vo_website", type="text"),
       *                         @OA\Property(property="vo_provider_phone_number", type="text"),
@@ -555,6 +562,7 @@ class VirtualOfficeController extends Controller
 
         $validated = $request->validate([
             'vo_signer_uuid' => '',
+            'vo_signer_company_uuid' => '',
             'vo_provider_name' => '',
             'vo_website' => '',
             'vo_provider_phone_number' => '',
@@ -623,7 +631,8 @@ class VirtualOfficeController extends Controller
       *                         type="object",
       *                         required={},
       *                         
-      *                         @OA\Property(property="vo_signer_name", type="text"),
+      *                         @OA\Property(property="vo_signer_uuid", type="text"),
+      *                         @OA\Property(property="vo_signer_company_uuid", type="text"),
       *                         @OA\Property(property="vo_provider_name", type="text"),
       *                         @OA\Property(property="vo_website", type="text"),
       *                         @OA\Property(property="vo_provider_phone_number", type="text"),
@@ -672,6 +681,7 @@ class VirtualOfficeController extends Controller
 
         $validated = $request->validate([
             'vo_signer_uuid' => '',
+            'vo_signer_company_uuid' => '',
             'vo_provider_name' => '',
             'vo_website' => '',
             'vo_provider_phone_number' => '',

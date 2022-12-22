@@ -2846,6 +2846,41 @@
                 }
             }
         },
+        "/api/comapny-list/{search?}": {
+            "get": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Get company list and search",
+                "description": "Get company list and search",
+                "operationId": "company_list_search",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "path",
+                        "description": "company full name",
+                        "schema": {
+                            "type": "string",
+                            "format": "text"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
         "/api/future-company": {
             "get": {
                 "tags": [
@@ -5983,7 +6018,10 @@
                             "schema": {
                                 "required": [],
                                 "properties": {
-                                    "vo_signer_name": {
+                                    "vo_signer_uuid": {
+                                        "type": "text"
+                                    },
+                                    "vo_signer_company_uuid": {
                                         "type": "text"
                                     },
                                     "vo_provider_name": {
@@ -6146,7 +6184,10 @@
                             "schema": {
                                 "required": [],
                                 "properties": {
-                                    "vo_signer_name": {
+                                    "vo_signer_uuid": {
+                                        "type": "text"
+                                    },
+                                    "vo_signer_company_uuid": {
                                         "type": "text"
                                     },
                                     "vo_provider_name": {
@@ -6336,7 +6377,10 @@
                             "schema": {
                                 "required": [],
                                 "properties": {
-                                    "vo_signer_name": {
+                                    "vo_signer_uuid": {
+                                        "type": "text"
+                                    },
+                                    "vo_signer_company_uuid": {
                                         "type": "text"
                                     },
                                     "vo_provider_name": {
@@ -6462,7 +6506,10 @@
                             "schema": {
                                 "required": [],
                                 "properties": {
-                                    "vo_signer_name": {
+                                    "vo_signer_uuid": {
+                                        "type": "text"
+                                    },
+                                    "vo_signer_company_uuid": {
                                         "type": "text"
                                     },
                                     "vo_provider_name": {
@@ -6588,7 +6635,10 @@
                             "schema": {
                                 "required": [],
                                 "properties": {
-                                    "vo_signer_name": {
+                                    "vo_signer_uuid": {
+                                        "type": "text"
+                                    },
+                                    "vo_signer_company_uuid": {
                                         "type": "text"
                                     },
                                     "vo_provider_name": {

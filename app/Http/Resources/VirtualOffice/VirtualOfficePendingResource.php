@@ -18,7 +18,7 @@ class VirtualOfficePendingResource extends JsonResource
         return [
             'uuid' => $this->uuid,
             'name' => $this->vo_provider_name,
-            'company' => $this->company(),
+            'company' => $this->company,
             'addresses' => AddressResource::collection($this->addresses),
             'uploaded_files' => [],
             'last_activity' => $this->last_activity,
