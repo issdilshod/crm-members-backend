@@ -11,6 +11,7 @@ return [
 
     'permission' => [
         'director' => [
+            'group' => 'director', // group name
             'store' => 'director_store', // add/update
             'delete' => 'director_delete',
             'save' => 'director_save', // pending add/update
@@ -21,6 +22,7 @@ return [
             'download' => 'director_download'
         ],
         'company' => [
+            'group' => 'company', // group name
             'store' => 'company_store', // add/update
             'delete' => 'company_delete',
             'save' => 'company_save', // pending add/update
@@ -31,6 +33,7 @@ return [
             'download' => 'company_download'
         ],
         'future_website' => [
+            'group' => 'future_website', // group name
             'store' => 'future_website_store', // add/update
             'delete' => 'future_website_delete',
             'save' => 'future_website_save', // pending add/update
@@ -38,6 +41,7 @@ return [
             'view' => 'future_website_view'
         ],
         'virtual_office' => [
+            'group' => 'virtual_office', // group name
             'store' => 'virtual_office_store', // add/update
             'delete' => 'virtual_office_delete',
             'save' => 'virtual_office_save', // pending add/update
@@ -45,6 +49,7 @@ return [
             'view' => 'virtual_office_view'
         ],
         'future_company' => [
+            'group' => 'future_company', // group name
             'store' => 'future_company_store', // add/update
             'delete' => 'future_company_delete',
             'save' => 'future_company_save', // pending add/update
@@ -52,9 +57,11 @@ return [
             'view' => 'future_company_view'
         ],
         'chat' => [
+            'group' => 'chat', // group name
             'store' => 'chat_store' // add/update
         ],
         'task' => [
+            'group' => 'task', // group name
             'store' => 'task_store' // add/update
         ]
     ],
