@@ -172,6 +172,7 @@ class DirectorService {
                                             })
                                             ->groupBy('d1.uuid');
                             })
+                            ->where('d1.status', '!=', Config::get('common.status.deleted'))
                             ->paginate(5);
 
         foreach($directors AS $key => $value):

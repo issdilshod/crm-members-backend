@@ -120,6 +120,7 @@ class CompanyService {
                             ->when(($user_uuid!=''), function ($q) use ($user_uuid){
                                 return $q->where('c1.user_uuid', $user_uuid);
                             })
+                            ->where('c1.status', '!=', Config::get('common.status.deleted'))
                             ->paginate(5);
 
         foreach($companies AS $key => $value):

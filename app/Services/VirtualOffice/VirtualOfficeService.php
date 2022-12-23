@@ -80,6 +80,7 @@ class VirtualOfficeService{
                                         ->when(($user_uuid!=''), function ($q) use($user_uuid){
                                             return $q->where('vo1.user_uuid', $user_uuid);
                                         })
+                                        ->where('vo1.status', '!=', Config::get('common.status.deleted'))
                                         ->paginate(5);
 
         foreach($virtualOffices AS $key => $value):
