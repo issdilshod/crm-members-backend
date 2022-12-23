@@ -9,6 +9,7 @@ use App\Services\Director\DirectorService;
 use App\Services\Helper\AddressService;
 use App\Services\Helper\EmailService;
 use App\Services\Helper\FileService;
+use App\Services\Helper\RejectReasonService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 
@@ -19,6 +20,7 @@ class DirectorController extends Controller
     private $addressService;
     private $emailService;
     private $fileService;
+    private $rejectReasonService;
 
     public function __construct()
     {
@@ -26,6 +28,7 @@ class DirectorController extends Controller
         $this->addressService = new AddressService();
         $this->emailService = new EmailService();
         $this->fileService = new FileService();
+        $this->rejectReasonService = new RejectReasonService();
     }
 
     /**     @OA\GET(
@@ -799,6 +802,16 @@ class DirectorController extends Controller
       *                 ),
       *                 required=true
       *             ),
+      *             @OA\RequestBody(
+      *                 @OA\JsonContent(),
+      *                 @OA\MediaType(
+      *                     mediaType="multipart/form-data",
+      *                     @OA\Schema(
+      *                         required={},
+      *                         @OA\Property(property="description", type="text"),
+      *                     ),
+      *                 ),
+      *             ),
       *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=401, description="Not Authenticated"),
@@ -813,6 +826,18 @@ class DirectorController extends Controller
             if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.acccept'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
             }
+        }
+
+        $validated = $request->validate([
+            'description' => ''
+        ]);
+
+        // reject reason
+        if (isset($validated['description'])){
+            $this->rejectReasonService->create([
+                'entity_uuid' => $uuid,
+                'description' => $validated['description']
+            ]);
         }
 
         $this->directorService->reject($uuid, $request->user_uuid);

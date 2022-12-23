@@ -5,9 +5,11 @@ namespace App\Models\VirtualOffice;
 use App\Models\Company\Company;
 use App\Models\Director\Director;
 use App\Models\Helper\Address;
+use App\Models\Helper\RejectReason;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\TraitUuid;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Config;
 
 class VirtualOffice extends Model
@@ -29,5 +31,11 @@ class VirtualOffice extends Model
 
     public function company(){
         return $this->belongsTo(Company::class, 'vo_signer_company_uuid', 'uuid');
+    }
+
+    public function reject_reason(): HasOne
+    {
+        return $this->hasOne(RejectReason::class, 'entity_uuid', 'uuid')
+                    ->latest();
     }
 }

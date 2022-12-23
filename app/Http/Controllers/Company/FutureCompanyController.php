@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Company\FutureCompany;
 use App\Policies\PermissionPolicy;
 use App\Services\Company\FutureCompanyService;
+use App\Services\Helper\RejectReasonService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 
@@ -13,10 +14,12 @@ class FutureCompanyController extends Controller
 {
 
     private $futureCompanyService;
+    private $rejectReasonService;
 
     public function __construct()
     {
         $this->futureCompanyService = new FutureCompanyService();
+        $this->rejectReasonService = new RejectReasonService();
     }
     
     /**     @OA\GET(
@@ -618,6 +621,16 @@ class FutureCompanyController extends Controller
       *                 ),
       *                 required=true
       *             ),
+      *             @OA\RequestBody(
+      *                 @OA\JsonContent(),
+      *                 @OA\MediaType(
+      *                     mediaType="multipart/form-data",
+      *                     @OA\Schema(
+      *                         required={},
+      *                         @OA\Property(property="description", type="text"),
+      *                     ),
+      *                 ),
+      *             ),
       *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=401, description="Not Authenticated"),
@@ -632,6 +645,18 @@ class FutureCompanyController extends Controller
             if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.future_company.accept'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
             }
+        }
+
+        $validated = $request->validate([
+            'description' => ''
+        ]);
+
+        // reject reason
+        if (isset($validated['description'])){
+            $this->rejectReasonService->create([
+                'entity_uuid' => $uuid,
+                'description' => $validated['description']
+            ]);
         }
 
         $this->futureCompanyService->reject($uuid, $request->user_uuid);

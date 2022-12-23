@@ -8,6 +8,7 @@ use App\Models\Helper\BankAccount;
 use App\Models\Helper\Email;
 use App\Models\Helper\File;
 use App\Models\Helper\RegisterAgent;
+use App\Models\Helper\RejectReason;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\TraitUuid;
@@ -59,5 +60,11 @@ class Company extends Model
 
     public function register_agents(): HasMany{
         return $this->hasMany(RegisterAgent::class, 'entity_uuid', 'uuid');
+    }
+
+    public function reject_reason(): HasOne
+    {
+        return $this->hasOne(RejectReason::class, 'entity_uuid', 'uuid')
+                    ->latest();
     }
 }

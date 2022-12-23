@@ -4,6 +4,7 @@ namespace App\Http\Resources\Company;
 
 use App\Http\Resources\Director\DirectorResource;
 use App\Http\Resources\Helper\FileResource;
+use App\Http\Resources\Helper\RejectReasonResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class FutureCompanyResource extends JsonResource
@@ -32,6 +33,9 @@ class FutureCompanyResource extends JsonResource
             'comment' => $this->comment,
 
             'uploaded_files' => FileResource::collection($this->files),
+
+            'reject_reason' => new RejectReasonResource($this->reject_reason),
+
             'status' => $this->status
         ];
     }

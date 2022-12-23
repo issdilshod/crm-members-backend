@@ -3,6 +3,7 @@
 namespace App\Http\Resources\VirtualOffice;
 
 use App\Http\Resources\Helper\AddressResource;
+use App\Http\Resources\Helper\RejectReasonResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class VirtualOfficeResource extends JsonResource
@@ -53,6 +54,8 @@ class VirtualOfficeResource extends JsonResource
 
             // addresses
             'addresses' => AddressResource::collection($this->addresses),
+
+            'reject_reason' => new RejectReasonResource($this->reject_reason),
 
             'status' => $this->status
         ];

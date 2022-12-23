@@ -12,6 +12,7 @@ use App\Services\Helper\BankAccountService;
 use App\Services\Helper\EmailService;
 use App\Services\Helper\FileService;
 use App\Services\Helper\RegisterAgentService;
+use App\Services\Helper\RejectReasonService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 
@@ -25,6 +26,7 @@ class CompanyController extends Controller
     private $fileService;
     private $registerAgentService;
     private $companyIncorporationService;
+    private $rejectReasonService;
 
     public function __construct()
     {
@@ -35,6 +37,7 @@ class CompanyController extends Controller
         $this->fileService = new FileService();
         $this->registerAgentService = new RegisterAgentService();
         $this->companyIncorporationService = new CompanyIncorporationService();
+        $this->rejectReasonService = new RejectReasonService();
     }
 
     /**     @OA\GET(
@@ -1336,6 +1339,16 @@ class CompanyController extends Controller
       *                 ),
       *                 required=true
       *             ),
+      *             @OA\RequestBody(
+      *                 @OA\JsonContent(),
+      *                 @OA\MediaType(
+      *                     mediaType="multipart/form-data",
+      *                     @OA\Schema(
+      *                         required={},
+      *                         @OA\Property(property="description", type="text"),
+      *                     ),
+      *                 ),
+      *             ),
       *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=401, description="Not Authenticated"),
@@ -1350,6 +1363,18 @@ class CompanyController extends Controller
             if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.accept'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
             }
+        }
+
+        $validated = $request->validate([
+            'description' => ''
+        ]);
+
+        // reject reason
+        if (isset($validated['description'])){
+            $this->rejectReasonService->create([
+                'entity_uuid' => $uuid,
+                'description' => $validated['description']
+            ]);
         }
 
         $this->companyService->reject($uuid, $request->user_uuid);

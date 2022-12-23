@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\VirtualOffice\VirtualOffice;
 use App\Policies\PermissionPolicy;
 use App\Services\Helper\AddressService;
+use App\Services\Helper\RejectReasonService;
 use App\Services\VirtualOffice\VirtualOfficeService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -15,11 +16,13 @@ class VirtualOfficeController extends Controller
 
     private $virtualOfficeService;
     private $addressService;
+    private $rejectReasonService;
 
     public function __construct()
     {
         $this->virtualOfficeService = new VirtualOfficeService();
         $this->addressService = new AddressService();
+        $this->rejectReasonService = new RejectReasonService();
     }
     
     /**     @OA\GET(
@@ -751,6 +754,16 @@ class VirtualOfficeController extends Controller
       *                 ),
       *                 required=true
       *             ),
+      *             @OA\RequestBody(
+      *                 @OA\JsonContent(),
+      *                 @OA\MediaType(
+      *                     mediaType="multipart/form-data",
+      *                     @OA\Schema(
+      *                         required={},
+      *                         @OA\Property(property="description", type="text"),
+      *                     ),
+      *                 ),
+      *             ),
       *             @OA\Response(response=200, description="Successfully"),
       *             @OA\Response(response=400, description="Bad request"),
       *             @OA\Response(response=401, description="Not Authenticated"),
@@ -765,6 +778,18 @@ class VirtualOfficeController extends Controller
             if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.accept'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
             }
+        }
+
+        $validated = $request->validate([
+            'description' => ''
+        ]);
+
+        // reject reason
+        if (isset($validated['description'])){
+            $this->rejectReasonService->create([
+                'entity_uuid' => $uuid,
+                'description' => $validated['description']
+            ]);
         }
 
         $this->virtualOfficeService->reject($uuid, $request->user_uuid);

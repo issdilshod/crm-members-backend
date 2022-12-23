@@ -7,6 +7,7 @@ use App\Http\Resources\Helper\BankAccountResource;
 use App\Http\Resources\Helper\EmailResource;
 use App\Http\Resources\Helper\FileResource;
 use App\Http\Resources\Helper\RegisterAgentResource;
+use App\Http\Resources\Helper\RejectReasonResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CompanyResource extends JsonResource
@@ -61,6 +62,8 @@ class CompanyResource extends JsonResource
 
             'register_agents' => RegisterAgentResource::collection($this->register_agents),
             'incorporations' => CompanyIncorporationResource::collection($this->incorporations),
+
+            'reject_reason' => new RejectReasonResource($this->reject_reason),
 
             'status' => $this->status,
         ];

@@ -6,6 +6,7 @@ use App\Http\Resources\Account\ActivityResource;
 use App\Http\Resources\Helper\AddressResource;
 use App\Http\Resources\Helper\EmailResource;
 use App\Http\Resources\Helper\FileResource;
+use App\Http\Resources\Helper\RejectReasonResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class DirectorResource extends JsonResource
@@ -34,6 +35,7 @@ class DirectorResource extends JsonResource
             'emails' => EmailResource::collection($this->emails),
             'addresses' => AddressResource::collection($this->addresses),
             'last_activity' => new ActivityResource($this->last_activity),
+            'reject_reason' => new RejectReasonResource($this->reject_reason),
             'status' => $this->status,
         ];
     }

@@ -6,6 +6,7 @@ use App\Models\Company\Company;
 use App\Models\Helper\Address;
 use App\Models\Helper\Email;
 use App\Models\Helper\File;
+use App\Models\Helper\RejectReason;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\TraitUuid;
@@ -42,5 +43,11 @@ class Director extends Model
     {
         return $this->hasOne(Company::class, 'director_uuid', 'uuid')
                     ->where('approved', Config::get('common.status.actived'));
+    }
+
+    public function reject_reason(): HasOne
+    {
+        return $this->hasOne(RejectReason::class, 'entity_uuid', 'uuid')
+                    ->latest();
     }
 }

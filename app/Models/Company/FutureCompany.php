@@ -4,11 +4,13 @@ namespace App\Models\Company;
 
 use App\Models\Director\Director;
 use App\Models\Helper\File;
+use App\Models\Helper\RejectReason;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\TraitUuid;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Config;
 
 class FutureCompany extends Model
@@ -27,5 +29,11 @@ class FutureCompany extends Model
     public function director(): BelongsTo
     {
         return $this->belongsTo(Director::class, 'recommended_director_uuid', 'uuid');
+    }
+
+    public function reject_reason(): HasOne
+    {
+        return $this->hasOne(RejectReason::class, 'entity_uuid', 'uuid')
+                    ->latest();
     }
 }
