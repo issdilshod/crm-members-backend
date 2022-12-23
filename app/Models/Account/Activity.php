@@ -2,12 +2,9 @@
 
 namespace App\Models\Account;
 
-use App\Models\Company\Company;
-use App\Models\Director\Director;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\TraitUuid;
-use Illuminate\Support\Facades\Config;
 
 class Activity extends Model
 {

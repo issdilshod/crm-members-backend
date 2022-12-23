@@ -14,6 +14,7 @@ use App\Services\Company\CompanyService;
 use App\Services\Helper\NotificationService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 
 class VirtualOfficeService{
 
@@ -41,29 +42,43 @@ class VirtualOfficeService{
         return VirtualOfficePendingResource::collection($virtualOffices);
     }
 
-    public function for_pending($user_uuid, $filter, $filter_summary)
+    public function for_pending($user_uuid, $filter, $filter_summary, $filter_by_user)
     {
-        $virtualOffices = VirtualOffice::orderBy('updated_at', 'DESC')
-                                        ->where('status', '!=', Config::get('common.status.deleted'))
+        $virtualOffices = VirtualOffice::from('virtual_offices as vo1')
+                                        ->select('vo1.*')
+                                        ->orderBy('vo1.updated_at', 'DESC')
+                                        ->groupBy('vo1.uuid')
+                                        ->when(($filter_by_user!=''), function ($gq) use ($filter_by_user){ // filter by user
+                                            $gq->leftJoin('activities as a1', function($join) {
+                                                $join->on('a1.entity_uuid', '=' , 'vo1.uuid')
+                                                        ->where('a1.created_at', '=', function($q){
+                                                            $q->from('activities as a2')
+                                                                ->select(DB::raw('max(`a2`.`created_at`)'))
+                                                                ->where('a2.entity_uuid', '=', DB::raw('`vo1`.`uuid`'));
+                                                        });
+                                            })
+                                            ->where('a1.user_uuid', $filter_by_user);
+                                        })
+                                        ->where('vo1.status', '!=', Config::get('common.status.deleted'))
                                         ->when(($filter_summary==''), function ($gq) use ($filter) { // no summary filter
                                             return $gq->when(($filter!='' || $filter=='0'), function ($q) { // normal view
-                                                    return $q->where('status', '!=', Config::get('common.status.deleted'));
+                                                    return $q->where('vo1.status', '!=', Config::get('common.status.deleted'));
                                                 })
                                                 ->when($filter=='1', function ($q) { // unapproved
-                                                    return $q->where('status', Config::get('common.status.pending'));
+                                                    return $q->where('vo1.status', Config::get('common.status.pending'));
                                                 })
                                                 ->when($filter=='2', function ($q) { // approved
-                                                    return $q->where('status', Config::get('common.status.actived'));
+                                                    return $q->where('vo1.status', Config::get('common.status.actived'));
                                                 })
                                                 ->when($filter=='3', function ($q) { // rejected
-                                                    return $q->where('status', Config::get('common.status.rejected'));
+                                                    return $q->where('vo1.status', Config::get('common.status.rejected'));
                                                 });
                                         })
                                         ->when(($filter_summary!=''), function($q){ // never true
-                                            return $q->where('status', 100); // never true
+                                            return $q->where('vo1.status', 100); // never true
                                         })
                                         ->when(($user_uuid!=''), function ($q) use($user_uuid){
-                                            return $q->where('user_uuid', $user_uuid);
+                                            return $q->where('vo1.user_uuid', $user_uuid);
                                         })
                                         ->paginate(5);
 

@@ -10,6 +10,7 @@ use App\Models\Helper\BankAccount;
 use App\Models\Helper\Email;
 use App\Models\VirtualOffice\VirtualOffice;
 use App\Policies\PermissionPolicy;
+use App\Services\Account\UserService;
 use App\Services\Company\CompanyService;
 use App\Services\Director\DirectorService;
 use App\Services\VirtualOffice\VirtualOfficeService;
@@ -22,12 +23,14 @@ class PendingController extends Controller
     private $directorService;
     private $companyService;
     private $virtualOfficesService;
+    private $userService;
 
     public function __construct()
     {
         $this->directorService = new DirectorService();
         $this->companyService = new CompanyService();
         $this->virtualOfficesService = new VirtualOfficeService();
+        $this->userService = new UserService();
     }
     
     /**     @OA\GET(
@@ -44,18 +47,19 @@ class PendingController extends Controller
       */
     public function index(Request $request)
     {
-        $filter = ''; $summary_filter = '';
+        $filter = ''; $summary_filter = ''; $filter_by_user = '';
 
         // filters
         if (isset($request->filter)){ $filter = $request->filter; }
         if (isset($request->summary_filter)){ $summary_filter = $request->summary_filter; }
+        if (isset($request->filter_by_user)){ $filter_by_user = $request->filter_by_user; }
 
         // get directors
         $user_uuid = '';
         if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.view'))){
             $user_uuid = $request->user_uuid;
         }
-        $directors = $this->directorService->for_pending($user_uuid, $filter, $summary_filter);
+        $directors = $this->directorService->for_pending($user_uuid, $filter, $summary_filter, $filter_by_user);
         $summary['directors'] = $this->directorService->summary($user_uuid);
 
         // get companies
@@ -63,7 +67,7 @@ class PendingController extends Controller
         if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.view'))){
             $user_uuid = $request->user_uuid;
         }
-        $companies = $this->companyService->for_pending($user_uuid, $filter, $summary_filter);
+        $companies = $this->companyService->for_pending($user_uuid, $filter, $summary_filter, $filter_by_user);
         $summary['companies'] = $this->companyService->summary($user_uuid);
 
         // get virtual offices
@@ -71,7 +75,7 @@ class PendingController extends Controller
         if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.view'))){
             $user_uuid = $request->user_uuid;
         }
-        $virtualOffices = $this->virtualOfficesService->for_pending($user_uuid, $filter, $summary_filter);
+        $virtualOffices = $this->virtualOfficesService->for_pending($user_uuid, $filter, $summary_filter, $filter_by_user);
 
         // meta data
         $current_page = $directors->currentPage();
@@ -332,6 +336,30 @@ class PendingController extends Controller
         endforeach;
         
         return $pendings;   
+    }
+
+    /**     @OA\GET(
+      *         path="/api/pending/users",
+      *         operationId="list_of_users",
+      *         tags={"Helper"},
+      *         summary="List of users",
+      *         description="List of users to create the chat",
+      *             @OA\Response(response=200, description="Successfully"),
+      *             @OA\Response(response=400, description="Bad request"),
+      *             @OA\Response(response=401, description="Not Authenticated"),
+      *             @OA\Response(response=403, description="Not Autorized"),
+      *             @OA\Response(response=404, description="Resource Not Found"),
+      *     )
+      */
+    public function users(Request $request)
+    {
+        // permission
+        if (!PermissionPolicy::permission($request->user_uuid)){
+            return response()->json([ 'data' => 'Not Authorized' ], 403);
+        }
+
+        $users = $this->userService->all();
+        return $users;
     }
 
 }

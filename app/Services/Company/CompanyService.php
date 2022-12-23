@@ -16,6 +16,7 @@ use App\Services\Helper\EmailService;
 use App\Services\Helper\NotificationService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 
 class CompanyService {
 
@@ -70,40 +71,54 @@ class CompanyService {
         return CompanyPendingResource::collection($companies);
     }
 
-    public function for_pending($user_uuid = '', $filter, $summary_filter)
+    public function for_pending($user_uuid = '', $filter, $summary_filter, $filter_by_user)
     {
-        $companies = Company::orderBy('updated_at', 'DESC')
+        $companies = Company::from('companies as c1')
+                            ->select('c1.*')
+                            ->orderBy('c1.updated_at', 'DESC')
+                            ->groupBy('c1.uuid')
+                            ->when(($filter_by_user!=''), function ($gq) use ($filter_by_user){ // filter by user
+                                $gq->leftJoin('activities as a1', function($join) {
+                                    $join->on('a1.entity_uuid', '=' , 'c1.uuid')
+                                            ->where('a1.created_at', '=', function($q){
+                                                $q->from('activities as a2')
+                                                    ->select(DB::raw('max(`a2`.`created_at`)'))
+                                                    ->where('a2.entity_uuid', '=', DB::raw('`c1`.`uuid`'));
+                                            });
+                                })
+                                ->where('a1.user_uuid', $filter_by_user);
+                            })
                             ->when(($summary_filter==''), function ($gq) use ($filter) { // no summary filter
                                 return $gq->when(($filter!='' || $filter=='0') , function ($q) { // normal view
-                                    return $q->where('status', '!=', Config::get('common.status.deleted'));
+                                    return $q->where('c1.status', '!=', Config::get('common.status.deleted'));
                                 })
                                 ->when($filter=='1', function ($q) { // unapproved
-                                    return $q->where('status', Config::get('common.status.pending'));
+                                    return $q->where('c1.status', Config::get('common.status.pending'));
                                 })
                                 ->when($filter=='2', function ($q) { // approved
-                                    return $q->where('status', Config::get('common.status.actived'));
+                                    return $q->where('c1.status', Config::get('common.status.actived'));
                                 })
                                 ->when($filter=='3', function ($q) { // rejected
-                                    return $q->where('status', Config::get('common.status.rejected'));
+                                    return $q->where('c1.status', Config::get('common.status.rejected'));
                                 });
                             })
                             ->when(($summary_filter=='0' || $summary_filter=='1' || $summary_filter=='2' || $summary_filter=='3' || $summary_filter=='4' || $summary_filter=='5'), function ($q) { // only director
-                                return $q->where('status', 100); // never true
+                                return $q->where('c1.status', 100); // never true
                             })
                             ->when(($summary_filter=='6'), function($q){ // all companies
-                                return $q->where('status', '!=', Config::get('common.status.deleted'));
+                                return $q->where('c1.status', '!=', Config::get('common.status.deleted'));
                             })
                             ->when(($summary_filter=='7'), function($q){ // approved companies
-                                return $q->where('status', Config::get('common.status.actived'));
+                                return $q->where('c1.status', Config::get('common.status.actived'));
                             })
                             ->when(($summary_filter=='8'), function($q){ // pending companies
                                 return $q->where(function ($qq) {
-                                            $qq->where('status', Config::get('common.status.pending'))
-                                                ->orWhere('status', Config::get('common.status.rejected'));
+                                            $qq->where('c1.status', Config::get('common.status.pending'))
+                                                ->orWhere('c1.status', Config::get('common.status.rejected'));
                                         });
                             }) 
                             ->when(($user_uuid!=''), function ($q) use ($user_uuid){
-                                return $q->where('user_uuid', $user_uuid);
+                                return $q->where('c1.user_uuid', $user_uuid);
                             })
                             ->paginate(5);
 

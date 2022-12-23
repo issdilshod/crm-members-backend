@@ -94,10 +94,23 @@ class DirectorService {
         return DirectorPendingResource::collection($directors);
     }
 
-    public function for_pending($user_uuid, $filter, $filter_summary)
+    public function for_pending($user_uuid, $filter, $filter_summary, $filter_by_user)
     {
-        $directors = Director::from('directors as d1')->select('d1.*')
+        $directors = Director::from('directors as d1')
+                            ->select('d1.*')
                             ->orderBy('d1.updated_at', 'DESC')
+                            ->groupBy('d1.uuid')
+                            ->when(($filter_by_user!=''), function ($gq) use ($filter_by_user){ // filter by user
+                                $gq->leftJoin('activities as a1', function($join) {
+                                    $join->on('a1.entity_uuid', '=' , 'd1.uuid')
+                                            ->where('a1.created_at', '=', function($q){
+                                                $q->from('activities as a2')
+                                                    ->select(DB::raw('max(`a2`.`created_at`)'))
+                                                    ->where('a2.entity_uuid', '=', DB::raw('`d1`.`uuid`'));
+                                            });
+                                })
+                                ->where('a1.user_uuid', $filter_by_user);
+                            })
                             ->when(($filter_summary==''), function ($gq) use ($filter) { // no summary filter
                                 return $gq->when(($filter!='' || $filter=='0'), function ($q) { // normal view
                                         return $q->where('d1.status', '!=', Config::get('common.status.deleted'));
