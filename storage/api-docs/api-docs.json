@@ -3660,6 +3660,12 @@
                                     },
                                     "notes": {
                                         "type": "text"
+                                    },
+                                    "files[]": {
+                                        "type": "text"
+                                    },
+                                    "files_to_delete[]": {
+                                        "type": "text"
                                     }
                                 },
                                 "type": "object"
@@ -3798,6 +3804,12 @@
                                         "type": "text"
                                     },
                                     "notes": {
+                                        "type": "text"
+                                    },
+                                    "files[]": {
+                                        "type": "text"
+                                    },
+                                    "files_to_delete[]": {
                                         "type": "text"
                                     }
                                 },
@@ -3965,6 +3977,12 @@
                                     },
                                     "notes": {
                                         "type": "text"
+                                    },
+                                    "files[]": {
+                                        "type": "text"
+                                    },
+                                    "files_to_delete[]": {
+                                        "type": "text"
                                     }
                                 },
                                 "type": "object"
@@ -4067,6 +4085,12 @@
                                     },
                                     "notes": {
                                         "type": "text"
+                                    },
+                                    "files[]": {
+                                        "type": "text"
+                                    },
+                                    "files_to_delete[]": {
+                                        "type": "text"
                                     }
                                 },
                                 "type": "object"
@@ -4168,6 +4192,12 @@
                                         "type": "text"
                                     },
                                     "notes": {
+                                        "type": "text"
+                                    },
+                                    "files[]": {
+                                        "type": "text"
+                                    },
+                                    "files_to_delete[]": {
                                         "type": "text"
                                     }
                                 },

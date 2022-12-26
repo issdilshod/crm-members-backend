@@ -7,6 +7,7 @@ use App\Models\Contact\Contact;
 use App\Policies\PermissionPolicy;
 use App\Services\Contact\ContactService;
 use App\Services\Helper\AccountSecurityService;
+use App\Services\Helper\FileService;
 use App\Services\Helper\RejectReasonService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -17,12 +18,14 @@ class ContactController extends Controller
     private $contactSerivce;
     private $rejectReasonService;
     private $accountSecurityService;
+    private $fileService;
 
     public function __construct()
     {
         $this->contactSerivce = new ContactService();
         $this->rejectReasonService = new RejectReasonService();
         $this->accountSecurityService = new AccountSecurityService();
+        $this->fileService = new FileService();
     }
     
     /**     @OA\GET(
@@ -79,7 +82,10 @@ class ContactController extends Controller
         *                         @OA\Property(property="account_password", type="text"),
         *                         @OA\Property(property="security_questions", type="text"),
         *                         @OA\Property(property="account_securities[]", type="text"),
-        *                         @OA\Property(property="notes", type="text")
+        *                         @OA\Property(property="notes", type="text"),
+        *
+        *                         @OA\Property(property="files[]", type="text"),
+        *                         @OA\Property(property="files_to_delete[]", type="text"),
         *                     ),
         *                 ),
         *             ),
@@ -117,6 +123,10 @@ class ContactController extends Controller
             'account_securities' => 'array', 
             'notes' => '', 
 
+            // files
+            'files' => 'array',
+            'files_to_delete' => 'array',
+
             'user_uuid' => ''
         ]);
 
@@ -127,6 +137,20 @@ class ContactController extends Controller
             foreach ($validated['account_securities'] AS $key => $value):
                 $value['entity_uuid'] = $contact['uuid'];
                 $this->accountSecurityService->save($value);
+            endforeach;
+        }
+
+        // files to delete (first)
+        if (isset($validated['files_to_delete'])){
+            foreach ($validated['files_to_delete'] AS $key => $value):
+                $this->fileService->delete($value);
+            endforeach;
+        }
+
+        // files
+        if (isset($validated['files'])){
+            foreach ($validated['files'] AS $key => $value):
+                $this->fileService->update(['entity_uuid' => $contact->uuid], $value['uuid']);
             endforeach;
         }
 
@@ -207,7 +231,10 @@ class ContactController extends Controller
         *                         @OA\Property(property="account_password", type="text"),
         *                         @OA\Property(property="security_questions", type="text"),
         *                         @OA\Property(property="account_securities[]", type="text"),
-        *                         @OA\Property(property="notes", type="text")
+        *                         @OA\Property(property="notes", type="text"),
+        *
+        *                         @OA\Property(property="files[]", type="text"),
+        *                         @OA\Property(property="files_to_delete[]", type="text"),
         *                     ),
         *                 ),
         *             ),
@@ -243,6 +270,11 @@ class ContactController extends Controller
             'account_password' => '', 
             'security_questions' => '', 
             'account_securities' => 'array', 
+
+            // files
+            'files' => 'array',
+            'files_to_delete' => 'array',
+
             'notes' => '', 
         ]);
 
@@ -253,6 +285,20 @@ class ContactController extends Controller
             foreach ($validated['account_securities'] AS $key => $value):
                 $value['entity_uuid'] = $contact['uuid'];
                 $this->accountSecurityService->save($value);
+            endforeach;
+        }
+
+        // files to delete (first)
+        if (isset($validated['files_to_delete'])){
+            foreach ($validated['files_to_delete'] AS $key => $value):
+                $this->fileService->delete($value);
+            endforeach;
+        }
+
+        // files
+        if (isset($validated['files'])){
+            foreach ($validated['files'] AS $key => $value):
+                $this->fileService->update(['entity_uuid' => $contact->uuid], $value['uuid']);
             endforeach;
         }
 
@@ -359,7 +405,10 @@ class ContactController extends Controller
         *                         @OA\Property(property="account_password", type="text"),
         *                         @OA\Property(property="security_questions", type="text"),
         *                         @OA\Property(property="account_securities[]", type="text"),
-        *                         @OA\Property(property="notes", type="text")
+        *                         @OA\Property(property="notes", type="text"),
+        *
+        *                         @OA\Property(property="files[]", type="text"),
+        *                         @OA\Property(property="files_to_delete[]", type="text"),
         *                     ),
         *                 ),
         *             ),
@@ -397,6 +446,10 @@ class ContactController extends Controller
             'account_securities' => 'array', 
             'notes' => '', 
 
+            // files
+            'files' => 'array',
+            'files_to_delete' => 'array',
+
             'user_uuid' => ''
         ]);
 
@@ -407,6 +460,20 @@ class ContactController extends Controller
             foreach ($validated['account_securities'] AS $key => $value):
                 $value['entity_uuid'] = $contact['uuid'];
                 $this->accountSecurityService->save($value);
+            endforeach;
+        }
+
+        // files to delete (first)
+        if (isset($validated['files_to_delete'])){
+            foreach ($validated['files_to_delete'] AS $key => $value):
+                $this->fileService->delete($value);
+            endforeach;
+        }
+
+        // files
+        if (isset($validated['files'])){
+            foreach ($validated['files'] AS $key => $value):
+                $this->fileService->update(['entity_uuid' => $contact->uuid], $value['uuid']);
             endforeach;
         }
 
@@ -450,7 +517,10 @@ class ContactController extends Controller
         *                         @OA\Property(property="account_password", type="text"),
         *                         @OA\Property(property="security_questions", type="text"),
         *                         @OA\Property(property="account_securities[]", type="text"),
-        *                         @OA\Property(property="notes", type="text")
+        *                         @OA\Property(property="notes", type="text"),
+        *
+        *                         @OA\Property(property="files[]", type="text"),
+        *                         @OA\Property(property="files_to_delete[]", type="text"),
         *                     ),
         *                 ),
         *             ),
@@ -486,6 +556,11 @@ class ContactController extends Controller
             'account_password' => '', 
             'security_questions' => '', 
             'account_securities' => 'array', 
+
+            // files
+            'files' => 'array',
+            'files_to_delete' => 'array',
+
             'notes' => '', 
 
         ]);
@@ -499,6 +574,20 @@ class ContactController extends Controller
             foreach ($validated['account_securities'] AS $key => $value):
                 $value['entity_uuid'] = $contact['uuid'];
                 $this->accountSecurityService->save($value);
+            endforeach;
+        }
+
+        // files to delete (first)
+        if (isset($validated['files_to_delete'])){
+            foreach ($validated['files_to_delete'] AS $key => $value):
+                $this->fileService->delete($value);
+            endforeach;
+        }
+
+        // files
+        if (isset($validated['files'])){
+            foreach ($validated['files'] AS $key => $value):
+                $this->fileService->update(['entity_uuid' => $contact->uuid], $value['uuid']);
             endforeach;
         }
 
@@ -542,7 +631,10 @@ class ContactController extends Controller
         *                         @OA\Property(property="account_password", type="text"),
         *                         @OA\Property(property="security_questions", type="text"),
         *                         @OA\Property(property="account_securities[]", type="text"),
-        *                         @OA\Property(property="notes", type="text")
+        *                         @OA\Property(property="notes", type="text"),
+        *
+        *                         @OA\Property(property="files[]", type="text"),
+        *                         @OA\Property(property="files_to_delete[]", type="text"),
         *                     ),
         *                 ),
         *             ),
@@ -578,6 +670,11 @@ class ContactController extends Controller
             'account_password' => '', 
             'security_questions' => '', 
             'account_securities' => 'array',  
+
+            // files
+            'files' => 'array',
+            'files_to_delete' => 'array',
+
             'notes' => '',
         ]);
 
@@ -590,6 +687,20 @@ class ContactController extends Controller
             foreach ($validated['account_securities'] AS $key => $value):
                 $value['entity_uuid'] = $contact['uuid'];
                 $this->accountSecurityService->save($value);
+            endforeach;
+        }
+
+        // files to delete (first)
+        if (isset($validated['files_to_delete'])){
+            foreach ($validated['files_to_delete'] AS $key => $value):
+                $this->fileService->delete($value);
+            endforeach;
+        }
+
+        // files
+        if (isset($validated['files'])){
+            foreach ($validated['files'] AS $key => $value):
+                $this->fileService->update(['entity_uuid' => $contact->uuid], $value['uuid']);
             endforeach;
         }
 

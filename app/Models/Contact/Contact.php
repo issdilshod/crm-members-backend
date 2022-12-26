@@ -3,6 +3,7 @@
 namespace App\Models\Contact;
 
 use App\Models\Helper\AccountSecurity;
+use App\Models\Helper\File;
 use App\Models\Helper\RejectReason;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -29,6 +30,12 @@ class Contact extends Model
     {
         return $this->hasOne(RejectReason::class, 'entity_uuid', 'uuid')
                     ->latest();
+    }
+
+    public function files(): HasMany
+    {
+        return $this->hasMany(File::class, 'entity_uuid', 'uuid')
+                    ->where('status', '!=', Config::get('common.status.deleted'));
     }
 
 }

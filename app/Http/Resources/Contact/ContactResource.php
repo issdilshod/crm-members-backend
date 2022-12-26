@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Contact;
 
 use App\Http\Resources\Helper\AccountSecurityResource;
+use App\Http\Resources\Helper\FileResource;
 use App\Http\Resources\Helper\RejectReasonResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -34,6 +35,9 @@ class ContactResource extends JsonResource
             'account_securities' => AccountSecurityResource::collection($this->account_securities), 
             'notes' => $this->notes, 
             'reject_reason' => new RejectReasonResource($this->reject_reason),
+
+            'uploaded_files' => FileResource::collection($this->files),
+
             'status' => $this->status
         ];
     }
