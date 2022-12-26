@@ -12,6 +12,7 @@ use App\Models\VirtualOffice\VirtualOffice;
 use App\Policies\PermissionPolicy;
 use App\Services\Account\UserService;
 use App\Services\Company\CompanyService;
+use App\Services\Contact\ContactService;
 use App\Services\Director\DirectorService;
 use App\Services\VirtualOffice\VirtualOfficeService;
 use Illuminate\Http\Request;
@@ -24,6 +25,7 @@ class PendingController extends Controller
     private $companyService;
     private $virtualOfficesService;
     private $userService;
+    private $contactService;
 
     public function __construct()
     {
@@ -31,6 +33,7 @@ class PendingController extends Controller
         $this->companyService = new CompanyService();
         $this->virtualOfficesService = new VirtualOfficeService();
         $this->userService = new UserService();
+        $this->contactService = new ContactService();
     }
     
     /**     @OA\GET(
@@ -77,6 +80,13 @@ class PendingController extends Controller
         }
         $virtualOffices = $this->virtualOfficesService->for_pending($user_uuid, $filter, $summary_filter, $filter_by_user);
 
+        // get contacts
+        $user_uuid = '';
+        if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.contact.view'))){
+            $user_uuid = $request->user_uuid;
+        }
+        $contacts = $this->contactService->for_pending($user_uuid, $filter, $summary_filter, $filter_by_user);
+
         // meta data
         $current_page = $directors->currentPage();
 
@@ -94,12 +104,17 @@ class PendingController extends Controller
             $max_page = $virtualOffices->lastPage();
         }
 
+        if ($contacts->lastPage()>$max_page){ // contacts max page
+            $max_page = $contacts->lastPage();
+        }
+
         $meta = [ 'current_page' => $current_page, 'max_page' => $max_page ];
 
         return [
             'directors' => $directors, 
             'companies' => $companies, 
             'virtual_offices' => $virtualOffices,
+            'contacts' => $contacts,
             
             'meta' => $meta, 
             'summary' => $summary
