@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Contact\Contact;
 use App\Policies\PermissionPolicy;
 use App\Services\Contact\ContactService;
+use App\Services\Helper\AccountSecurityService;
 use App\Services\Helper\RejectReasonService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -15,11 +16,13 @@ class ContactController extends Controller
 
     private $contactSerivce;
     private $rejectReasonService;
+    private $accountSecurityService;
 
     public function __construct()
     {
         $this->contactSerivce = new ContactService();
         $this->rejectReasonService = new RejectReasonService();
+        $this->accountSecurityService = new AccountSecurityService();
     }
     
     /**     @OA\GET(
@@ -75,9 +78,7 @@ class ContactController extends Controller
         *                         @OA\Property(property="account_username", type="text"),
         *                         @OA\Property(property="account_password", type="text"),
         *                         @OA\Property(property="security_questions", type="text"),
-        *                         @OA\Property(property="security_question1", type="text"),
-        *                         @OA\Property(property="security_question2", type="text"),
-        *                         @OA\Property(property="security_question3", type="text"),
+        *                         @OA\Property(property="account_securities[]", type="text"),
         *                         @OA\Property(property="notes", type="text")
         *                     ),
         *                 ),
@@ -113,15 +114,21 @@ class ContactController extends Controller
             'account_username' => '', 
             'account_password' => '', 
             'security_questions' => '', 
-            'security_question1' => '', 
-            'security_question2' => '', 
-            'security_question3' => '', 
+            'account_securities' => 'array', 
             'notes' => '', 
 
             'user_uuid' => ''
         ]);
 
         $contact = $this->contactSerivce->create($validated);
+
+        // account securities
+        if (isset($validated['account_securities'])){
+            foreach ($validated['account_securities'] AS $key => $value):
+                $value['entity_uuid'] = $contact['uuid'];
+                $this->accountSecurityService->save($value);
+            endforeach;
+        }
 
         return $contact;
     }
@@ -199,9 +206,7 @@ class ContactController extends Controller
         *                         @OA\Property(property="account_username", type="text"),
         *                         @OA\Property(property="account_password", type="text"),
         *                         @OA\Property(property="security_questions", type="text"),
-        *                         @OA\Property(property="security_question1", type="text"),
-        *                         @OA\Property(property="security_question2", type="text"),
-        *                         @OA\Property(property="security_question3", type="text"),
+        *                         @OA\Property(property="account_securities[]", type="text"),
         *                         @OA\Property(property="notes", type="text")
         *                     ),
         *                 ),
@@ -237,13 +242,19 @@ class ContactController extends Controller
             'account_username' => '', 
             'account_password' => '', 
             'security_questions' => '', 
-            'security_question1' => '', 
-            'security_question2' => '', 
-            'security_question3' => '', 
+            'account_securities' => 'array', 
             'notes' => '', 
         ]);
 
         $contact = $this->contactSerivce->update($contact, $validated, $request->user_uuid);
+
+        // account securities
+        if (isset($validated['account_securities'])){
+            foreach ($validated['account_securities'] AS $key => $value):
+                $value['entity_uuid'] = $contact['uuid'];
+                $this->accountSecurityService->save($value);
+            endforeach;
+        }
 
         return $contact;
     }
@@ -347,9 +358,7 @@ class ContactController extends Controller
         *                         @OA\Property(property="account_username", type="text"),
         *                         @OA\Property(property="account_password", type="text"),
         *                         @OA\Property(property="security_questions", type="text"),
-        *                         @OA\Property(property="security_question1", type="text"),
-        *                         @OA\Property(property="security_question2", type="text"),
-        *                         @OA\Property(property="security_question3", type="text"),
+        *                         @OA\Property(property="account_securities[]", type="text"),
         *                         @OA\Property(property="notes", type="text")
         *                     ),
         *                 ),
@@ -385,15 +394,21 @@ class ContactController extends Controller
             'account_username' => '', 
             'account_password' => '', 
             'security_questions' => '', 
-            'security_question1' => '', 
-            'security_question2' => '', 
-            'security_question3' => '', 
+            'account_securities' => 'array', 
             'notes' => '', 
 
             'user_uuid' => ''
         ]);
 
         $contact = $this->contactSerivce->pending($validated);
+
+        // account securities
+        if (isset($validated['account_securities'])){
+            foreach ($validated['account_securities'] AS $key => $value):
+                $value['entity_uuid'] = $contact['uuid'];
+                $this->accountSecurityService->save($value);
+            endforeach;
+        }
 
         return $contact;
     }
@@ -434,9 +449,7 @@ class ContactController extends Controller
         *                         @OA\Property(property="account_username", type="text"),
         *                         @OA\Property(property="account_password", type="text"),
         *                         @OA\Property(property="security_questions", type="text"),
-        *                         @OA\Property(property="security_question1", type="text"),
-        *                         @OA\Property(property="security_question2", type="text"),
-        *                         @OA\Property(property="security_question3", type="text"),
+        *                         @OA\Property(property="account_securities[]", type="text"),
         *                         @OA\Property(property="notes", type="text")
         *                     ),
         *                 ),
@@ -472,9 +485,7 @@ class ContactController extends Controller
             'account_username' => '', 
             'account_password' => '', 
             'security_questions' => '', 
-            'security_question1' => '', 
-            'security_question2' => '', 
-            'security_question3' => '', 
+            'account_securities' => 'array', 
             'notes' => '', 
 
         ]);
@@ -482,6 +493,14 @@ class ContactController extends Controller
         $contact = Contact::where('uuid', $uuid)->first();
 
         $contact = $this->contactSerivce->pending_update($contact, $validated, $request->user_uuid);
+
+        // account securities
+        if (isset($validated['account_securities'])){
+            foreach ($validated['account_securities'] AS $key => $value):
+                $value['entity_uuid'] = $contact['uuid'];
+                $this->accountSecurityService->save($value);
+            endforeach;
+        }
 
         return $contact;
     }
@@ -522,9 +541,7 @@ class ContactController extends Controller
         *                         @OA\Property(property="account_username", type="text"),
         *                         @OA\Property(property="account_password", type="text"),
         *                         @OA\Property(property="security_questions", type="text"),
-        *                         @OA\Property(property="security_question1", type="text"),
-        *                         @OA\Property(property="security_question2", type="text"),
-        *                         @OA\Property(property="security_question3", type="text"),
+        *                         @OA\Property(property="account_securities[]", type="text"),
         *                         @OA\Property(property="notes", type="text")
         *                     ),
         *                 ),
@@ -560,15 +577,21 @@ class ContactController extends Controller
             'account_username' => '', 
             'account_password' => '', 
             'security_questions' => '', 
-            'security_question1' => '', 
-            'security_question2' => '', 
-            'security_question3' => '', 
+            'account_securities' => 'array',  
             'notes' => '',
         ]);
 
         $contact = Contact::where('uuid', $uuid)->first();
 
         $contact = $this->contactSerivce->accept($contact, $validated, $request->user_uuid);
+
+        // account securities
+        if (isset($validated['account_securities'])){
+            foreach ($validated['account_securities'] AS $key => $value):
+                $value['entity_uuid'] = $contact['uuid'];
+                $this->accountSecurityService->save($value);
+            endforeach;
+        }
 
         return $contact;
     }

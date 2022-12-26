@@ -7,11 +7,11 @@ use Illuminate\Support\Facades\Config;
 
 class BankAccountService {
 
-    private $bankAccountSecurity;
+    private $accountSecurityService;
 
     public function __construct()
     {
-        $this->bankAccountSecurity = new BankAccountSecurityService();
+        $this->accountSecurityService = new AccountSecurityService();
     }
 
     public function save($entity)
@@ -27,14 +27,14 @@ class BankAccountService {
         if (isset($entity['bank_account_security'])){
             foreach ($entity['bank_account_security'] AS $key => $value):
                 $value['entity_uuid'] = $bankAccount->uuid;
-                $this->bankAccountSecurity->save($value);
+                $this->accountSecurityService->save($value);
             endforeach;
         }
 
         // security delete
         if (isset($entity['bank_account_security_to_delete'])){
             foreach ($entity['bank_account_security_to_delete'] AS $key => $value):
-                $this->bankAccountSecurity->delete($value);
+                $this->accountSecurityService->delete($value);
             endforeach;
         }
 

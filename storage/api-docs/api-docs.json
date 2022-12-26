@@ -3655,13 +3655,7 @@
                                     "security_questions": {
                                         "type": "text"
                                     },
-                                    "security_question1": {
-                                        "type": "text"
-                                    },
-                                    "security_question2": {
-                                        "type": "text"
-                                    },
-                                    "security_question3": {
+                                    "account_securities[]": {
                                         "type": "text"
                                     },
                                     "notes": {
@@ -3800,13 +3794,7 @@
                                     "security_questions": {
                                         "type": "text"
                                     },
-                                    "security_question1": {
-                                        "type": "text"
-                                    },
-                                    "security_question2": {
-                                        "type": "text"
-                                    },
-                                    "security_question3": {
+                                    "account_securities[]": {
                                         "type": "text"
                                     },
                                     "notes": {
@@ -3972,13 +3960,7 @@
                                     "security_questions": {
                                         "type": "text"
                                     },
-                                    "security_question1": {
-                                        "type": "text"
-                                    },
-                                    "security_question2": {
-                                        "type": "text"
-                                    },
-                                    "security_question3": {
+                                    "account_securities[]": {
                                         "type": "text"
                                     },
                                     "notes": {
@@ -4080,13 +4062,7 @@
                                     "security_questions": {
                                         "type": "text"
                                     },
-                                    "security_question1": {
-                                        "type": "text"
-                                    },
-                                    "security_question2": {
-                                        "type": "text"
-                                    },
-                                    "security_question3": {
+                                    "account_securities[]": {
                                         "type": "text"
                                     },
                                     "notes": {
@@ -4188,13 +4164,7 @@
                                     "security_questions": {
                                         "type": "text"
                                     },
-                                    "security_question1": {
-                                        "type": "text"
-                                    },
-                                    "security_question2": {
-                                        "type": "text"
-                                    },
-                                    "security_question3": {
+                                    "account_securities[]": {
                                         "type": "text"
                                     },
                                     "notes": {

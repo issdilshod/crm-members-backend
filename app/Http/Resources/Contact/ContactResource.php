@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Contact;
 
+use App\Http\Resources\Helper\AccountSecurityResource;
 use App\Http\Resources\Helper\RejectReasonResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -30,9 +31,7 @@ class ContactResource extends JsonResource
             'account_username' => $this->account_username, 
             'account_password' => $this->account_password, 
             'security_questions' => $this->security_questions, 
-            'security_question1' => $this->security_question1, 
-            'security_question2' => $this->security_question2, 
-            'security_question3' => $this->security_question3, 
+            'account_securities' => AccountSecurityResource::collection($this->account_securities), 
             'notes' => $this->notes, 
             'reject_reason' => new RejectReasonResource($this->reject_reason),
             'status' => $this->status
