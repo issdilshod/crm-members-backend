@@ -9,6 +9,7 @@ use App\Http\Controllers\Chat\ChatController;
 use App\Http\Controllers\Chat\MessageController;
 use App\Http\Controllers\Company\CompanyController;
 use App\Http\Controllers\Company\FutureCompanyController;
+use App\Http\Controllers\Contact\ContactController;
 use App\Http\Controllers\Director\DirectorController;
 use App\Http\Controllers\FutureWebsite\FutureWebsiteController;
 use App\Http\Controllers\Helper\DepartmentController;
@@ -135,7 +136,7 @@ Route::middleware('auth.custom')->group(function() {
     Route::put('api/virtual-office-reject/{uuid}', [VirtualOfficeController::class, 'reject']);
     Route::get('api/virtual-office-permission', [VirtualOfficeController::class, 'permission']);
 
-    // virtual office
+    // future company
     Route::resource('api/future-company', FutureCompanyController::class);
     Route::get('api/future-company', [FutureCompanyController::class, 'index']);
     Route::get('api/future-company/{uuid}', [FutureCompanyController::class, 'show']);
@@ -177,6 +178,21 @@ Route::middleware('auth.custom')->group(function() {
     Route::get('api/task-comment/{taskUuid}', [TaskController::class, 'comments']);
     Route::put('api/task-approve/{uuid}', [TaskController::class, 'approve']);
     Route::put('api/task-reject/{uuid}', [TaskController::class, 'reject']);
+
+    // contact
+    Route::resource('api/contact', ContactController::class);
+    Route::get('api/contact', [ContactController::class, 'index']);
+    Route::get('api/contact/{uuid}', [ContactController::class, 'show']);
+    Route::post('api/contact', [ContactController::class, 'store']);
+    Route::put('api/contact/{uuid}', [ContactController::class, 'update']);
+    Route::delete('api/contact/{uuid}', [ContactController::class, 'destroy']);
+    Route::get('api/contact-search/{search}', [ContactController::class, 'search']);
+    Route::post('api/contact-pending', [ContactController::class, 'pending']);
+    Route::put('api/contact-pending-update/{uuid}', [ContactController::class, 'pending_update']);
+    Route::put('api/contact-accept/{uuid}', [ContactController::class, 'accept']);
+    Route::put('api/contact-reject/{uuid}', [ContactController::class, 'reject']);
+    Route::get('api/contact-permission', [ContactController::class, 'permission']);
+
 
     // notes
     Route::resource('api/note', NoteController::class);

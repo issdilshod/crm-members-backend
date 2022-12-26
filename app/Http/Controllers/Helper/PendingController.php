@@ -340,7 +340,7 @@ class PendingController extends Controller
 
     /**     @OA\GET(
       *         path="/api/pending/users",
-      *         operationId="list_of_users",
+      *         operationId="list_of_users_for_pending",
       *         tags={"Helper"},
       *         summary="List of users",
       *         description="List of users to create the chat",

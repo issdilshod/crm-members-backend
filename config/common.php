@@ -63,7 +63,15 @@ return [
         'task' => [
             'group' => 'task', // group name
             'store' => 'task_store' // add/update
-        ]
+        ],
+        'contact' => [
+            'group' => 'contact', // group name
+            'store' => 'contact_store', // add/update
+            'delete' => 'contact_delete',
+            'save' => 'contact_save', // pending add/update
+            'accept' => 'contact_accept', // accept/reject
+            'view' => 'contact_view'
+        ],
     ],
 
     'chat' => [
@@ -160,6 +168,14 @@ return [
             'approve' =>  'Task {name} approved',
             'reject' => 'Task {name} rejected',
         ],
+        'contact' => [
+            'add' => 'Contact {name} card added',
+            'updated' => 'Contact {name} card updated',
+            'pending' => 'Contact {name} card approval request sent',
+            'pending_update' => 'Contact {name} card update approval request sent',
+            'reject' => 'Contact {name} card rejected',
+            'accept' => 'Contact {name} card accepted',
+        ],
 
         'codes' => [
             'user_add' => 1,
@@ -211,6 +227,13 @@ return [
             'task_to_progress' => 42,
             'task_reject' => 43,
             'task_approve' => 44,
+
+            'contact_add' => 45,
+            'contact_update' => 46,
+            'contact_pending' => 47,
+            'contact_pending_update' => 48,
+            'contact_accept' => 49,
+            'contact_reject' => 50,
         ],
 
         'codes_link' => [
@@ -263,6 +286,13 @@ return [
             42 => '?section=task&uuid=',
             43 => '?section=task&uuid=',
             44 => '?section=task&uuid=',
+
+            45 => 'contacts',
+            46 => 'contacts',
+            47 => 'contacts',
+            48 => 'contacts',
+            49 => 'contacts',
+            50 => 'contacts',
         ],
     ],
 

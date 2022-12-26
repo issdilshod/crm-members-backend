@@ -188,7 +188,33 @@ class PermissionSeeder extends Seeder
                 'permission_name' => 'Task store', // add/update
                 'alias' => Config::get('common.permission.task.store'),
                 'group' => Config::get('common.permission.task.group')
-            ]
+            ],
+            // contact
+            [
+                'permission_name' => 'Contact card save (without approve)',
+                'alias' => Config::get('common.permission.contact.store'),
+                'group' => Config::get('common.permission.contact.group')
+            ],
+            [
+                'permission_name' => 'Contact card delete',
+                'alias' => Config::get('common.permission.contact.delete'),
+                'group' => Config::get('common.permission.contact.group')
+            ],
+            [
+                'permission_name' => 'Contact card save',
+                'alias' => Config::get('common.permission.contact.save'),
+                'group' => Config::get('common.permission.contact.group')
+            ],
+            [
+                'permission_name' => 'Contact card accept & reject',
+                'alias' => Config::get('common.permission.contact.accept'),
+                'group' => Config::get('common.permission.contact.group')
+            ],
+            [
+                'permission_name' => 'Contact card view',
+                'alias' => Config::get('common.permission.contact.view'),
+                'group' => Config::get('common.permission.contact.group')
+            ],
         ];
         Permission::query()->update(['status' => Config::get('common.status.deleted')]);
         foreach($permission_list AS $key => $value):

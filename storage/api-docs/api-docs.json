@@ -3580,6 +3580,738 @@
                 }
             }
         },
+        "/api/contact": {
+            "get": {
+                "tags": [
+                    "Contact"
+                ],
+                "summary": "List of contact",
+                "description": "List of contact",
+                "operationId": "list_contact",
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Contact"
+                ],
+                "summary": "Add contact",
+                "description": "Add contact",
+                "operationId": "post_contact",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [],
+                                "properties": {
+                                    "first_name": {
+                                        "type": "text"
+                                    },
+                                    "last_name": {
+                                        "type": "text"
+                                    },
+                                    "email": {
+                                        "type": "text"
+                                    },
+                                    "phone_number": {
+                                        "type": "text"
+                                    },
+                                    "company_name": {
+                                        "type": "text"
+                                    },
+                                    "company_phone_number": {
+                                        "type": "text"
+                                    },
+                                    "company_email": {
+                                        "type": "text"
+                                    },
+                                    "company_website": {
+                                        "type": "text"
+                                    },
+                                    "online_account": {
+                                        "type": "text"
+                                    },
+                                    "account_username": {
+                                        "type": "text"
+                                    },
+                                    "account_password": {
+                                        "type": "text"
+                                    },
+                                    "security_questions": {
+                                        "type": "text"
+                                    },
+                                    "security_question1": {
+                                        "type": "text"
+                                    },
+                                    "security_question2": {
+                                        "type": "text"
+                                    },
+                                    "security_question3": {
+                                        "type": "text"
+                                    },
+                                    "notes": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            }
+        },
+        "/api/contact/{uuid}": {
+            "get": {
+                "tags": [
+                    "Contact"
+                ],
+                "summary": "Get contact",
+                "description": "Get contact",
+                "operationId": "get_contact",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "contact uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Contact"
+                ],
+                "summary": "Update contact",
+                "description": "Update contact",
+                "operationId": "update_contact",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "contact uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [],
+                                "properties": {
+                                    "first_name": {
+                                        "type": "text"
+                                    },
+                                    "last_name": {
+                                        "type": "text"
+                                    },
+                                    "email": {
+                                        "type": "text"
+                                    },
+                                    "phone_number": {
+                                        "type": "text"
+                                    },
+                                    "company_name": {
+                                        "type": "text"
+                                    },
+                                    "company_phone_number": {
+                                        "type": "text"
+                                    },
+                                    "company_email": {
+                                        "type": "text"
+                                    },
+                                    "company_website": {
+                                        "type": "text"
+                                    },
+                                    "online_account": {
+                                        "type": "text"
+                                    },
+                                    "account_username": {
+                                        "type": "text"
+                                    },
+                                    "account_password": {
+                                        "type": "text"
+                                    },
+                                    "security_questions": {
+                                        "type": "text"
+                                    },
+                                    "security_question1": {
+                                        "type": "text"
+                                    },
+                                    "security_question2": {
+                                        "type": "text"
+                                    },
+                                    "security_question3": {
+                                        "type": "text"
+                                    },
+                                    "notes": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Contact"
+                ],
+                "summary": "Delete contact",
+                "description": "Delete contact",
+                "operationId": "delete_contact",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "contact uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/contact-search/{search}": {
+            "get": {
+                "tags": [
+                    "Contact"
+                ],
+                "summary": "Get contact search",
+                "description": "Get contact search",
+                "operationId": "get_contact_search",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "path",
+                        "description": "contact search",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "text"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/contact-pending": {
+            "post": {
+                "tags": [
+                    "Contact"
+                ],
+                "summary": "Pending contact",
+                "description": "Pending contact",
+                "operationId": "pending_contact",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [],
+                                "properties": {
+                                    "first_name": {
+                                        "type": "text"
+                                    },
+                                    "last_name": {
+                                        "type": "text"
+                                    },
+                                    "email": {
+                                        "type": "text"
+                                    },
+                                    "phone_number": {
+                                        "type": "text"
+                                    },
+                                    "company_name": {
+                                        "type": "text"
+                                    },
+                                    "company_phone_number": {
+                                        "type": "text"
+                                    },
+                                    "company_email": {
+                                        "type": "text"
+                                    },
+                                    "company_website": {
+                                        "type": "text"
+                                    },
+                                    "online_account": {
+                                        "type": "text"
+                                    },
+                                    "account_username": {
+                                        "type": "text"
+                                    },
+                                    "account_password": {
+                                        "type": "text"
+                                    },
+                                    "security_questions": {
+                                        "type": "text"
+                                    },
+                                    "security_question1": {
+                                        "type": "text"
+                                    },
+                                    "security_question2": {
+                                        "type": "text"
+                                    },
+                                    "security_question3": {
+                                        "type": "text"
+                                    },
+                                    "notes": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            }
+        },
+        "/api/contact-pending-update/{uuid}": {
+            "put": {
+                "tags": [
+                    "Contact"
+                ],
+                "summary": "Pending update contact",
+                "description": "Pending update contact",
+                "operationId": "pending_update_contact",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "contact uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [],
+                                "properties": {
+                                    "first_name": {
+                                        "type": "text"
+                                    },
+                                    "last_name": {
+                                        "type": "text"
+                                    },
+                                    "email": {
+                                        "type": "text"
+                                    },
+                                    "phone_number": {
+                                        "type": "text"
+                                    },
+                                    "company_name": {
+                                        "type": "text"
+                                    },
+                                    "company_phone_number": {
+                                        "type": "text"
+                                    },
+                                    "company_email": {
+                                        "type": "text"
+                                    },
+                                    "company_website": {
+                                        "type": "text"
+                                    },
+                                    "online_account": {
+                                        "type": "text"
+                                    },
+                                    "account_username": {
+                                        "type": "text"
+                                    },
+                                    "account_password": {
+                                        "type": "text"
+                                    },
+                                    "security_questions": {
+                                        "type": "text"
+                                    },
+                                    "security_question1": {
+                                        "type": "text"
+                                    },
+                                    "security_question2": {
+                                        "type": "text"
+                                    },
+                                    "security_question3": {
+                                        "type": "text"
+                                    },
+                                    "notes": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            }
+        },
+        "/api/contact-accept/{uuid}": {
+            "put": {
+                "tags": [
+                    "Contact"
+                ],
+                "summary": "Accept contact",
+                "description": "Accept contact",
+                "operationId": "accept_contact",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "contact uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [],
+                                "properties": {
+                                    "first_name": {
+                                        "type": "text"
+                                    },
+                                    "last_name": {
+                                        "type": "text"
+                                    },
+                                    "email": {
+                                        "type": "text"
+                                    },
+                                    "phone_number": {
+                                        "type": "text"
+                                    },
+                                    "company_name": {
+                                        "type": "text"
+                                    },
+                                    "company_phone_number": {
+                                        "type": "text"
+                                    },
+                                    "company_email": {
+                                        "type": "text"
+                                    },
+                                    "company_website": {
+                                        "type": "text"
+                                    },
+                                    "online_account": {
+                                        "type": "text"
+                                    },
+                                    "account_username": {
+                                        "type": "text"
+                                    },
+                                    "account_password": {
+                                        "type": "text"
+                                    },
+                                    "security_questions": {
+                                        "type": "text"
+                                    },
+                                    "security_question1": {
+                                        "type": "text"
+                                    },
+                                    "security_question2": {
+                                        "type": "text"
+                                    },
+                                    "security_question3": {
+                                        "type": "text"
+                                    },
+                                    "notes": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "422": {
+                        "description": "Unprocessable Content"
+                    }
+                }
+            }
+        },
+        "/api/contact-reject/{uuid}": {
+            "put": {
+                "tags": [
+                    "Contact"
+                ],
+                "summary": "Reject contact",
+                "description": "Reject contact",
+                "operationId": "reject_contact",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "contact uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [],
+                                "properties": {
+                                    "description": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/contact-permission": {
+            "get": {
+                "tags": [
+                    "Contact"
+                ],
+                "summary": "Get contact permission of user",
+                "description": "Get contact permission of user",
+                "operationId": "contact_permission",
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    }
+                }
+            }
+        },
         "/api/director": {
             "get": {
                 "tags": [
@@ -5521,6 +6253,33 @@
                     },
                     "422": {
                         "description": "Unprocessable Content"
+                    }
+                }
+            }
+        },
+        "/api/pending/users": {
+            "get": {
+                "tags": [
+                    "Helper"
+                ],
+                "summary": "List of users",
+                "description": "List of users to create the chat",
+                "operationId": "list_of_users_for_pending",
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
                     }
                 }
             }
