@@ -31,6 +31,11 @@ class AuthenticateCustom
             ], 401);
         }
 
+        // add more life to token as in config
+        $expires_at = Carbon::now();
+        UserAccessToken::where('token', $token)
+                        ->update([ 'expires_at' => $expires_at->addDays(Config::get('common.session.token_deadline'))->toDateTimeString() ]);
+
         $request->merge(['user_uuid' => $user_access_token->user_uuid]);
         return $next($request);
     }
