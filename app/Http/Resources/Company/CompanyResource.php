@@ -23,6 +23,7 @@ class CompanyResource extends JsonResource
         return [
             'uuid' => $this->uuid,
             'user_uuid' => $this->user_uuid,
+            'is_active' => $this->is_active,
             'legal_name' => $this->legal_name,
             'sic_code_uuid' => $this->sic_code_uuid,
             'director_uuid' => $this->director_uuid,

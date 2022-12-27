@@ -80,6 +80,7 @@ class CompanyController extends Controller
       *                         type="object",
       *                         required={"legal_name", "director_uuid", "ein", "db_report_number"},
       *                         
+      *                         @OA\Property(property="is_active", type="text"),
       *                         @OA\Property(property="legal_name", type="text"),
       *                         @OA\Property(property="sic_code_uuid", type="text"),
       *                         @OA\Property(property="director_uuid", type="text"),
@@ -145,6 +146,7 @@ class CompanyController extends Controller
         }
 
         $validated = $request->validate([
+            'is_active' => '',
             'legal_name' => 'required',
             'sic_code_uuid' => '',
             'director_uuid' => 'required',
@@ -353,6 +355,7 @@ class CompanyController extends Controller
       *                     @OA\Schema(
       *                         type="object",
       *                         required={"legal_name", "director_uuid", "ein", "db_report_number"},
+      *                         @OA\Property(property="is_active", type="text"),
       *                         @OA\Property(property="legal_name", type="text"),
       *                         @OA\Property(property="sic_code_uuid", type="text"),
       *                         @OA\Property(property="director_uuid", type="text"),
@@ -420,6 +423,7 @@ class CompanyController extends Controller
         }
 
         $validated = $request->validate([
+            'is_active' => '',
             'legal_name' => 'required',
             'sic_code_uuid' => '',
             'director_uuid' => 'required',
@@ -624,6 +628,7 @@ class CompanyController extends Controller
       *                     @OA\Schema(
       *                         type="object",
       *                         required={"legal_name", "director_uuid", "ein", "db_report_number"},
+      *                         @OA\Property(property="is_active", type="text"),
       *                         @OA\Property(property="legal_name", type="text"),
       *                         @OA\Property(property="sic_code_uuid", type="text"),
       *                         @OA\Property(property="director_uuid", type="text"),
@@ -689,6 +694,7 @@ class CompanyController extends Controller
         }
 
         $validated = $request->validate([
+            'is_active' => '',
             'legal_name' => 'required',
             'sic_code_uuid' => '',
             'director_uuid' => 'required',
@@ -858,6 +864,7 @@ class CompanyController extends Controller
       *                     @OA\Schema(
       *                         type="object",
       *                         required={"legal_name", "director_uuid", "ein", "db_report_number"},
+      *                         @OA\Property(property="is_active", type="text"),
       *                         @OA\Property(property="legal_name", type="text"),
       *                         @OA\Property(property="sic_code_uuid", type="text"),
       *                         @OA\Property(property="director_uuid", type="text"),
@@ -933,6 +940,7 @@ class CompanyController extends Controller
         }
 
         $validated = $request->validate([
+            'is_active' => '',
             'legal_name' => 'required',
             'sic_code_uuid' => '',
             'director_uuid' => 'required',
@@ -1113,6 +1121,7 @@ class CompanyController extends Controller
       *                     @OA\Schema(
       *                         type="object",
       *                         required={"legal_name", "director_uuid", "ein", "db_report_number"},
+      *                         @OA\Property(property="is_active", type="text"),
       *                         @OA\Property(property="legal_name", type="text"),
       *                         @OA\Property(property="sic_code_uuid", type="text"),
       *                         @OA\Property(property="director_uuid", type="text"),
@@ -1180,6 +1189,7 @@ class CompanyController extends Controller
         }
     
         $validated = $request->validate([
+            'is_active' => '',
             'legal_name' => 'required',
             'sic_code_uuid' => '',
             'director_uuid' => 'required',
@@ -1403,6 +1413,7 @@ class CompanyController extends Controller
       *                     @OA\Schema(
       *                         type="object",
       *                         required={},
+      *                         @OA\Property(property="is_active", type="text"),
       *                         @OA\Property(property="legal_name", type="text"),
       *                         @OA\Property(property="sic_code_uuid", type="text"),
       *                         @OA\Property(property="director_uuid", type="text"),
@@ -1468,6 +1479,7 @@ class CompanyController extends Controller
         }
     
         $validated = $request->validate([
+            'is_active' => '',
             'legal_name' => '',
             'sic_code_uuid' => '',
             'director_uuid' => '',

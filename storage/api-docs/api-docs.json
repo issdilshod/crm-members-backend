@@ -1749,6 +1749,9 @@
                                     "db_report_number"
                                 ],
                                 "properties": {
+                                    "is_active": {
+                                        "type": "text"
+                                    },
                                     "legal_name": {
                                         "type": "text"
                                     },
@@ -1902,6 +1905,9 @@
                                     "db_report_number"
                                 ],
                                 "properties": {
+                                    "is_active": {
+                                        "type": "text"
+                                    },
                                     "legal_name": {
                                         "type": "text"
                                     },
@@ -2127,6 +2133,9 @@
                                     "db_report_number"
                                 ],
                                 "properties": {
+                                    "is_active": {
+                                        "type": "text"
+                                    },
                                     "legal_name": {
                                         "type": "text"
                                     },
@@ -2288,6 +2297,9 @@
                                     "db_report_number"
                                 ],
                                 "properties": {
+                                    "is_active": {
+                                        "type": "text"
+                                    },
                                     "legal_name": {
                                         "type": "text"
                                     },
@@ -2455,6 +2467,9 @@
                                     "db_report_number"
                                 ],
                                 "properties": {
+                                    "is_active": {
+                                        "type": "text"
+                                    },
                                     "legal_name": {
                                         "type": "text"
                                     },
@@ -2674,6 +2689,9 @@
                             "schema": {
                                 "required": [],
                                 "properties": {
+                                    "is_active": {
+                                        "type": "text"
+                                    },
                                     "legal_name": {
                                         "type": "text"
                                     },
