@@ -9,7 +9,7 @@ class ChatUserService{
 
     public function chat_members($chat_uuid)
     {
-        $chatUsers = ChatUser::select('chat_users.user_uuid', 'users.first_name', 'users.last_name', 'users.last_seen')
+        $chatUsers = ChatUser::select('users.uuid', 'users.first_name', 'users.last_name', 'users.last_seen')
                                 ->join('users', 'users.uuid', '=', 'chat_users.user_uuid')
                                 ->where('chat_users.chat_uuid', $chat_uuid)
                                 ->where('chat_users.status', Config::get('common.status.actived'))

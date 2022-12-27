@@ -82,7 +82,7 @@ class ChatService{
             'status' => Config::get('common.status.actived')
         ]);
 
-        // push
+        // push activity
         $activity = $this->activityService->setLink($activity);
         $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
 
@@ -92,7 +92,21 @@ class ChatService{
 
     public function update(Chat $chat, $entity, $user_uuid)
     {
-        $chat = Chat::create($entity);
+        $chat->update($entity);
+
+        // add members
+        if (isset($entity['members'])){
+            foreach ($entity['members'] AS $key => $value):
+                $this->chatUserService->add_user_to_chat($chat->uuid, $value['uuid']);
+            endforeach;
+        }
+
+        // delete members
+        if (isset($entity['members_to_delete'])){
+            foreach ($entity['members_to_delete'] AS $key => $value):
+                $this->chatUserService->delete_user_from_chat($chat->uuid, $value['uuid']);
+            endforeach;
+        }
 
         $activity = Activity::create([
             'user_uuid' => $user_uuid,
@@ -105,7 +119,8 @@ class ChatService{
             'status' => Config::get('common.status.actived')
         ]);
 
-        // push
+        // push activity
+        $activity = $this->activityService->setLink($activity);
         $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
 
         $chat = $this->setChatMembers($chat);
