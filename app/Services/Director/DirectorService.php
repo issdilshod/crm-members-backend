@@ -245,8 +245,32 @@ class DirectorService {
 
     public function for_pending_duplicate($user_uuid = '')
     {
-        /*$directors = Director::where('status', '!=', Config::get('common.status.actived'))
-                                ->where()*/
+        $directors = Director::from('directors as d1')
+                        ->select('d1.*')
+
+                        ->join('directors as d2', 'd2.uuid', '!=', 'd1.uuid')
+
+                        ->where(function ($q){
+                            $q->whereColumn('d1.ssn_cpn', '=', 'd2.ssn_cpn')
+                                ->orWhereColumn('d1.phone_number', '=', 'd2.phone_number');
+                        })
+
+                        ->when(($user_uuid!=''), function ($q) use ($user_uuid){
+                            $q->where('d1.user_uuid', $user_uuid);
+                        })
+
+                        ->where('d1.status', '!=', Config::get('common.status.deleted'))
+                        ->where('d1.approved', Config::get('common.status.actived'))
+                        ->where('d2.status', '!=', Config::get('common.status.deleted'))
+                        ->where('d2.approved', Config::get('common.status.actived'))
+
+                        ->paginate(20);
+                          
+        foreach($directors AS $key => $value):
+            $directors[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
+        endforeach;
+
+        return DirectorPendingResource::collection($directors);
     }
 
     public function one(Director $director)

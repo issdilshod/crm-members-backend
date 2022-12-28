@@ -184,14 +184,24 @@ class PendingController extends Controller
 
         $user_uuid = '';
 
+        // director get 
         if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.view'))){
             $user_uuid = $request->user_uuid;
         }
         $directors = $this->directorService->for_pending_duplicate($user_uuid);
 
+        // meta data
+        $current_page = $directors->currentPage();
 
+        // max page
+        $max_page = 0;
+        if ($directors->lastPage()>$max_page){ // director max page
+            $max_page = $directors->lastPage();
+        }
 
-        return ['directors' => $directors, 'companies' => '', 'meta' => ''];
+        $meta = [ 'current_page' => $current_page, 'max_page' => $max_page ];
+
+        return ['directors' => $directors, 'meta' => $meta];
     }
 
     /**     @OA\POST(
