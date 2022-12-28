@@ -79,7 +79,8 @@ class CompanyService {
     {
         $companies = Company::orderBy('legal_name', 'ASC')
                                 ->orderBy('created_at', 'DESC')
-                                ->where('status', Config::get('common.status.actived'))
+                                ->where('status', '!=', Config::get('common.status.deleted'))
+                                ->where('approved', Config::get('common.status.actived'))
                                 ->paginate(20);
 
         foreach($companies AS $key => $value):

@@ -58,8 +58,9 @@ class VirtualOfficeService{
     public function all()
     {
         $virtualOffices = VirtualOffice::orderBy('updated_at')
-                                            ->where('status', Config::get('common.status.actived'))
-                                            ->paginate(20);
+                                        ->where('status', '!=', Config::get('common.status.deleted'))
+                                        ->where('approved', Config::get('common.status.actived'))
+                                        ->paginate(20);
 
         foreach($virtualOffices AS $key => $value):
             $virtualOffices[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);

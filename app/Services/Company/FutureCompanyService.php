@@ -27,8 +27,9 @@ class FutureCompanyService{
     public function all()
     {
         $futureCompanies = FutureCompany::orderBy('updated_at')
-                                            ->where('status', Config::get('common.status.actived'))
-                                            ->paginate(20);
+                                        ->where('status', '!=', Config::get('common.status.deleted'))
+                                        ->where('approved', Config::get('common.status.actived'))
+                                        ->paginate(20);
                     
         foreach($futureCompanies AS $key => $value):
             $futureCompanies[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);

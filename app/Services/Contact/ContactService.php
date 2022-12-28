@@ -29,7 +29,8 @@ class ContactService{
     public function all()
     {
         $contacts = Contact::orderBy('updated_at')
-                            ->where('status', Config::get('common.status.actived'))
+                            ->where('status', '!=', Config::get('common.status.deleted'))
+                            ->where('approved', Config::get('common.status.actived'))
                             ->paginate(20);
 
         foreach($contacts AS $key => $value):

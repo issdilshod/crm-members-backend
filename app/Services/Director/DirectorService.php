@@ -84,7 +84,8 @@ class DirectorService {
                                 ->orderBy('middle_name', 'ASC')
                                 ->orderBy('last_name', 'ASC')
                                 ->orderBy('updated_at', 'DESC')
-                                ->where('status', Config::get('common.status.actived'))
+                                ->where('status', '!=', Config::get('common.status.deleted'))
+                                ->where('approved', Config::get('common.status.actived'))
                                 ->paginate(20);
     
         foreach($directors AS $key => $value):

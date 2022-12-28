@@ -27,7 +27,8 @@ class FutureWebsiteService{
     public function all()
     {
         $futureWebsites = FutureWebsite::orderBy('updated_at')
-                                        ->where('status', Config::get('common.status.actived'))
+                                        ->where('status', '!=', Config::get('common.status.deleted'))
+                                        ->where('approved', Config::get('common.status.actived'))
                                         ->paginate(20);
                                         
         foreach($futureWebsites AS $key => $value):
