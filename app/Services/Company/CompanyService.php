@@ -51,7 +51,25 @@ class CompanyService {
                                 ->when(($user_uuid!=''), function ($q) use ($user_uuid){
                                     $q->where('user_uuid', $user_uuid);
                                 })
-                                ->count()
+                                ->count(),
+            'active' => Company::where(function ($q){
+                                    $q->where('status', '!=', Config::get('common.status.deleted'))
+                                        ->where('approved', Config::get('common.status.actived'))
+                                        ->where('is_active', 'YES');
+                                })
+                                ->when(($user_uuid!=''), function ($q) use ($user_uuid){
+                                    $q->where('user_uuid', $user_uuid);
+                                })
+                                ->count(),
+            'none_active' => Company::where(function ($q){
+                                    $q->where('status', '!=', Config::get('common.status.deleted'))
+                                        ->where('approved', Config::get('common.status.actived'))
+                                        ->where('is_active', 'NO');
+                                })
+                                ->when(($user_uuid!=''), function ($q) use ($user_uuid){
+                                    $q->where('user_uuid', $user_uuid);
+                                })
+                                ->count(),
         ];
 
         return $entity;
@@ -77,6 +95,8 @@ class CompanyService {
                             ->select('c1.*')
                             ->orderBy('c1.updated_at', 'DESC')
                             ->groupBy('c1.uuid')
+                            ->where('c1.status', '!=', Config::get('common.status.deleted'))
+                            // filter by user activity
                             ->when(($filter_by_user!=''), function ($gq) use ($filter_by_user){ // filter by user
                                 $gq->leftJoin('activities as a1', function($join) {
                                     $join->on('a1.entity_uuid', '=' , 'c1.uuid')
@@ -88,8 +108,9 @@ class CompanyService {
                                 })
                                 ->where('a1.user_uuid', $filter_by_user);
                             })
-                            ->when(($summary_filter==''), function ($gq) use ($filter) { // no summary filter
-                                return $gq->when(($filter!='' || $filter=='0') , function ($q) { // normal view
+                            // general filter
+                            ->when(($filter!=''), function ($gq) use ($filter) { // general filter
+                                return $gq->when(($filter=='0') , function ($q) { // normal view
                                     return $q->where('c1.status', '!=', Config::get('common.status.deleted'));
                                 })
                                 ->when($filter=='1', function ($q) { // unapproved
@@ -102,25 +123,37 @@ class CompanyService {
                                     return $q->where('c1.status', Config::get('common.status.rejected'));
                                 });
                             })
-                            ->when(($summary_filter=='0' || $summary_filter=='1' || $summary_filter=='2' || $summary_filter=='3' || $summary_filter=='4' || $summary_filter=='5'), function ($q) { // only director
-                                return $q->where('c1.status', 100); // never true
+                            // summary filter
+                            ->when(($summary_filter!=''), function ($gq) use ($summary_filter) { // summary filter
+                                return $gq->when((
+                                                $summary_filter!='6' &&
+                                                $summary_filter!='7' && 
+                                                $summary_filter!='8' &&
+                                                $summary_filter!='9' &&
+                                                $summary_filter!='10'), function ($q){ // not company filter
+                                                    return $q->where('c1.status', 100); // never true
+                                                })
+                                            ->when(($summary_filter=='6'), function($q){ /* all companies, no need to query */ })
+                                            ->when(($summary_filter=='7'), function($q){ // approved companies
+                                                return $q->where('c1.status', Config::get('common.status.actived'));
+                                            })
+                                            ->when(($summary_filter=='8'), function($q){ // pending companies
+                                                return $q->where(function ($qq) {
+                                                            $qq->where('c1.status', Config::get('common.status.pending'))
+                                                                ->orWhere('c1.status', Config::get('common.status.rejected'));
+                                                        });
+                                            })
+                                            ->when(($summary_filter=='9'), function($q){ // active companies
+                                                return $q->where('c1.is_active', 'YES');
+                                            })
+                                            ->when(($summary_filter=='10'), function($q){ // none active companies
+                                                return $q->where('c1.is_active', 'NO');
+                                            });
                             })
-                            ->when(($summary_filter=='6'), function($q){ // all companies
-                                return $q->where('c1.status', '!=', Config::get('common.status.deleted'));
-                            })
-                            ->when(($summary_filter=='7'), function($q){ // approved companies
-                                return $q->where('c1.status', Config::get('common.status.actived'));
-                            })
-                            ->when(($summary_filter=='8'), function($q){ // pending companies
-                                return $q->where(function ($qq) {
-                                            $qq->where('c1.status', Config::get('common.status.pending'))
-                                                ->orWhere('c1.status', Config::get('common.status.rejected'));
-                                        });
-                            }) 
+                            // user filter
                             ->when(($user_uuid!=''), function ($q) use ($user_uuid){
                                 return $q->where('c1.user_uuid', $user_uuid);
                             })
-                            ->where('c1.status', '!=', Config::get('common.status.deleted'))
                             ->paginate(5);
 
         foreach($companies AS $key => $value):

@@ -29,6 +29,32 @@ class VirtualOfficeService{
         $this->companyService = new CompanyService();
     }
 
+    public function summary($user_uuid = '')
+    {
+        $entity = [
+            'active' => VirtualOffice::where(function ($q){
+                                    $q->where('status', '!=', Config::get('common.status.deleted'))
+                                        ->where('approved', Config::get('common.status.actived'))
+                                        ->where('vo_active', 'YES');
+                                })
+                                ->when(($user_uuid!=''), function ($q) use ($user_uuid){
+                                    $q->where('user_uuid', $user_uuid);
+                                })
+                                ->count(),
+            'none_active' => VirtualOffice::where(function ($q){
+                                    $q->where('status', '!=', Config::get('common.status.deleted'))
+                                        ->where('approved', Config::get('common.status.actived'))
+                                        ->where('vo_active', 'NO');
+                                })
+                                ->when(($user_uuid!=''), function ($q) use ($user_uuid){
+                                    $q->where('user_uuid', $user_uuid);
+                                })
+                                ->count(),
+        ];
+
+        return $entity;
+    }
+
     public function all()
     {
         $virtualOffices = VirtualOffice::orderBy('updated_at')
@@ -48,6 +74,8 @@ class VirtualOfficeService{
                                         ->select('vo1.*')
                                         ->orderBy('vo1.updated_at', 'DESC')
                                         ->groupBy('vo1.uuid')
+                                        ->where('vo1.status', '!=', Config::get('common.status.deleted'))
+                                        // filter by user activity
                                         ->when(($filter_by_user!=''), function ($gq) use ($filter_by_user){ // filter by user
                                             $gq->leftJoin('activities as a1', function($join) {
                                                 $join->on('a1.entity_uuid', '=' , 'vo1.uuid')
@@ -59,9 +87,9 @@ class VirtualOfficeService{
                                             })
                                             ->where('a1.user_uuid', $filter_by_user);
                                         })
-                                        ->where('vo1.status', '!=', Config::get('common.status.deleted'))
-                                        ->when(($filter_summary==''), function ($gq) use ($filter) { // no summary filter
-                                            return $gq->when(($filter!='' || $filter=='0'), function ($q) { // normal view
+                                        // general filter
+                                        ->when(($filter!=''), function ($gq) use ($filter) { // general filter
+                                            return $gq->when(($filter=='0'), function ($q) { // normal view
                                                     return $q->where('vo1.status', '!=', Config::get('common.status.deleted'));
                                                 })
                                                 ->when($filter=='1', function ($q) { // unapproved
@@ -74,13 +102,24 @@ class VirtualOfficeService{
                                                     return $q->where('vo1.status', Config::get('common.status.rejected'));
                                                 });
                                         })
-                                        ->when(($filter_summary!=''), function($q){ // never true
-                                            return $q->where('vo1.status', 100); // never true
+                                        // summary filter
+                                        ->when(($filter_summary!=''), function($gq) use ($filter_summary){ // summary filter
+                                            return $gq->when((
+                                                            $filter_summary!='11' &&
+                                                            $filter_summary!='12'), function ($q){ // not director filter
+                                                                return $q->where('vo1.status', 100); // never true
+                                                            })
+                                                        ->when(($filter_summary=='11'), function ($q){ // active vo
+                                                            return $q->where('vo1.vo_active', 'YES');
+                                                        }) 
+                                                        ->when(($filter_summary=='12'), function ($q){ // none active vo
+                                                            return $q->where('vo1.vo_active', 'NO');
+                                                        });
                                         })
-                                        ->when(($user_uuid!=''), function ($q) use($user_uuid){
+                                        // user filter
+                                        ->when(($user_uuid!=''), function ($q) use($user_uuid){ // by user
                                             return $q->where('vo1.user_uuid', $user_uuid);
                                         })
-                                        ->where('vo1.status', '!=', Config::get('common.status.deleted'))
                                         ->paginate(5);
 
         foreach($virtualOffices AS $key => $value):

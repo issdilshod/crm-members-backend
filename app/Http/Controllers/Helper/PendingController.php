@@ -79,6 +79,7 @@ class PendingController extends Controller
             $user_uuid = $request->user_uuid;
         }
         $virtualOffices = $this->virtualOfficesService->for_pending($user_uuid, $filter, $summary_filter, $filter_by_user);
+        $summary['virtual_offices'] = $this->virtualOfficesService->summary($user_uuid);
 
         // get contacts
         $user_uuid = '';

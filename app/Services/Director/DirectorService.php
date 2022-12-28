@@ -100,6 +100,8 @@ class DirectorService {
                             ->select('d1.*')
                             ->orderBy('d1.updated_at', 'DESC')
                             ->groupBy('d1.uuid')
+                            ->where('d1.status', '!=', Config::get('common.status.deleted'))
+                            // filter by user activity
                             ->when(($filter_by_user!=''), function ($gq) use ($filter_by_user){ // filter by user
                                 $gq->leftJoin('activities as a1', function($join) {
                                     $join->on('a1.entity_uuid', '=' , 'd1.uuid')
@@ -111,8 +113,9 @@ class DirectorService {
                                 })
                                 ->where('a1.user_uuid', $filter_by_user);
                             })
-                            ->when(($filter_summary==''), function ($gq) use ($filter) { // no summary filter
-                                return $gq->when(($filter!='' || $filter=='0'), function ($q) { // normal view
+                            // general filter
+                            ->when(($filter!=''), function ($gq) use ($filter) { // general filter
+                                return $gq->when(($filter=='0'), function ($q) { // normal view
                                         return $q->where('d1.status', '!=', Config::get('common.status.deleted'));
                                     })
                                     ->when($filter=='1', function ($q) { // unapproved
@@ -125,54 +128,64 @@ class DirectorService {
                                         return $q->where('d1.status', Config::get('common.status.rejected'));
                                     });
                             })
-                            ->when(($filter_summary=='6' || $filter_summary=='7' || $filter_summary=='8'), function ($q){ // only company
-                                return $q->where('d1.status', 100); // never true
+                            // summary filter
+                            ->when(($filter_summary!=''), function ($gq) use ($filter_summary){ // summary filter
+                                return $gq->when((
+                                                $filter_summary!='0' &&
+                                                $filter_summary!='1' && 
+                                                $filter_summary!='2' &&
+                                                $filter_summary!='3' &&
+                                                $filter_summary!='4' &&
+                                                $filter_summary!='5'), function ($q){ // not director filter
+                                                    return $q->where('d1.status', 100); // never true
+                                                })
+                                            ->when(($filter_summary=='0'), function ($q){ // all directors
+                                                return $q->where('d1.status', '!=', Config::get('common.status.deleted'));
+                                            }) 
+                                            ->when(($filter_summary=='1'), function ($q){ // approved directors
+                                                return $q->where('d1.status', Config::get('common.status.actived'));
+                                            }) 
+                                            ->when(($filter_summary=='2'), function ($q){ // pending directors
+                                                return $q->where(function ($qq) {
+                                                            $qq->where('d1.status', Config::get('common.status.pending'))
+                                                                ->orWhere('d1.status', Config::get('common.status.rejected'));
+                                                        });
+                                            }) 
+                                            ->when(($filter_summary=='3'), function ($q){ // available directors
+                                                return $q->leftJoin('companies as c1', 'c1.director_uuid', '=', 'd1.uuid')
+                                                        ->where('d1.status', '!=', Config::get('common.status.deleted'))
+                                                        ->whereNull('c1.director_uuid')
+                                                        ->groupBy('d1.uuid');
+                                            })   
+                                            ->when(($filter_summary=='4'), function ($q){ // directors with ID
+                                                return $q->where('d1.status', '!=', Config::get('common.status.deleted'))
+                                                            ->join('files', 'files.entity_uuid', '=', 'd1.uuid')
+                                                            ->where(function ($qq){
+                                                                $qq->where('files.file_parent', 'dl_upload__back') // dl back
+                                                                    ->orWhere('files.file_parent', 'dl_upload__front'); // dl front
+                                                            })
+                                                            ->groupBy('d1.uuid');
+                                            }) 
+                                            ->when(($filter_summary=='5'), function ($q){ // directors without ID
+                                                return $q->leftJoin('files as f1', 'f1.entity_uuid', '=', 'd1.uuid')
+                                                            ->where('d1.status', '!=', Config::get('common.status.deleted'))
+                                                            ->whereNotExists(function($qq){
+                                                                $qq->from('files as f2')
+                                                                    ->select('f2.*')
+                                                                    ->whereColumn('f2.entity_uuid', 'd1.uuid')
+                                                                    ->where(function ($qqq){
+                                                                        $qqq->where('f2.file_parent', 'dl_upload__back')
+                                                                            ->orWhere('f2.file_parent', 'dl_upload__front');
+                                                                    });
+                                                            })
+                                                            ->groupBy('d1.uuid');
+                                            });
+                                            
                             })
-                            ->when(($filter_summary=='0'), function ($q){ // all directors
-                                return $q->where('d1.status', '!=', Config::get('common.status.deleted'));
-                            }) 
-                            ->when(($filter_summary=='1'), function ($q){ // approved directors
-                                return $q->where('d1.status', Config::get('common.status.actived'));
-                            }) 
-                            ->when(($filter_summary=='2'), function ($q){ // pending directors
-                                return $q->where(function ($qq) {
-                                            $qq->where('d1.status', Config::get('common.status.pending'))
-                                                ->orWhere('d1.status', Config::get('common.status.rejected'));
-                                        });
-                            }) 
-                            ->when(($filter_summary=='3'), function ($q){ // available directors
-                                return $q->leftJoin('companies as c1', 'c1.director_uuid', '=', 'd1.uuid')
-                                        ->where('d1.status', '!=', Config::get('common.status.deleted'))
-                                        ->whereNull('c1.director_uuid')
-                                        ->groupBy('d1.uuid');
-                            })   
-                            ->when(($filter_summary=='4'), function ($q){ // directors with ID
-                                return $q->where('d1.status', '!=', Config::get('common.status.deleted'))
-                                            ->join('files', 'files.entity_uuid', '=', 'd1.uuid')
-                                            ->where(function ($qq){
-                                                $qq->where('files.file_parent', 'dl_upload__back') // dl back
-                                                    ->orWhere('files.file_parent', 'dl_upload__front'); // dl front
-                                            })
-                                            ->groupBy('d1.uuid');
-                            }) 
+                            // filter by user
                             ->when(($user_uuid!=''), function ($q) use($user_uuid){
                                 return $q->where('d1.user_uuid', $user_uuid);
                             })
-                            ->when(($filter_summary=='5'), function ($q){ // directors without ID
-                                return $q->leftJoin('files as f1', 'f1.entity_uuid', '=', 'd1.uuid')
-                                            ->where('d1.status', '!=', Config::get('common.status.deleted'))
-                                            ->whereNotExists(function($qq){
-                                                $qq->from('files as f2')
-                                                    ->select('f2.*')
-                                                    ->whereColumn('f2.entity_uuid', 'd1.uuid')
-                                                    ->where(function ($qqq){
-                                                        $qqq->where('f2.file_parent', 'dl_upload__back')
-                                                            ->orWhere('f2.file_parent', 'dl_upload__front');
-                                                    });
-                                            })
-                                            ->groupBy('d1.uuid');
-                            })
-                            ->where('d1.status', '!=', Config::get('common.status.deleted'))
                             ->paginate(5);
 
         foreach($directors AS $key => $value):
