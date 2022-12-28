@@ -435,7 +435,7 @@ class VirtualOfficeService{
         if (isset($entity['vo_signer_company_uuid']) && $entity['vo_signer_company_uuid']!=''){
             $company = $this->companyService->by_uuid($entity['vo_signer_company_uuid']);
             if ($company!=null){
-                $name = ' for company ' . $company['legal_name'];
+                $name = 'for company ' . $company['legal_name'];
             }
         }
         return $name;
