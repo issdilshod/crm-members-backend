@@ -362,12 +362,49 @@ class VirtualOfficeService{
         return new VirtualOfficePendingResource($virtualOffice);
     }
 
-    public function search($value)
+    public function search($user_uuid, $search)
     {
-        $virtualOffices = VirtualOffice::orderBy('updated_at')
-                                            ->where('status', Config::get('common.status.actived'))
-                                            ->where('vo_provider_name', $value)
-                                            ->paginate(20);
+        $virtualOffices = VirtualOffice::select('virtual_offices.*')
+                                ->orderBy('virtual_offices.updated_at', 'DESC')
+                                ->groupBy('virtual_offices.uuid')
+                                ->leftJoin('addresses', 'addresses.entity_uuid', '=', 'virtual_offices.uuid')
+                                ->leftJoin('directors', 'directors.uuid', '=', 'virtual_offices.vo_signer_uuid')
+                                ->leftJoin('companies', 'companies.uuid', '=', 'virtual_offices.vo_signer_company_uuid')
+                                ->where('virtual_offices.status', '!=', Config::get('common.status.deleted'))
+                                ->where(function ($q) use($search) {
+                                    $q
+                                        // director names
+                                        ->whereRaw("concat(directors.first_name, ' ', directors.last_name) like '%".$search."%'")
+                                        ->orWhereRaw("concat(directors.first_name, ' ', directors.middle_name, ' ', directors.last_name) like '%".$search."%'")
+                                        ->orWhereRaw("concat(directors.last_name, ' ', directors.middle_name, ' ', directors.first_name) like '%".$search."%'")
+                                        ->orWhereRaw("concat(directors.last_name, ' ', directors.first_name) like '%".$search."%'")
+
+                                        // company names
+                                        ->orWhere('companies.legal_name', 'like', $search.'%')
+
+                                        // basic info
+                                        ->orWhere('virtual_offices.vo_website', 'like', $search.'%')
+                                        ->orWhere('virtual_offices.vo_contact_person_name', 'like', $search.'%')
+                                        ->orWhere('virtual_offices.vo_contact_person_phone_number', 'like', $search.'%')
+                                        ->orWhere('virtual_offices.vo_contact_person_email', 'like', $search.'%')
+                                        ->orWhere('virtual_offices.online_email', 'like', $search.'%')
+                                        ->orWhere('virtual_offices.online_account_username', 'like', $search.'%')
+                                        ->orWhere('virtual_offices.card_holder_name', 'like', $search.'%')
+                                        ->orWhere('virtual_offices.vo_provider_name', 'like', $search.'%')
+                                        ->orWhere('virtual_offices.vo_provider_phone_number', 'like', $search.'%')
+
+                                        // addresses
+                                        ->orWhereRaw("concat(addresses.street_address, ' ', addresses.address_line_2, ' ', addresses.city, ' ', addresses.state, ' ', addresses.postal, ' ', addresses.country) like '%".$search."%'")
+                                        ->orWhereRaw("concat(addresses.street_address, ' ', addresses.city, ' ', addresses.state, ' ', addresses.postal, ' ', addresses.country) like '%".$search."%'")
+
+                                        ->orWhereRaw("concat(addresses.street_address, ', ', addresses.address_line_2, ', ', addresses.city, ', ', addresses.state, ', ', addresses.postal, ', ', addresses.country) like '%".$search."%'")
+                                        ->orWhereRaw("concat(addresses.street_address, ', ', addresses.city, ', ', addresses.state, ', ', addresses.postal, ', ', addresses.country) like '%".$search."%'");
+                                })
+                                ->when(($user_uuid!=''), function ($q) use ($user_uuid){
+                                    return $q->where('virtual_offices.user_uuid', $user_uuid);
+                                })
+                                ->limit(5)
+                                ->get();
 
         foreach($virtualOffices AS $key => $value):
             $virtualOffices[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);

@@ -123,7 +123,7 @@ class PendingController extends Controller
     }
 
     /**     @OA\GET(
-      *         path="/api/pending/search?q=",
+      *         path="/api/pending/search?q=&include=",
       *         operationId="list_pending_search",
       *         tags={"Helper"},
       *         summary="List of pending search",
@@ -137,26 +137,37 @@ class PendingController extends Controller
     public function search(Request $request)
     {
         // get query
-        $search = '';
+        $search = ''; $include = '';
         if (isset($request->q)){ $search = $request->q; }
+        if (isset($request->include)){ $include = $request->include; }
         
+        // get directors
         $user_uuid = '';
         if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.view'))){
             $user_uuid = $request->user_uuid;
         }
         $directors = $this->directorService->for_pending_search($user_uuid, $search);
-        
         // get related
         $director_related = $this->companyService->for_pending_related($directors);
         
+        // get companies
         $user_uuid = '';
         if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.view'))){
             $user_uuid = $request->user_uuid;
         }
         $companies = $this->companyService->for_pending_search($user_uuid, $search);
-
         // get related
         $company_related = $this->directorService->for_pending_related($companies);
+
+        // get virtual offices
+        $virtualOffices = [];
+        if ($include=='virtual-office'){
+            $user_uuid = '';
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.view'))){
+                $user_uuid = $request->user_uuid;
+            }
+            $virtualOffices = $this->virtualOfficesService->search($user_uuid, $search);
+        }
 
         // merge related
         $companies = $companies->merge($director_related);
@@ -165,7 +176,11 @@ class PendingController extends Controller
         $companies = $companies->unique('uuid')->values()->all();
         $directors = $directors->unique('uuid')->values()->all();
 
-        return ['directors' => $directors, 'companies' => $companies];
+        return [
+            'directors' => $directors, 
+            'companies' => $companies,
+            'virtual_offices' => $virtualOffices,
+        ];
     }
 
     /**     @OA\GET(
