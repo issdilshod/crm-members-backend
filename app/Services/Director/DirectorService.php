@@ -102,7 +102,6 @@ class DirectorService {
                             ->orderBy('d1.updated_at', 'DESC')
                             ->groupBy('d1.uuid')
                             ->where('d1.status', '!=', Config::get('common.status.deleted'))
-                            ->where('d1.approved', Config::get('common.status.actived'))
                             // filter by user activity
                             ->when(($filter_by_user!=''), function ($gq) use ($filter_by_user){ // filter by user
                                 $gq->leftJoin('activities as a1', function($join) {

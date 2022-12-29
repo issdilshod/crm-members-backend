@@ -76,7 +76,6 @@ class VirtualOfficeService{
                                         ->orderBy('vo1.updated_at', 'DESC')
                                         ->groupBy('vo1.uuid')
                                         ->where('vo1.status', '!=', Config::get('common.status.deleted'))
-                                        ->where('vo1.approved', Config::get('common.status.actived'))
                                         // filter by user activity
                                         ->when(($filter_by_user!=''), function ($gq) use ($filter_by_user){ // filter by user
                                             $gq->leftJoin('activities as a1', function($join) {
@@ -371,7 +370,6 @@ class VirtualOfficeService{
                                 ->leftJoin('directors', 'directors.uuid', '=', 'virtual_offices.vo_signer_uuid')
                                 ->leftJoin('companies', 'companies.uuid', '=', 'virtual_offices.vo_signer_company_uuid')
                                 ->where('virtual_offices.status', '!=', Config::get('common.status.deleted'))
-                                ->where('virtual_offices.approved', Config::get('common.status.actived'))
                                 ->where(function ($q) use($search) {
                                     $q
                                         // director names
