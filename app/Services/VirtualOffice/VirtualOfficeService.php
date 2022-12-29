@@ -371,7 +371,7 @@ class VirtualOfficeService{
                                 ->leftJoin('directors', 'directors.uuid', '=', 'virtual_offices.vo_signer_uuid')
                                 ->leftJoin('companies', 'companies.uuid', '=', 'virtual_offices.vo_signer_company_uuid')
                                 ->where('virtual_offices.status', '!=', Config::get('common.status.deleted'))
-                                ->where('virtual_offices.aprroved', Config::get('common.status.actived'))
+                                ->where('virtual_offices.approved', Config::get('common.status.actived'))
                                 ->where(function ($q) use($search) {
                                     $q
                                         // director names
