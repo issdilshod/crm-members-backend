@@ -16,7 +16,7 @@ class Contact extends Model
 {
     use HasFactory, TraitUuid;
 
-    protected $fillable = ['user_uuid', 'first_name', 'last_name', 'email', 'phone_number', 'company_name', 'company_phone_number', 'company_email', 'company_website', 'online_account', 'account_username', 'account_password', 'security_questions', 'notes', 'status', 'approved'];
+    protected $fillable = ['user_uuid', 'first_name', 'last_name', 'email', 'phone_number', 'company_name', 'company_phone_number', 'company_email', 'company_website', 'online_account', 'account_username', 'account_password', 'fax', 'security_questions', 'notes', 'status', 'approved'];
 
     protected $attributes = ['status' => 1, 'approved' => 0];
 

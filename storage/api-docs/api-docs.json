@@ -1797,9 +1797,6 @@
                                     "business_mobile_number": {
                                         "type": "text"
                                     },
-                                    "business_mobile_number_type": {
-                                        "type": "text"
-                                    },
                                     "business_mobile_provider": {
                                         "type": "text"
                                     },
@@ -1825,6 +1822,12 @@
                                         "type": "text"
                                     },
                                     "db_report_number": {
+                                        "type": "text"
+                                    },
+                                    "business_mobiles[]": {
+                                        "type": "text"
+                                    },
+                                    "business_mobile_to_delete": {
                                         "type": "text"
                                     },
                                     "addresses[]": {
@@ -1953,9 +1956,6 @@
                                     "business_mobile_number": {
                                         "type": "text"
                                     },
-                                    "business_mobile_number_type": {
-                                        "type": "text"
-                                    },
                                     "business_mobile_provider": {
                                         "type": "text"
                                     },
@@ -1975,6 +1975,12 @@
                                         "type": "text"
                                     },
                                     "card_holder_name": {
+                                        "type": "text"
+                                    },
+                                    "business_mobiles[]": {
+                                        "type": "text"
+                                    },
+                                    "business_mobile_to_delete": {
                                         "type": "text"
                                     },
                                     "website": {
@@ -2181,9 +2187,6 @@
                                     "business_mobile_number": {
                                         "type": "text"
                                     },
-                                    "business_mobile_number_type": {
-                                        "type": "text"
-                                    },
                                     "business_mobile_provider": {
                                         "type": "text"
                                     },
@@ -2209,6 +2212,12 @@
                                         "type": "text"
                                     },
                                     "db_report_number": {
+                                        "type": "text"
+                                    },
+                                    "business_mobiles[]": {
+                                        "type": "text"
+                                    },
+                                    "business_mobile_to_delete": {
                                         "type": "text"
                                     },
                                     "addresses[]": {
@@ -2345,9 +2354,6 @@
                                     "business_mobile_number": {
                                         "type": "text"
                                     },
-                                    "business_mobile_number_type": {
-                                        "type": "text"
-                                    },
                                     "business_mobile_provider": {
                                         "type": "text"
                                     },
@@ -2373,6 +2379,12 @@
                                         "type": "text"
                                     },
                                     "db_report_number": {
+                                        "type": "text"
+                                    },
+                                    "business_mobiles[]": {
+                                        "type": "text"
+                                    },
+                                    "business_mobile_to_delete": {
                                         "type": "text"
                                     },
                                     "addresses[]": {
@@ -2515,9 +2527,6 @@
                                     "business_mobile_number": {
                                         "type": "text"
                                     },
-                                    "business_mobile_number_type": {
-                                        "type": "text"
-                                    },
                                     "business_mobile_provider": {
                                         "type": "text"
                                     },
@@ -2543,6 +2552,12 @@
                                         "type": "text"
                                     },
                                     "db_report_number": {
+                                        "type": "text"
+                                    },
+                                    "business_mobiles[]": {
+                                        "type": "text"
+                                    },
+                                    "business_mobile_to_delete": {
                                         "type": "text"
                                     },
                                     "addresses[]": {
@@ -2737,9 +2752,6 @@
                                     "business_mobile_number": {
                                         "type": "text"
                                     },
-                                    "business_mobile_number_type": {
-                                        "type": "text"
-                                    },
                                     "business_mobile_provider": {
                                         "type": "text"
                                     },
@@ -2765,6 +2777,12 @@
                                         "type": "text"
                                     },
                                     "db_report_number": {
+                                        "type": "text"
+                                    },
+                                    "business_mobiles[]": {
+                                        "type": "text"
+                                    },
+                                    "business_mobile_to_delete": {
                                         "type": "text"
                                     },
                                     "addresses[]": {
@@ -3670,6 +3688,9 @@
                                     "account_password": {
                                         "type": "text"
                                     },
+                                    "fax": {
+                                        "type": "text"
+                                    },
                                     "security_questions": {
                                         "type": "text"
                                     },
@@ -3813,6 +3834,9 @@
                                         "type": "text"
                                     },
                                     "account_password": {
+                                        "type": "text"
+                                    },
+                                    "fax": {
                                         "type": "text"
                                     },
                                     "security_questions": {
@@ -3987,6 +4011,9 @@
                                     "account_password": {
                                         "type": "text"
                                     },
+                                    "fax": {
+                                        "type": "text"
+                                    },
                                     "security_questions": {
                                         "type": "text"
                                     },
@@ -4095,6 +4122,9 @@
                                     "account_password": {
                                         "type": "text"
                                     },
+                                    "fax": {
+                                        "type": "text"
+                                    },
                                     "security_questions": {
                                         "type": "text"
                                     },
@@ -4201,6 +4231,9 @@
                                         "type": "text"
                                     },
                                     "account_password": {
+                                        "type": "text"
+                                    },
+                                    "fax": {
                                         "type": "text"
                                     },
                                     "security_questions": {
@@ -5066,6 +5099,63 @@
                     },
                     "401": {
                         "description": "Not Authenticated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/pending_delete/{uuid}": {
+            "put": {
+                "tags": [
+                    "Director"
+                ],
+                "summary": "Delete pending",
+                "description": "Delete pending",
+                "operationId": "delete_pending",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "director uuid",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [],
+                                "properties": {
+                                    "description": {
+                                        "type": "text"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Not Authenticated"
+                    },
+                    "403": {
+                        "description": "Not Autorized"
                     },
                     "404": {
                         "description": "Resource Not Found"
@@ -6121,7 +6211,7 @@
                 }
             }
         },
-        "/api/pending/search?q=": {
+        "/api/pending/search?q=&include=": {
             "get": {
                 "tags": [
                     "Helper"

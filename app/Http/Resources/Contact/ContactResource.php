@@ -31,6 +31,7 @@ class ContactResource extends JsonResource
             'online_account' => $this->online_account, 
             'account_username' => $this->account_username, 
             'account_password' => $this->account_password, 
+            'fax' => $this->fax,
             'security_questions' => $this->security_questions, 
             'account_securities' => AccountSecurityResource::collection($this->account_securities), 
             'notes' => $this->notes, 
