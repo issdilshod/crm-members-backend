@@ -62,6 +62,12 @@ class Company extends Model
         return $this->hasMany(RegisterAgent::class, 'entity_uuid', 'uuid');
     }
 
+    public function business_mobiles(): HasMany
+    {
+        return $this->hasMany(CompanyBusinessMobile::class, 'entity_uuid', 'uuid')
+                        ->where('status', '!=', Config::get('common.status.deleted'));
+    }
+
     public function reject_reason(): HasOne
     {
         return $this->hasOne(RejectReason::class, 'entity_uuid', 'uuid')

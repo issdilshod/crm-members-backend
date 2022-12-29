@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Company;
 use App\Http\Controllers\Controller;
 use App\Models\Company\Company;
 use App\Policies\PermissionPolicy;
+use App\Services\Company\CompanyBusinessMobileService;
 use App\Services\Company\CompanyIncorporationService;
 use App\Services\Company\CompanyService;
 use App\Services\Helper\AddressService;
@@ -26,6 +27,7 @@ class CompanyController extends Controller
     private $fileService;
     private $registerAgentService;
     private $companyIncorporationService;
+    private $companyBusinessMobile;
     private $rejectReasonService;
 
     public function __construct()
@@ -37,6 +39,7 @@ class CompanyController extends Controller
         $this->fileService = new FileService();
         $this->registerAgentService = new RegisterAgentService();
         $this->companyIncorporationService = new CompanyIncorporationService();
+        $this->companyBusinessMobile = new CompanyBusinessMobileService();
         $this->rejectReasonService = new RejectReasonService();
     }
 
@@ -96,17 +99,18 @@ class CompanyController extends Controller
       *                         @OA\Property(property="voip_provider", type="text"),
       *                         @OA\Property(property="voip_login", type="text"),
       *                         @OA\Property(property="voip_password", type="text"),
-      *                         @OA\Property(property="business_mobile_number", type="text"),
-      *                         @OA\Property(property="business_mobile_number_type", type="text"),
       *
+      *                         @OA\Property(property="business_mobile_number", type="text"),
       *                         @OA\Property(property="business_mobile_provider", type="text"),
       *                         @OA\Property(property="business_mobile_website", type="text"),
       *                         @OA\Property(property="business_mobile_login", type="text"),
       *                         @OA\Property(property="business_mobile_password", type="text"),
-      *
       *                         @OA\Property(property="card_on_file", type="text"),
       *                         @OA\Property(property="card_last_four_digit", type="text"),
       *                         @OA\Property(property="card_holder_name", type="text"),
+      *
+      *                         @OA\Property(property="business_mobiles[]", type="text"),
+      *                         @OA\Property(property="business_mobile_to_delete", type="text"),
       *
       *                         @OA\Property(property="website", type="text"),
       *                         @OA\Property(property="db_report_number", type="text"),
@@ -163,20 +167,21 @@ class CompanyController extends Controller
             'voip_provider' => '',
             'voip_login' => '',
             'voip_password' => '',
-            'business_mobile_number' => '',
-            'business_mobile_number_type' => '',
 
+            'business_mobile_number' => '',
             'business_mobile_provider' => '',
             'business_mobile_website' => '',
             'business_mobile_login' => '',
             'business_mobile_password' => '',
-
             'card_on_file' => '',
             'card_last_four_digit' => '',
             'card_holder_name' => '',
 
             'website' => '',
             'db_report_number' => 'required',
+
+            // business mobiles
+            'business_mobiles' => 'array',
 
             // addresses
             'addresses' => 'array',
@@ -279,6 +284,14 @@ class CompanyController extends Controller
             endforeach;
         }
 
+        // business mobiles
+        if (isset($validated['business_mobiles'])){
+            foreach ($validated['business_mobiles'] AS $key => $value):
+                $value['entity_uuid'] = $company->uuid;
+                $this->companyBusinessMobile->save($value);
+            endforeach;
+        }
+
         // files to delete (first)
         if (isset($validated['files_to_delete'])){
             foreach ($validated['files_to_delete'] AS $key => $value):
@@ -371,20 +384,21 @@ class CompanyController extends Controller
       *                         @OA\Property(property="voip_provider", type="text"),
       *                         @OA\Property(property="voip_login", type="text"),
       *                         @OA\Property(property="voip_password", type="text"),
+      *
       *                         @OA\Property(property="business_mobile_number", type="text"),
-      *                         @OA\Property(property="business_mobile_number_type", type="text"),
-      *            
       *                         @OA\Property(property="business_mobile_provider", type="text"),
       *                         @OA\Property(property="business_mobile_website", type="text"),
       *                         @OA\Property(property="business_mobile_login", type="text"),
       *                         @OA\Property(property="business_mobile_password", type="text"),
-      *
       *                         @OA\Property(property="card_on_file", type="text"),
       *                         @OA\Property(property="card_last_four_digit", type="text"),
       *                         @OA\Property(property="card_holder_name", type="text"),
       *
       *                         @OA\Property(property="website", type="text"),
       *                         @OA\Property(property="db_report_number", type="text"),
+      *
+      *                         @OA\Property(property="business_mobiles[]", type="text"),
+      *                         @OA\Property(property="business_mobile_to_delete", type="text"),
       *
       *                         @OA\Property(property="addresses[]", type="text"),
       *                         @OA\Property(property="address_to_delete", type="text"),
@@ -440,20 +454,22 @@ class CompanyController extends Controller
             'voip_provider' => '',
             'voip_login' => '',
             'voip_password' => '',
+
             'business_mobile_number' => '',
-            'business_mobile_number_type' => '',
-            
             'business_mobile_provider' => '',
             'business_mobile_website' => '',
             'business_mobile_login' => '',
             'business_mobile_password' => '',
-
             'card_on_file' => '',
             'card_last_four_digit' => '',
             'card_holder_name' => '',
 
             'website' => '',
             'db_report_number' => 'required',
+
+            // business mobiles
+            'business_mobiles' => 'array',
+            'business_mobile_to_delete' => '',
 
             // addresses
             'addresses' => 'array',
@@ -543,6 +559,10 @@ class CompanyController extends Controller
             $this->addressService->delete($validated['address_to_delete']);
         }
 
+        // bank account
+        $validated['bank_account']['entity_uuid'] = $company->uuid;
+        $this->bankAccountService->save($validated['bank_account']);
+
         // register agent
         if (isset($validated['register_agents'])){
             foreach ($validated['register_agents'] AS $key => $value):
@@ -559,9 +579,13 @@ class CompanyController extends Controller
             endforeach;
         }
 
-        // bank account
-        $validated['bank_account']['entity_uuid'] = $company->uuid;
-        $this->bankAccountService->save($validated['bank_account']);
+        // business mobiles
+        if (isset($validated['business_mobiles'])){
+            foreach ($validated['business_mobiles'] AS $key => $value):
+                $value['entity_uuid'] = $company->uuid;
+                $this->companyBusinessMobile->save($value);
+            endforeach;
+        }
 
         // files to delete (first)
         if (isset($validated['files_to_delete'])){
@@ -644,20 +668,21 @@ class CompanyController extends Controller
       *                         @OA\Property(property="voip_provider", type="text"),
       *                         @OA\Property(property="voip_login", type="text"),
       *                         @OA\Property(property="voip_password", type="text"),
-      *                         @OA\Property(property="business_mobile_number", type="text"),
-      *                         @OA\Property(property="business_mobile_number_type", type="text"),
       *
+      *                         @OA\Property(property="business_mobile_number", type="text"),
       *                         @OA\Property(property="business_mobile_provider", type="text"),
       *                         @OA\Property(property="business_mobile_website", type="text"),
       *                         @OA\Property(property="business_mobile_login", type="text"),
       *                         @OA\Property(property="business_mobile_password", type="text"),
-      *
       *                         @OA\Property(property="card_on_file", type="text"),
       *                         @OA\Property(property="card_last_four_digit", type="text"),
       *                         @OA\Property(property="card_holder_name", type="text"),
       *
       *                         @OA\Property(property="website", type="text"),
       *                         @OA\Property(property="db_report_number", type="text"),
+      *
+      *                         @OA\Property(property="business_mobiles[]", type="text"),
+      *                         @OA\Property(property="business_mobile_to_delete", type="text"),
       *
       *                         @OA\Property(property="addresses[]", type="text"),
       *
@@ -711,20 +736,21 @@ class CompanyController extends Controller
             'voip_provider' => '',
             'voip_login' => '',
             'voip_password' => '',
+
             'business_mobile_number' => '',
-            'business_mobile_number_type' => '',
-            
             'business_mobile_provider' => '',
             'business_mobile_website' => '',
             'business_mobile_login' => '',
             'business_mobile_password' => '',
-
             'card_on_file' => '',
             'card_last_four_digit' => '',
             'card_holder_name' => '',
 
             'website' => '',
             'db_report_number' => 'required',
+
+            // business mobiles
+            'business_mobiles' => 'array',
 
             // addresses
             'addresses' => 'array',
@@ -880,20 +906,21 @@ class CompanyController extends Controller
       *                         @OA\Property(property="voip_provider", type="text"),
       *                         @OA\Property(property="voip_login", type="text"),
       *                         @OA\Property(property="voip_password", type="text"),
-      *                         @OA\Property(property="business_mobile_number", type="text"),
-      *                         @OA\Property(property="business_mobile_number_type", type="text"),
       *
+      *                         @OA\Property(property="business_mobile_number", type="text"),
       *                         @OA\Property(property="business_mobile_provider", type="text"),
       *                         @OA\Property(property="business_mobile_website", type="text"),
       *                         @OA\Property(property="business_mobile_login", type="text"),
       *                         @OA\Property(property="business_mobile_password", type="text"),
-      *
       *                         @OA\Property(property="card_on_file", type="text"),
       *                         @OA\Property(property="card_last_four_digit", type="text"),
       *                         @OA\Property(property="card_holder_name", type="text"),
       *
       *                         @OA\Property(property="website", type="text"),
       *                         @OA\Property(property="db_report_number", type="text"),
+      *
+      *                         @OA\Property(property="business_mobiles[]", type="text"),
+      *                         @OA\Property(property="business_mobile_to_delete", type="text"),
       *
       *                         @OA\Property(property="addresses[]", type="text"),
       *                         @OA\Property(property="address_to_delete", type="text"),
@@ -957,20 +984,22 @@ class CompanyController extends Controller
             'voip_provider' => '',
             'voip_login' => '',
             'voip_password' => '',
+
             'business_mobile_number' => '',
-            'business_mobile_number_type' => '',
-            
             'business_mobile_provider' => '',
             'business_mobile_website' => '',
             'business_mobile_login' => '',
             'business_mobile_password' => '',
-
             'card_on_file' => '',
             'card_last_four_digit' => '',
             'card_holder_name' => '',
 
             'website' => '',
             'db_report_number' => 'required',
+
+            // business mobiles
+            'business_mobiles' => 'array',
+            'business_mobile_to_delete' => '',
 
             // addresses
             'addresses' => 'array',
@@ -1137,20 +1166,21 @@ class CompanyController extends Controller
       *                         @OA\Property(property="voip_provider", type="text"),
       *                         @OA\Property(property="voip_login", type="text"),
       *                         @OA\Property(property="voip_password", type="text"),
-      *                         @OA\Property(property="business_mobile_number", type="text"),
-      *                         @OA\Property(property="business_mobile_number_type", type="text"),
       *
+      *                         @OA\Property(property="business_mobile_number", type="text"),
       *                         @OA\Property(property="business_mobile_provider", type="text"),
       *                         @OA\Property(property="business_mobile_website", type="text"),
       *                         @OA\Property(property="business_mobile_login", type="text"),
       *                         @OA\Property(property="business_mobile_password", type="text"),
-      *
       *                         @OA\Property(property="card_on_file", type="text"),
       *                         @OA\Property(property="card_last_four_digit", type="text"),
       *                         @OA\Property(property="card_holder_name", type="text"),
       *
       *                         @OA\Property(property="website", type="text"),
       *                         @OA\Property(property="db_report_number", type="text"),
+      *
+      *                         @OA\Property(property="business_mobiles[]", type="text"),
+      *                         @OA\Property(property="business_mobile_to_delete", type="text"),
       *
       *                         @OA\Property(property="addresses[]", type="text"),
       *                         @OA\Property(property="address_to_delete", type="text"),
@@ -1206,20 +1236,22 @@ class CompanyController extends Controller
             'voip_provider' => '',
             'voip_login' => '',
             'voip_password' => '',
+
             'business_mobile_number' => '',
-            'business_mobile_number_type' => '',
-            
             'business_mobile_provider' => '',
             'business_mobile_website' => '',
             'business_mobile_login' => '',
             'business_mobile_password' => '',
-
             'card_on_file' => '',
             'card_last_four_digit' => '',
             'card_holder_name' => '',
 
             'website' => '',
             'db_report_number' => 'required',
+
+            // business mobiles
+            'business_mobiles' => 'array',
+            'business_mobile_to_delete' => '',
 
             // addresses
             'addresses' => 'array',
@@ -1429,20 +1461,21 @@ class CompanyController extends Controller
       *                         @OA\Property(property="voip_provider", type="text"),
       *                         @OA\Property(property="voip_login", type="text"),
       *                         @OA\Property(property="voip_password", type="text"),
-      *                         @OA\Property(property="business_mobile_number", type="text"),
-      *                         @OA\Property(property="business_mobile_number_type", type="text"),
       *
+      *                         @OA\Property(property="business_mobile_number", type="text"),
       *                         @OA\Property(property="business_mobile_provider", type="text"),
       *                         @OA\Property(property="business_mobile_website", type="text"),
       *                         @OA\Property(property="business_mobile_login", type="text"),
       *                         @OA\Property(property="business_mobile_password", type="text"),
-      *
       *                         @OA\Property(property="card_on_file", type="text"),
       *                         @OA\Property(property="card_last_four_digit", type="text"),
       *                         @OA\Property(property="card_holder_name", type="text"),
       *
       *                         @OA\Property(property="website", type="text"),
       *                         @OA\Property(property="db_report_number", type="text"),
+      *
+      *                         @OA\Property(property="business_mobiles[]", type="text"),
+      *                         @OA\Property(property="business_mobile_to_delete", type="text"),
       *
       *                         @OA\Property(property="addresses[]", type="text"),
       *                         @OA\Property(property="address_to_delete", type="text"),
@@ -1496,20 +1529,22 @@ class CompanyController extends Controller
             'voip_provider' => '',
             'voip_login' => '',
             'voip_password' => '',
+
             'business_mobile_number' => '',
-            'business_mobile_number_type' => '',
-            
             'business_mobile_provider' => '',
             'business_mobile_website' => '',
             'business_mobile_login' => '',
             'business_mobile_password' => '',
-
             'card_on_file' => '',
             'card_last_four_digit' => '',
             'card_holder_name' => '',
 
             'website' => '',
             'db_report_number' => '',
+
+            // business mobiles
+            'business_mobiles' => 'array',
+            'business_mobile_to_delete' => '',
 
             // addresses
             'addresses' => 'array',

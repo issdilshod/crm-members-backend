@@ -40,14 +40,15 @@ class CompanyResource extends JsonResource
             'voip_provider' => $this->voip_provider,
             'voip_login' => $this->voip_login,
             'voip_password' => $this->voip_password,
-            'business_mobile_number' => $this->business_mobile_number,
-            'business_mobile_number_type' => $this->business_mobile_number_type,
 
+            // business mobile
+            'business_mobile' => CompanyBusinessMobileResource::collection($this->business_mobiles),
+
+            'business_mobile_number' => $this->business_mobile_number,
             'business_mobile_provider' => $this->business_mobile_provider,
             'business_mobile_website' => $this->business_mobile_website,
             'business_mobile_login' => $this->business_mobile_login,
             'business_mobile_password' => $this->business_mobile_password,
-
             'card_on_file' => $this->card_on_file,
             'card_last_four_digit' => $this->card_last_four_digit,
             'card_holder_name' => $this->card_holder_name,
