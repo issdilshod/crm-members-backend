@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Helper;
 
 use App\Http\Controllers\Controller;
 use App\Models\Company\Company;
+use App\Models\Contact\Contact;
 use App\Models\Director\Director;
 use App\Models\Helper\Address;
 use App\Models\Helper\BankAccount;
@@ -261,6 +262,7 @@ class PendingController extends Controller
             $director = Director::where('uuid', $value)->where('status', '!=', Config::get('common.status.deleted'))->first();
             $company = Company::where('uuid', $value)->where('status', '!=', Config::get('common.status.deleted'))->first();
             $virtualOffice = VirtualOffice::where('uuid', $value)->where('status', '!=', Config::get('common.status.deleted'))->first();
+            $contact = Contact::where('uuid', $value)->where('status', '!=', Config::get('common.status.deleted'))->first();
 
             if ($director!=null){ // accept director
                 $entity = $director->toArray();
@@ -313,6 +315,13 @@ class PendingController extends Controller
                 $value = $virtualOffice;
             }
 
+            if ($contact!=null){ // accept contact
+                $entity = $contact->toArray();
+                $contact = $this->contactService->accept($contact, $entity, $request->user_uuid);
+
+                $value = $contact;
+            }
+
             $pendings[] = $value;
         endforeach;
         
@@ -360,17 +369,22 @@ class PendingController extends Controller
             $director = Director::where('uuid', $value)->first();
             $company = Company::where('uuid', $value)->first();
             $virtualOffice = VirtualOffice::where('uuid', $value)->first();
+            $contact = Contact::where('uuid', $value)->first();
 
-            if ($director!=null){ // accept director
+            if ($director!=null){ // reject director
                 $value = $this->directorService->reject($value, $request->user_uuid);
             }
 
-            if ($company!=null){ // accept company
+            if ($company!=null){ // reject company
                 $value = $this->companyService->reject($value, $request->user_uuid);
             }
 
-            if ($virtualOffice!=null){
+            if ($virtualOffice!=null){ // reject virtual office
                 $value = $this->virtualOfficesService->reject($value, $request->user_uuid);
+            }
+
+            if ($contact!=null){ // reject contact
+                $value = $this->contactService->reject($value, $request->user_uuid);
             }
 
             $pendings[] = $value;
