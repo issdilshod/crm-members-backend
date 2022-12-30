@@ -148,6 +148,21 @@ class VirtualOfficeController extends Controller
             'user_uuid' => ''
         ]);
 
+        // check
+        $check = [];
+
+        // addresses check
+        if (isset($validated['addresses'])){
+            foreach($validated['addresses'] AS $key => $value):
+                $tmpCheck = $this->addressService->check($value, $key, '', 'virtual_offices');
+                $check = array_merge($check, $tmpCheck);
+            endforeach;
+        }
+
+        if (count($check)>0){
+            return response()->json(['data' => $check], 409);
+        }
+
         $virtualOffice = $this->virtualOfficeService->create($validated);
 
         // addresses
@@ -302,6 +317,21 @@ class VirtualOfficeController extends Controller
             'addresses' => 'array'
         ]);
 
+        // check
+        $check = [];
+
+        // addresses check
+        if (isset($validated['addresses'])){
+            foreach($validated['addresses'] AS $key => $value):
+                $tmpCheck = $this->addressService->check($value, $key, $virtualOffice->uuid, 'virtual_offices');
+                $check = array_merge($check, $tmpCheck);
+            endforeach;
+        }
+
+        if (count($check)>0){
+            return response()->json(['data' => $check], 409);
+        }
+
         $virtualOffice = $this->virtualOfficeService->update($virtualOffice, $validated, $request->user_uuid);
 
         // addresses
@@ -382,9 +412,9 @@ class VirtualOfficeController extends Controller
             }
         }
 
-        $virtualOffice = $this->virtualOfficeService->search($search);
+        $virtualOffices = $this->virtualOfficeService->search($request->user_uuid, $search);
 
-        return $virtualOffice;
+        return $virtualOffices;
     }
 
     /**     @OA\POST(
@@ -483,6 +513,21 @@ class VirtualOfficeController extends Controller
 
             'user_uuid' => ''
         ]);
+
+        // check
+        $check = [];
+
+        // addresses check
+        if (isset($validated['addresses'])){
+            foreach($validated['addresses'] AS $key => $value):
+                $tmpCheck = $this->addressService->check($value, $key, '', 'virtual_offices');
+                $check = array_merge($check, $tmpCheck);
+            endforeach;
+        }
+
+        if (count($check)>0){
+            return response()->json(['data' => $check], 409);
+        }
 
         $virtualOffice = $this->virtualOfficeService->pending($validated);
 
@@ -605,6 +650,21 @@ class VirtualOfficeController extends Controller
 
         $virtualOffice = VirtualOffice::where('uuid', $uuid)->first();
 
+        // check
+        $check = [];
+
+        // addresses check
+        if (isset($validated['addresses'])){
+            foreach($validated['addresses'] AS $key => $value):
+                $tmpCheck = $this->addressService->check($value, $key, $virtualOffice->uuid, 'virtual_offices');
+                $check = array_merge($check, $tmpCheck);
+            endforeach;
+        }
+
+        if (count($check)>0){
+            return response()->json(['data' => $check], 409);
+        }
+
         $virtualOffice = $this->virtualOfficeService->pending_update($virtualOffice, $validated, $request->user_uuid);
 
         // addresses
@@ -724,6 +784,21 @@ class VirtualOfficeController extends Controller
         ]);
 
         $virtualOffice = VirtualOffice::where('uuid', $uuid)->first();
+
+        // check
+        $check = [];
+
+        // addresses check
+        if (isset($validated['addresses'])){
+            foreach($validated['addresses'] AS $key => $value):
+                $tmpCheck = $this->addressService->check($value, $key, $virtualOffice->uuid, 'virtual_offices');
+                $check = array_merge($check, $tmpCheck);
+            endforeach;
+        }
+
+        if (count($check)>0){
+            return response()->json(['data' => $check], 409);
+        }
 
         $virtualOffice = $this->virtualOfficeService->accept($virtualOffice, $validated, $request->user_uuid);
 

@@ -6,6 +6,7 @@ use App\Logs\Log;
 use App\Models\Company\Company;
 use App\Models\Director\Director;
 use App\Models\Helper\Address;
+use App\Models\VirtualOffice\VirtualOffice;
 use Illuminate\Support\Facades\Config;
 
 class AddressService {
@@ -78,19 +79,34 @@ class AddressService {
     private function get_identifier_exists($uuid)
     {
         $director = Director::select('first_name', 'middle_name', 'last_name')
-                                    ->where('status', Config::get('common.status.actived'))
+                                    ->where('status', '!=', Config::get('common.status.deleted'))
+                                    ->where('approved', Config::get('common.status.actived'))
                                     ->where('uuid', $uuid)
                                     ->first();
+
         $company = Company::select('legal_name')
-                            ->where('status', Config::get('common.status.actived'))
+                            ->where('status', '!=', Config::get('common.status.deleted'))
+                            ->where('approved', Config::get('common.status.actived'))
                             ->where('uuid', $uuid)
                             ->first();
+
+        $virtualOffice = VirtualOffice::select(['virtual_offices.vo_provider_name', 'companies.legal_name'])
+                                    ->leftJoin('companies', 'companies.uuid', '=', 'virtual_offices.vo_signer_company_uuid')
+                                    ->where('virtual_offices.status', '!=', Config::get('common.status.deleted'))
+                                    ->where('virtual_offices.approved', Config::get('common.status.actived'))
+                                    ->where('virtual_offices.uuid', $uuid)
+                                    ->first();
+        
         $message = '';
+
         if ($director!=null){
             $message = ' on director card ' . strtoupper($director['first_name']) . ' ' . strtoupper($director['middle_name']) . ' ' . strtoupper($director['last_name']);
         }else if ($company!=null){
             $message = ' on company card ' . strtoupper($company['legal_name']);
+        }else if ($virtualOffice!=null){
+            $message = ' on virtual office card ' . strtoupper($virtualOffice['vo_provider_name']) . ' for company ' . strtoupper($virtualOffice['legal_name']);
         }
+
         return $message;
     }
 }
