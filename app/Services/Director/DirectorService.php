@@ -388,7 +388,7 @@ class DirectorService {
         return new DirectorPendingResource($director);
     }
 
-    public function update(Director $director, $entity, $user_uuid)
+    public function update(Director $director, $entity)
     {
         $entity['updated_at'] = Carbon::now();
         $entity['approved'] = Config::get('common.status.actived');
@@ -398,7 +398,7 @@ class DirectorService {
         $director_fn = $director['first_name'] . ' ' . ($director['middle_name']!=null?$director['middle_name'].' ':'') . $director['last_name'];
 
         $activity = Activity::create([
-            'user_uuid' => $user_uuid,
+            'user_uuid' => $entity['user_uuid'],
             'entity_uuid' => $director['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
@@ -455,7 +455,7 @@ class DirectorService {
         return new DirectorResource($director);
     }
 
-    public function pending_update($uuid, $entity, $user_uuid)
+    public function pending_update($uuid, $entity)
     {
         $director = Director::where('uuid', $uuid)
                                 ->where('status', '!=', Config::get('common.status.deleted'))
@@ -469,7 +469,7 @@ class DirectorService {
         $director_fn = $director['first_name'] . ' ' . ($director['middle_name']!=null?$director['middle_name'].' ':'') . $director['last_name'];
 
         $activity = Activity::create([
-            'user_uuid' => $user_uuid,
+            'user_uuid' => $entity['user_uuid'],
             'entity_uuid' => $director['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
@@ -480,7 +480,7 @@ class DirectorService {
         ]);
 
         // notification
-        $user = User::where('uuid', $user_uuid)->first();
+        $user = User::where('uuid', $entity['user_uuid'])->first();
 
         // push activity
         $activity = $this->activityService->setLink($activity);
@@ -499,7 +499,7 @@ class DirectorService {
         return new DirectorResource($director);
     }
 
-    public function accept(Director $director, $entity, $user_uuid, $override = false)
+    public function accept(Director $director, $entity, $override = false)
     {
         $entity['status'] = Config::get('common.status.actived');
         $entity['approved'] = Config::get('common.status.actived');
@@ -509,7 +509,7 @@ class DirectorService {
         $director_fn = $director['first_name'] . ' ' . ($director['middle_name']!=null?$director['middle_name'].' ':'') . $director['last_name'];
         
         $activity = Activity::create([
-            'user_uuid' => $user_uuid,
+            'user_uuid' => $entity['user_uuid'],
             'entity_uuid' => $director['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),

@@ -287,7 +287,9 @@ class DirectorController extends Controller
 
             // files & files to delete by uuid
             'files' => 'array',
-            'files_to_delete' => 'array'
+            'files_to_delete' => 'array',
+
+            'user_uuid' => ''
         ]);
 
         // check
@@ -310,7 +312,7 @@ class DirectorController extends Controller
         }
 
         // update
-        $director = $this->directorService->update($director, $validated, $request->user_uuid);
+        $director = $this->directorService->update($director, $validated);
 
         // emails
         if (isset($validated['emails'])){
@@ -560,11 +562,9 @@ class DirectorController extends Controller
         if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
             if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.save'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
-            } else{
-                if ($director->user_uuid!=$request->user_uuid){
-                    if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.director.pre_save'))){
-                        return response()->json([ 'data' => 'Not Authorized' ], 403);
-                    }
+            } else if ($director->user_uuid!=$request->user_uuid){ // if double update other user
+                if ($director->status!=Config::get('common.status.actived')){ // not active entity
+                    return response()->json([ 'data' => 'Not Authorized' ], 403);
                 }
             }
         }
@@ -588,6 +588,8 @@ class DirectorController extends Controller
             // files
             'files' => 'array',
             'files_to_delete' => 'array',
+
+            'user_uuid' => '',
         ]);
 
         // check
@@ -610,7 +612,7 @@ class DirectorController extends Controller
         }
 
         // update
-        $director = $this->directorService->pending_update($uuid, $validated, $request->user_uuid);
+        $director = $this->directorService->pending_update($uuid, $validated);
 
         // emails
         if (isset($validated['emails'])){
@@ -725,6 +727,8 @@ class DirectorController extends Controller
             // files & files to delete by uuid
             'files' => 'array',
             'files_to_delete' => 'array',
+
+            'user_uuid' => ''
         ]);
 
         $director = Director::where('uuid', $uuid)->first();
@@ -749,7 +753,7 @@ class DirectorController extends Controller
         }
 
         // update
-        $director = $this->directorService->accept($director, $validated, $request->user_uuid);
+        $director = $this->directorService->accept($director, $validated);
 
         // emails
         if (isset($validated['emails'])){
@@ -1023,11 +1027,13 @@ class DirectorController extends Controller
             // files & files to delete by uuid
             'files' => 'array',
             'files_to_delete' => 'array',
+
+            'user_uuid' => '',
         ]);
 
         $director = Director::where('uuid', $uuid)->first();
 
-        $director = $this->directorService->accept($director, $validated, $request->user_uuid, true);
+        $director = $this->directorService->accept($director, $validated, true);
 
         // emails
         if (isset($validated['emails'])){
