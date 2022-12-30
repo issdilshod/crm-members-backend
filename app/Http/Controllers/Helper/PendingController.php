@@ -170,6 +170,16 @@ class PendingController extends Controller
             $virtualOffices = $this->virtualOfficesService->search($user_uuid, $search);
         }
 
+        // get contacts
+        $contacts = [];
+        if ($include=='contact'){
+            $user_uuid = '';
+            if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.contact.view'))){
+                $user_uuid = $request->user_uuid;
+            }
+            $contacts = $this->contactService->search($user_uuid, $search);
+        }
+
         // merge related
         $companies = $companies->merge($director_related);
         $directors = $directors->merge($company_related);
@@ -181,6 +191,7 @@ class PendingController extends Controller
             'directors' => $directors, 
             'companies' => $companies,
             'virtual_offices' => $virtualOffices,
+            'contacts' => $contacts
         ];
     }
 

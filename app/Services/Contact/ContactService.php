@@ -312,4 +312,38 @@ class ContactService{
         return new ContactPendingResource($contact);
     }
 
+    public function search($user_uuid, $search)
+    {
+        $contacts = Contact::select('contacts.*')
+                                ->orderBy('contacts.updated_at', 'DESC')
+                                ->groupBy('contacts.uuid')
+                                ->where('contacts.status', '!=', Config::get('common.status.deleted'))
+                                ->where(function ($q) use($search) {
+                                    $q
+                                        // basic info
+                                        ->orWhere('contacts.first_name', 'like', $search.'%')
+                                        ->orWhere('contacts.last_name', 'like', $search.'%')
+                                        ->orWhere('contacts.email', 'like', $search.'%')
+                                        ->orWhere('contacts.phone_number', 'like', $search.'%')
+                                        ->orWhere('contacts.company_name', 'like', $search.'%')
+                                        ->orWhere('contacts.company_phone_number', 'like', $search.'%')
+                                        ->orWhere('contacts.company_email', 'like', $search.'%')
+                                        ->orWhere('contacts.company_website', 'like', $search.'%')
+                                        ->orWhere('contacts.account_username', 'like', $search.'%')
+                                        ->orWhere('contacts.fax', 'like', $search.'%')
+                                        ->orWhere('contacts.notes', 'like', $search.'%');
+                                })
+                                ->when(($user_uuid!=''), function ($q) use ($user_uuid){
+                                    return $q->where('contacts.user_uuid', $user_uuid);
+                                })
+                                ->limit(5)
+                                ->get();
+
+        foreach($contacts AS $key => $value):
+            $contacts[$key]['last_activity'] = $this->activityService->by_entity_last($value['uuid']);
+        endforeach;
+
+        return ContactPendingResource::collection($contacts);
+    }
+
 }
