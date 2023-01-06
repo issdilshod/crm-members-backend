@@ -18,6 +18,7 @@ use App\Services\Director\DirectorService;
 use App\Services\VirtualOffice\VirtualOfficeService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Str;
 
 class PendingController extends Controller
 {
@@ -141,6 +142,16 @@ class PendingController extends Controller
         $search = ''; $include = '';
         if (isset($request->q)){ $search = $request->q; }
         if (isset($request->include)){ $include = $request->include; }
+
+        // less sensitive
+        $search = Str::replace(',', '*', $search);
+        $search = Str::replace(' ', '*', $search);
+        $search = Str::replace('-', '*', $search);
+        $search = Str::replace('.', '*', $search);
+        $search = Str::replace('(', '*', $search);
+        $search = Str::replace(')', '*', $search);
+        $search = Str::replace("'", '*', $search);
+        $search = Str::replace('"', '*', $search);
         
         // get directors
         $user_uuid = '';
