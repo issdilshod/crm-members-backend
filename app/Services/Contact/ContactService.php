@@ -115,14 +115,14 @@ class ContactService{
         return new ContactPendingResource($contact);
     }
 
-    public function update(Contact $contact, $entity, $user_uuid)
+    public function update(Contact $contact, $entity)
     {
         $entity['updated_at'] = Carbon::now();
         $entity['approved'] = Config::get('common.status.actived');
         $contact->update($entity);
 
         Activity::create([
-            'user_uuid' => $user_uuid,
+            'user_uuid' => $contact['user_uuid'],
             'entity_uuid' => $contact['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
@@ -181,7 +181,7 @@ class ContactService{
         return new ContactPendingResource($contact);
     }
 
-    public function pending_update(Contact $contact, $entity, $user_uuid)
+    public function pending_update(Contact $contact, $entity)
     {
         $entity['updated_at'] = Carbon::now();
         $entity['status'] = Config::get('common.status.pending');
@@ -192,7 +192,7 @@ class ContactService{
 
         // logs
         $activity = Activity::create([
-            'user_uuid' => $user_uuid,
+            'user_uuid' => $contact['user_uuid'],
             'entity_uuid' => $contact['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
@@ -223,8 +223,10 @@ class ContactService{
         return new ContactPendingResource($contact);
     }
 
-    public function accept(Contact $contact, $entity, $user_uuid)
+    public function accept(Contact $contact, $entity)
     {
+        $notifyUser = $contact->user_uuid;
+
         $entity['status'] = Config::get('common.status.actived');
         $entity['approved'] = Config::get('common.status.actived');
         $contact->update($entity);
@@ -234,7 +236,7 @@ class ContactService{
 
         // log
         $activity = Activity::create([
-            'user_uuid' => $user_uuid,
+            'user_uuid' => $contact['user_uuid'],
             'entity_uuid' => $contact['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
@@ -245,7 +247,7 @@ class ContactService{
         ]);
 
         // notification
-        $user = User::where('uuid', $contact['user_uuid'])->first();
+        $user = User::where('uuid', $notifyUser)->first();
 
         // telegram
         $this->notificationService->telegram([

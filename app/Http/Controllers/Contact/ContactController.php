@@ -280,9 +280,11 @@ class ContactController extends Controller
             'files_to_delete' => 'array',
 
             'notes' => '', 
+
+            'user_uuid' => ''
         ]);
 
-        $contact = $this->contactSerivce->update($contact, $validated, $request->user_uuid);
+        $contact = $this->contactSerivce->update($contact, $validated);
 
         // account securities
         if (isset($validated['account_securities'])){
@@ -542,10 +544,16 @@ class ContactController extends Controller
         */
     public function pending_update(Request $request, $uuid)
     {
+        $contact = Contact::where('uuid', $uuid)->first();
+
         // permission
         if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
             if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.contact.save'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }else if ($contact->user_uuid!=$request->user_uuid){ // if double update other user
+                if ($contact->status!=Config::get('common.status.actived')){ // not active entity
+                    return response()->json([ 'data' => 'Not Authorized' ], 403);
+                }
             }
         }
 
@@ -571,11 +579,10 @@ class ContactController extends Controller
 
             'notes' => '', 
 
+            'user_uuid' => ''
         ]);
 
-        $contact = Contact::where('uuid', $uuid)->first();
-
-        $contact = $this->contactSerivce->pending_update($contact, $validated, $request->user_uuid);
+        $contact = $this->contactSerivce->pending_update($contact, $validated);
 
         // account securities
         if (isset($validated['account_securities'])){
@@ -686,11 +693,13 @@ class ContactController extends Controller
             'files_to_delete' => 'array',
 
             'notes' => '',
+
+            'user_uuid' => ''
         ]);
 
         $contact = Contact::where('uuid', $uuid)->first();
 
-        $contact = $this->contactSerivce->accept($contact, $validated, $request->user_uuid);
+        $contact = $this->contactSerivce->accept($contact, $validated);
 
         // account securities
         if (isset($validated['account_securities'])){
