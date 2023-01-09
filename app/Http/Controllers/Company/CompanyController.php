@@ -490,7 +490,9 @@ class CompanyController extends Controller
 
             // files to delete
             'files' => 'array',
-            'files_to_delete' => 'array'
+            'files_to_delete' => 'array',
+
+            'user_uuid' => ''
         ]);
 
         // check
@@ -527,7 +529,7 @@ class CompanyController extends Controller
         }
 
         // update
-        $company = $this->companyService->update($company, $validated, $request->user_uuid);
+        $company = $this->companyService->update($company, $validated);
 
         // emails to delete
         if (isset($validated['emails_to_delete'])){
@@ -957,11 +959,9 @@ class CompanyController extends Controller
         if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
             if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.save'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
-            } else{
-                if ($company->user_uuid!=$request->user_uuid){
-                    if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.company.pre_save'))){
-                        return response()->json([ 'data' => 'Not Authorized' ], 403);
-                    }
+            } else if($company->user_uuid!=$request->user_uuid){ // if double update other user
+                if ($company->status!=Config::get('common.status.actived')){ // not active entity
+                    return response()->json([ 'data' => 'Not Authorized' ], 403);
                 }
             }
         }
@@ -1021,6 +1021,8 @@ class CompanyController extends Controller
             // files
             'files' => 'array',
             'files_to_delete' => 'array',
+
+            'user_uuid' => ''
         ]);
 
         // check
@@ -1057,7 +1059,7 @@ class CompanyController extends Controller
         }
 
         // update
-        $company = $this->companyService->pending_update($uuid, $validated, $request->user_uuid);
+        $company = $this->companyService->pending_update($uuid, $validated);
 
         // emails to delete
         if (isset($validated['emails_to_delete'])){
@@ -1272,7 +1274,9 @@ class CompanyController extends Controller
 
             // files to delete
             'files' => 'array',
-            'files_to_delete' => 'array'
+            'files_to_delete' => 'array',
+
+            'user_uuid' => ''
         ]);
 
         $company = Company::where('uuid', $uuid)->first();
@@ -1311,7 +1315,7 @@ class CompanyController extends Controller
         }
 
         // update
-        $company = $this->companyService->accept($company, $validated, $request->user_uuid);
+        $company = $this->companyService->accept($company, $validated);
 
         // emails to delete
         if (isset($validated['emails_to_delete'])){
@@ -1565,12 +1569,14 @@ class CompanyController extends Controller
 
             // files to delete
             'files' => 'array',
-            'files_to_delete' => 'array'
+            'files_to_delete' => 'array',
+            
+            'user_uuid' => ''
         ]);
 
         $company = Company::where('uuid', $uuid)->first();
 
-        $company = $this->companyService->accept($company, $validated, $request->user_uuid, true);
+        $company = $this->companyService->accept($company, $validated, true);
 
         // emails to delete
         if (isset($validated['emails_to_delete'])){

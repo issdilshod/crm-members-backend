@@ -501,6 +501,8 @@ class DirectorService {
 
     public function accept(Director $director, $entity, $override = false)
     {
+        $notifUser = $director->user_uuid;
+
         $entity['status'] = Config::get('common.status.actived');
         $entity['approved'] = Config::get('common.status.actived');
         $director->update($entity);
@@ -520,7 +522,7 @@ class DirectorService {
         ]);
 
         // notification
-        $user = User::where('uuid', $director['user_uuid'])->first();
+        $user = User::where('uuid', $notifUser)->first();
 
         // push activity
         $activity = $this->activityService->setLink($activity);

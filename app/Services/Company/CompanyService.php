@@ -453,7 +453,7 @@ class CompanyService {
         return new CompanyPendingResource($company);
     }
 
-    public function update(Company $company, $entity, $user_uuid)
+    public function update(Company $company, $entity)
     {
         $entity['updated_at'] = Carbon::now();
         $entity['approved'] = Config::get('common.status.actived');
@@ -463,7 +463,7 @@ class CompanyService {
         $company_fn = $company['legal_name'];
 
         $activity = Activity::create([
-            'user_uuid' => $user_uuid,
+            'user_uuid' => $company['user_uuid'],
             'entity_uuid' => $company['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
@@ -520,7 +520,7 @@ class CompanyService {
         return new CompanyPendingResource($company);
     }
 
-    public function pending_update($uuid, $entity, $user_uuid)
+    public function pending_update($uuid, $entity)
     {
         $entity['updated_at'] = Carbon::now();
         $company = Company::where('uuid', $uuid)
@@ -533,7 +533,7 @@ class CompanyService {
         $company_fn = $company['legal_name'];
 
         $activity = Activity::create([
-            'user_uuid' => $user_uuid,
+            'user_uuid' => $company['user_uuid'],
             'entity_uuid' => $company['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
@@ -548,7 +548,7 @@ class CompanyService {
         $this->notificationService->push_to_headquarters('activity', ['data' => new ActivityResource($activity), 'msg' => '', 'link' => '']);
 
         // notification
-        $user = User::where('uuid', $user_uuid)->first();
+        $user = User::where('uuid', $company['user_uuid'])->first();
 
         $msg = '*' . $user->first_name . ' ' . $user->last_name . "*\n" .
                 str_replace("{name}", "*" . $company_fn . "*", Config::get('common.activity.company.pending_update')) . "\n" .
@@ -563,8 +563,10 @@ class CompanyService {
         return new CompanyPendingResource($company);
     }
 
-    public function accept(Company $company, $entity, $user_uuid, $override = false)
+    public function accept(Company $company, $entity, $override = false)
     {
+        $notifUser = $company->user_uuid;
+
         $entity['status'] = Config::get('common.status.actived');
         $entity['approved'] = Config::get('common.status.actived');
         $company->update($entity);
@@ -573,7 +575,7 @@ class CompanyService {
         $company_fn = $company['legal_name'];
 
         $activity = Activity::create([
-            'user_uuid' => $user_uuid,
+            'user_uuid' => $company['user_uuid'],
             'entity_uuid' => $company['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
@@ -584,7 +586,7 @@ class CompanyService {
         ]);
 
         // notification
-        $user = User::where('uuid', $company['user_uuid'])->first();
+        $user = User::where('uuid', $notifUser)->first();
 
         // push activity
         $activity = $this->activityService->setLink($activity);
