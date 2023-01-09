@@ -65,6 +65,8 @@ class CompanyResource extends JsonResource
             'register_agents' => RegisterAgentResource::collection($this->register_agents),
             'incorporations' => CompanyIncorporationResource::collection($this->incorporations),
 
+            'credit_account' => new CompanyCreditAccountResource($this->credit_account),
+
             'reject_reason' => new RejectReasonResource($this->reject_reason),
 
             'status' => $this->status,

@@ -68,6 +68,11 @@ class Company extends Model
                         ->where('status', '!=', Config::get('common.status.deleted'));
     }
 
+    public function credit_account()
+    {
+        return $this->hasOne(CompanyCreditAccount::class, 'entity_uuid', 'uuid');
+    }
+
     public function reject_reason(): HasOne
     {
         return $this->hasOne(RejectReason::class, 'entity_uuid', 'uuid')

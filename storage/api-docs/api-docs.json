@@ -1851,6 +1851,9 @@
                                     "incorporations[]": {
                                         "type": "text"
                                     },
+                                    "credit_account[]": {
+                                        "type": "text"
+                                    },
                                     "files[]": {
                                         "type": "text"
                                     },
@@ -2002,6 +2005,9 @@
                                         "type": "text"
                                     },
                                     "incorporations[]": {
+                                        "type": "text"
+                                    },
+                                    "credit_account[]": {
                                         "type": "text"
                                     },
                                     "files[]": {
@@ -2235,6 +2241,9 @@
                                     "incorporations[]": {
                                         "type": "text"
                                     },
+                                    "credit_account[]": {
+                                        "type": "text"
+                                    },
                                     "files[]": {
                                         "type": "text"
                                     },
@@ -2408,6 +2417,9 @@
                                     "incorporations[]": {
                                         "type": "text"
                                     },
+                                    "credit_account[]": {
+                                        "type": "text"
+                                    },
                                     "files[]": {
                                         "type": "text"
                                     },
@@ -2579,6 +2591,9 @@
                                         "type": "text"
                                     },
                                     "incorporations[]": {
+                                        "type": "text"
+                                    },
+                                    "credit_account[]": {
                                         "type": "text"
                                     },
                                     "files[]": {
@@ -2804,6 +2819,9 @@
                                         "type": "text"
                                     },
                                     "incorporations[]": {
+                                        "type": "text"
+                                    },
+                                    "credit_account[]": {
                                         "type": "text"
                                     },
                                     "files[]": {
@@ -5099,63 +5117,6 @@
                     },
                     "401": {
                         "description": "Not Authenticated"
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
-                    }
-                }
-            }
-        },
-        "/api/pending_delete/{uuid}": {
-            "put": {
-                "tags": [
-                    "Director"
-                ],
-                "summary": "Delete pending",
-                "description": "Delete pending",
-                "operationId": "delete_pending",
-                "parameters": [
-                    {
-                        "name": "uuid",
-                        "in": "path",
-                        "description": "director uuid",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [],
-                                "properties": {
-                                    "description": {
-                                        "type": "text"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        },
-                        "application/json": {
-                            "schema": {}
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successfully"
-                    },
-                    "400": {
-                        "description": "Bad request"
-                    },
-                    "401": {
-                        "description": "Not Authenticated"
-                    },
-                    "403": {
-                        "description": "Not Autorized"
                     },
                     "404": {
                         "description": "Resource Not Found"

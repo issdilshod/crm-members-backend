@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Company\Company;
 use App\Policies\PermissionPolicy;
 use App\Services\Company\CompanyBusinessMobileService;
+use App\Services\Company\CompanyCreditAccountService;
 use App\Services\Company\CompanyIncorporationService;
 use App\Services\Company\CompanyService;
 use App\Services\Helper\AddressService;
@@ -29,6 +30,7 @@ class CompanyController extends Controller
     private $companyIncorporationService;
     private $companyBusinessMobile;
     private $rejectReasonService;
+    private $companyCreditAccountService;
 
     public function __construct()
     {
@@ -41,6 +43,7 @@ class CompanyController extends Controller
         $this->companyIncorporationService = new CompanyIncorporationService();
         $this->companyBusinessMobile = new CompanyBusinessMobileService();
         $this->rejectReasonService = new RejectReasonService();
+        $this->companyCreditAccountService = new CompanyCreditAccountService();
     }
 
     /**     @OA\GET(
@@ -125,6 +128,8 @@ class CompanyController extends Controller
       *
       *                         @OA\Property(property="incorporations[]", type="text"),
       *
+      *                         @OA\Property(property="credit_account[]", type="text"),
+      *
       *                         @OA\Property(property="files[]", type="text"),
       *
       *                         @OA\Property(property="files_to_delete[]", type="text")
@@ -197,6 +202,9 @@ class CompanyController extends Controller
 
             // incorporations
             'incorporations' => 'array',
+
+            // credit account
+            'credit_account' => 'array',
 
             // files
             'files' => 'array',
@@ -290,6 +298,12 @@ class CompanyController extends Controller
                 $value['entity_uuid'] = $company->uuid;
                 $this->companyBusinessMobile->save($value);
             endforeach;
+        }
+
+        // credit account
+        if (isset($validated['credit_account'])){
+            $validated['credit_account']['entity_uuid'] = $company->uuid;
+            $this->companyCreditAccountService->save($validated['credit_account']);
         }
 
         // files to delete (first)
@@ -412,6 +426,8 @@ class CompanyController extends Controller
       *
       *                         @OA\Property(property="incorporations[]", type="text"),
       *
+      *                         @OA\Property(property="credit_account[]", type="text"),
+      *
       *                         @OA\Property(property="files[]", type="text"),
       *
       *                         @OA\Property(property="files_to_delete[]", type="text")
@@ -487,6 +503,9 @@ class CompanyController extends Controller
 
             // incorporations
             'incorporations' => 'array',
+
+            // credit account
+            'credit_account' => 'array',
 
             // files to delete
             'files' => 'array',
@@ -587,6 +606,12 @@ class CompanyController extends Controller
                 $value['entity_uuid'] = $company->uuid;
                 $this->companyBusinessMobile->save($value);
             endforeach;
+        }
+
+        // credit account
+        if (isset($validated['credit_account'])){
+            $validated['credit_account']['entity_uuid'] = $company->uuid;
+            $this->companyCreditAccountService->save($validated['credit_account']);
         }
 
         // files to delete (first)
@@ -696,6 +721,8 @@ class CompanyController extends Controller
       *
       *                         @OA\Property(property="incorporations[]", type="text"),
       *
+      *                         @OA\Property(property="credit_account[]", type="text"),
+      *
       *                         @OA\Property(property="files[]", type="text"),
       *
       *                         @OA\Property(property="files_to_delete[]", type="text")
@@ -768,6 +795,9 @@ class CompanyController extends Controller
 
             // incorporations
             'incorporations' => 'array',
+
+            // credit account
+            'credit_account' => 'array',
 
             // files
             'files' => 'array',
@@ -850,6 +880,12 @@ class CompanyController extends Controller
                 $value['entity_uuid'] = $company->uuid;
                 $this->companyIncorporationService->save($value);
             endforeach;
+        }
+
+        // credit account
+        if (isset($validated['credit_account'])){
+            $validated['credit_account']['entity_uuid'] = $company->uuid;
+            $this->companyCreditAccountService->save($validated['credit_account']);
         }
 
         // files to delete (first)
@@ -936,6 +972,8 @@ class CompanyController extends Controller
       *
       *                         @OA\Property(property="incorporations[]", type="text"),
       *
+      *                         @OA\Property(property="credit_account[]", type="text"),
+      *
       *                         @OA\Property(property="files[]", type="text"),
       *
       *                         @OA\Property(property="files_to_delete[]", type="text")
@@ -1017,6 +1055,9 @@ class CompanyController extends Controller
 
             // incorporations
             'incorporations' => 'array',
+
+            // credit account
+            'credit_account' => 'array',
 
             // files
             'files' => 'array',
@@ -1112,6 +1153,12 @@ class CompanyController extends Controller
             endforeach;
         }
 
+        // credit account
+        if (isset($validated['credit_account'])){
+            $validated['credit_account']['entity_uuid'] = $company->uuid;
+            $this->companyCreditAccountService->save($validated['credit_account']);
+        }
+
         // files to delete (first)
         if (isset($validated['files_to_delete'])){
             foreach ($validated['files_to_delete'] AS $key => $value):
@@ -1196,6 +1243,8 @@ class CompanyController extends Controller
       *
       *                         @OA\Property(property="incorporations[]", type="text"),
       *
+      *                         @OA\Property(property="credit_account[]", type="text"),
+      *
       *                         @OA\Property(property="files[]", type="text"),
       *
       *                         @OA\Property(property="files_to_delete[]", type="text")
@@ -1271,6 +1320,9 @@ class CompanyController extends Controller
 
             // incorporations
             'incorporations' => 'array',
+
+            // credit account
+            'credit_account' => 'array',
 
             // files to delete
             'files' => 'array',
@@ -1351,6 +1403,12 @@ class CompanyController extends Controller
         $validated['bank_account']['entity_uuid'] = $company->uuid;
         $validated['bank_account']['status'] = Config::get('common.status.actived');
         $this->bankAccountService->save($validated['bank_account']);
+
+        // credit account
+        if (isset($validated['credit_account'])){
+            $validated['credit_account']['entity_uuid'] = $company->uuid;
+            $this->companyCreditAccountService->save($validated['credit_account']);
+        }
 
         // files to delete (first)
         if (isset($validated['files_to_delete'])){
@@ -1493,6 +1551,8 @@ class CompanyController extends Controller
       *
       *                         @OA\Property(property="incorporations[]", type="text"),
       *
+      *                         @OA\Property(property="credit_account[]", type="text"),
+      *
       *                         @OA\Property(property="files[]", type="text"),
       *
       *                         @OA\Property(property="files_to_delete[]", type="text")
@@ -1567,6 +1627,9 @@ class CompanyController extends Controller
             // incorporations
             'incorporations' => 'array',
 
+            // credit account
+            'credit_account' => 'array',
+
             // files to delete
             'files' => 'array',
             'files_to_delete' => 'array',
@@ -1627,6 +1690,12 @@ class CompanyController extends Controller
                 $value['entity_uuid'] = $company->uuid;
                 $this->companyIncorporationService->save($value);
             endforeach;
+        }
+
+        // credit account
+        if (isset($validated['credit_account'])){
+            $validated['credit_account']['entity_uuid'] = $company->uuid;
+            $this->companyCreditAccountService->save($validated['credit_account']);
         }
 
         // files to delete (first)
