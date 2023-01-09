@@ -65,14 +65,14 @@ class FutureCompanyService{
         return new FutureCompanyPendingResource($futureCompany);
     }
 
-    public function update(FutureCompany $futureCompany, $entity, $user_uuid)
+    public function update(FutureCompany $futureCompany, $entity)
     {
         $entity['updated_at'] = Carbon::now();
         $entity['approved'] = Config::get('common.status.actived');
         $futureCompany->update($entity);
 
         Activity::create([
-            'user_uuid' => $user_uuid,
+            'user_uuid' => $futureCompany['user_uuid'],
             'entity_uuid' => $futureCompany['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
@@ -120,7 +120,7 @@ class FutureCompanyService{
         return new FutureCompanyPendingResource($futureCompany);
     }
 
-    public function pending_update(FutureCompany $futureCompany, $entity, $user_uuid)
+    public function pending_update(FutureCompany $futureCompany, $entity)
     {
         $entity['updated_at'] = Carbon::now();
         $entity['status'] = Config::get('common.status.pending');
@@ -128,7 +128,7 @@ class FutureCompanyService{
 
         // logs
         Activity::create([
-            'user_uuid' => $user_uuid,
+            'user_uuid' => $futureCompany['user_uuid'],
             'entity_uuid' => $futureCompany['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
@@ -150,15 +150,17 @@ class FutureCompanyService{
         return new FutureCompanyPendingResource($futureCompany);
     }
 
-    public function accept(FutureCompany $futureCompany, $entity, $user_uuid)
+    public function accept(FutureCompany $futureCompany, $entity)
     {
+        $notifyUser = $futureCompany['user_uuid'];
+
         $entity['status'] = Config::get('common.status.actived');
         $entity['approved'] = Config::get('common.status.actived');
         $futureCompany->update($entity);
 
         // log
         Activity::create([
-            'user_uuid' => $user_uuid,
+            'user_uuid' => $futureCompany['user_uuid'],
             'entity_uuid' => $futureCompany['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
@@ -169,7 +171,7 @@ class FutureCompanyService{
         ]);
 
         // notification
-        $user = User::where('uuid', $futureCompany['user_uuid'])->first();
+        $user = User::where('uuid', $notifyUser)->first();
 
         $this->notificationService->telegram([
             'telegram' => $user['telegram'],

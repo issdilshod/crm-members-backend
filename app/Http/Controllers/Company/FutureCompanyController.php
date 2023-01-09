@@ -239,22 +239,12 @@ class FutureCompanyController extends Controller
             'db_report_number' => '',
             'comment' => '',
 
-            'files_to_delete' => 'array'
+            'files_to_delete' => 'array',
+
+            'user_uuid' => ''
         ]);
 
-        /*$check = [];
-
-        $tmpCheck = $this->futureCompanyService->check_ignore($validated, $futureCompany->uuid);
-        $check = array_merge($check, $tmpCheck);
-
-        // exists
-        if (count($check)>0){
-            return response()->json([
-                'data' => $check,
-            ], 409);
-        }*/
-
-        $futureCompany = $this->futureCompanyService->update($futureCompany, $validated, $request->user_uuid);
+        $futureCompany = $this->futureCompanyService->update($futureCompany, $validated);
 
         // files upload & files delete
 
@@ -466,10 +456,16 @@ class FutureCompanyController extends Controller
       */
     public function pending_update(Request $request, $uuid)
     {
+        $futureCompany = FutureCompany::where('uuid', $uuid)->first();
+
         // permission
         if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
             if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.future_company.save'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }else if ($futureCompany->user_uuid!=$request->user_uuid){ // if double update other user
+                if ($futureCompany->status!=Config::get('common.status.actived')){ // not active entity
+                    return response()->json([ 'data' => 'Not Authorized' ], 403);
+                }
             }
         }
 
@@ -486,24 +482,12 @@ class FutureCompanyController extends Controller
             'db_report_number' => '',
             'comment' => '',
 
-            'files_to_delete' => 'array'
+            'files_to_delete' => 'array',
+
+            'user_uuid' => ''
         ]);
 
-        $futureCompany = FutureCompany::where('uuid', $uuid)->first();
-
-        /*$check = [];
-
-        $tmpCheck = $this->futureCompanyService->check_ignore($validated, $futureCompany->uuid);
-        $check = array_merge($check, $tmpCheck);
-
-        // exists
-        if (count($check)>0){
-            return response()->json([
-                'data' => $check,
-            ], 409);
-        }*/
-
-        $futureCompany = $this->futureCompanyService->pending_update($futureCompany, $validated, $request->user_uuid);
+        $futureCompany = $this->futureCompanyService->pending_update($futureCompany, $validated);
 
         // files upload & files delete
 
