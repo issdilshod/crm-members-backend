@@ -144,14 +144,14 @@ class PendingController extends Controller
         if (isset($request->include)){ $include = $request->include; }
 
         // less sensitive
-        $search = Str::replace(',', '*', $search);
-        $search = Str::replace(' ', '*', $search);
-        $search = Str::replace('-', '*', $search);
-        $search = Str::replace('.', '*', $search);
-        $search = Str::replace('(', '*', $search);
-        $search = Str::replace(')', '*', $search);
-        $search = Str::replace("'", '*', $search);
-        $search = Str::replace('"', '*', $search);
+        $search = Str::replace(',', '%', $search);
+        $search = Str::replace(' ', '%', $search);
+        $search = Str::replace('-', '%', $search);
+        $search = Str::replace('.', '%', $search);
+        $search = Str::replace('(', '%', $search);
+        $search = Str::replace(')', '%', $search);
+        $search = Str::replace("'", '%', $search);
+        $search = Str::replace('"', '%', $search);
         
         // get directors
         $user_uuid = '';
