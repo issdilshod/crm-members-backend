@@ -160,7 +160,7 @@ class VirtualOfficeService{
         return new VirtualOfficePendingResource($virtualOffice);
     }
 
-    public function update(VirtualOffice $virtualOffice, $entity, $user_uuid)
+    public function update(VirtualOffice $virtualOffice, $entity)
     {
         $entity['updated_at'] = Carbon::now();
         $entity['approved'] = Config::get('common.status.actived');
@@ -170,7 +170,7 @@ class VirtualOfficeService{
         $name = $this->get_name($entity);
 
         Activity::create([
-            'user_uuid' => $user_uuid,
+            'user_uuid' => $virtualOffice['user_uuid'],
             'entity_uuid' => $virtualOffice['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
@@ -230,7 +230,7 @@ class VirtualOfficeService{
         return new VirtualOfficePendingResource($virtualOffice);
     }
 
-    public function pending_update(VirtualOffice $virtualOffice, $entity, $user_uuid)
+    public function pending_update(VirtualOffice $virtualOffice, $entity)
     {
         $entity['updated_at'] = Carbon::now();
         $entity['status'] = Config::get('common.status.pending');
@@ -241,7 +241,7 @@ class VirtualOfficeService{
 
         // logs
         $activity = Activity::create([
-            'user_uuid' => $user_uuid,
+            'user_uuid' => $virtualOffice['user_uuid'],
             'entity_uuid' => $virtualOffice['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
@@ -272,8 +272,10 @@ class VirtualOfficeService{
         return new VirtualOfficePendingResource($virtualOffice);
     }
 
-    public function accept(VirtualOffice $virtualOffice, $entity, $user_uuid)
+    public function accept(VirtualOffice $virtualOffice, $entity)
     {
+        $notifyUser = $virtualOffice->user_uuid;
+
         $entity['status'] = Config::get('common.status.actived');
         $entity['approved'] = Config::get('common.status.actived');
         $virtualOffice->update($entity);
@@ -283,7 +285,7 @@ class VirtualOfficeService{
 
         // log
         $activity = Activity::create([
-            'user_uuid' => $user_uuid,
+            'user_uuid' => $virtualOffice['user_uuid'],
             'entity_uuid' => $virtualOffice['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
@@ -294,7 +296,7 @@ class VirtualOfficeService{
         ]);
 
         // notification
-        $user = User::where('uuid', $virtualOffice['user_uuid'])->first();
+        $user = User::where('uuid', $notifyUser)->first();
 
         // telegram
         $this->notificationService->telegram([

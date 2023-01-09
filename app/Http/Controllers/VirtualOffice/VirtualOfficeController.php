@@ -314,7 +314,9 @@ class VirtualOfficeController extends Controller
             'contract_terms_notes' => '',
             'contract_effective_date' => '',
 
-            'addresses' => 'array'
+            'addresses' => 'array',
+            
+            'user_uuid' => ''
         ]);
 
         // check
@@ -332,7 +334,7 @@ class VirtualOfficeController extends Controller
             return response()->json(['data' => $check], 409);
         }
 
-        $virtualOffice = $this->virtualOfficeService->update($virtualOffice, $validated, $request->user_uuid);
+        $virtualOffice = $this->virtualOfficeService->update($virtualOffice, $validated);
 
         // addresses
         if (isset($validated['addresses'])){
@@ -608,10 +610,16 @@ class VirtualOfficeController extends Controller
       */
     public function pending_update(Request $request, $uuid)
     {
+        $virtualOffice = VirtualOffice::where('uuid', $uuid)->first();
+
         // permission
         if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
             if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.virtual_office.save'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
+            }else if ($virtualOffice->user_uuid!=$request->user_uuid){ // if double update other user
+                if ($virtualOffice->status!=Config::get('common.status.actived')){ // not active entity
+                    return response()->json([ 'data' => 'Not Authorized' ], 403);
+                }
             }
         }
 
@@ -646,9 +654,8 @@ class VirtualOfficeController extends Controller
             // addresses
             'addresses' => 'array',
 
+            'user_uuid' => ''
         ]);
-
-        $virtualOffice = VirtualOffice::where('uuid', $uuid)->first();
 
         // check
         $check = [];
@@ -780,7 +787,9 @@ class VirtualOfficeController extends Controller
             'contract_effective_date' => '',
 
             // addresses
-            'addresses' => 'array'
+            'addresses' => 'array',
+
+            'user_uuid' => ''
         ]);
 
         $virtualOffice = VirtualOffice::where('uuid', $uuid)->first();
@@ -800,7 +809,7 @@ class VirtualOfficeController extends Controller
             return response()->json(['data' => $check], 409);
         }
 
-        $virtualOffice = $this->virtualOfficeService->accept($virtualOffice, $validated, $request->user_uuid);
+        $virtualOffice = $this->virtualOfficeService->accept($virtualOffice, $validated);
 
         // addresses
         if (isset($validated['addresses'])){
