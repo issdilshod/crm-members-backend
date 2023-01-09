@@ -196,7 +196,9 @@ class FutureWebsiteController extends Controller
 
         $validated = $request->validate([
             'sic_code_uuid' => 'required',
-            'link' => 'required'
+            'link' => 'required',
+
+            'user_uuid' => ''
         ]);
 
         $futureWebsite = FutureWebsite::where('uuid', $uuid)->first();
@@ -213,7 +215,7 @@ class FutureWebsiteController extends Controller
             ], 409);
         }
 
-        $futureWebsite = $this->futureWebsiteService->update($futureWebsite, $validated, $request->user_uuid);
+        $futureWebsite = $this->futureWebsiteService->update($futureWebsite, $validated);
 
         return $futureWebsite;
     }
@@ -353,21 +355,27 @@ class FutureWebsiteController extends Controller
       */
     public function pending_update(Request $request, $uuid)
     {
+        $futureWebsite = FutureWebsite::where('uuid', $uuid)->first();
+
         // permission
         if (!PermissionPolicy::permission($request->user_uuid)){ // if not headquarter
             if (!PermissionPolicy::permission($request->user_uuid, Config::get('common.permission.future_website.save'))){
                 return response()->json([ 'data' => 'Not Authorized' ], 403);
+            } else if ($futureWebsite->user_uuid!=$request->user_uuid){ // if double update other user
+                if ($futureWebsite->status!=Config::get('common.status.actived')){ // not active entity
+                    return response()->json([ 'data' => 'Not Authorized' ], 403);
+                }
             }
         }
 
         $validated = $request->validate([
             'sic_code_uuid' => 'required',
-            'link' => 'required'
+            'link' => 'required',
+            
+            'user_uuid' => ''
         ]);
 
         $check = [];
-
-        $futureWebsite = FutureWebsite::where('uuid', $uuid)->first();
 
         $tmpCheck = $this->futureWebsiteService->check_ignore($validated, $futureWebsite->uuid);
         $check = array_merge($check, $tmpCheck);
@@ -379,7 +387,7 @@ class FutureWebsiteController extends Controller
             ], 409);
         }
 
-        $futureWebsite = $this->futureWebsiteService->pending_update($futureWebsite, $validated, $request->user_uuid);
+        $futureWebsite = $this->futureWebsiteService->pending_update($futureWebsite, $validated);
 
         return $futureWebsite;
     }
@@ -433,7 +441,9 @@ class FutureWebsiteController extends Controller
 
         $validated = $request->validate([
             'sic_code_uuid' => 'required',
-            'link' => 'required'
+            'link' => 'required',
+            
+            'user_uuid' => ''
         ]);
 
         $check = [];
@@ -450,7 +460,7 @@ class FutureWebsiteController extends Controller
             ], 409);
         }
 
-        $futureWebsite = $this->futureWebsiteService->accept($futureWebsite, $validated, $request->user_uuid);
+        $futureWebsite = $this->futureWebsiteService->accept($futureWebsite, $validated);
 
         return $futureWebsite;
     }

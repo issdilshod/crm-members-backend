@@ -65,14 +65,14 @@ class FutureWebsiteService{
         return new FutureWebsitePendingResource($futureWebsite);
     }
 
-    public function update(FutureWebsite $futureWebsite, $entity, $user_uuid)
+    public function update(FutureWebsite $futureWebsite, $entity)
     {
         $entity['updated_at'] = Carbon::now();
         $entity['approved'] = Config::get('common.status.actived');
         $futureWebsite->update($entity);
 
         Activity::create([
-            'user_uuid' => $user_uuid,
+            'user_uuid' => $futureWebsite['user_uuid'],
             'entity_uuid' => $futureWebsite['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
@@ -120,7 +120,7 @@ class FutureWebsiteService{
         return new FutureWebsitePendingResource($futureWebsite);
     }
 
-    public function pending_update(FutureWebsite $futureWebsite, $entity, $user_uuid)
+    public function pending_update(FutureWebsite $futureWebsite, $entity)
     {
         $entity['updated_at'] = Carbon::now();
         $entity['status'] = Config::get('common.status.pending');
@@ -128,7 +128,7 @@ class FutureWebsiteService{
 
         // logs
         Activity::create([
-            'user_uuid' => $user_uuid,
+            'user_uuid' => $futureWebsite['user_uuid'],
             'entity_uuid' => $futureWebsite['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
@@ -150,15 +150,17 @@ class FutureWebsiteService{
         return new FutureWebsitePendingResource($futureWebsite);
     }
 
-    public function accept(FutureWebsite $futureWebsite, $entity, $user_uuid)
+    public function accept(FutureWebsite $futureWebsite, $entity)
     {
+        $notifyUser = $futureWebsite['user_uuid'];
+
         $entity['status'] = Config::get('common.status.actived');
         $entity['approved'] = Config::get('common.status.actived');
         $futureWebsite->update($entity);
 
         // log
         Activity::create([
-            'user_uuid' => $user_uuid,
+            'user_uuid' => $futureWebsite['user_uuid'],
             'entity_uuid' => $futureWebsite['uuid'],
             'device' => UserSystemInfoHelper::device_full(),
             'ip' => UserSystemInfoHelper::ip(),
@@ -169,7 +171,7 @@ class FutureWebsiteService{
         ]);
 
         // notification
-        $user = User::where('uuid', $futureWebsite['user_uuid'])->first();
+        $user = User::where('uuid', $notifyUser)->first();
 
         $this->notificationService->telegram([
             'telegram' => $user['telegram'],
