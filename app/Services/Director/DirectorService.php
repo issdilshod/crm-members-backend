@@ -213,9 +213,9 @@ class DirectorService {
                                         ->orWhereRaw("concat(directors.last_name, ' ', directors.first_name) like '%".$search."%'")
 
                                         // basic info
-                                        ->orWhere('directors.date_of_birth', 'like', $search.'%')
-                                        ->orWhere('directors.ssn_cpn', 'like', $search.'%')
-                                        ->orWhere('directors.phone_number', 'like', $search.'%')
+                                        ->orWhere('directors.date_of_birth', 'like', '%'.$search.'%')
+                                        ->orWhere('directors.ssn_cpn', 'like', '%'.$search.'%')
+                                        ->orWhere('directors.phone_number', 'like', '%'.$search.'%')
 
                                         // addresses
                                         ->orWhereRaw("concat(addresses.street_address, ' ', addresses.address_line_2, ' ', addresses.city, ' ', addresses.state, ' ', addresses.postal, ' ', addresses.country) like '%".$search."%'")
@@ -225,8 +225,8 @@ class DirectorService {
                                         ->orWhereRaw("concat(addresses.street_address, ', ', addresses.city, ', ', addresses.state, ', ', addresses.postal, ', ', addresses.country) like '%".$search."%'")
 
                                         // emails
-                                        ->orWhere('emails.email', 'like', $search.'%')
-                                        ->orWhere('emails.phone', 'like', $search.'%');
+                                        ->orWhere('emails.email', 'like', '%'.$search.'%')
+                                        ->orWhere('emails.phone', 'like', '%'.$search.'%');
                                 })
                                 ->when(($user_uuid!=''), function ($q) use ($user_uuid){
                                     return $q->where('directors.user_uuid', $user_uuid);

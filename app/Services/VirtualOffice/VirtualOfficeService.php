@@ -381,18 +381,18 @@ class VirtualOfficeService{
                                         ->orWhereRaw("concat(directors.last_name, ' ', directors.first_name) like '%".$search."%'")
 
                                         // company names
-                                        ->orWhere('companies.legal_name', 'like', $search.'%')
+                                        ->orWhere('companies.legal_name', 'like', '%'.$search.'%')
 
                                         // basic info
-                                        ->orWhere('virtual_offices.vo_website', 'like', $search.'%')
-                                        ->orWhere('virtual_offices.vo_contact_person_name', 'like', $search.'%')
-                                        ->orWhere('virtual_offices.vo_contact_person_phone_number', 'like', $search.'%')
-                                        ->orWhere('virtual_offices.vo_contact_person_email', 'like', $search.'%')
-                                        ->orWhere('virtual_offices.online_email', 'like', $search.'%')
-                                        ->orWhere('virtual_offices.online_account_username', 'like', $search.'%')
-                                        ->orWhere('virtual_offices.card_holder_name', 'like', $search.'%')
-                                        ->orWhere('virtual_offices.vo_provider_name', 'like', $search.'%')
-                                        ->orWhere('virtual_offices.vo_provider_phone_number', 'like', $search.'%')
+                                        ->orWhere('virtual_offices.vo_website', 'like', '%'.$search.'%')
+                                        ->orWhere('virtual_offices.vo_contact_person_name', 'like', '%'.$search.'%')
+                                        ->orWhere('virtual_offices.vo_contact_person_phone_number', 'like', '%'.$search.'%')
+                                        ->orWhere('virtual_offices.vo_contact_person_email', 'like', '%'.$search.'%')
+                                        ->orWhere('virtual_offices.online_email', 'like', '%'.$search.'%')
+                                        ->orWhere('virtual_offices.online_account_username', 'like', '%'.$search.'%')
+                                        ->orWhere('virtual_offices.card_holder_name', 'like', '%'.$search.'%')
+                                        ->orWhere('virtual_offices.vo_provider_name', 'like', '%'.$search.'%')
+                                        ->orWhere('virtual_offices.vo_provider_phone_number', 'like', '%'.$search.'%')
 
                                         // addresses
                                         ->orWhereRaw("concat(addresses.street_address, ' ', addresses.address_line_2, ' ', addresses.city, ' ', addresses.state, ' ', addresses.postal, ' ', addresses.country) like '%".$search."%'")

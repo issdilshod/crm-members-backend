@@ -323,17 +323,17 @@ class ContactService{
                                 ->where(function ($q) use($search) {
                                     $q
                                         // basic info
-                                        ->orWhere('contacts.first_name', 'like', $search.'%')
-                                        ->orWhere('contacts.last_name', 'like', $search.'%')
-                                        ->orWhere('contacts.email', 'like', $search.'%')
-                                        ->orWhere('contacts.phone_number', 'like', $search.'%')
-                                        ->orWhere('contacts.company_name', 'like', $search.'%')
-                                        ->orWhere('contacts.company_phone_number', 'like', $search.'%')
-                                        ->orWhere('contacts.company_email', 'like', $search.'%')
-                                        ->orWhere('contacts.company_website', 'like', $search.'%')
-                                        ->orWhere('contacts.account_username', 'like', $search.'%')
-                                        ->orWhere('contacts.fax', 'like', $search.'%')
-                                        ->orWhere('contacts.notes', 'like', $search.'%');
+                                        ->orWhere('contacts.first_name', 'like', '%'.$search.'%')
+                                        ->orWhere('contacts.last_name', 'like', '%'.$search.'%')
+                                        ->orWhere('contacts.email', 'like', '%'.$search.'%')
+                                        ->orWhere('contacts.phone_number', 'like', '%'.$search.'%')
+                                        ->orWhere('contacts.company_name', 'like', '%'.$search.'%')
+                                        ->orWhere('contacts.company_phone_number', 'like', '%'.$search.'%')
+                                        ->orWhere('contacts.company_email', 'like', '%'.$search.'%')
+                                        ->orWhere('contacts.company_website', 'like', '%'.$search.'%')
+                                        ->orWhere('contacts.account_username', 'like', '%'.$search.'%')
+                                        ->orWhere('contacts.fax', 'like', '%'.$search.'%')
+                                        ->orWhere('contacts.notes', 'like', '%'.$search.'%');
                                 })
                                 ->when(($user_uuid!=''), function ($q) use ($user_uuid){
                                     return $q->where('contacts.user_uuid', $user_uuid);

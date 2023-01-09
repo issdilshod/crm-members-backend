@@ -179,23 +179,23 @@ class CompanyService {
                                 ->where(function ($q) use($search) {
                                     $q
                                         // name
-                                        ->where('companies.legal_name', 'like', $search.'%')
+                                        ->where('companies.legal_name', 'like', '%'.$search.'%')
                                         
                                         // incoroporation
-                                        ->orWhere('companies.incorporation_date', 'like', $search.'%')
-                                        ->orWhere('companies.incorporation_state_name', 'like', $search.'%')
-                                        ->orWhere('companies.doing_business_in_state_name', 'like', $search.'%')
+                                        ->orWhere('companies.incorporation_date', 'like', '%'.$search.'%')
+                                        ->orWhere('companies.incorporation_state_name', 'like', '%'.$search.'%')
+                                        ->orWhere('companies.doing_business_in_state_name', 'like', '%'.$search.'%')
 
                                         // basic info
-                                        ->orWhere('companies.ein', 'like', $search.'%')
+                                        ->orWhere('companies.ein', 'like', '%'.$search.'%')
 
                                         // phones
-                                        ->orWhere('companies.business_number', 'like', $search.'%')
-                                        ->orWhere('companies.business_mobile_number', 'like', $search.'%')
-                                        ->orWhere('companies.business_mobile_login', 'like', $search.'%')
-                                        ->orWhere('companies.voip_login', 'like', $search.'%')
-                                        ->orWhere('companies.website', 'like', $search.'%')
-                                        ->orWhere('companies.db_report_number', 'like', $search.'%')
+                                        ->orWhere('companies.business_number', 'like', '%'.$search.'%')
+                                        ->orWhere('companies.business_mobile_number', 'like', '%'.$search.'%')
+                                        ->orWhere('companies.business_mobile_login', 'like', '%'.$search.'%')
+                                        ->orWhere('companies.voip_login', 'like', '%'.$search.'%')
+                                        ->orWhere('companies.website', 'like', '%'.$search.'%')
+                                        ->orWhere('companies.db_report_number', 'like', '%'.$search.'%')
 
                                         // addresses
                                         ->orWhereRaw("concat(addresses.street_address, ' ', addresses.address_line_2, ' ', addresses.city, ' ', addresses.state, ' ', addresses.postal, ' ', addresses.country) like '%".$search."%'")
@@ -205,22 +205,22 @@ class CompanyService {
                                         ->orWhereRaw("concat(addresses.street_address, ', ', addresses.city, ', ', addresses.state, ', ', addresses.postal, ', ', addresses.country) like '%".$search."%'")
 
                                         // states
-                                        ->orWhere('states1.full_name', $search.'%')
-                                        ->orWhere('states2.full_name', $search.'%')
-                                        ->orWhere('states1.short_name', $search.'%')
-                                        ->orWhere('states2.short_name', $search.'%')
+                                        ->orWhere('states1.full_name', '%'.$search.'%')
+                                        ->orWhere('states2.full_name', '%'.$search.'%')
+                                        ->orWhere('states1.short_name', '%'.$search.'%')
+                                        ->orWhere('states2.short_name', '%'.$search.'%')
 
                                         // emails
-                                        ->orWhere('hostings.host', 'like', $search.'%')
-                                        ->orWhere('emails.email', 'like', $search.'%')
-                                        ->orWhere('emails.phone', 'like', $search.'%')
+                                        ->orWhere('hostings.host', 'like', '%'.$search.'%')
+                                        ->orWhere('emails.email', 'like', '%'.$search.'%')
+                                        ->orWhere('emails.phone', 'like', '%'.$search.'%')
                                         
                                         // bank account
-                                        ->orWhere('bank_accounts.name', 'like', $search.'%')
-                                        ->orWhere('bank_accounts.website', 'like', $search.'%')
-                                        ->orWhere('bank_accounts.username', 'like', $search.'%')
-                                        ->orWhere('bank_accounts.account_number', 'like', $search.'%')
-                                        ->orWhere('bank_accounts.routing_number', 'like', $search.'%');
+                                        ->orWhere('bank_accounts.name', 'like', '%'.$search.'%')
+                                        ->orWhere('bank_accounts.website', 'like', '%'.$search.'%')
+                                        ->orWhere('bank_accounts.username', 'like', '%'.$search.'%')
+                                        ->orWhere('bank_accounts.account_number', 'like', '%'.$search.'%')
+                                        ->orWhere('bank_accounts.routing_number', 'like', '%'.$search.'%');
                                 })
                                 ->when(($user_uuid!=''), function ($q) use($user_uuid) {
                                     return $q->where('companies.user_uuid', $user_uuid);
