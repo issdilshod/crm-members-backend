@@ -288,7 +288,8 @@ class PendingController extends Controller
 
             if ($director!=null){ // accept director
                 $entity = $director->toArray();
-                $director = $this->directorService->accept($director, $entity, $request->user_uuid);
+                $entity['user_uuid'] = $request->user_uuid;
+                $director = $this->directorService->accept($director, $entity);
 
                 // emails
                 Email::where('entity_uuid', $director['uuid'])
@@ -305,7 +306,8 @@ class PendingController extends Controller
 
             if ($company!=null){ // accept company
                 $entity = $company->toArray();
-                $company = $this->companyService->accept($company, $entity, $request->user_uuid);
+                $entity['user_uuid'] = $request->user_uuid;
+                $company = $this->companyService->accept($company, $entity);
 
                 // emails
                 Email::where('entity_uuid', $company['uuid'])
@@ -327,7 +329,8 @@ class PendingController extends Controller
 
             if ($virtualOffice!=null){ // accept virtual office
                 $entity = $virtualOffice->toArray();
-                $virtualOffice = $this->virtualOfficesService->accept($virtualOffice, $entity, $request->user_uuid);
+                $entity['user_uuid'] = $request->user_uuid;
+                $virtualOffice = $this->virtualOfficesService->accept($virtualOffice, $entity);
 
                 // address
                 Address::where('entity_uuid', $virtualOffice['uuid'])
@@ -339,7 +342,8 @@ class PendingController extends Controller
 
             if ($contact!=null){ // accept contact
                 $entity = $contact->toArray();
-                $contact = $this->contactService->accept($contact, $entity, $request->user_uuid);
+                $entity['user_uuid'] = $request->user_uuid;
+                $contact = $this->contactService->accept($contact, $entity);
 
                 $value = $contact;
             }
